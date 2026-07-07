@@ -1,9 +1,26 @@
 import { useState } from 'react';
 import { LogOut, Menu, X, ShieldCheck, User, Bell } from 'lucide-react';
 import { useAuth } from '@/context/SellerAuthContext';
+import { useLocation } from 'react-router-dom';
 
 export default function Navbar({ sidebarOpen, setSidebarOpen }) {
     const { currentSeller, logout } = useAuth();
+    const location = useLocation();
+
+    const getPageName = (pathname) => {
+        if (pathname === '/exhibitor-dashboard' || pathname === '/exhibitor-dashboard/') return 'Dashboard';
+        const pathSegments = pathname.split('/').filter(Boolean);
+        const lastSegment = pathSegments[pathSegments.length - 1];
+        if (!lastSegment || lastSegment === 'exhibitor-dashboard') return 'Dashboard';
+        if (lastSegment === 'bsm') return 'Buyer Seller Meet';
+        if (lastSegment === 'epromotion') return 'E-Promotion';
+        if (lastSegment === 'psm-claim') return 'PMS Scheme';
+        if (lastSegment === 'ex-profile') return 'Exhibitor Profile';
+        return lastSegment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    };
+    
+    const pageName = getPageName(location.pathname);
+    
     const initials = currentSeller?.fullName
         ? currentSeller.fullName.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
         : 'BU';
@@ -21,7 +38,11 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }) {
                         <div className="w-9 h-9 bg-[#23471d] flex items-center justify-center rounded-sm">
                             <ShieldCheck size={18} className="text-white" />
                         </div>
-                        <span className="text-[12px] font-black text-slate-800 uppercase tracking-widest hidden sm:block font-sans">Seller Portal</span>
+                        <h2 className="text-slate-800 text-[14px] uppercase font-bold tracking-tight hidden sm:block font-sans mt-[2px]">
+                            Seller Portal <span className="text-[#23471d] font-semibold tracking-normal capitalize ml-1">
+                                | {pageName}
+                            </span>
+                        </h2>
                     </div>
                 </div>
             </div>

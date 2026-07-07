@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { LogOut, Menu, X, ShieldCheck, User, Phone, Mail, MessageSquare, Sun, Sunset, Moon, Sparkles } from 'lucide-react';
 import { SERVER_URL, API_URL } from '@/lib/api';
 import { BiSupport } from "react-icons/bi";
@@ -28,6 +28,22 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
     const [activePhone, setActivePhone] = useState<string | null>(null);
     const rmName = data?.spokenWith || data?.referredBy || null;
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const getPageName = (pathname: string) => {
+        if (pathname === '/exhibitor-dashboard' || pathname === '/exhibitor-dashboard/') return 'Dashboard';
+        const pathSegments = pathname.split('/').filter(Boolean);
+        const lastSegment = pathSegments[pathSegments.length - 1];
+        if (!lastSegment || lastSegment === 'exhibitor-dashboard') return 'Dashboard';
+        if (lastSegment === 'bsm') return 'Buyer Seller Meet';
+        if (lastSegment === 'epromotion') return 'E-Promotion';
+        if (lastSegment === 'psm-claim') return 'PMS Scheme';
+        if (lastSegment === 'ex-profile') return 'Exhibitor Profile';
+        if (lastSegment === 'accessories') return 'Add On Services';
+        return lastSegment.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+    };
+    
+    const pageName = getPageName(location.pathname);
 
     const [timeContext, setTimeContext] = useState<{ greeting: string; icon: any; iconColor: string }>({
         greeting: "Welcome back",
@@ -85,7 +101,11 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
                 >
                     {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
                 </button>
-                <h2 className="text-white text-sm lg:text-lg uppercase font-semibold tracking-tight hidden sm:block">Exhibitor Interface</h2>
+                <h2 className="text-white text-[15px] uppercase font-semibold tracking-tight hidden sm:block">
+                    Exhibitor Interface <span className="text-yellow-200 font-medium tracking-normal capitalize ml-1">
+                        | {pageName}
+                    </span>
+                </h2>
                 <h2 className="text-white text-[11px] uppercase font-bold tracking-tight sm:hidden">IHWE 2026</h2>
             </div>
 
