@@ -43,7 +43,7 @@ const NAV_ITEMS: NavItem[] = [
     { id: "accessories", label: "Add On Services", icon: ShoppingBag },
     { id: "exhibitor-pass", label: "Passes & Hospitality", icon: Package },
     { id: "product", label: "My Product/Services", icon: Package },
-    { id: "documentation", label: "MSME Documentation", icon: FolderOpen },
+    { id: "documentation", label: "Documentations", icon: FolderOpen },
     ...(import.meta.env.DEV ? [{ id: "bsm", label: "Buyers Management", icon: UsersRound }] : []),
     { id: "payments", label: "Make Payment", icon: CreditCard },
     ...(import.meta.env.DEV ? [{ id: "epromotion", label: "E-Promotion", icon: Megaphone }] : []),
