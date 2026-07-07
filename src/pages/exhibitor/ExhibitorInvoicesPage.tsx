@@ -62,12 +62,12 @@ const RAZORPAY_KEY = import.meta.env.VITE_RAZORPAY_KEY_ID || '';
 
 // Which recentDocuments.documentType values show up under each tab.
 const TAB_DOC_TYPES: Record<string, string[]> = {
-    'All': ['Invoice', 'Proforma Invoice', 'Delivery Challan', 'Payment', 'Credit Note'],
+    'All': ['Invoice', 'Proforma Invoice', 'Delivery Challan', 'Payment', 'Credit Note', 'Credit Note (Legacy)', 'Debit Note'],
     'Proforma Invoice': ['Proforma Invoice'],
     'Invoice': ['Invoice'],
     'Delivery Challan': ['Delivery Challan'],
     'Payment': ['Payment'],
-    'Credit Notes': ['Credit Note'],
+    'Credit Notes': ['Credit Note', 'Credit Note (Legacy)', 'Debit Note'],
 };
 
 const STATUS_STYLES: Record<string, string> = {
@@ -752,7 +752,7 @@ export default function ExhibitorInvoicesPage() {
                                 <ChevronRight size={14} />
                             </button>
 
-                            <button onClick={() => setActiveTab('Payments')} className="w-full flex items-center justify-between">
+                            <button onClick={() => setActiveTab('Payment')} className="w-full flex items-center justify-between">
                                 <div className="flex items-center gap-3">
                                     <CreditCard size={14} />
                                     <span className="font-medium text-[12px]">
