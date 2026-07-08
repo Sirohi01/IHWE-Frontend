@@ -31,6 +31,7 @@ const CounterNumber = ({ end, started, delay, decimals = 0 }: { end: number, sta
 import { API_URL } from '@/lib/api';
 import { logActivity } from '@/utils/activityLogger';
 import { toast } from 'sonner';
+import { useNavigate } from 'react-router-dom';
 
 import {
     Calendar,
@@ -140,6 +141,8 @@ const ITEMS_PER_PAGE = 10;
 export default function ExhibitorInvoicesPage() {
     const { data } = useExhibitorCtx();
     const token = localStorage.getItem('exhibitorToken');
+    const navigate = useNavigate();
+
 
     const [activeTab, setActiveTab] = useState('All');
     const [currentPage, setCurrentPage] = useState(1);
@@ -235,6 +238,63 @@ export default function ExhibitorInvoicesPage() {
         logActivity('Finance', 'Viewed Document', doc.documentNo);
         window.open(`/exhibitor-print/${slug}/${doc.id}`, '_blank', 'noopener,noreferrer');
     };
+
+    const handleDownloadStatement = async () => {
+        if (!data?._id) return;
+        try {
+            const toastId = toast.loading('Generating statement...');
+            const res = await fetch(`${API_URL}/client-ledger/${data._id}/statement`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            if (!res.ok) throw new Error('Failed to download statement');
+
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Statement_${data.exhibitorName?.replace(/[^a-z0-9]+/gi, '_') || 'Client'}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+            toast.success('Statement downloaded successfully', { id: toastId });
+        } catch (err) {
+            console.error('Download error:', err);
+            toast.error('Failed to download statement');
+        }
+    };
+
+    const handleDownloadAllInvoices = () => {
+        const invoices = documents.filter((doc: any) => doc.documentType === 'Invoice');
+        if (invoices.length === 0) {
+            toast.error('No invoices found to download');
+            return;
+        }
+
+        toast.info(`Generating a single document for ${invoices.length} invoices...`);
+
+        const ids = invoices.map((doc: any) => doc.id).join(',');
+        const types = invoices.map((doc: any) => DOC_TYPE_SLUGS[doc.documentType]).join(',');
+
+        navigate(`/exhibitor-print-all?ids=${ids}&types=${types}`);
+    };
+
+    const handleDownloadAllReceipts = () => {
+        const receipts = documents.filter((doc: any) => doc.documentType === 'Payment');
+        if (receipts.length === 0) {
+            toast.error('No receipts found to download');
+            return;
+        }
+
+        toast.info(`Downloading ${receipts.length} receipts...`, { duration: 5000 });
+        receipts.forEach((doc: any, index: number) => {
+            setTimeout(() => {
+                window.open(`${API_URL.replace('/api', '')}/api/payments/${doc.id}/receipt`, '_blank');
+            }, index * 800);
+        });
+    };
+
+
 
     const payDocument = async (doc: any) => {
         const docType = doc.documentType === 'Invoice' ? 'invoice' : 'proforma';
@@ -790,7 +850,10 @@ export default function ExhibitorInvoicesPage() {
 
                         {/* DOWNLOAD */}
 
-                        <button className="w-full h-[32px] rounded-[8px] border border-[#d9e2ec] hover:bg-[#f8fafc] transition-all bg-white text-[#2563eb] text-[12px] font-semibold mt-2 flex items-center justify-center gap-2">
+                        <button
+                            onClick={handleDownloadStatement}
+                            className="w-full h-[32px] rounded-[8px] border border-[#d9e2ec] hover:bg-[#f8fafc] transition-all bg-white text-[#2563eb] text-[12px] font-semibold mt-2 flex items-center justify-center gap-2"
+                        >
 
                             <Download size={14} />
 
@@ -808,7 +871,7 @@ export default function ExhibitorInvoicesPage() {
 
                         <div className="divide-y divide-[#eef2f7]">
 
-                            <button className="w-full flex items-center justify-between">
+                            <button onClick={handleDownloadAllInvoices} className="w-full flex items-center justify-between py-2 hover:bg-slate-50 transition-colors">
                                 <div className="flex items-center gap-3">
                                     <Download size={14} />
                                     <span className="font-medium text-[12px]">
@@ -819,7 +882,7 @@ export default function ExhibitorInvoicesPage() {
                                 <ChevronRight size={14} />
                             </button>
 
-                            <button className="w-full flex items-center justify-between">
+                            <button onClick={handleDownloadAllReceipts} className="w-full flex items-center justify-between py-2 hover:bg-slate-50 transition-colors">
                                 <div className="flex items-center gap-3">
                                     <Receipt size={14} />
                                     <span className="font-medium text-[12px]">
@@ -830,7 +893,7 @@ export default function ExhibitorInvoicesPage() {
                                 <ChevronRight size={14} />
                             </button>
 
-                            <button onClick={() => setActiveTab('Payment')} className="w-full flex items-center justify-between">
+                            <button onClick={() => setActiveTab('Payment')} className="w-full flex items-center justify-between py-2 hover:bg-slate-50 transition-colors">
                                 <div className="flex items-center gap-3">
                                     <CreditCard size={14} />
                                     <span className="font-medium text-[12px]">
@@ -840,7 +903,8 @@ export default function ExhibitorInvoicesPage() {
 
                                 <ChevronRight size={14} />
                             </button>
-                            <button className="w-full flex items-center justify-between">
+
+                            <button onClick={() => navigate('/exhibitor-dashboard/profile')} className="w-full flex items-center justify-between py-2 hover:bg-slate-50 transition-colors">
                                 <div className="flex items-center gap-3">
                                     <Edit2 size={14} />
                                     <span className="font-medium text-[12px]">
