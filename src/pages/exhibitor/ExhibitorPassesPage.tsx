@@ -19,6 +19,8 @@ import Swal from "sweetalert2";
 import DelegateRegistrationModal from "./DelegateRegistrationModal";
 import { logActivity } from "@/utils/activityLogger";
 
+const isVehiclePassId = (id?: string) => id === 'vehicle';
+
 export default function ExhibitorPassesPage() {
     const { data } = useExhibitorCtx();
     const navigate = useNavigate();
@@ -30,7 +32,7 @@ export default function ExhibitorPassesPage() {
 
     const [personnel, setPersonnel] = useState<any[]>([]);
     const [vehicles, setVehicles] = useState<any[]>([]);
-    const quantity = selectedPass?.id === 'vehicle' ? vehicles.length : personnel.length;
+    const quantity = isVehiclePassId(selectedPass?.id) ? vehicles.length : personnel.length;
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     // New states for payment review
@@ -89,9 +91,9 @@ export default function ExhibitorPassesPage() {
         isTeamMember: Boolean(member)
     });
 
-    const createVehicleEntry = (member?: any) => ({
+    const createVehicleEntry = (member?: any, vehicleType: '2-wheeler' | '4-wheeler' = '4-wheeler') => ({
         teamMemberId: member?._id || undefined,
-        vehicleType: '4-wheeler',
+        vehicleType,
         vehicleNumber: '',
         name: member?.name || '',
         email: member?.email || '',
@@ -119,7 +121,7 @@ export default function ExhibitorPassesPage() {
     const handleOpenModal = (pass: any) => {
         const { available } = getTeamAllocation(pass);
         setSelectedPass(pass);
-        if (pass.id === 'vehicle') {
+        if (isVehiclePassId(pass.id)) {
             setVehicles(available[0] ? [createVehicleEntry(available[0])] : []);
             setPersonnel([]);
         } else if (pass.simpleFlow) {
@@ -144,7 +146,7 @@ export default function ExhibitorPassesPage() {
     // Team members are added/removed via checkbox; manual entries only unlock once
     // all currently available team members have been checked off.
     const toggleTeamMember = (member: any) => {
-        const isVehiclePass = selectedPass?.id === 'vehicle';
+        const isVehiclePass = isVehiclePassId(selectedPass?.id);
         const list = isVehiclePass ? vehicles : personnel;
         const existingIndex = list.findIndex((entry: any) => entry.teamMemberId === member._id);
 
@@ -167,7 +169,7 @@ export default function ExhibitorPassesPage() {
     };
 
     const addManualEntry = () => {
-        const isVehiclePass = selectedPass?.id === 'vehicle';
+        const isVehiclePass = isVehiclePassId(selectedPass?.id);
         const list = isVehiclePass ? vehicles : personnel;
         const maxAllowed = selectedPass?.maxPerRequest || 10;
         if (list.length >= maxAllowed) {
@@ -179,7 +181,7 @@ export default function ExhibitorPassesPage() {
     };
 
     const removeEntry = (index: number) => {
-        const isVehiclePass = selectedPass?.id === 'vehicle';
+        const isVehiclePass = isVehiclePassId(selectedPass?.id);
         if (isVehiclePass) setVehicles(vehicles.filter((_: any, i: number) => i !== index));
         else setPersonnel(personnel.filter((_: any, i: number) => i !== index));
     };
@@ -200,8 +202,12 @@ export default function ExhibitorPassesPage() {
         try {
             const token = localStorage.getItem("exhibitorToken");
             const headers = token ? { Authorization: `Bearer ${token}` } : undefined;
+            // /my-active returns complimentary quotas computed from this exhibitor's actual
+            // stall area; fall back to the flat /active config if not authenticated yet.
             const [configRes, requestRes] = await Promise.all([
-                fetch(`${API_URL}/exhibitor-pass-config/active`),
+                token
+                    ? fetch(`${API_URL}/exhibitor-pass-config/my-active`, { headers })
+                    : fetch(`${API_URL}/exhibitor-pass-config/active`),
                 data?._id
                     ? fetch(`${API_URL}/exhibitor-pass-requests/exhibitor/${data._id}`, { headers })
                     : Promise.resolve(null),
@@ -245,8 +251,8 @@ export default function ExhibitorPassesPage() {
             const payload = {
                 passType: selectedPass.id,
                 quantity,
-                vehicles: selectedPass.id === 'vehicle' ? vehicles : undefined,
-                personnel: selectedPass.id !== 'vehicle' ? personnel : undefined,
+                vehicles: isVehiclePassId(selectedPass.id) ? vehicles : undefined,
+                personnel: !isVehiclePassId(selectedPass.id) ? personnel : undefined,
                 paymentDetails
             };
 
@@ -521,11 +527,60 @@ export default function ExhibitorPassesPage() {
                 complimentaryRemaining,
                 totalQuota,
                 price: null,
-                maxPerRequest: 1
+                priceTwoWheeler: 0,
+                priceFourWheeler: 0,
+                complimentaryTwoWheeler: 0,
+                complimentaryFourWheeler: 0,
+                remainingTwoWheeler: 0,
+                remainingFourWheeler: 0,
+                maxPerRequest: 1,
+                validityDays: Number(config?.validityDays || 0)
             };
         }
 
         const config = passConfigs.find((item) => item.passType === pass.id);
+
+        if (pass.id === 'vehicle') {
+            // The Vehicle Pass has independent free quota + price per vehicle type —
+            // count prior usage by type from pass-request history to know what's left.
+            const priceTwoWheeler = Number(config?.vehicleTypeConfig?.twoWheeler?.price || 0);
+            const priceFourWheeler = Number(config?.vehicleTypeConfig?.fourWheeler?.price || 0);
+            const complimentaryTwoWheeler = Number(config?.complimentaryQuotaTwoWheeler ?? config?.vehicleTypeConfig?.twoWheeler?.complimentaryQuota ?? 0);
+            const complimentaryFourWheeler = Number(config?.complimentaryQuotaFourWheeler ?? config?.vehicleTypeConfig?.fourWheeler?.complimentaryQuota ?? 0);
+
+            let usedTwoWheeler = 0, usedFourWheeler = 0;
+            passRequests
+                .filter(r => r.passType === 'vehicle' && r.status !== 'rejected')
+                .forEach(r => (r.vehicles || []).forEach((v: any) => {
+                    if (v.vehicleType === '2-wheeler') usedTwoWheeler += 1; else usedFourWheeler += 1;
+                }));
+
+            const remainingTwoWheeler = Math.max(complimentaryTwoWheeler - usedTwoWheeler, 0);
+            const remainingFourWheeler = Math.max(complimentaryFourWheeler - usedFourWheeler, 0);
+            const totalQuota = Number(config?.totalQuota ?? 10);
+            const totalRequested = countsByType[pass.id]?.total ?? 0;
+
+            return {
+                ...pass,
+                title: config?.title || pass.title,
+                subtitle: config?.subtitle || pass.subtitle,
+                complimentary: complimentaryTwoWheeler + complimentaryFourWheeler,
+                used: countsByType[pass.id]?.approved ?? 0,
+                remaining: Math.max(totalQuota - totalRequested, 0),
+                complimentaryRemaining: remainingTwoWheeler + remainingFourWheeler,
+                totalQuota,
+                price: null,
+                priceTwoWheeler,
+                priceFourWheeler,
+                complimentaryTwoWheeler,
+                complimentaryFourWheeler,
+                remainingTwoWheeler,
+                remainingFourWheeler,
+                maxPerRequest: Number(config?.maxPerRequest ?? 10),
+                validityDays: Number(config?.validityDays || 0)
+            };
+        }
+
         const complimentary = Number(config?.complimentaryQuota ?? pass.complimentary);
         const totalQuota = Number(config?.totalQuota ?? 10);
         const used = countsByType[pass.id]?.approved ?? 0;
@@ -541,7 +596,14 @@ export default function ExhibitorPassesPage() {
             complimentaryRemaining,
             totalQuota,
             price: Number(config?.price ?? pass.price),
-            maxPerRequest: Number(config?.maxPerRequest ?? 10)
+            priceTwoWheeler: 0,
+            priceFourWheeler: 0,
+            complimentaryTwoWheeler: 0,
+            complimentaryFourWheeler: 0,
+            remainingTwoWheeler: 0,
+            remainingFourWheeler: 0,
+            maxPerRequest: Number(config?.maxPerRequest ?? 10),
+            validityDays: Number(config?.validityDays || 0)
         };
     });
 
@@ -553,9 +615,24 @@ export default function ExhibitorPassesPage() {
         "Lunch & Water Bottle entitlement for Exhibitor Team (2 persons per day)."
     ];
 
-    const selectedComplimentaryRemaining = Number(selectedPass?.complimentaryRemaining || 0);
-    const selectedFreeQuantity = Math.min(quantity, selectedComplimentaryRemaining);
-    const selectedPaidQuantity = Math.max(quantity - selectedComplimentaryRemaining, 0);
+    // The Vehicle Pass prices/free-quota independently per vehicle type, so its free/paid
+    // split has to be computed from the actual 2-wheeler vs car mix currently in the form —
+    // a flat quantity vs one price doesn't apply here.
+    const isVehicleSelected = isVehiclePassId(selectedPass?.id);
+    const selectedTwoWheelerCount = isVehicleSelected ? vehicles.filter(v => v.vehicleType === '2-wheeler').length : 0;
+    const selectedFourWheelerCount = isVehicleSelected ? vehicles.length - selectedTwoWheelerCount : 0;
+    const selectedFreeTwoWheeler = isVehicleSelected ? Math.min(selectedTwoWheelerCount, Number(selectedPass?.remainingTwoWheeler || 0)) : 0;
+    const selectedFreeFourWheeler = isVehicleSelected ? Math.min(selectedFourWheelerCount, Number(selectedPass?.remainingFourWheeler || 0)) : 0;
+
+    const selectedComplimentaryRemaining = isVehicleSelected
+        ? Number(selectedPass?.remainingTwoWheeler || 0) + Number(selectedPass?.remainingFourWheeler || 0)
+        : Number(selectedPass?.complimentaryRemaining || 0);
+    const selectedFreeQuantity = isVehicleSelected
+        ? selectedFreeTwoWheeler + selectedFreeFourWheeler
+        : Math.min(quantity, selectedComplimentaryRemaining);
+    const selectedPaidQuantity = isVehicleSelected
+        ? (selectedTwoWheelerCount - selectedFreeTwoWheeler) + (selectedFourWheelerCount - selectedFreeFourWheeler)
+        : Math.max(quantity - selectedComplimentaryRemaining, 0);
     const selectedHasSelection = quantity >= 1;
     // Only "fully complimentary" once something is actually selected — 0 selected should
     // never read as "Free", it should read as "nothing chosen yet".
@@ -565,7 +642,10 @@ export default function ExhibitorPassesPage() {
         : selectedIsFullyComplimentary
         ? { text: 'Complimentary', cls: 'bg-emerald-50 text-emerald-700 border-emerald-100' }
         : { text: 'Extra Payment', cls: 'bg-amber-50 text-amber-700 border-amber-100' };
-    const selectedEstimatedPayable = selectedPaidQuantity * Number(selectedPass?.price || 0);
+    const selectedEstimatedPayable = isVehicleSelected
+        ? (selectedTwoWheelerCount - selectedFreeTwoWheeler) * Number(selectedPass?.priceTwoWheeler || 0)
+            + (selectedFourWheelerCount - selectedFreeFourWheeler) * Number(selectedPass?.priceFourWheeler || 0)
+        : selectedPaidQuantity * Number(selectedPass?.price || 0);
 
     return (
         <motion.div
@@ -614,7 +694,7 @@ export default function ExhibitorPassesPage() {
                 </div>
             </div>
 
-            {/* ─── 5 MAIN PASS CARDS ─── */}
+            {/* ─── MAIN PASS CARDS ─── */}
             <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-1 mb-1">
                 {passes.map((pass) => {
                     const Icon = pass.icon;
@@ -640,27 +720,48 @@ export default function ExhibitorPassesPage() {
                                         </div>
                                     </div>
                                     <span className={`inline-flex px-1.5 py-0.5 rounded text-[8.5px] font-extrabold border shrink-0 mt-0.5 ${pass.themeClasses.badgeBg}`}>
-                                        {pass.complimentary} Complimentary
+                                        {pass.id === 'vehicle'
+                                            ? `2W ${pass.complimentaryTwoWheeler} · Car ${pass.complimentaryFourWheeler} Free`
+                                            : `${pass.complimentary} Complimentary`}
                                     </span>
                                 </div>
 
+                                {!!pass.validityDays && (
+                                    <p className="mb-2 text-[9px] font-extrabold text-slate-400 uppercase tracking-wide">
+                                        ⏱ Valid for {pass.validityDays} Day{pass.validityDays > 1 ? 's' : ''} only
+                                    </p>
+                                )}
+
                                 {/* Statistics Table - Mockup style without outer border */}
-                                <div className="grid grid-cols-3 divide-x divide-slate-200/80 mb-2 text-center">
-                                    <div className="flex flex-col items-center justify-center">
-                                        <span className="text-[9px] font-extrabold text-slate-500 leading-none">Used</span>
-                                        <span className="text-[13px] font-black text-slate-800 mt-1">{pass.used}</span>
+                                {pass.id === 'vehicle' ? (
+                                    <div className="grid grid-cols-2 divide-x divide-slate-200/80 mb-2 text-center">
+                                        <div className="flex flex-col items-center justify-center px-1">
+                                            <span className="text-[9px] font-extrabold text-slate-500 leading-none">2-Wheeler</span>
+                                            <span className="text-[10px] font-black text-slate-800 mt-1">{pass.remainingTwoWheeler} free · ₹{pass.priceTwoWheeler}/extra</span>
+                                        </div>
+                                        <div className="flex flex-col items-center justify-center px-1">
+                                            <span className="text-[9px] font-extrabold text-slate-500 leading-none">Car / 4-Wheeler</span>
+                                            <span className="text-[10px] font-black text-slate-800 mt-1">{pass.remainingFourWheeler} free · ₹{pass.priceFourWheeler}/extra</span>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col items-center justify-center">
-                                        <span className="text-[9px] font-extrabold text-slate-500 leading-none">Remaining</span>
-                                        <span className="text-[13px] font-black text-slate-800 mt-1">{pass.remaining}</span>
+                                ) : (
+                                    <div className="grid grid-cols-3 divide-x divide-slate-200/80 mb-2 text-center">
+                                        <div className="flex flex-col items-center justify-center">
+                                            <span className="text-[9px] font-extrabold text-slate-500 leading-none">Used</span>
+                                            <span className="text-[13px] font-black text-slate-800 mt-1">{pass.used}</span>
+                                        </div>
+                                        <div className="flex flex-col items-center justify-center">
+                                            <span className="text-[9px] font-extrabold text-slate-500 leading-none">Remaining</span>
+                                            <span className="text-[13px] font-black text-slate-800 mt-1">{pass.remaining}</span>
+                                        </div>
+                                        <div className="flex flex-col items-center justify-center">
+                                            <span className="text-[9px] font-extrabold text-slate-500 leading-none">{pass.id === 'delegate' ? 'Total Passes' : 'Extra Price'}</span>
+                                            <span className="text-[9.5px] font-black text-slate-800 mt-1">
+                                                {pass.id === 'delegate' ? pass.totalQuota : `₹${pass.price} / Pass`}
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col items-center justify-center">
-                                        <span className="text-[9px] font-extrabold text-slate-500 leading-none">{pass.id === 'delegate' ? 'Total Passes' : 'Extra Price'}</span>
-                                        <span className="text-[9.5px] font-black text-slate-800 mt-1">
-                                            {pass.id === 'delegate' ? pass.totalQuota : `₹${pass.price} / Pass`}
-                                        </span>
-                                    </div>
-                                </div>
+                                )}
                             </div>
 
                             {/* Button */}
@@ -895,7 +996,7 @@ export default function ExhibitorPassesPage() {
                         </h4>
 
                         {/* Passes list row */}
-                        <div className="grid grid-cols-5 gap-1.5 mt-1.5 pb-1.5 border-b border-dashed border-[#d8e6da]">
+                        <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5 mt-1.5 pb-1.5 border-b border-dashed border-[#d8e6da]">
                             <span className="flex items-center gap-1 text-[9px] font-black text-slate-700">
                                 <Users size={11} className="text-[#1a3a7c] shrink-0" /> {passes.find(p => p.id === 'visitor')?.complimentary} Visitor
                             </span>
@@ -903,7 +1004,10 @@ export default function ExhibitorPassesPage() {
                                 <UserCheck size={11} className="text-[#ea580c] shrink-0" /> {passes.find(p => p.id === 'exhibitor')?.complimentary} Exhibitor
                             </span>
                             <span className="flex items-center gap-1 text-[9px] font-black text-slate-700">
-                                <Car size={11} className="text-[#15803d] shrink-0" /> {passes.find(p => p.id === 'vehicle')?.complimentary} Vehicle
+                                <Car size={11} className="text-[#15803d] shrink-0" /> {passes.find(p => p.id === 'vehicle')?.complimentaryTwoWheeler} 2-Wheeler
+                            </span>
+                            <span className="flex items-center gap-1 text-[9px] font-black text-slate-700">
+                                <Car size={11} className="text-[#0f766e] shrink-0" /> {passes.find(p => p.id === 'vehicle')?.complimentaryFourWheeler} Car
                             </span>
                             <span className="flex items-center gap-1 text-[9px] font-black text-slate-700">
                                 <Wrench size={11} className="text-[#6b21a8] shrink-0" /> {passes.find(p => p.id === 'service')?.complimentary} Service
@@ -993,9 +1097,12 @@ export default function ExhibitorPassesPage() {
                                             </span>
                                         </div>
                                         <p className="text-[10.5px] text-white/80 font-bold mt-0.5">
-                                            {selectedIsFullyComplimentary
+                                            {isVehicleSelected
+                                                ? `2-Wheeler: ${selectedPass.remainingTwoWheeler} free, then ₹${selectedPass.priceTwoWheeler} · Car: ${selectedPass.remainingFourWheeler} free, then ₹${selectedPass.priceFourWheeler}`
+                                                : selectedIsFullyComplimentary
                                                 ? `${selectedComplimentaryRemaining} complimentary available`
                                                 : `₹${selectedPass.price} / extra pass`} • {selectedPass.subtitle}
+                                            {!!selectedPass.validityDays && ` • Valid ${selectedPass.validityDays} day${selectedPass.validityDays > 1 ? 's' : ''} only`}
                                         </p>
                                     </div>
                                 </div>
@@ -1059,7 +1166,7 @@ export default function ExhibitorPassesPage() {
                                         </div>
                                     ) : (() => {
                                         const { available: modalAvailable, allocated: modalAllocated } = getTeamAllocation(selectedPass);
-                                        const list = selectedPass?.id === 'vehicle' ? vehicles : personnel;
+                                        const list = isVehiclePassId(selectedPass?.id) ? vehicles : personnel;
                                         const checkedIds = new Set(list.filter((e: any) => e.isTeamMember).map((e: any) => String(e.teamMemberId)));
                                         const manualCount = list.filter((e: any) => !e.isTeamMember).length;
                                         const teamMembersExhausted = modalAvailable.length === 0 || checkedIds.size >= modalAvailable.length;
@@ -1115,7 +1222,7 @@ export default function ExhibitorPassesPage() {
                                                         onClick={addManualEntry}
                                                         className="w-full h-7 rounded-full border border-dashed border-slate-300 text-[10.5px] font-black text-slate-500 hover:border-slate-400 hover:text-slate-700 hover:bg-slate-50 transition-all flex items-center justify-center gap-1 mb-2"
                                                     >
-                                                        + Add Manual {selectedPass?.id === 'vehicle' ? 'Vehicle' : 'Person'}
+                                                        + Add Manual {isVehiclePassId(selectedPass?.id) ? 'Vehicle' : 'Person'}
                                                         {manualCount > 0 && <span className="px-1.5 rounded-full bg-slate-100 text-slate-500 text-[9px]">{manualCount}</span>}
                                                     </button>
                                                 )}
@@ -1130,8 +1237,15 @@ export default function ExhibitorPassesPage() {
                                         );
                                     })()}
 
+                                    {isVehicleSelected && (
+                                        <div className="flex items-center justify-between gap-2 bg-white border border-slate-200 rounded-xl px-3 py-2 mb-2 text-[10.5px] font-bold text-slate-600">
+                                            <span>🛵 2-Wheeler: <b className="text-emerald-700">{selectedPass.remainingTwoWheeler} free</b> left, then ₹{selectedPass.priceTwoWheeler}</span>
+                                            <span>🚗 Car: <b className="text-emerald-700">{selectedPass.remainingFourWheeler} free</b> left, then ₹{selectedPass.priceFourWheeler}</span>
+                                        </div>
+                                    )}
+
                                     {/* Dynamic Fields — team members only fill in what's NOT already known (vehicle no. / Aadhaar); manual entries get the full form */}
-                                    {selectedPass?.id === 'vehicle' ? (
+                                    {isVehiclePassId(selectedPass?.id) ? (
                                         vehicles.map((veh, index) => (
                                             veh.isTeamMember ? (
                                                 <div key={index} className="bg-white border border-slate-200 rounded-xl p-2 mb-2 shadow-sm flex items-center gap-2">
