@@ -146,8 +146,7 @@ const DownloadsSection = () => {
                             className="bg-white border border-slate-100 shadow-md hover:shadow-xl transition-shadow duration-300 group overflow-hidden flex flex-col rounded-xl"
                         >
                             <div className="relative overflow-hidden aspect-video bg-white rounded-t-xl">
-                                <img
-                                    src={item.image}
+                                <img loading="lazy" decoding="async" src={item.image}
                                     alt={item.imageAlt || item.title}
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                                 />

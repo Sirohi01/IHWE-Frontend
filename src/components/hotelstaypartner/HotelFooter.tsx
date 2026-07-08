@@ -26,8 +26,7 @@ const HotelFooter: React.FC<HotelFooterProps> = ({ footer }) => {
         <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-2 w-full lg:w-auto justify-center lg:justify-start">
 
           <div className="relative w-20 h-20 flex-shrink-0">
-            <img
-              src={footerBgImage}
+            <img loading="lazy" decoding="async" src={footerBgImage}
               alt="IHWE Footer Badge"
               className="w-full h-full object-contain"
             />

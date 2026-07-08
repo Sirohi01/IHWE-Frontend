@@ -33,7 +33,7 @@ export default function BuyerNavbar({ logo, data, sidebarOpen, setSidebarOpen, h
                 </button>
                 <div className="flex items-center" style={{ height: '48px' }}>
                     {logo ? (
-                        <img src={`${SERVER_URL}${logo}`} style={{ height: '48px', width: 'auto', objectFit: 'contain', maxWidth: '180px' }} alt="Logo" />
+                        <img loading="lazy" decoding="async" src={`${SERVER_URL}${logo}`} style={{ height: '48px', width: 'auto', objectFit: 'contain', maxWidth: '180px' }} alt="Logo" />
                     ) : (
                         <div className="flex items-center gap-2">
                             <div className="w-9 h-9 bg-[#23471d] flex items-center justify-center rounded-sm">

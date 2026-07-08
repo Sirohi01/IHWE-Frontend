@@ -29,164 +29,10 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import { Store } from "lucide-react";
 
-// Sparkle component
-const Sparkle = ({ style, color = '#5ef5e0', shadowColor = '#0A7C6E' }: { style?: React.CSSProperties, color?: string, shadowColor?: string }) => (
-  <span
-    style={{
-      position: 'absolute',
-      pointerEvents: 'none',
-      fontSize: '16px',
-      color: color,
-      textShadow: `0 0 8px ${shadowColor}, 0 0 15px ${color}, 0 0 25px ${color}`,
-      animation: 'sparkleAnim 1.8s ease-in-out infinite',
-      opacity: 0,
-      zIndex: 20,
-      ...style,
-    }}
-  >
-    ✦
-  </span>
-);
+import Sparkle from "@/components/about/Sparkle";
+import EventOverview from "@/components/about/EventOverview";
 
-const CounterItem = ({ icon, number, sup, label, sub, prefix }: any) => {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const animated = useRef(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting && !animated.current) {
-          animated.current = true;
-          let start = 0;
-          const step = number / (1800 / 16);
-          const timer = setInterval(() => {
-            start += step;
-            if (start >= number) { setCount(number); clearInterval(timer); }
-            else setCount(Math.floor(start));
-          }, 16);
-        }
-      },
-      { threshold: 0.3 }
-    );
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, [number]);
-
-  return (
-    <div ref={ref} className="flex items-center gap-4 px-6 py-6 group">
-      <div className="w-12 h-12 rounded-xl bg-[#f0f9f0] flex items-center justify-center shrink-0 group-hover:bg-[#23471d] transition-colors duration-300 text-[#23471d] group-hover:text-white">
-        {cloneElement(icon, { stroke: "currentColor" })}
-      </div>
-      <div>
-        <div className="flex items-baseline leading-none mb-1.5 gap-0.5">
-          {prefix && <span style={{ color: '#d26019', fontFamily: "'Inter', sans-serif", fontWeight: 800, fontSize: '1.2rem' }}>{prefix}</span>}
-          <span style={{ color: '#d26019', fontFamily: "'Inter', sans-serif", fontWeight: 800, fontSize: '1.75rem' }} className="tabular-nums">
-            {count.toLocaleString()}
-          </span>
-          <span style={{ color: '#23471d', fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: '0.9rem' }}>{sup}</span>
-        </div>
-        <p style={{ color: '#23471d', fontFamily: "'Inter', sans-serif", fontWeight: 700, fontSize: '9.5px', letterSpacing: '0.18em' }} className="uppercase">{label}</p>
-        <p style={{ color: '#000000ff', fontFamily: "'Inter', sans-serif", fontSize: '10px', marginTop: '2px' }}>{sub}</p>
-      </div>
-    </div>
-  );
-};
-
-const STATS = [
-  {
-    number: 9, sup: "th", label: "EDITION", sub: "A Decade of Excellence",
-    icon: <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#23471d" strokeWidth="1.8"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" strokeLinecap="round" strokeLinejoin="round" /></svg>
-  },
-  {
-    number: 1500, sup: "+", label: "EXHIBITORS", sub: "Across 8 Successful Editions",
-    icon: <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#23471d" strokeWidth="1.8"><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" strokeLinecap="round" strokeLinejoin="round" /><path d="M16 3.13a4 4 0 0 1 0 7.75" strokeLinecap="round" /><path d="M21 21v-2a4 4 0 0 0-3-3.87" strokeLinecap="round" /></svg>
-  },
-  {
-    number: 10, sup: "+", label: "YEARS", sub: "Legacy of Trust & Growth",
-    icon: <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#23471d" strokeWidth="1.8"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" strokeLinecap="round" strokeLinejoin="round" /></svg>
-  },
-  {
-    number: 500, sup: "Cr+", prefix: "₹", label: "BUSINESS OPPORTUNITIES", sub: "Generated Over the Years",
-    icon: <svg viewBox="0 0 24 24" className="w-5 h-5" fill="none" stroke="#23471d" strokeWidth="1.8"><line x1="12" y1="1" x2="12" y2="23" strokeLinecap="round" /><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" strokeLinecap="round" strokeLinejoin="round" /></svg>
-  },
-];
-
-
-const VENUE_STATS = [
-  {
-    end: 1500, prefix: "", suffix: "+", label: "EXHIBITORS", iconColor: "#d26019",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></svg>
-  },
-  {
-    end: 8000, prefix: "", suffix: "+", label: "VISITORS/DELEGATES", iconColor: "#23471d",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="9" cy="7" r="4" /><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75M21 21v-2a4 4 0 0 0-3-3.87" /></svg>
-  },
-  {
-    end: 0, prefix: "B2B", suffix: "", label: "B2B MEETINGS", iconColor: "#d26019",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" /></svg>
-  },
-  {
-    end: 150, prefix: "", suffix: "+", label: "SPEAKERS & EXPERTS", iconColor: "#23471d",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" /></svg>
-  },
-  {
-    end: 10000, prefix: "", suffix: "+", label: "GLOBAL BUYERS", iconColor: "#d26019",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><circle cx="12" cy="12" r="10" /><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" /></svg>
-  },
-  {
-    end: 700, prefix: "₹500–", suffix: " Cr+", label: "BUSINESS OPPORTUNITIES", iconColor: "#23471d",
-    icon: (c: string) => <svg viewBox="0 0 24 24" fill={c} fillOpacity="0.15" stroke={c} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-7 h-7"><path d="M6 3h12M6 8h12M14.5 21L6 13h3c3.5 0 4.5-5 0-5H6" /></svg>
-  },
-];
-
-const VenueStatItem = ({ stat, visible, delay }: { stat: typeof VENUE_STATS[0], visible: boolean, delay: number }) => {
-  const [count, setCount] = useState(0);
-  const animated = useRef(false);
-  useEffect(() => {
-    if (!visible || animated.current) return;
-    const timer = setTimeout(() => {
-      animated.current = true;
-      let start = 0;
-      const step = stat.end / (1600 / 16);
-      const interval = setInterval(() => {
-        start += step;
-        if (start >= stat.end) { setCount(stat.end); clearInterval(interval); }
-        else setCount(Math.floor(start));
-      }, 16);
-    }, delay);
-    return () => clearTimeout(timer);
-  }, [visible, stat.end, delay]);
-
-  return (
-    <div className="flex flex-col items-center text-center py-1.5 px-3">
-      <div className="w-12 h-12 rounded-full border-2 flex items-center justify-center mb-1.5" style={{ borderColor: `${stat.iconColor}40` }}>
-        {stat.icon(stat.iconColor)}
-      </div>
-      <p className="font-black text-[15px] leading-tight" style={{ color: stat.iconColor, fontFamily: "'Inter', sans-serif" }}>
-        {stat.prefix}{stat.end > 0 ? count.toLocaleString() : ""}{stat.suffix}
-      </p>
-      <p className="text-black text-[9px] uppercase tracking-[0.15em] font-bold mt-0.5" style={{ fontFamily: "'Inter', sans-serif" }}>{stat.label}</p>
-    </div>
-  );
-};
-
-const VenueStats = () => {
-  const ref = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-  useEffect(() => {
-    const observer = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); observer.disconnect(); } }, { threshold: 0.3 });
-    if (ref.current) observer.observe(ref.current);
-    return () => observer.disconnect();
-  }, []);
-  return (
-    <div ref={ref} className="">
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-x divide-gray-200">
-        {VENUE_STATS.map((stat, i) => <VenueStatItem key={i} stat={stat} visible={visible} delay={i * 120} />)}
-      </div>
-    </div>
-  );
-};
+import { VenueStats } from "@/components/about/AboutStats";
 
 const About = () => {
   const [heroData, setHeroData] = useState<any>(null);
@@ -394,8 +240,7 @@ const About = () => {
         
         {/* Full Width Background Image */}
         <div className="absolute inset-0 z-0">
-          <img 
-            src={About12} 
+          <img loading="lazy" decoding="async" src={About12} 
             alt="Hero Background" 
             className="w-full h-full object-cover object-[80%] md:object-right"
           />
@@ -404,8 +249,7 @@ const About = () => {
         </div>
 
         {/* Decorative Leaf Element */}
-        <img 
-          src={LeafImg} 
+        <img loading="lazy" decoding="async" src={LeafImg} 
           alt="decoration" 
           className="absolute -top-10 -left-10 w-40 h-40 opacity-10 pointer-events-none rotate-45"
         />
@@ -468,19 +312,19 @@ const About = () => {
               {/* Feature Icons Row */}
               <div className="grid grid-cols-2 md:flex md:flex-wrap items-center gap-x-4 md:gap-x-6 gap-y-4 md:gap-y-3 mb-4 mt-2 py-3 md:py-2 border-t border-gray-100">
                 <div className="flex items-center gap-3 md:pr-6 md:border-r border-gray-400 last:border-r-0">
-                  <img src={G1} alt="Global Exposure" className="w-8 h-8 object-contain" />
+                  <img loading="lazy" decoding="async" src={G1} alt="Global Exposure" className="w-8 h-8 object-contain" />
                   <span className="font-bold text-[9px] uppercase tracking-wider leading-tight" style={{ color: '#081e4a' }}>
                     GLOBAL<br />EXPOSURE
                   </span>
                 </div>
                 <div className="flex items-center gap-3 md:pr-6 md:border-r border-gray-400 last:border-r-0">
-                  <img src={G2} alt="Quality Connections" className="w-8 h-8 object-contain" />
+                  <img loading="lazy" decoding="async" src={G2} alt="Quality Connections" className="w-8 h-8 object-contain" />
                   <span className="font-bold text-[9px] uppercase tracking-wider leading-tight" style={{ color: '#081e4a' }}>
                     QUALITY<br />CONNECTIONS
                   </span>
                 </div>
                 <div className="flex items-center gap-3 md:pr-6 md:border-r border-gray-400 last:border-r-0">
-                  <img src={G3} alt="Business Growth" className="w-8 h-8 object-contain" />
+                  <img loading="lazy" decoding="async" src={G3} alt="Business Growth" className="w-8 h-8 object-contain" />
                   <span 
                     className="font-bold text-[9px] uppercase tracking-wider leading-tight" 
                     style={{ color: '#081e4a', textShadow: 'none' }}
@@ -489,7 +333,7 @@ const About = () => {
                   </span>
                 </div>
                 <div className="flex items-center gap-3 md:pr-6 md:border-r border-gray-400 last:border-r-0">
-                  <img src={G4} alt="Brand Visibility" className="w-8 h-8 object-contain" />
+                  <img loading="lazy" decoding="async" src={G4} alt="Brand Visibility" className="w-8 h-8 object-contain" />
                   <span 
                     className="font-bold text-[9px] uppercase tracking-wider leading-tight" 
                     style={{ color: '#081e4a', textShadow: '1px 1px 1px rgba(0,0,0,0.1)' }}
@@ -566,77 +410,7 @@ const About = () => {
       <GlobalPlatform />
 
       {/* EVENT OVERVIEW + KEY SECTORS */}
-<section className="pt-4 pb-0 bg-white relative z-10">
-  <SectionContainer>
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-
-      {/* LEFT - Event Overview */}
-      {eventOverviewData && eventOverviewData.title ? (
-        <div>
-          <p className="text-[#d26019] font-bold text-[13px] uppercase tracking-[0.22em] mb-3" style={{ fontFamily: "'Inter', sans-serif" }}>
-            {eventOverviewData.subtitle}
-          </p>
-          <h2 className="font-black text-[28px] leading-[1.2] mb-4 text-[#1a2e1a]" style={{ fontFamily: "'Inter', sans-serif" }}>
-            {eventOverviewData.title}
-          </h2>
-          <div 
-            className="text-gray-900 text-sm leading-[1.6] mb-3 text-justify strip-editor-bg prose prose-sm max-w-none [&_*]:!bg-transparent" 
-            style={{ fontFamily: "'Inter', sans-serif", textAlign: 'justify' }}
-            dangerouslySetInnerHTML={{ __html: eventOverviewData.descriptionHtml }}
-          />
-        </div>
-      ) : (
-        <div>
-          <p className="text-[#d26019] font-bold text-[13px] uppercase tracking-[0.22em] mb-3" style={{ fontFamily: "'Inter', sans-serif" }}>
-            Event Overview
-          </p>
-          <h2 className="font-black text-[28px] leading-[1.2] mb-4 text-[#1a2e1a]" style={{ fontFamily: "'Inter', sans-serif" }}>
-            A Global Platform Connecting Healthcare  Wellness & Business Opportunities
-          </h2>
-          <p className="text-gray-900 text-sm leading-[1.6] mb-3 text-justify strip-editor-bg" style={{ fontFamily: "'Inter', sans-serif", textAlign: 'justify' }}>
-            The International Health & Wellness Expo (IHWE) 2026 is a globally positioned B2B healthcare and wellness exhibition in India, designed to bring together the entire ecosystem of healthcare, AYUSH, wellness, nutrition, medical technology, and preventive healthcare under one integrated platform.
-          </p>
-          <p className="text-gray-900 text-sm leading-[1.6] mb-3 text-justify strip-editor-bg" style={{ fontFamily: "'Inter', sans-serif", textAlign: 'justify' }}>
-            Now in its 9th Edition, IHWE has evolved into a comprehensive business, knowledge, and networking platform, attracting exhibitors, buyers, healthcare professionals, startups, and international delegates from across India and global markets.
-          </p>
-          <p className="text-gray-900 text-sm leading-[1.6] text-justify strip-editor-bg" style={{ fontFamily: "'Inter', sans-serif", textAlign: 'justify' }}>
-            Scheduled from 21st – 23rd August 2026 at Pragati Maidan, New Delhi, the expo is strategically designed to enable business growth, industry collaboration, and global trade opportunities in one high-impact environment.
-          </p>
-        </div>
-      )}
-
-      {/* RIGHT - Key Sectors */}
-      <div>
-        <p className="text-[#d26019] font-bold text-[13px] uppercase tracking-[0.22em] mb-6" style={{ fontFamily: "'Inter', sans-serif" }}>
-          {eventOverviewData?.keySectorsTitle || "Key Sectors"}
-        </p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {(eventOverviewData?.sectors || [
-            { label: "Healthcare & Medical Industry", color: "#3b82f6", iconName: "HeartPulse" },
-            { label: "AYUSH & Traditional Medicine", color: "#22c55e", iconName: "Sprout" },
-            { label: "Wellness, Fitness & Lifestyle", color: "#f59e0b", iconName: "User" },
-            { label: "Digital Health, AI & Medical Technology", color: "#8b5cf6", iconName: "MonitorDot" },
-            { label: "Medical Tourism in India", color: "#06b6d4", iconName: "Plane" },
-            { label: "Nutrition, Organic & Sustainable Living", color: "#10b981", iconName: "Leaf" },
-          ]).map((sector: any, i: number) => {
-            const Icon = (LucideIcons as any)[sector.iconName] || LucideIcons.HeartPulse;
-            return (
-              <div key={i} className="flex flex-col items-center text-center gap-3 p-4 bg-[#f8f9fa] rounded-xl shadow-sm transition-all duration-300 group cursor-default border border-gray-100 hover:border-[#d26019]/30">
-                <div className="transition-transform duration-300 group-hover:scale-110" style={{ color: sector.color }}>
-                  <Icon className="w-16 h-16" strokeWidth={1.2} />
-                </div>
-                <span className="text-[#1a2e1a] font-bold text-[11px] leading-[1.4]" style={{ fontFamily: "'Inter', sans-serif" }}>
-                  {sector.label}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-
-    </div>
-  </SectionContainer>
-</section>
+      <EventOverview eventOverviewData={eventOverviewData} />
 
 
       {/* ABOUT THE ORGANIZER */}
@@ -710,8 +484,7 @@ const About = () => {
                 {/* Image */}
                 <div className="relative z-10 w-full h-full overflow-hidden group"
                   style={{ outline: '2px solid #d26019', outlineOffset: '-2px' }}>
-                  <img
-                    src={organizerData?.imageUrl ? `${SERVER_URL}${organizerData.imageUrl}` : "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80"}
+                  <img loading="lazy" decoding="async" src={organizerData?.imageUrl ? `${SERVER_URL}${organizerData.imageUrl}` : "https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&q=80"}
                     alt={organizerData?.imageAltText || "Organizer Image"}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
@@ -1033,7 +806,7 @@ const About = () => {
                 {/* Image Area - Minimized gap from border */}
                 <div className="p-[4px]">
                   <div className="relative h-[160px] overflow-hidden rounded-[1rem]">
-                    <img src={pillar.img} alt={pillar.title.join(" ")} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                    <img loading="lazy" decoding="async" src={pillar.img} alt={pillar.title.join(" ")} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
                     <div className="absolute inset-0 bg-black/10" />
                   </div>
                 </div>
@@ -1069,8 +842,7 @@ const About = () => {
 
             {/* LEFT - Venue Image - NO border radius */}
             <div className="relative overflow-hidden group">
-              <img
-                src={PragatiMaidanImg}
+              <img loading="lazy" decoding="async" src={PragatiMaidanImg}
                 alt="Pragati Maidan, New Delhi"
                 className="w-full h-[240px] md:h-[340px] object-cover group-hover:scale-[1.04] transition-transform duration-500"
               />

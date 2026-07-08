@@ -84,8 +84,7 @@ const Day3Agenda: React.FC<Day3AgendaProps> = ({ data, dayTitle, dayNumber }) =>
 
                   <td className="px-4 py-2 align-middle min-w-[180px]">
                     <div className="flex items-center gap-3">
-                      <img
-                        src={speakerImg}
+                      <img loading="lazy" decoding="async" src={speakerImg}
                         alt={item.speaker?.name}
                         className="w-10 h-10 rounded-full object-cover border-2 border-white shadow-sm shrink-0"
                       />

@@ -38,8 +38,7 @@ const PrivacyPolicies = () => {
         {/* 1. HERO SECTION */}
         <div className="relative w-full overflow-hidden min-h-[440px] bg-slate-50 flex items-center">
           <div className="absolute inset-0 z-0">
-            <img
-              src={TopImage}
+            <img loading="lazy" decoding="async" src={TopImage}
               alt="Hero Background"
               className="w-full h-full object-cover object-center opacity-90"
             />

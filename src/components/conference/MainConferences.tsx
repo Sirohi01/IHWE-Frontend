@@ -130,8 +130,7 @@ const MainConferences: React.FC<MainConferencesProps> = ({ isModal = false }) =>
               >
 
                 <div className="absolute inset-0 w-full h-full overflow-hidden">
-                  <img
-                    src={conf.image}
+                  <img loading="lazy" decoding="async" src={conf.image}
                     alt={conf.title}
                     className="w-full h-full object-cover object-center transition-transform duration-700 scale-100 group-hover:scale-110"
                   />

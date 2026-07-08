@@ -15,26 +15,26 @@ const SupportingDocumentsSection = ({ form, update }: Props) => (
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
         <UploadCard
           label="Profile / Company Deck"
-          icon={<img src={doc22} alt="Profile Deck" className="w-8 h-8 object-contain" />}
+          icon={<img loading="lazy" decoding="async" src={doc22} alt="Profile Deck" className="w-8 h-8 object-contain" />}
           value={form.profileDeckUrl}
           onChange={v => update("profileDeckUrl", v)}
         />
         <UploadCard
           label="Certifications / Awards"
-          icon={<img src={certificate11} alt="Certifications" className="w-8 h-8 object-contain" />}
+          icon={<img loading="lazy" decoding="async" src={certificate11} alt="Certifications" className="w-8 h-8 object-contain" />}
           value={form.certificationsUrl}
           onChange={v => update("certificationsUrl", v)}
         />
         <UploadCard
           label="Images / Videos"
-          icon={<img src={documentsImg} alt="Images Videos" className="w-8 h-8 object-contain" />}
+          icon={<img loading="lazy" decoding="async" src={documentsImg} alt="Images Videos" className="w-8 h-8 object-contain" />}
           value={form.imagesUrl}
           onChange={v => update("imagesUrl", v)}
         />
         <UploadCard
           label="Website / Social Links"
           isLink
-          icon={<img src={uplinkImg} alt="Social Links" className="w-8 h-8 object-contain" />}
+          icon={<img loading="lazy" decoding="async" src={uplinkImg} alt="Social Links" className="w-8 h-8 object-contain" />}
           value={form.socialLinks}
           onChange={v => update("socialLinks", v)}
         />

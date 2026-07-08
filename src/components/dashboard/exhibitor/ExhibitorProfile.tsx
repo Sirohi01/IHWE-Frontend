@@ -1025,8 +1025,7 @@ function FileUpload({ label, field, currentUrl, files, previews, onFileChange, i
             {showPreview && previewUrl && isImage && (
                 <div className="mt-2 flex justify-center">
                     <div className="w-16 h-16 bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
-                        <img
-                            src={previewUrl}
+                        <img loading="lazy" decoding="async" src={previewUrl}
                             alt={label}
                             className="w-full h-full object-cover"
                         />

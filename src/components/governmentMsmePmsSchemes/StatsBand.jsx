@@ -63,7 +63,7 @@ const StatsBand = () => {
           {stats.map((stat, i) => (
             <React.Fragment key={i}>
               <div className="flex flex-col items-center text-center group flex-1">
-                <img src={stat.img} alt={stat.label} className="w-6 h-6 md:w-7 md:h-7 mb-0.5 object-contain brightness-0 invert" />
+                <img loading="lazy" decoding="async" src={stat.img} alt={stat.label} className="w-6 h-6 md:w-7 md:h-7 mb-0.5 object-contain brightness-0 invert" />
                 <h4 className="text-base md:text-lg font-bold text-white leading-none">
                   <StatCounter value={stat.val} />
                 </h4>

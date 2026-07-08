@@ -205,7 +205,7 @@ export default function MarketingToolkit({ data }: { data: any }) {
                                         onMouseOut={(e) => e.currentTarget.pause()}
                                     />
                                 ) : (
-                                    <img src={`${SERVER_URL}${tpl.templateUrl}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt={tpl.name} />
+                                    <img loading="lazy" decoding="async" src={`${SERVER_URL}${tpl.templateUrl}`} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt={tpl.name} />
                                 )}
                                 
                                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">

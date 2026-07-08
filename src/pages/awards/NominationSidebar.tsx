@@ -49,10 +49,10 @@ const NominationSidebar = () => {
           </p>
         </div>
         <div className="p-4 space-y-4">
-          <BenefitItem icon={<img src={oneImg} alt="Credible Jury" className="w-9 h-9 object-contain" />} title="Credible Jury" desc="Industry Experts" />
-          <BenefitItem icon={<img src={award2Img} alt="Transparent Process" className="w-9 h-9 object-contain" />} title="Transparent Process" desc="Fair Evaluation" />
-          <BenefitItem icon={<img src={team1Img} alt="National & Global" className="w-9 h-9 object-contain" />} title="National &amp; Global" desc="Recognition" />
-          <BenefitItem icon={<img src={jaiImg} alt="Trusted & Prestigious" className="w-9 h-9 object-contain" />} title="Trusted &amp; Prestigious" desc="Platform" />
+          <BenefitItem icon={<img loading="lazy" decoding="async" src={oneImg} alt="Credible Jury" className="w-9 h-9 object-contain" />} title="Credible Jury" desc="Industry Experts" />
+          <BenefitItem icon={<img loading="lazy" decoding="async" src={award2Img} alt="Transparent Process" className="w-9 h-9 object-contain" />} title="Transparent Process" desc="Fair Evaluation" />
+          <BenefitItem icon={<img loading="lazy" decoding="async" src={team1Img} alt="National & Global" className="w-9 h-9 object-contain" />} title="National &amp; Global" desc="Recognition" />
+          <BenefitItem icon={<img loading="lazy" decoding="async" src={jaiImg} alt="Trusted & Prestigious" className="w-9 h-9 object-contain" />} title="Trusted &amp; Prestigious" desc="Platform" />
         </div>
       </div>
 
@@ -120,7 +120,7 @@ const NominationSidebar = () => {
       {/* Secure Badge */}
       <div className="bg-[#edf7f2] rounded-xl border border-[#c4e9d6] p-4 flex items-center gap-3">
         <div className="w-14 h-14 bg-white rounded-lg flex items-center justify-center shadow-sm shrink-0">
-          <img src={lastImg} alt="Secure" className="w-11 h-11 object-contain" />
+          <img loading="lazy" decoding="async" src={lastImg} alt="Secure" className="w-11 h-11 object-contain" />
         </div>
         <div>
           <h4 className="text-[#0a2e5c] text-[12px] font-black uppercase tracking-wide">Secure & Confidential</h4>

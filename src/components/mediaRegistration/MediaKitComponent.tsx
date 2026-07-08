@@ -123,7 +123,7 @@ const MediaKitComponent = () => {
               className="relative flex justify-center items-center w-full lg:w-1/6 h-40 sm:h-40"
             >
               {/* FRONT CARD */}
-              <img src={mediakit_image} alt="Media Kit" className="w-auto h-full object-contain" />
+              <img loading="lazy" decoding="async" src={mediakit_image} alt="Media Kit" className="w-auto h-full object-contain" />
             </motion.div>
             <div className="flex items-center">
 

@@ -73,8 +73,7 @@ const BlogFeaturedLayout: React.FC<BlogFeaturedLayoutProps> = ({ featured, activ
                   >
                     {/* Image Container */}
                     <div className="relative aspect-[4/3] overflow-hidden">
-                      <img
-                        src={`${SERVER_URL}${post.image}`}
+                      <img loading="lazy" decoding="async" src={`${SERVER_URL}${post.image}`}
                         alt={post.title}
                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                       />

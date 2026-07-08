@@ -43,8 +43,7 @@ export default function StallInformation() {
                     <div className="lg:col-span-6 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col md:flex-row">
                         {/* Left Image Section */}
                         <div className="w-full md:w-[45%] relative min-h-[200px] md:min-h-[250px] bg-slate-100">
-                            <img
-                                src={stallImage}
+                            <img loading="lazy" decoding="async" src={stallImage}
                                 alt="Exhibition Stall"
                                 className="w-full h-full object-fit absolute inset-0"
                             />
@@ -135,7 +134,7 @@ export default function StallInformation() {
                         <h3 className="text-sm font-bold text-slate-800 pl-3">Your Stall Location</h3>
                         <div className="flex-1 flex flex-col items-center overflow-visible">
                             <div className="w-full h-[190px]">
-                                <img src={rightimage} alt="" className='w-full h-full object-fit' />
+                                <img loading="lazy" decoding="async" src={rightimage} alt="" className='w-full h-full object-fit' />
                             </div>
                             {/* Legend */}
                             <div className="flex flex-wrap justify-between items-center gap-y-1.5 mt-1.5 text-[9px] font-semibold text-slate-700 w-full px-3">

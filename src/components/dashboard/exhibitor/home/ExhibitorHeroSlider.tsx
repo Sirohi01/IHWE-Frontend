@@ -101,15 +101,13 @@ const ExhibitorHeroSlider = () => {
                     >
                         {slides[current].path ? (
                             <a href={slides[current].path} target="_blank" rel="noopener noreferrer" className="block w-full h-full">
-                                <img
-                                    src={getImageUrl(slides[current].image)}
+                                <img loading="lazy" decoding="async" src={getImageUrl(slides[current].image)}
                                     alt={slides[current].imageAlt || "Exhibitor Hero Slide"}
                                     className="w-full h-full object-cover"
                                 />
                             </a>
                         ) : (
-                            <img
-                                src={getImageUrl(slides[current].image)}
+                            <img loading="lazy" decoding="async" src={getImageUrl(slides[current].image)}
                                 alt={slides[current].imageAlt || "Exhibitor Hero Slide"}
                                 className="w-full h-full object-cover"
                             />

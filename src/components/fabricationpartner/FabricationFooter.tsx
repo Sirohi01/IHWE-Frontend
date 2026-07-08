@@ -34,8 +34,7 @@ const FabricationFooter: React.FC<FabricationFooterProps> = ({ footer }) => {
 
               {/* IMAGE */}
               <div className="w-[120px] md:w-[160px] shrink-0 hidden md:block">
-                <img
-                  src={footerImgUrl}
+                <img loading="lazy" decoding="async" src={footerImgUrl}
                   alt="Stall"
                   className="w-full object-contain opacity-95"
                 />

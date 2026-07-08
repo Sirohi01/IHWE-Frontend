@@ -22,8 +22,7 @@ const DelegateDetailsHero = () => {
             <section className="relative w-full overflow-hidden min-h-[440px]" >
 
                 {/* ── Background Image ── */}
-                <img
-                    src={bannerBg}
+                <img loading="lazy" decoding="async" src={bannerBg}
                     alt="9th International Health & Wellness Expo 2026"
                     className="absolute inset-0 w-full h-full object-cover object-center"
                 />
@@ -37,7 +36,7 @@ const DelegateDetailsHero = () => {
 
                     {/* 9th + th superscript */}
                     <div className="flex mt-10">
-                        <img src={logo} className="h-[220px]" alt="logo" />
+                        <img loading="lazy" decoding="async" src={logo} className="h-[220px]" alt="logo" />
                     </div>
 
                     {/* Tagline */}
@@ -211,7 +210,7 @@ const DelegateDetailsHero = () => {
                                 className={`cursor-pointer transition-all duration-300 rounded-xl px-5 py-4 flex flex-col items-center text-center gap-2 border-2 ${delegateType === 'single' ? 'bg-[#f0f7e6] border-[#4a8f2f] shadow-lg scale-[1.02]' : 'bg-[#f0f7e6]/50 border-transparent hover:border-[#c8e6a0] hover:bg-[#f0f7e6]'}`}
                             >
                                 <div className="flex items-center justify-center">
-                                    <img src="/exhibition/dom.png" alt="Single Delegate" className="w-18 h-20 object-contain" />
+                                    <img loading="lazy" decoding="async" src="/exhibition/dom.png" alt="Single Delegate" className="w-18 h-20 object-contain" />
                                 </div>
                                 <div>
                                     <p className="text-gray-800 font-bold text-base mb-1">Delegate Register </p>
@@ -236,7 +235,7 @@ const DelegateDetailsHero = () => {
                                 className={`cursor-pointer transition-all duration-300 rounded-xl px-5 py-4 flex flex-col items-center text-center gap-2 border-2 ${delegateType === 'group' ? 'bg-[#fff7f0] border-[#d26019] shadow-lg scale-[1.02]' : 'bg-[#fff7f0]/50 border-transparent hover:border-[#f5d5b0] hover:bg-[#fff7f0]'}`}
                             >
                                 <div className="flex items-center justify-center">
-                                    <img src="/exhibition/int.png" alt="Group Delegate" className="w-18 h-20 object-contain" />
+                                    <img loading="lazy" decoding="async" src="/exhibition/int.png" alt="Group Delegate" className="w-18 h-20 object-contain" />
                                 </div>
                                 <div>
                                     <p className="text-gray-800 font-bold text-base mb-1">Delegate Group Register </p>

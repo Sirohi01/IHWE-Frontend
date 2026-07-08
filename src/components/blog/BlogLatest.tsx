@@ -45,8 +45,7 @@ const BlogLatest: React.FC<BlogLatestProps> = ({ blogs, type }) => {
             className="group flex flex-col bg-white rounded-[24px] overflow-hidden border border-slate-100 shadow-sm hover:shadow-xl transition-all duration-500 h-full"
           >
             <div className="relative aspect-video overflow-hidden shrink-0">
-              <img
-                src={`${SERVER_URL}${mainBlog.image}`}
+              <img loading="lazy" decoding="async" src={`${SERVER_URL}${mainBlog.image}`}
                 alt={mainBlog.title}
                 className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
               />
@@ -97,7 +96,7 @@ const BlogLatest: React.FC<BlogLatestProps> = ({ blogs, type }) => {
           {videos.map((video, idx) => (
             <div key={idx} className="flex-1 snap-start group cursor-pointer h-full flex flex-col">
               <div className="relative aspect-[3/4.2] rounded-2xl overflow-hidden mb-3 shrink-0 shadow-sm border border-slate-100">
-                <img src={video.image} alt={video.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <img loading="lazy" decoding="async" src={video.image} alt={video.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-black/20 group-hover:bg-black/40 transition-colors" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center border border-white/30 group-hover:scale-110 transition-transform">

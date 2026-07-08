@@ -119,7 +119,7 @@ export default function EPromotionWeb({ data }: any) {
 
                 {/* ITEM 1 */}
                 <div className="flex items-center gap-2 border-r pr-3 border-white/20 md:border-gray-300">
-                  <img src="/images/1.png" className="w-8 h-8" />
+                  <img loading="lazy" decoding="async" src="/images/1.png" className="w-8 h-8" />
                   <p className="text-white md:text-green-800 text-sm leading-tight">
                     Increased <br /> Brand Visibility
                   </p>
@@ -127,7 +127,7 @@ export default function EPromotionWeb({ data }: any) {
 
                 {/* ITEM 2 */}
                 <div className="flex items-center gap-2 border-r pr-3 border-white/20 md:border-gray-300">
-                  <img src="/images/2.png" className="w-8 h-8" />
+                  <img loading="lazy" decoding="async" src="/images/2.png" className="w-8 h-8" />
                   <p className="text-white md:text-green-800 text-sm leading-tight">
                     Generate <br /> Quality Leads
                   </p>
@@ -135,7 +135,7 @@ export default function EPromotionWeb({ data }: any) {
 
                 {/* ITEM 3 */}
                 <div className="flex items-center gap-2 border-r pr-3 border-white/20 md:border-gray-300">
-                  <img src="/images/3.png" className="w-8 h-8" />
+                  <img loading="lazy" decoding="async" src="/images/3.png" className="w-8 h-8" />
                   <p className="text-white md:text-green-800 text-sm leading-tight">
                     Reach Targeted <br /> Audience
                   </p>
@@ -143,7 +143,7 @@ export default function EPromotionWeb({ data }: any) {
 
                 {/* ITEM 4 (NO BORDER) */}
                 <div className="flex items-center gap-2">
-                  <img src="/images/4.png" className="w-8 h-8" />
+                  <img loading="lazy" decoding="async" src="/images/4.png" className="w-8 h-8" />
                   <p className="text-white md:text-green-800 text-sm leading-tight">
                     Boost ROI from <br /> Participation
                   </p>
@@ -207,8 +207,7 @@ export default function EPromotionWeb({ data }: any) {
               className="flex items-center gap-3 p-4 flex-1 min-w-[200px]"
             >
               {/* ICON */}
-              <img
-                src={item.icon}
+              <img loading="lazy" decoding="async" src={item.icon}
                 className="w-10 h-10 object-contain"
                 alt="icon"
               />
@@ -329,8 +328,7 @@ export default function EPromotionWeb({ data }: any) {
               key={i}
               className="bg-white rounded-xl border p-4 text-center shadow-sm hover:shadow-md transition"
             >
-              <img
-                src={item.image}
+              <img loading="lazy" decoding="async" src={item.image}
                 alt={item.label}
                 className="w-12 h-12 object-contain mx-auto mb-3"
               />
@@ -399,8 +397,7 @@ export default function EPromotionWeb({ data }: any) {
                   key={i}
                   className="bg-gray-50 border rounded-xl p-4 text-center hover:shadow-md transition"
                 >
-                  <img
-                    src={item.icon}
+                  <img loading="lazy" decoding="async" src={item.icon}
                     alt={item.label}
                     className="w-12 h-12 object-contain mx-auto mb-2"
                   />
@@ -464,8 +461,7 @@ export default function EPromotionWeb({ data }: any) {
 
                 {/* RIGHT IMAGE */}
                 <div className="relative h-[120px] md:h-auto overflow-hidden">
-                  <img
-                    src="/images/epromotion/test.png"
+                  <img loading="lazy" decoding="async" src="/images/epromotion/test.png"
                     alt="Testimonial"
                     className="w-full h-full object-cover"
                   />
@@ -494,8 +490,7 @@ export default function EPromotionWeb({ data }: any) {
 
               {/* ICON */}
               <div className="w-[62px] h-[62px] shrink-0 flex items-center justify-center shadow-md bg-[#0d3a20] rounded-xl border border-[#7ea35f]/30">
-                <img
-                  src="/images/epromotion/megaphone.png"
+                <img loading="lazy" decoding="async" src="/images/epromotion/megaphone.png"
                   alt="Megaphone"
                   className="w-14 h-14 object-contain"
                 />
@@ -605,8 +600,7 @@ export default function EPromotionWeb({ data }: any) {
               >
                 {/* IMAGE ICON */}
                 <div className="w-12 h-12 rounded-full bg-[#0d3a20] border border-[#7ea35f] flex items-center justify-center shrink-0 p-1">
-                  <img
-                    src={item[0]}
+                  <img loading="lazy" decoding="async" src={item[0]}
                     alt={item[2]}
                     className="w-full h-full object-contain"
                   />

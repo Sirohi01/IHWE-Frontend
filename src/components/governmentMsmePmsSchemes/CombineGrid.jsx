@@ -10,8 +10,7 @@ const CombineGrid = () => {
                 {/* BG Image Blended Right */}
                 <div className="absolute top-0 right-0 w-full sm:w-[50%] h-full pointer-events-none z-0 opacity-10 sm:opacity-90">
                     <div className="absolute inset-0 bg-gradient-to-r from-white via-white/70 sm:via-white/70 to-transparent z-10" />
-                    <img
-                        src="/msmepmsscheme/combine_handshake.png"
+                    <img loading="lazy" decoding="async" src="/msmepmsscheme/combine_handshake.png"
                         className="w-full h-full object-cover object-center saturate-[0.9] transition-transform duration-700 group-hover:scale-100"
                         alt=""
                     />
@@ -48,8 +47,7 @@ const CombineGrid = () => {
                 {/* BG Image Blended Right */}
                 <div className="absolute top-0 right-0 w-full sm:w-[50%] h-full pointer-events-none z-0 opacity-10 sm:opacity-90">
                     <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent z-10" />
-                    <img
-                        src="/msmepmsscheme/combine_bullseye.png"
+                    <img loading="lazy" decoding="async" src="/msmepmsscheme/combine_bullseye.png"
                         className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-100"
                         alt=""
                     />
@@ -87,8 +85,7 @@ const CombineGrid = () => {
                 {/* BG Image Blended Right */}
                 <div className="absolute top-0 right-0 w-full sm:w-[50%] h-full pointer-events-none z-0 opacity-10 sm:opacity-95">
                     <div className="absolute inset-0 bg-gradient-to-r from-white via-white/60 to-transparent z-10" />
-                    <img
-                        src="/msmepmsscheme/combine_moneyplant.png"
+                    <img loading="lazy" decoding="async" src="/msmepmsscheme/combine_moneyplant.png"
                         className="w-full h-full object-cover object-center saturate-[1.1] transition-transform duration-700 group-hover:scale-100"
                         alt=""
                     />
@@ -114,7 +111,7 @@ const CombineGrid = () => {
                             { t: "Brand Visibility, Enhance Recognition", i: "/msmepmsscheme/brandvisibility.png" }
                         ].map((item, i) => (
                             <div key={i} className="flex items-center gap-3">
-                                {/* <img src={item.i} className="w-8 h-8 object-contain shrink-0" alt="" /> */}
+                                {/* <img loading="lazy" decoding="async" src={item.i} className="w-8 h-8 object-contain shrink-0" alt="" /> */}
                                 <CheckCircle size={13} className="text-[#166534] mt-0.5 shrink-0 opacity-80" strokeWidth={2.5} />
                                 <span className="text-[11px] font-bold text-slate-700 leading-tight">{item.t}</span>
                             </div>

@@ -122,8 +122,7 @@ const WhoWeAre = () => {
                   data-aos-duration="700"
                   className="md:mt-8 overflow-hidden aspect-square rounded-2xl border-2 border-[#d26019]/10 shadow-lg"
                 >
-                  <img
-                    src={activeImages[0].url.startsWith('http') ? activeImages[0].url : `${SERVER_URL}${activeImages[0].url}`}
+                  <img loading="lazy" decoding="async" src={activeImages[0].url.startsWith('http') ? activeImages[0].url : `${SERVER_URL}${activeImages[0].url}`}
                     alt={activeImages[0].altText || "Who We Are Image 1"}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                   />
@@ -136,8 +135,7 @@ const WhoWeAre = () => {
                   data-aos-duration="700"
                   className="md:-mt-4 overflow-hidden aspect-[4/5] rounded-2xl border-2 border-[#23471d]/10 shadow-lg"
                 >
-                  <img
-                    src={activeImages[1].url.startsWith('http') ? activeImages[1].url : `${SERVER_URL}${activeImages[1].url}`}
+                  <img loading="lazy" decoding="async" src={activeImages[1].url.startsWith('http') ? activeImages[1].url : `${SERVER_URL}${activeImages[1].url}`}
                     alt={activeImages[1].altText || "Who We Are Image 2"}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                   />
@@ -150,8 +148,7 @@ const WhoWeAre = () => {
                   data-aos-duration="700"
                   className="md:-mt-8 overflow-hidden aspect-[4/5] rounded-2xl border-2 border-[#23471d]/10 shadow-lg"
                 >
-                  <img
-                    src={activeImages[2].url.startsWith('http') ? activeImages[2].url : `${SERVER_URL}${activeImages[2].url}`}
+                  <img loading="lazy" decoding="async" src={activeImages[2].url.startsWith('http') ? activeImages[2].url : `${SERVER_URL}${activeImages[2].url}`}
                     alt={activeImages[2].altText || "Who We Are Image 3"}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                   />
@@ -164,8 +161,7 @@ const WhoWeAre = () => {
                   data-aos-duration="700"
                   className="md:mt-4 overflow-hidden aspect-square rounded-2xl border-2 border-[#d26019]/10 shadow-lg"
                 >
-                  <img
-                    src={activeImages[3].url.startsWith('http') ? activeImages[3].url : `${SERVER_URL}${activeImages[3].url}`}
+                  <img loading="lazy" decoding="async" src={activeImages[3].url.startsWith('http') ? activeImages[3].url : `${SERVER_URL}${activeImages[3].url}`}
                     alt={activeImages[3].altText || "Who We Are Image 4"}
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
                   />

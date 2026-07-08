@@ -333,7 +333,7 @@ export default function SellerProfilePage() {
                                         {val ? (
                                             <div className="space-y-2">
                                                 {item.field === 'logo' ? (
-                                                    <img src={fixUrl(val)} alt="logo" className="w-16 h-16 object-contain mx-auto rounded-lg border border-slate-100" />
+                                                    <img loading="lazy" decoding="async" src={fixUrl(val)} alt="logo" className="w-16 h-16 object-contain mx-auto rounded-lg border border-slate-100" />
                                                 ) : (
                                                     <div className="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center mx-auto">
                                                         <CheckCircle2 size={20} className="text-emerald-600" />

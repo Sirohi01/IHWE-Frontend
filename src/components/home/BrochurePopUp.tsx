@@ -163,14 +163,13 @@ const BrochurePopUp: React.FC<BrochurePopUpProps> = ({ isOpen, onClose, logoUrl 
             {/* Logo in Top Right */}
             {logoUrl && (
               <div className="absolute -top-10 right-6 z-[20020] pointer-events-none">
-                <img src={logoUrl} alt="IHWE Logo" className="h-40 w-auto object-contain drop-shadow-sm" />
+                <img loading="lazy" decoding="async" src={logoUrl} alt="IHWE Logo" className="h-40 w-auto object-contain drop-shadow-sm" />
               </div>
             )}
 
             {/* Banner Image Container */}
             <div className="relative w-full h-auto rounded-2xl overflow-hidden shadow-[0_40px_80px_-15px_rgba(0,0,0,0.6)] border border-white/30 bg-white">
-              <img
-                src={bannerImg}
+              <img loading="lazy" decoding="async" src={bannerImg}
                 alt="IHWE 2026 Banner"
                 className="w-full h-auto object-contain block"
               />

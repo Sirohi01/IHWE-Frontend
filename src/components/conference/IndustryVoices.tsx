@@ -182,8 +182,7 @@ const IndustryVoices: React.FC = () => {
                     </div>
 
                     <div className="flex justify-center mb-4 relative z-10">
-                      <img
-                        src={
+                      <img loading="lazy" decoding="async" src={
                           item.image
                             ? item.image.startsWith("http")
                               ? item.image

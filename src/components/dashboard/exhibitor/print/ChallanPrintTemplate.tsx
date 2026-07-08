@@ -142,7 +142,7 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
         <>
             {headerImageUrl && (
                 <div style={{ marginBottom: 5, textAlign: 'center' }}>
-                    <img src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
+                    <img loading="lazy" decoding="async" src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
                 </div>
             )}
             <div style={{ position: 'relative', textAlign: 'center', marginBottom: 4, paddingTop: 2, paddingBottom: 1 }}>
@@ -386,8 +386,8 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
                         <td style={{ ...td, textAlign: 'center', verticalAlign: 'bottom' }}>
                             {(settings?.companyStamp || settings?.authorizedSignature) ? (
                                 <div style={{ height: 60, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, overflow: 'hidden' }}>
-                                    {settings?.authorizedSignature && <img src={settings.authorizedSignature} alt="" style={{ maxHeight: 60, maxWidth: 130, objectFit: 'contain' }} />}
-                                    {settings?.companyStamp && <img src={settings.companyStamp} alt="" style={{ maxHeight: 60, maxWidth: 60, objectFit: 'contain' }} />}
+                                    {settings?.authorizedSignature && <img loading="lazy" decoding="async" src={settings.authorizedSignature} alt="" style={{ maxHeight: 60, maxWidth: 130, objectFit: 'contain' }} />}
+                                    {settings?.companyStamp && <img loading="lazy" decoding="async" src={settings.companyStamp} alt="" style={{ maxHeight: 60, maxWidth: 60, objectFit: 'contain' }} />}
                                 </div>
                             ) : (
                                 <div style={{ height: 60 }}></div>

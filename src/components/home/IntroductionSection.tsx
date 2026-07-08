@@ -196,8 +196,7 @@ const IntroductionSection = () => {
 
           <div className="relative mt-4 md:mt-20">
             {data.image && (
-              <img
-                src={`${SERVER_URL}${data.image}`}
+              <img loading="lazy" decoding="async" src={`${SERVER_URL}${data.image}`}
                 alt={data.altText || "IHWE Introduction"}
                 className="w-full max-w-[850px] object-contain scale-100 md:scale-110 md:translate-x-4"
               />

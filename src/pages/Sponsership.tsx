@@ -401,8 +401,7 @@ const Sponsership = () => {
                                             className="flex items-center gap-2 sm:gap-3"
                                         >
 
-                                            <img
-                                                src={item.icon}
+                                            <img loading="lazy" decoding="async" src={item.icon}
                                                 alt=""
                                                 className="w-10 h-10 sm:w-12 sm:h-12 object-contain shrink-0"
                                             />
@@ -446,8 +445,7 @@ const Sponsership = () => {
                     <div key={idx} className="flex items-start gap-4 py-2">
 
                       <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xl shrink-0">
-                        <img
-                          src={item.icon}
+                        <img loading="lazy" decoding="async" src={item.icon}
                           alt=""
                           className="w-full h-full object-contain"
                         />
@@ -536,8 +534,7 @@ const Sponsership = () => {
 
                   <div className="w-16 h-16 mx-auto flex items-center justify-center">
 
-                    <img
-                      src={item.icon}
+                    <img loading="lazy" decoding="async" src={item.icon}
                       alt=""
                       className="w-full h-full object-contain"
                     />
@@ -581,8 +578,7 @@ const Sponsership = () => {
             >
               {/* IMAGE */}
               <div className="w-16 h-16 mx-auto flex items-center justify-center">
-                <img
-                  src={item.image}
+                <img loading="lazy" decoding="async" src={item.image}
                   alt={item.title}
                   className="w-14 h-14 object-contain"
                 />
@@ -667,8 +663,7 @@ const Sponsership = () => {
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
                   sponsorCards[activeMobileTab].color === "blue" ? "bg-blue-50" : "bg-green-50"
                 }`}>
-                  <img
-                    src={sponsorCards[activeMobileTab].image}
+                  <img loading="lazy" decoding="async" src={sponsorCards[activeMobileTab].image}
                     alt=""
                     className="w-8 h-8 object-contain"
                   />
@@ -731,8 +726,7 @@ const Sponsership = () => {
                       style={{ minWidth: "130px" }}
                     >
                       <div className="flex flex-col items-center gap-2">
-                        <img
-                          src={item.image}
+                        <img loading="lazy" decoding="async" src={item.image}
                           alt={item.title}
                           className="w-7 h-7 object-contain brightness-0 invert"
                         />

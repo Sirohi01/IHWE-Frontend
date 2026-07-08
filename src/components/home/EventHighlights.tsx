@@ -159,8 +159,7 @@ const EventHighlights = () => {
                     {/* Left: Image — Balanced width (5/12) to keep height in check while being square */}
                     <div className="lg:col-span-5 relative aspect-square" data-aos="fade-right">
                         <div className="absolute inset-0 overflow-hidden group shadow-xl border border-slate-100 bg-white">
-                            <img
-                                src={data?.image ? `${SERVER_URL}${data.image}` : ""}
+                            <img loading="lazy" decoding="async" src={data?.image ? `${SERVER_URL}${data.image}` : ""}
                                 alt={data?.imageAlt || ""}
                                 className="w-full h-full object-contain transition-transform duration-1000 group-hover:scale-105"
                             />

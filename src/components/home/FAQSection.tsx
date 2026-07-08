@@ -45,7 +45,7 @@ const FAQSection = () => {
   return (
     <section className="pt-8 pb-8 bg-white border-t border-gray-100 relative overflow-hidden">
       <div className="absolute top-0 left-0 w-32 md:w-56 h-auto pointer-events-none z-0">
-        <img src={leaf} alt="decoration" className="w-full h-full object-contain rotate-[110deg] -translate-x-1/3 translate-y-[5%]" />
+        <img loading="lazy" decoding="async" src={leaf} alt="decoration" className="w-full h-full object-contain rotate-[110deg] -translate-x-1/3 translate-y-[5%]" />
       </div>
       <div className="absolute top-0 right-0 w-[400px] h-[400px] bg-[#23471d]/[0.01] rounded-full blur-[80px] -mr-48 -mt-48" />
       <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#d26019]/[0.01] rounded-full blur-[80px] -ml-48 -mb-48" />
@@ -146,14 +146,12 @@ const FAQSection = () => {
                   className="absolute inset-0"
                 >
                   {activeIndex !== null && items[activeIndex]?.image ? (
-                    <img
-                      src={items[activeIndex].image.startsWith('http') ? items[activeIndex].image : `${SERVER_URL}${items[activeIndex].image}`}
+                    <img loading="lazy" decoding="async" src={items[activeIndex].image.startsWith('http') ? items[activeIndex].image : `${SERVER_URL}${items[activeIndex].image}`}
                       alt={items[activeIndex]?.imageAlt || items[activeIndex]?.question}
                       className="w-full h-full object-cover"
                     />
                   ) : faqData?.defaultImage ? (
-                    <img
-                      src={faqData.defaultImage.startsWith('http') ? faqData.defaultImage : `${SERVER_URL}${faqData.defaultImage}`}
+                    <img loading="lazy" decoding="async" src={faqData.defaultImage.startsWith('http') ? faqData.defaultImage : `${SERVER_URL}${faqData.defaultImage}`}
                       alt={faqData?.defaultImageAlt || "9th International Health & Wellness Expo 2026"}
                       className="w-full h-full object-cover"
                     />

@@ -264,7 +264,7 @@ const BrochureDownloadPopup: React.FC = () => {
 
                 <div className="flex-1 p-5 md:p-5 flex flex-col justify-center text-center md:text-left">
                   <motion.div variants={itemVariants} className="flex justify-center md:justify-start mb-2">
-                    <img src={logoUrl || "/logo.png"} alt="Logo" className="h-12 md:h-auto object-contain" />
+                    <img loading="lazy" decoding="async" src={logoUrl || "/logo.png"} alt="Logo" className="h-12 md:h-auto object-contain" />
                   </motion.div>
 
                   <div className="space-y-0.5 mb-3 md:mb-4">

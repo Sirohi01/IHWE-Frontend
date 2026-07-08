@@ -152,8 +152,7 @@ const Day1Agenda: React.FC = () => {
                     <td className="px-4 py-2 align-top min-w-[250px]">
                       <div className="flex items-center justify-between gap-3">
                         <div className="flex items-center gap-3">
-                          <img
-                            src={item.speaker.image}
+                          <img loading="lazy" decoding="async" src={item.speaker.image}
                             alt={item.speaker.name}
                             className="w-10 h-10 rounded-full object-cover border border-gray-100 shadow-sm"
                           />

@@ -222,8 +222,7 @@ const DelegatesLogin = () => {
                                     />
                                     <div className="relative z-10 flex-1 flex flex-col">
                                         <div className="mt-8 mb-8">
-                                            <img
-                                                src="/logo.png"
+                                            <img loading="lazy" decoding="async" src="/logo.png"
                                                 alt="IHWE Logo"
                                                 className="h-20 w-auto object-contain -ml-2"
                                             />

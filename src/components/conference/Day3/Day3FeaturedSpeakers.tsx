@@ -40,8 +40,7 @@ const Day3FeaturedSpeakers: React.FC<Day3FeaturedSpeakersProps> = ({ data, dayNu
               className="flex flex-col items-center text-center"
             >
               {/* Photo */}
-              <img
-                src={speakerImg}
+              <img loading="lazy" decoding="async" src={speakerImg}
                 alt={speaker.name}
                 className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md mb-2"
               />

@@ -26,7 +26,7 @@ const AwardCategorySection = ({ form, update, categories }: Props) => (
         </select>
       </div>
       <div className="hidden md:block shrink-0">
-        <img src={awardImg} alt="Award" className="w-12 h-12 object-contain opacity-60" />
+        <img loading="lazy" decoding="async" src={awardImg} alt="Award" className="w-12 h-12 object-contain opacity-60" />
       </div>
     </div>
   </div>

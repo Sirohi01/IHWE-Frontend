@@ -74,8 +74,7 @@ const ConferenceHero: React.FC = () => {
               transition={{ duration: 0.6 }}
               className="mt-1 sm:-mt-5"
             >
-              <img
-                src={arogyaLogo}
+              <img loading="lazy" decoding="async" src={arogyaLogo}
                 alt="Arogyasangosti Logo"
                 className="h-28 sm:h-36 md:h-40 w-auto object-contain transition-all duration-300 hover:scale-105"
                 style={{

@@ -163,19 +163,19 @@ const BuyerLanding = () => {
                             {[
                                 {
                                     num: '1,000+', label: 'Buyers',
-                                    icon: <img src="/buyer/sb1.png" alt="" className="w-16 lg:w-20 h-auto object-contain" />
+                                    icon: <img loading="lazy" decoding="async" src="/buyer/sb1.png" alt="" className="w-16 lg:w-20 h-auto object-contain" />
                                 },
                                 {
                                     num: '150+', label: 'Exhibitors',
-                                    icon: <img src="/buyer/sb2.png" alt="" className="w-16 lg:w-20 h-auto object-contain" />,
+                                    icon: <img loading="lazy" decoding="async" src="/buyer/sb2.png" alt="" className="w-16 lg:w-20 h-auto object-contain" />,
                                 },
                                 {
                                     num: '5,000+', label: 'Products',
-                                    icon: <img src="/buyer/sb3.png" alt="" className="w-16 lg:w-20 h-auto object-contain" />,
+                                    icon: <img loading="lazy" decoding="async" src="/buyer/sb3.png" alt="" className="w-16 lg:w-20 h-auto object-contain" />,
                                 },
                                 {
                                     num: 'Global', label: 'Participation',
-                                    icon: <img src="/buyer/sb4.png" alt="" className="w-16 lg:w-20 h-auto object-contain" />,
+                                    icon: <img loading="lazy" decoding="async" src="/buyer/sb4.png" alt="" className="w-16 lg:w-20 h-auto object-contain" />,
                                 },
                             ].map((stat, i, arr) => (
                                 <div key={i} className="flex items-center lg:contents">
@@ -201,7 +201,7 @@ const BuyerLanding = () => {
                     </div>
 
                     <div className="hidden lg:block lg:w-[30%]">
-                        {/* <img src="/bsmeet/bsherob.png" alt="" /> */}
+                        {/* <img loading="lazy" decoding="async" src="/bsmeet/bsherob.png" alt="" /> */}
                     </div>
                 </SectionContainer>
             </section>
@@ -234,8 +234,7 @@ const BuyerLanding = () => {
                     >
 
                         {/* Background Full Image */}
-                        <img
-                            src="/buyer/dombuybg.png"
+                        <img loading="lazy" decoding="async" src="/buyer/dombuybg.png"
                             alt=""
                             className="absolute inset-0 w-full h-full object-cover opacity-100 pointer-events-none"
                         />
@@ -244,8 +243,7 @@ const BuyerLanding = () => {
                         <div className="relative shrink-0 z-10">
                             <div className={`w-24 h-24 rounded-full bg-white flex items-center justify-center border-[6px] transition-all duration-300 ${buyerType === 'domestic' ? 'border-[#eef6e2] shadow-xl scale-105' : 'border-transparent shadow-md'}`}>
                                 <div className="w-20 h-20 rounded-full bg-[#4d7f1d] flex items-center justify-center">
-                                    <img
-                                        src="/buyer/dombuy.png"
+                                    <img loading="lazy" decoding="async" src="/buyer/dombuy.png"
                                         alt="Domestic"
                                         className="w-26 h-26 object-contain"
                                     />
@@ -279,8 +277,7 @@ const BuyerLanding = () => {
                     >
 
                         {/* Background Full Image */}
-                        <img
-                            src="/buyer/intbuybg.png"
+                        <img loading="lazy" decoding="async" src="/buyer/intbuybg.png"
                             alt=""
                             className="absolute inset-0 w-full h-full object-cover opacity-100 pointer-events-none"
                         />
@@ -289,8 +286,7 @@ const BuyerLanding = () => {
                         <div className="relative shrink-0 z-10">
                             <div className={`w-24 h-24 rounded-full bg-white flex items-center justify-center border-[6px] transition-all duration-300 ${buyerType === 'international' ? 'border-[#e4eef9] shadow-xl scale-105' : 'border-transparent shadow-md'}`}>
                                 <div className="w-20 h-20 rounded-full bg-[#185fa5] flex items-center justify-center">
-                                    <img
-                                        src="/buyer/intbuy.png"
+                                    <img loading="lazy" decoding="async" src="/buyer/intbuy.png"
                                         alt="International"
                                         className="w-26 h-26 object-contain"
                                     />

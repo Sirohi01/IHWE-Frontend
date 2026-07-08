@@ -19,7 +19,7 @@ export default function ExhibitorHeader({ logo, data, activeTab, setActiveTab, h
                 <div className="flex items-center group">
                     <div className="h-14 flex items-center group-hover:scale-105 transition-all duration-500">
                         {logo ? (
-                            <img src={`${SERVER_URL}${logo}`} className="h-full w-auto object-contain pr-4" alt="Logo" />
+                            <img loading="lazy" decoding="async" src={`${SERVER_URL}${logo}`} className="h-full w-auto object-contain pr-4" alt="Logo" />
                         ) : (
                             <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-[#1a3516] to-[#3a7a2e] flex items-center justify-center shadow-xl shadow-green-900/10">
                                 <ShieldCheck size={24} className="text-white" strokeWidth={2.5} />

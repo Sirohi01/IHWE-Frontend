@@ -26,8 +26,7 @@ const TravelFooter: React.FC<TravelFooterProps> = ({ footer }) => {
           <div className="bgg-white relative p-[20px_25px] lg:p-[0px_25px] flex items-center gap-[15px] lg:min-w-[280px] overflow-hidden rounded-[20px] lg:rounded-none lg:rounded-r-[80px] z-10 w-full lg:w-auto justify-center lg:justify-start min-h-[100px] lg:min-h-[70px]">
 
             <div className="absolute inset-0 w-full h-full z-0 bg-white">
-              <img
-                src={footerBgImage}
+              <img loading="lazy" decoding="async" src={footerBgImage}
                 alt="background"
                 className="w-full h-full object-cover"
               />

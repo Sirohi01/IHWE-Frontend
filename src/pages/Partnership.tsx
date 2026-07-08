@@ -254,8 +254,7 @@ const Partnership = () => {
 
                         <div className="w-16 h-16 flex items-center justify-center p-2">
 
-                          <img
-                            src={item.image}
+                          <img loading="lazy" decoding="async" src={item.image}
                             alt=""
                             className="w-full h-full object-contain"
                           />
@@ -349,8 +348,7 @@ const Partnership = () => {
 
                   <div className="w-12 h-12 mx-auto rounded-full bg-[#eef8ea] flex items-center justify-center p-2.5 mb-2.5 shadow-sm">
 
-                    <img
-                      src={item.image}
+                    <img loading="lazy" decoding="async" src={item.image}
                       alt=""
                       className="w-full h-full object-contain"
                     />
@@ -477,8 +475,7 @@ const Partnership = () => {
 
                   >
 
-                    <img
-                      src={formatUrl(item.icon)}
+                    <img loading="lazy" decoding="async" src={formatUrl(item.icon)}
                       alt=""
                       className="w-full h-full object-contain p-4"
                     />

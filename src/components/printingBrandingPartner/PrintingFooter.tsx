@@ -28,8 +28,7 @@ const PricingFooter = ({ footer }) => {
           <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between">
             <div className="flex items-center gap-3 px-6 py-3 w-full lg:w-auto">
               <div className="w-[160px] shrink-0 hidden md:block">
-                <img
-                  src="/images/stall.png"
+                <img loading="lazy" decoding="async" src="/images/stall.png"
                   alt="Stall"
                   className="w-full object-contain opacity-95"
                 />

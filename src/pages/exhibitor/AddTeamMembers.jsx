@@ -272,7 +272,7 @@ const AddTeamMembers = () => {
                                             <label className="w-10 h-10 rounded-lg border border-dashed border-blue-300 bg-blue-50 hover:bg-blue-100 flex flex-col items-center justify-center cursor-pointer transition-colors overflow-hidden group mx-auto relative">
                                                 <input type="file" accept="image/jpeg, image/png" className="hidden" onChange={(e) => handlePhotoUpload(index, e.target.files[0])} />
                                                 {row.photoPreview ? (
-                                                    <img src={row.photoPreview} alt="" className="w-full h-full object-cover" />
+                                                    <img loading="lazy" decoding="async" src={row.photoPreview} alt="" className="w-full h-full object-cover" />
                                                 ) : (
                                                     <Upload size={14} className="text-blue-500 group-hover:scale-110 transition-transform" />
                                                 )}

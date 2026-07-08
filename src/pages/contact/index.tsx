@@ -5,7 +5,7 @@ import {
   MapPin, Mail, Phone, Clock, Send, CheckCircle, Loader2,
 } from "lucide-react";
 import { settingsApi, heroBackgroundApi, contactEnquiryApi, verifyApi, SERVER_URL } from "@/lib/api";
-import SectionContainer from "../components/layout/SectionContainer";
+import SectionContainer from "@/components/layout/SectionContainer";
 import contactBg from "@/assets/contactbg.webp";
 import conbg from "@/assets/conbg.png";
 import arrowImg from "@/assets/arrow.png";
@@ -13,11 +13,9 @@ import leafImg from "@/assets/leaf.png";
 import teleImg from "@/assets/tele.png";
 import webg from "@/assets/webg.png";
 import c1 from "@/assets/c1.png";
-import c2 from "@/assets/c2.png";
-import c3 from "@/assets/c3.png";
+import TrustBand from "@/components/contact/TrustBand";
+import ContactHero from "@/components/contact/ContactHero";
 import c4 from "@/assets/c4.png";
-
-
 const Contact = () => {
   const [settings, setSettings] = useState<any>(null);
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", service: "", message: "" });
@@ -274,88 +272,7 @@ const Contact = () => {
   return (
     <div className="bg-[#f3f4f6] min-h-screen font-inter overflow-hidden">
       {/* ── HERO SECTION ── */}
-      <section
-        className="relative flex items-center pt-14 md:pt-20 pb-10 md:pb-14 aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]"
-        style={{ 
-          backgroundImage: `url(${contactBg})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        }}
-      >
-        {/* Removed Overlay as requested */}
-        
-        <SectionContainer className="relative z-10">
-          <div className="flex flex-col lg:flex-row items-center justify-between gap-12">
-            <div className="text-white max-w-4xl" data-aos="fade-right">
-              <div className="inline-flex items-center gap-2 mb-6">
-                <Mail className="w-4 h-4 text-[#72a01d]" />
-                <span className="text-sm font-bold uppercase tracking-widest text-[#72a01d]">CONTACT US</span>
-                <div className="w-8 h-[1px] bg-[#72a01d]" />
-              </div>
-              
-              <h1 className="text-5xl md:text-6xl font-black mb-4 leading-tight drop-shadow-lg">
-                WE'RE HERE <br />
-                <span className="text-[#73ad1d]">TO HELP YOU!</span>
-              </h1>
-              
-              <p className="text-white text-lg mb-8 max-w-xl leading-relaxed drop-shadow-md">
-                Have questions about the expo, exhibiting,<br />
-                partnerships or anything else?<br />
-                Our team is just a message away.
-              </p>
-              
-              <div className="flex flex-wrap items-center gap-y-4">
-                {[
-                  { icon: Clock, label: "QUICK RESPONSE", sub: "We reply within 24 hrs" },
-                  { icon: CheckCircle, label: "EXPERT SUPPORT", sub: "Dedicated team to help" },
-                  { icon: Send, label: "RELIABLE ASSISTANCE", sub: "We're just a message away" },
-                ].map((item, i, arr) => (
-                  <div key={i} className="flex items-center">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-[#8cc63f] flex items-center justify-center shrink-0">
-                        <item.icon className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold text-white tracking-wider leading-none mb-1">{item.label}</p>
-                        <p className="text-xs text-white">{item.sub}</p>
-                      </div>
-                    </div>
-                    {i < arr.length - 1 && (
-                      <div className="hidden md:block w-[1px] h-8 bg-white/30 mx-6 md:mx-8" />
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Floating Info Card (WE VALUE YOUR TIME) */}
-            <div className="hidden lg:block w-44 bg-white rounded-2xl shadow-2xl px-3 py-6 relative transform hover:-translate-y-2 transition-all duration-500" data-aos="fade-left">
-              <div className="absolute top-0 right-0 w-24 h-24 opacity-[0.03] pointer-events-none overflow-hidden rounded-tr-2xl">
-                <img src={leafImg} alt="" className="w-full h-full object-contain rotate-45" />
-              </div>
-              
-              <div className="flex flex-col items-center text-center">
-                {/* Floating Icon Header */}
-                <div className="w-20 h-20 rounded-full bg-[#73ad1d] flex items-center justify-center mb-4 shadow-[0_10px_25px_rgba(115,173,29,0.3)] -mt-14 border-4 border-white transition-transform duration-300 hover:scale-110 relative z-10">
-                  <img src={webg} alt="Web Icon" className="w-12 h-12 object-contain" />
-                </div>
-                
-                <h3 className="text-[17px] font-black text-[#151f43] tracking-tighter uppercase leading-none">WE VALUE</h3>
-                <h3 className="text-[17px] font-black text-[#151f43] tracking-tighter uppercase mb-3 mt-1">YOUR TIME</h3>
-                
-                <div className="w-12 h-[3px] bg-[#73ad1d] rounded-full mb-4" />
-                
-                <p className="text-xs text-gray-900 font-bold leading-relaxed px-2">
-                  Reach out to us and <br /> we'll get back to you <br /> promptly!
-                </p>
-
-                {/* Decorative corner accent */}
-                <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-[#73ad1d] rounded-tl-2xl opacity-10" />
-              </div>
-            </div>
-          </div>
-        </SectionContainer>
-      </section>
+      <ContactHero />
 
       {/* ── OVERLAPPING CARDS SECTION ── */}
       <section className="relative z-20 pt-10 md:pt-12 pb-20">
@@ -406,8 +323,7 @@ const Contact = () => {
                     </div>
                     {i === 0 && (
                       <div className="absolute right-0 bottom-0 translate-x-2 translate-y-1 opacity-70 pointer-events-none w-14 md:w-16">
-                        <img 
-                          src={conbg} 
+                        <img loading="lazy" decoding="async" src={conbg} 
                           alt="Building" 
                           className="w-full h-auto object-contain"
                           style={{ filter: 'grayscale(1) brightness(0.5) sepia(1) hue-rotate(190deg) saturate(20)' }}
@@ -428,11 +344,11 @@ const Contact = () => {
             >
               {/* Decorative Leaf in top right */}
               <div className="absolute -top-14 -right-1 w-40  pointer-events-none transform rotate-[15deg]">
-                <img src={leafImg} alt="Decorative Leaf" className="w-full h-full object-contain" />
+                <img loading="lazy" decoding="async" src={leafImg} alt="Decorative Leaf" className="w-full h-full object-contain" />
               </div>
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-14 h-14 rounded-full bg-[#e8f5e9] flex items-center justify-center shrink-0">
-                  <img src={teleImg} alt="Telegram Icon" className="w-14 h-14 object-contain" />
+                  <img loading="lazy" decoding="async" src={teleImg} alt="Telegram Icon" className="w-14 h-14 object-contain" />
                 </div>
                 <div className="flex items-center gap-6">
                   <div>
@@ -607,28 +523,7 @@ const Contact = () => {
       </section>
 
       {/* ── TRUST BAND ── */}
-      <section className="relative z-30 -mt-16">
-        <SectionContainer>
-          <div className="bg-white rounded-2xl shadow-[0_10px_40px_rgba(0,0,0,0.08)] border border-gray-100 py-5 px-4">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-y-8">
-              {[
-                { img: c1, top: "100% SECURE", bot: "Your information is safe with us" },
-                { img: c2, top: "DEDICATED TEAM", bot: "We are here to help" },
-                { img: c3, top: "QUICK RESPONSE", bot: "We reply within 24 hrs" },
-                { img: c4, top: "TRUSTED SUPPORT", bot: "Your satisfaction is our priority" },
-              ].map((item, i) => (
-                <div key={i} className="flex items-center gap-4 px-6 border-gray-300 md:border-r last:border-none">
-                  <img src={item.img} alt={item.top} className="w-12 h-12 object-contain shrink-0" />
-                  <div>
-                    <p className="text-[13px] font-bold text-[#044716] leading-tight tracking-tight">{item.top}</p>
-                    <p className="text-[11px] text-gray-900 font-bold leading-tight mt-1">{item.bot}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </SectionContainer>
-      </section>
+      <TrustBand />
 
       {/* MAP */}
       {settings?.mapIframe && (

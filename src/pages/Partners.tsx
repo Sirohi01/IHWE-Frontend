@@ -300,7 +300,7 @@ const Partners = () => {
                     key={i}
                     className={`flex flex-col items-center text-center px-2 border-slate-200 ${i % 2 === 0 ? "border-r" : "border-r-0 lg:border-r"} lg:last:border-r-0`}
                   >
-                    <img src={item.img} alt="Feature" className="w-12 h-12 md:w-16 md:h-16 object-cover mb-1 md:mb-1.5 transition-transform hover:scale-110" />
+                    <img loading="lazy" decoding="async" src={item.img} alt="Feature" className="w-12 h-12 md:w-16 md:h-16 object-cover mb-1 md:mb-1.5 transition-transform hover:scale-110" />
                     <p className="text-[10px] md:text-[12px] font-black text-[#0a133c] leading-[1.1] uppercase">
                       {item.label}
                     </p>
@@ -318,8 +318,7 @@ const Partners = () => {
               className="hidden lg:flex w-full lg:w-1/2 relative justify-center lg:justify-end -mx-4 lg:mx-0"
             >
               <div className="relative w-screen lg:w-full lg:max-w-2xl">
-                <img
-                  src={partImage}
+                <img loading="lazy" decoding="async" src={partImage}
                   alt="IHWE Support Services"
                   className="w-full h-auto object-contain lg:scale-x-[2.0] lg:scale-y-[1.85] lg:-translate-x-72"
                 />
@@ -364,7 +363,7 @@ const Partners = () => {
 
                   <div>
                     <div className="w-16 h-16  mb-3">
-                      <img src={card.icon} alt={card.title} className="w-full h-full object-contain" />
+                      <img loading="lazy" decoding="async" src={card.icon} alt={card.title} className="w-full h-full object-contain" />
                     </div>
                     <h3
                       className="text-[16px] font-extrabold tracking-tight leading-snug mb-2 uppercase"
@@ -389,8 +388,7 @@ const Partners = () => {
 
 
                 <div className="w-[180px] shrink-0 overflow-hidden relative">
-                  <img
-                    src={card.image}
+                  <img loading="lazy" decoding="async" src={card.image}
                     alt={card.title}
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
@@ -418,8 +416,7 @@ const Partners = () => {
             <div className="flex flex-col lg:flex-row items-center">
               {/* Image Side */}
               <div className="w-full lg:w-[20%] p-6">
-                <img
-                  src={part1111}
+                <img loading="lazy" decoding="async" src={part1111}
                   alt="Vendor Network"
                   className="w-full h-auto object-contain"
                 />
@@ -511,8 +508,7 @@ const Partners = () => {
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 items-center justify-items-center">
               {hotelLogos.map((logo, i) => (
                 <div key={i} className="bg-white p-2 rounded-xl shadow-md w-full h-[75px] flex items-center justify-center group hover:scale-105 transition-transform duration-300">
-                  <img
-                    src={logo}
+                  <img loading="lazy" decoding="async" src={logo}
                     alt="Hotel Partner"
                     className="max-h-full max-w-full object-contain"
                   />
@@ -545,7 +541,7 @@ const Partners = () => {
               <React.Fragment key={i}>
                 <div className="flex items-center gap-4 px-2 flex-1 min-w-[200px]">
                   <div className="w-16 h-16 flex items-center justify-center shrink-0">
-                    <img src={f.icon} alt={f.title} className="object-contain" />
+                    <img loading="lazy" decoding="async" src={f.icon} alt={f.title} className="object-contain" />
                   </div>
                   <div className="flex flex-col">
                     <h4 className="text-[11px] font-black text-[#00153c] tracking-tight uppercase leading-tight mb-1">{f.title}</h4>
@@ -592,7 +588,7 @@ const Partners = () => {
                 <React.Fragment key={i}>
                   <div className="flex flex-col items-center gap-1.5 px-4 md:px-8 text-white/90 min-w-[70px] md:min-w-[100px] shrink-0">
                     <div className="text-white/80">
-                      <img src={item.icon} alt={item.label} className="w-8 md:w-12 h-auto object-contain" />
+                      <img loading="lazy" decoding="async" src={item.icon} alt={item.label} className="w-8 md:w-12 h-auto object-contain" />
                     </div>
                     <span className="text-[9px] md:text-[12px] font-black uppercase tracking-tight">{item.label}</span>
                   </div>

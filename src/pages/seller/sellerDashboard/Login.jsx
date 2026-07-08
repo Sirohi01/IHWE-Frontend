@@ -142,8 +142,7 @@ const Login = () => {
                 </div>
 
                 <div className="flex items-center gap-6">
-                  <img
-                    src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"}
+                  <img loading="lazy" decoding="async" src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"}
                     alt="IHWE Logo"
                     className="h-24 w-auto object-contain"
                   />

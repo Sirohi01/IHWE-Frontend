@@ -100,8 +100,7 @@ const ExhibitorLogos = () => {
                                 className="pl-4 basis-1/3 sm:basis-1/4 md:basis-1/6 lg:basis-[12.5%]"
                             >
                                 <div className="bg-white rounded-lg p-0 h-10 md:h-12 flex items-center justify-center shadow-sm hover:shadow-md transition-all duration-300 mx-1">
-                                    <img
-                                        src={logo.url.startsWith("http") ? logo.url : `${SERVER_URL}${logo.url}`}
+                                    <img loading="lazy" decoding="async" src={logo.url.startsWith("http") ? logo.url : `${SERVER_URL}${logo.url}`}
                                         alt={logo.altText}
                                         className="max-h-full max-w-full object-contain grayscale-[0.2] hover:grayscale-0 transition-all"
                                     />

@@ -21,8 +21,7 @@ const AwardsAbout = () => {
             className="flex-1 relative flex justify-center lg:justify-start"
           >
             <div className="w-full max-w-[550px] h-auto overflow-hidden rounded-[24px]">
-              <img
-                src={plaqueImg}
+              <img loading="lazy" decoding="async" src={plaqueImg}
                 alt="Award Plaque"
                 className="w-full h-auto object-contain"
               />
@@ -56,8 +55,7 @@ const AwardsAbout = () => {
             </div>
 
             <div className="border-t border-slate-200">
-              <img
-                src={credImg}
+              <img loading="lazy" decoding="async" src={credImg}
                 alt="Award Features"
                 className="w-full h-auto object-contain max-w-[700px]"
               />

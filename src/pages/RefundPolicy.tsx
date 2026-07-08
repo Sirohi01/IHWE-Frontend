@@ -322,8 +322,7 @@ const RefundPolicy = () => {
       <section className="relative min-h-[400px] md:h-[480px] flex items-center pt-24 md:pt-32 pb-16 overflow-hidden no-print">
         {/* BG Image with Gradient Overlay */}
         <div className="absolute inset-0 z-0">
-          <img
-            src={refundBg}
+          <img loading="lazy" decoding="async" src={refundBg}
             alt="Refund Policy BG"
             className="w-full h-full object-cover object-center"
           />

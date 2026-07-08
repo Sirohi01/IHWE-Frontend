@@ -29,9 +29,8 @@ export default function SellerPopup({ isOpen, onClose }: { isOpen: boolean, onCl
                         <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
                             {/* Left Side: Image - full contained, no crop */}
                             <div className="hidden md:flex w-[46%] shrink-0 relative bg-gradient-to-b from-[#f0fdf4] to-[#dcfce7]">
-                                <img src="/logo.png" alt="Logo" className="absolute top-3 left-3 z-10 h-8 w-auto drop-shadow-md" />
-                                <img
-                                    src={exsellImg}
+                                <img loading="lazy" decoding="async" src="/logo.png" alt="Logo" className="absolute top-3 left-3 z-10 h-8 w-auto drop-shadow-md" />
+                                <img loading="lazy" decoding="async" src={exsellImg}
                                     alt="Seller Registration"
                                     className="w-full h-full object-fill object-center"
                                 />
@@ -41,7 +40,7 @@ export default function SellerPopup({ isOpen, onClose }: { isOpen: boolean, onCl
                             <div className="w-full md:w-[54%] flex flex-col bg-white">
 
                                 {/* Top Banner Image */}
-                                <img src={exselltopImg} alt="Seller Registration" className="w-[96%] mx-auto h-auto object-contain shrink-0 mt-1" />
+                                <img loading="lazy" decoding="async" src={exselltopImg} alt="Seller Registration" className="w-[96%] mx-auto h-auto object-contain shrink-0 mt-1" />
 
                                 {/* Form - no scroll, tight spacing */}
                                 <div className="p-2 flex flex-col gap-1.5 flex-1 font-inter">

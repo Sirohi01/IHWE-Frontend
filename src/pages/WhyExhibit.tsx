@@ -117,7 +117,7 @@ const ExhibitorTestimonialCard = ({ item, expandedCardId, setExpandedCardId, ind
           className="w-16 h-16 rounded-full border-[3px] border-white flex items-center justify-center overflow-hidden bg-white"
           style={{ boxShadow: "0 4px 18px rgba(0,0,0,0.15), 0 0 0 2px #e2e8f0" }}
         >
-          <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+          <img loading="lazy" decoding="async" src={item.image} alt={item.name} className="w-full h-full object-cover" />
         </div>
       </div>
 
@@ -158,7 +158,7 @@ const ExhibitorTestimonialCard = ({ item, expandedCardId, setExpandedCardId, ind
               </div>
               <div className="flex items-center gap-2.5 px-4 py-3 border-t border-slate-100 flex-shrink-0" style={{ background: "#fafafa" }}>
                 <div className="w-8 h-8 rounded-full overflow-hidden border border-slate-200 bg-white flex-shrink-0">
-                  <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                  <img loading="lazy" decoding="async" src={item.image} alt={item.name} className="w-full h-full object-cover" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="font-bold text-[10px] leading-tight text-[#071056]">{item.companyName1}</div>
@@ -537,7 +537,7 @@ const WhyExhibit = () => {
       <section className="relative flex items-center pt-16 md:pt-20 pb-8 md:pb-12 overflow-hidden aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]">
         {/* BG Image */}
         <div className="absolute inset-0 z-0 w-full overflow-hidden pointer-events-none">
-          <img src={exhibitBg} alt="Exhibit BG" className="w-full h-full object-cover object-center md:object-[center_37%] max-w-full" />
+          <img loading="lazy" decoding="async" src={exhibitBg} alt="Exhibit BG" className="w-full h-full object-cover object-center md:object-[center_37%] max-w-full" />
           <div className="absolute inset-0 bg-white/75 lg:bg-transparent" />
         </div>
 
@@ -586,7 +586,7 @@ const WhyExhibit = () => {
                 ].map((item, i, arr) => (
                   <React.Fragment key={i}>
                     <div className="flex items-center gap-1.5">
-                      <img src={item.img} alt={item.main} className="w-7 md:w-8 h-auto shrink-0" />
+                      <img loading="lazy" decoding="async" src={item.img} alt={item.main} className="w-7 md:w-8 h-auto shrink-0" />
                       <div className="flex flex-col text-left">
                         <span className="text-[10px] md:text-[11px] font-black text-[#020633] uppercase leading-none">{item.main}</span>
                         <span className="text-[10px] md:text-[11px] font-bold text-[#d26019] uppercase tracking-tighter mt-0.5">{item.sub}</span>
@@ -688,7 +688,7 @@ const WhyExhibit = () => {
               {stats.map((stat, i) => (
                 <React.Fragment key={i}>
                   <div className="flex flex-col items-center text-center group flex-1">
-                    <img src={stat.img} alt={stat.label} className="w-6 h-6 md:w-7 md:h-7 mb-0.5 object-contain brightness-0 invert" />
+                    <img loading="lazy" decoding="async" src={stat.img} alt={stat.label} className="w-6 h-6 md:w-7 md:h-7 mb-0.5 object-contain brightness-0 invert" />
                     <h4 className="text-base md:text-lg font-bold text-white leading-none">
                       <LocalStatCounter value={stat.val} />
                     </h4>
@@ -726,7 +726,7 @@ const WhyExhibit = () => {
                 data-aos-delay={i * 100}
               >
                 <div className="mb-2 h-10 md:h-16 flex items-center justify-center transition-transform group-hover:scale-110">
-                  <img src={reason.img} alt="" className="w-10 md:w-16 h-full object-contain" />
+                  <img loading="lazy" decoding="async" src={reason.img} alt="" className="w-10 md:w-16 h-full object-contain" />
                 </div>
                 
                 <h3 className="text-[10px] md:text-[12px] font-black text-[#0c0c3e] mb-2 tracking-tight leading-tight uppercase min-h-[32px] md:min-h-[40px] flex flex-col items-center justify-center">
@@ -769,8 +769,7 @@ const WhyExhibit = () => {
             >
               {/* Image Section */}
               <div className="w-full md:w-[38%] h-[160px] md:h-auto flex-shrink-0 relative overflow-hidden">
-                <img
-                  src={leftbg}
+                <img loading="lazy" decoding="async" src={leftbg}
                   alt="PMS Scheme"
                   className="absolute inset-0 w-full h-full object-cover object-center"
                 />
@@ -801,7 +800,7 @@ const WhyExhibit = () => {
                   ].map((item, i, arr) => (
                     <div key={i} className="flex items-center">
                       <div className="flex items-center gap-3 pr-4 md:px-3">
-                        <img src={item.img} alt={item.line1} className="w-8 h-8 md:w-9 md:h-9 object-contain flex-shrink-0" />
+                        <img loading="lazy" decoding="async" src={item.img} alt={item.line1} className="w-8 h-8 md:w-9 md:h-9 object-contain flex-shrink-0" />
                         <div className="flex flex-col leading-tight">
                           <span className="text-[10px] md:text-[11px] font-black uppercase whitespace-nowrap" style={{ color: '#070e48' }}>{item.line1}</span>
                           <span className="text-[10px] md:text-[11px] font-black uppercase whitespace-nowrap" style={{ color: '#070e48' }}>{item.line2}</span>
@@ -841,8 +840,7 @@ const WhyExhibit = () => {
               </div>
 
               {/* Decorative Leaf - Right Bottom (inside card, clipped by overflow-hidden) */}
-              <img
-                src={leaf2}
+              <img loading="lazy" decoding="async" src={leaf2}
                 alt=""
                 aria-hidden="true"
                 className="absolute bottom-0 right-0 w-[140px] md:w-[210px] h-auto object-contain pointer-events-none select-none z-0"
@@ -879,7 +877,7 @@ const WhyExhibit = () => {
               >
                 <div className="mb-3 transition-transform group-hover:scale-110">
                   {typeof item.icon === 'string' ? (
-                    <img src={item.icon} alt={item.line1} className="w-8 h-8 object-contain" />
+                    <img loading="lazy" decoding="async" src={item.icon} alt={item.line1} className="w-8 h-8 object-contain" />
                   ) : (
                     <item.icon className="text-[#1a6b3a]" size={28} />
                   )}
@@ -950,8 +948,7 @@ const WhyExhibit = () => {
                     key={idx}
                     className="flex-1 overflow-hidden border-[3px] border-white shadow-xl transform -skew-x-12 rounded-[20px]"
                   >
-                    <img 
-                      src={img} 
+                    <img loading="lazy" decoding="async" src={img} 
                       alt={`Meet ${idx + 1}`} 
                       className="w-full h-full object-cover transform skew-x-12 scale-125" 
                     />

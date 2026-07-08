@@ -190,7 +190,7 @@ export default function ExhibitorDocuments({ data, setData }: DocsProps) {
                                     ) : hasUrl ? (
                                         <>
                                             {urlIsImage ? (
-                                                <img src={url} alt={doc.label} className="w-full h-full object-cover" />
+                                                <img loading="lazy" decoding="async" src={url} alt={doc.label} className="w-full h-full object-cover" />
                                             ) : (
                                                 <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 gap-1">
                                                     <FileText size={20} className="text-rose-500" />

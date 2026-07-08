@@ -225,8 +225,7 @@ const WhyParticipate = () => {
           <div className="hidden md:block absolute bottom-[-18px] right-[-18px] w-[180px] h-[180px] bg-[#2f8f3a] rounded-[20px] z-0" />
 
           <div className="relative rounded-[2rem] overflow-hidden shadow-2xl border-[7px] border-white/70 z-10">
-            <img
-              src={imageSrc}
+            <img loading="lazy" decoding="async" src={imageSrc}
               alt={data.imageAltText || "Business Meeting"}
               className="w-full h-[280px] md:h-[330px] object-cover"
             />

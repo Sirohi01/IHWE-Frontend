@@ -130,8 +130,17 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
 
   if (isLoading) {
     return (
-      <section className="relative w-full overflow-hidden bg-black flex items-center justify-center" style={{ aspectRatio: '16/5.3' }}>
-        <div className="w-12 h-12 rounded-full border-4 border-white/20 border-t-white animate-spin" />
+      <section className="relative w-full overflow-hidden bg-slate-900 animate-pulse flex items-center justify-center" style={{ aspectRatio: '16/5.3' }}>
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 skeleton-shimmer" />
+        <style>{`
+          @keyframes skeleton-shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+          }
+          .skeleton-shimmer {
+            animation: skeleton-shimmer 2s infinite linear;
+          }
+        `}</style>
       </section>
     );
   }
@@ -245,7 +254,11 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
               animate={{ scale: 1 }}
               transition={{ duration: 7, ease: "easeOut" }}
             >
-              <img
+              <img 
+                loading={current === 0 ? "eager" : "lazy"}
+                // @ts-ignore
+                fetchpriority={current === 0 ? "high" : "auto"}
+                decoding="async" 
                 src={getImageUrl(slides[current].image)}
                 alt={slides[current].title}
                 className="w-full h-full object-cover"

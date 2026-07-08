@@ -834,7 +834,7 @@ const VisitorRegistration = () => {
                                     <div key={i} className="flex items-center lg:contents">
                                         <div className="flex flex-col items-center text-center px-2 flex-1">
                                             <div className="mb-2 flex items-center justify-center">
-                                                <img src={stat.img} alt={stat.label} className="w-8 h-8 object-contain opacity-95" />
+                                                <img loading="lazy" decoding="async" src={stat.img} alt={stat.label} className="w-8 h-8 object-contain opacity-95" />
                                             </div>
                                             <div className="text-[10px] md:text-[12px] font-bold text-white tracking-tight leading-snug whitespace-pre-line drop-shadow-md max-w-[130px]">
                                                 {stat.label}
@@ -848,8 +848,7 @@ const VisitorRegistration = () => {
 
                         {/* Right-Side Visual Identity Seal */}
                         <div className="shrink-0 relative flex items-center justify-center lg:mr-12 z-20">
-                            <img
-                                src="/visitor/free_register_now.png"
+                            <img loading="lazy" decoding="async" src="/visitor/free_register_now.png"
                                 alt="Registration is Free! Register Now."
                                 className="w-[160px] sm:w-[200px] lg:w-[240px] h-auto object-contain drop-shadow-2xl animate-float-subtle"
                             />
@@ -924,7 +923,7 @@ const VisitorRegistration = () => {
                                                 </div>
                                                 <div className="flex items-center gap-5 mb-6">
                                                     <div className="w-24 h-24 rounded-full shrink-0 relative group-hover:scale-105 transition-transform duration-300">
-                                                        <img src="/visitor/domestic.png" alt="Domestic Visitor" className="w-full h-full object-contain" />
+                                                        <img loading="lazy" decoding="async" src="/visitor/domestic.png" alt="Domestic Visitor" className="w-full h-full object-contain" />
                                                     </div>
                                                     <div className="flex-1 space-y-0.5">
                                                         <h3 className="text-[22px] md:text-[24px] font-bold text-[#1a5f15] tracking-tight leading-tight">Domestic Visitor</h3>
@@ -953,7 +952,7 @@ const VisitorRegistration = () => {
                                             <div className="border border-[#ffebd8] bg-[#fffcf9] hover:border-[#e25c05] hover:shadow-xl hover:shadow-[#fff5eb] transition-all duration-300 rounded-[20px] p-6 flex flex-col justify-between relative group">
                                                 <div className="flex items-center gap-5 mb-6">
                                                     <div className="w-24 h-24 rounded-full shrink-0 relative group-hover:scale-105 transition-transform duration-300">
-                                                        <img src="/visitor/international.png" alt="International Visitor" className="w-full h-full object-contain" />
+                                                        <img loading="lazy" decoding="async" src="/visitor/international.png" alt="International Visitor" className="w-full h-full object-contain" />
                                                     </div>
                                                     <div className="flex-1 space-y-0.5">
                                                         <h3 className="text-[22px] md:text-[24px] font-bold text-[#e25c05] tracking-tight leading-tight">International Visitor</h3>
@@ -982,7 +981,7 @@ const VisitorRegistration = () => {
                                             <div className="border border-[#dfe9f8] bg-[#f7faff] hover:border-[#0e4293] hover:shadow-xl hover:shadow-[#edf4fe] transition-all duration-300 rounded-[20px] p-6 flex flex-col justify-between relative group">
                                                 <div className="flex items-center gap-5 mb-6">
                                                     <div className="w-24 h-24 rounded-full shrink-0 relative group-hover:scale-105 transition-transform duration-300">
-                                                        <img src="/visitor/group.png" alt="Group Registration" className="w-full h-full object-contain" />
+                                                        <img loading="lazy" decoding="async" src="/visitor/group.png" alt="Group Registration" className="w-full h-full object-contain" />
                                                     </div>
                                                     <div className="flex-1 space-y-0.5">
                                                         <h3 className="text-[22px] md:text-[24px] font-bold text-[#0e4293] tracking-tight leading-tight">Group Registration</h3>

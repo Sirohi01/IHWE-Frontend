@@ -162,8 +162,7 @@ const AdvisoryBoard = () => {
 
               {/* Photo */}
               <div className="absolute top-[10px] left-[13px] right-0 bottom-[27px] rounded-[14px] overflow-hidden z-[1]">
-                <img
-                  src={chairmanData?.photo ? (chairmanData.photo.startsWith('http') ? chairmanData.photo : `${SERVER_URL}${chairmanData.photo}`) : "/advisory/vijay.png"}
+                <img loading="lazy" decoding="async" src={chairmanData?.photo ? (chairmanData.photo.startsWith('http') ? chairmanData.photo : `${SERVER_URL}${chairmanData.photo}`) : "/advisory/vijay.png"}
                   alt={chairmanData?.chairmanName || "Dr. Randeep Guleria"}
                   className="w-full h-full object-cover object-top"
                 />
@@ -298,8 +297,7 @@ const AdvisoryBoard = () => {
 
                       {/* COUNTRY FLAG */}
                       <div className="flex items-center gap-4 mb-3">
-                        <img
-                          // src={member.country?.toLowerCase() === 'usa' ? '/images/usa-flag.png' : '/images/india-flag.png'}
+                        <img loading="lazy" decoding="async" // src={member.country?.toLowerCase() === 'usa' ? '/images/usa-flag.png' : '/images/india-flag.png'}
                           src="/advisory/india-flag.png"
                           alt={member.country || 'India'}
                           className="w-5 h-4 object-cover"
@@ -458,8 +456,7 @@ const AdvisoryBoard = () => {
 
             {/* Right image */}
             <div className="hidden md:block absolute right-0 bottom-0 h-full w-[420px] pointer-events-none">
-              <img
-                src="/advisory/last1.png"
+              <img loading="lazy" decoding="async" src="/advisory/last1.png"
                 alt="Nominate"
                 className="h-full w-full object-contain object-right-bottom"
               />

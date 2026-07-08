@@ -176,7 +176,7 @@ const HotelStay = () => {
                   >
                     <div>
                       <div className="w-10 h-10 mb-3">
-                        <img src={card.icon} alt={card.title} className="w-full h-full object-contain" />
+                        <img loading="lazy" decoding="async" src={card.icon} alt={card.title} className="w-full h-full object-contain" />
                       </div>
                       <h3 className="text-[12px] font-black text-[#00153c] uppercase mb-1.5 tracking-tight leading-snug">{card.title}</h3>
                       <p className="text-[11px] text-slate-600 font-medium leading-relaxed">{card.desc}</p>
@@ -315,7 +315,7 @@ const HotelStay = () => {
                 className="flex flex-col items-center max-w-[150px]"
               >
                 <div className="w-14 h-14 mb-3 flex items-center justify-center">
-                  <img src={item.img} alt={item.title} className="w-full h-full object-contain" />
+                  <img loading="lazy" decoding="async" src={item.img} alt={item.title} className="w-full h-full object-contain" />
                 </div>
                 <h4 className="text-[11px] font-black text-[#00153c] uppercase mb-1.5 leading-tight">{item.title}</h4>
                 <p className="text-[10px] text-slate-600 font-medium leading-relaxed">{item.desc}</p>
@@ -392,7 +392,7 @@ const HotelStay = () => {
               >
                 <div className="flex items-center gap-3 mb-5">
                   <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#74b123] shrink-0">
-                    <img src={item.img} alt={item.name} className="w-full h-full object-cover" />
+                    <img loading="lazy" decoding="async" src={item.img} alt={item.name} className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <h4 className="text-white font-black text-[12px] uppercase">{item.name}</h4>

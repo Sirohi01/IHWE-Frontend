@@ -260,7 +260,7 @@ const BuyerSellerMeet = () => {
                 <div className="w-[47%] lg:w-[115px] flex flex-col items-center text-center px-1 lg:shrink-0">
                   <div className={`w-full h-20 flex items-center justify-center mb-0.5 ${item.customImg ? '' : 'rounded-full border-[2px] border-[#519a27] bg-white w-14 h-14'}`}>
                     {item.customImg ? (
-                      <img src={item.customImg} alt={item.title} className="w-20 h-20 object-contain" />
+                      <img loading="lazy" decoding="async" src={item.customImg} alt={item.title} className="w-20 h-20 object-contain" />
                     ) : (
                       <item.icon size={20} className="text-[#519a27]" />
                     )}

@@ -306,8 +306,7 @@ export default function SellerSponsorshipPage() {
                                     <div className="relative h-48 bg-gradient-to-br from-slate-100 to-slate-200 overflow-hidden">
                                         {imageUrl ? (
                                             <>
-                                                <img 
-                                                    src={imageUrl} 
+                                                <img loading="lazy" decoding="async" src={imageUrl} 
                                                     alt={plan.name}
                                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                                                 />

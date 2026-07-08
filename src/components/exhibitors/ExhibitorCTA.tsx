@@ -41,8 +41,7 @@ const ExhibitorCTA = () => {
             <div className="w-full bg-[#f8f9f8] border-y border-gray-100 relative overflow-hidden py-4">
                 {/* Left Leaf branch */}
                 <div className="absolute left-0 top-1/2 -translate-y-1/2 w-48 h-full opacity-60 pointer-events-none">
-                    <img
-                        src={leaveImg}
+                    <img loading="lazy" decoding="async" src={leaveImg}
                         className="w-full h-full object-contain translate-x-4"
                         alt="exhibiton in delhi"
                     />
@@ -80,8 +79,7 @@ const ExhibitorCTA = () => {
 
                 {/* Right Leaf branch */}
                 <div className="absolute right-0 top-1/2 -translate-y-1/2 w-48 h-full opacity-60 pointer-events-none hidden lg:block">
-                    <img
-                        src={leaveImg}
+                    <img loading="lazy" decoding="async" src={leaveImg}
                         className="w-full h-full object-contain -translate-x-4 rotate-180 scale-x-[-1]"
                         alt="exhibiton in delhi"
                     />
@@ -96,7 +94,7 @@ const ExhibitorCTA = () => {
                             <React.Fragment key={idx}>
                                 <div className={`flex items-center gap-3 md:gap-4 flex-1 justify-start ${idx === BOTTOM_STATS.length - 1 ? 'col-span-2 sm:col-span-1' : ''}`}>
                                     <div className="text-white shrink-0 w-12 h-12 md:w-20 md:h-20 flex items-center justify-center">
-                                        <img src={stat.icon} alt={stat.label} className="w-12 h-12 md:w-20 md:h-20 object-contain" />
+                                        <img loading="lazy" decoding="async" src={stat.icon} alt={stat.label} className="w-12 h-12 md:w-20 md:h-20 object-contain" />
                                     </div>
                                     <div className="flex flex-col text-left">
                                         <span className="text-white text-[13px] md:text-[15px] font-bold leading-tight">{stat.value}</span>

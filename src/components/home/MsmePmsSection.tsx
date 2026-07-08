@@ -7,8 +7,7 @@ const MsmePmsSection = () => {
     <section className="w-full bg-white py-2 overflow-hidden">
       <div className="max-w-[1450px] mx-auto">
         <Link to="/msme-pms-scheme" className="block w-full">
-          <img 
-            src={msmeban} 
+          <img loading="lazy" decoding="async" src={msmeban} 
             alt="MSME PMS Scheme Banner" 
             className="w-full h-auto block"
             style={{ 

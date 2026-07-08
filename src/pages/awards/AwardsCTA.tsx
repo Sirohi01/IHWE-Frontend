@@ -17,8 +17,7 @@ const AwardsCTA = () => {
           
           <div className="flex items-center gap-6">
             <div className="shrink-0 w-24 h-24 md:w-30 md:h-30 overflow-hidden flex items-center justify-center -my-4">
-              <img 
-                src={ctaImg} 
+              <img loading="lazy" decoding="async" src={ctaImg} 
                 alt="Award Branding" 
                 className="w-full h-auto min-h-full object-cover scale-110" 
                 style={{ objectPosition: 'center' }}

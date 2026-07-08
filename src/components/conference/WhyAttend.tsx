@@ -78,8 +78,7 @@ const WhyAttend: React.FC = () => {
                 className="flex items-center gap-1.5 group"
               >
                 <div className="shrink-0 w-16 h-16 rounded-full overflow-hidden flex items-center justify-center">
-                  <img
-                    src={benefit.icon}
+                  <img loading="lazy" decoding="async" src={benefit.icon}
                     alt=""
                     className="w-full h-full object-contain object-center mix-blend-multiply contrast-125 brightness-110 group-hover:scale-105 transition-transform duration-300 rounded-full"
                   />

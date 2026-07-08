@@ -60,23 +60,23 @@ const serviceOptions = [
 const whyChoose = [
   {
     id: 1, title: "Verified & Trusted", desc: "All partners are verified and experienced",
-    icon: <img src={t1} alt="verified" className="w-[34px] h-[34px] object-contain" />
+    icon: <img loading="lazy" decoding="async" src={t1} alt="verified" className="w-[34px] h-[34px] object-contain" />
   },
   {
     id: 2, title: "Best Pricing", desc: "Competitive rates and best value",
-    icon: <img src={t2} alt="pricing" className="w-[34px] h-[34px] object-contain" />
+    icon: <img loading="lazy" decoding="async" src={t2} alt="pricing" className="w-[34px] h-[34px] object-contain" />
   },
   {
     id: 3, title: "Faster Coordination", desc: "Quick response and smooth execution",
-    icon: <img src={t3} alt="coordination" className="w-[34px] h-[34px] object-contain" />
+    icon: <img loading="lazy" decoding="async" src={t3} alt="coordination" className="w-[34px] h-[34px] object-contain" />
   },
   {
     id: 4, title: "Expo-Specific Support", desc: "Solutions tailored for IHWE exhibitors",
-    icon: <img src={t4} alt="support" className="w-[34px] h-[34px] object-contain" />
+    icon: <img loading="lazy" decoding="async" src={t4} alt="support" className="w-[34px] h-[34px] object-contain" />
   },
   {
     id: 5, title: "Trusted Network", desc: "Backed by IHWE's reliable partner network",
-    icon: <img src={t5} alt="network" className="w-[34px] h-[34px] object-contain" />
+    icon: <img loading="lazy" decoding="async" src={t5} alt="network" className="w-[34px] h-[34px] object-contain" />
   },
 ];
 
@@ -369,7 +369,7 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                 transition={{ delay: 0.3 }}
               >
                 <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center border-2 border-[#2d6a2d] p-1 shadow-sm flex-shrink-0">
-                  <img src={pop1} alt="Support" className="w-full h-full object-contain" />
+                  <img loading="lazy" decoding="async" src={pop1} alt="Support" className="w-full h-full object-contain" />
                 </div>
                 <div>
                   <h2 className="text-[19px] font-bold text-gray-900 leading-tight tracking-tight">Request Expo Support</h2>
@@ -578,7 +578,7 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
               >
                 <div className="flex justify-center mb-3">
                   <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md border-2 border-[#2d6a2d] p-0.5 relative">
-                    <img src={why1} alt="Why IHWE" className="w-full h-full object-contain" />
+                    <img loading="lazy" decoding="async" src={why1} alt="Why IHWE" className="w-full h-full object-contain" />
                   </div>
                 </div>
 
@@ -617,7 +617,7 @@ export default function PartnershipPopup({ isOpen, onClose, initialService }: Pa
                 animate={{ opacity: 1, scale: 1, rotate: -12 }}
                 transition={{ delay: 1.2, duration: 1 }}
               >
-                <img src={leaf2} alt="decoration" className="w-full h-full object-contain" />
+                <img loading="lazy" decoding="async" src={leaf2} alt="decoration" className="w-full h-full object-contain" />
               </motion.div>
             </div>
           </motion.div>

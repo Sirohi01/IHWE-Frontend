@@ -219,8 +219,7 @@ const EventGlimpses = () => {
                 className="glimpse-card group/card"
                 onClick={() => setSelectedImg(img)}
               >
-                <img
-                  src={img.url.startsWith('http') ? img.url : `${SERVER_URL}${img.url}`}
+                <img loading="lazy" decoding="async" src={img.url.startsWith('http') ? img.url : `${SERVER_URL}${img.url}`}
                   alt={img.title || 'Event Glimpse'}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover/card:scale-110"
                 />
@@ -311,8 +310,7 @@ const EventGlimpses = () => {
               className="relative max-w-5xl w-full max-h-[80vh] flex flex-col items-center"
               onClick={(e) => e.stopPropagation()}
             >
-              <img
-                src={selectedImg.url.startsWith('http') ? selectedImg.url : `${SERVER_URL}${selectedImg.url}`}
+              <img loading="lazy" decoding="async" src={selectedImg.url.startsWith('http') ? selectedImg.url : `${SERVER_URL}${selectedImg.url}`}
                 alt={selectedImg.title}
                 className="w-full h-full object-contain rounded-xl shadow-2xl border border-white/10"
               />

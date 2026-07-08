@@ -439,7 +439,7 @@ export default function BuyerFeedbackForm() {
                         <div
                             className="absolute inset-0 bg-[#002b49] overflow-hidden print:rounded-none"
                             style={{ borderBottomLeftRadius: '200px', borderTopLeftRadius: '200px' }}
-                        >                            <img src="https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?q=80&w=1000&auto=format&fit=crop" className="w-full h-full object-cover opacity-90 print:object-fill print:h-full0" alt="Expo Venue" />
+                        >                            <img loading="lazy" decoding="async" src="https://images.unsplash.com/photo-1577717903315-1691ae25ab3f?q=80&w=1000&auto=format&fit=crop" className="w-full h-full object-cover opacity-90 print:object-fill print:h-full0" alt="Expo Venue" />
                         </div>
                         <div className="absolute top-[20px] right-4 print:top-[10px] print:right-2 bg-[#002b49] text-white py-2 pl-4 pr-6 rounded-l-2xl shadow-lg border-l-[4px] border-[#002b49] flex flex-col gap-2">
                             <div className="flex items-start gap-2">
@@ -513,8 +513,7 @@ export default function BuyerFeedbackForm() {
 
             {/* New Image Header for Print */}
             <div className="hidden print:block w-full">
-                <img
-                    src="/feedbackform_header.jpeg"
+                <img loading="lazy" decoding="async" src="/feedbackform_header.jpeg"
                     className="w-full h-[120px] object-cover block"
                     alt="IHWE Header"
                 />
@@ -822,8 +821,7 @@ export default function BuyerFeedbackForm() {
 
             {/* New Image Footer for Print */}
             {/* <div className="hidden print:block w-full print-footer h-[5px]">
-                <img
-                    src="/feedbackform_fooder.jpeg"
+                <img loading="lazy" decoding="async" src="/feedbackform_fooder.jpeg"
                     className="w-full h-auto block"
                     alt="IHWE Footer"
                 />

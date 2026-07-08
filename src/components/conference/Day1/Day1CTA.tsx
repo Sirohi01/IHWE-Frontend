@@ -17,8 +17,7 @@ const Day1CTA: React.FC = () => {
     <section className="relative py-4 overflow-hidden">
       {/* Background Image & Overlay */}
       <div className="absolute inset-0 z-0">
-        <img
-          src={backgroundImage}
+        <img loading="lazy" decoding="async" src={backgroundImage}
           className="w-full h-full object-cover"
           alt="Section Background"
         />
@@ -36,13 +35,13 @@ const Day1CTA: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-[#1A4D2E] to-[#4E9F3D] z-0" />
             {/* Texture Overlay */}
             <div className="absolute inset-0 opacity-20 mix-blend-overlay">
-              <img src={bgTextures[0]} className="w-full h-full object-cover" alt="" />
+              <img loading="lazy" decoding="async" src={bgTextures[0]} className="w-full h-full object-cover" alt="" />
             </div>
 
             <div className="relative z-10 p-5 h-full flex flex-col">
               <div className="flex items-start gap-4 mb-4">
                 <div className="w-24 h-24 flex items-center justify-center shrink-0 -ml-4">
-                  <img src={one1} alt="Be Part of Day 1" className="w-full h-full object-contain" />
+                  <img loading="lazy" decoding="async" src={one1} alt="Be Part of Day 1" className="w-full h-full object-contain" />
                 </div>
                 <div className="pt-1">
                   <h3 className="text-[21px] font-black text-white uppercase tracking-tight leading-tight">
@@ -70,13 +69,13 @@ const Day1CTA: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-[#0B2C66] to-[#1E88E5] z-0" />
             {/* Texture Overlay */}
             <div className="absolute inset-0 opacity-20 mix-blend-overlay">
-              <img src={bgTextures[1]} className="w-full h-full object-cover" alt="" />
+              <img loading="lazy" decoding="async" src={bgTextures[1]} className="w-full h-full object-cover" alt="" />
             </div>
 
             <div className="relative z-10 p-5 h-full flex flex-col">
               <div className="flex items-start gap-4 mb-4">
                 <div className="w-24 h-24 flex items-center justify-center shrink-0 -ml-4">
-                  <img src={one2} alt="Delegate Pass" className="w-full h-full object-contain" />
+                  <img loading="lazy" decoding="async" src={one2} alt="Delegate Pass" className="w-full h-full object-contain" />
                 </div>
                 <div className="pt-1">
                   <h3 className="text-[21px] font-black text-white uppercase tracking-tight leading-tight">
@@ -104,13 +103,13 @@ const Day1CTA: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-[#112D26] to-[#1A4D2E] z-0" />
             {/* Texture Overlay */}
             <div className="absolute inset-0 opacity-20 mix-blend-overlay">
-              <img src={bgTextures[2]} className="w-full h-full object-cover" alt="" />
+              <img loading="lazy" decoding="async" src={bgTextures[2]} className="w-full h-full object-cover" alt="" />
             </div>
 
             <div className="relative z-10 p-5 h-full flex flex-col">
               <div className="flex items-start gap-4 mb-4">
                 <div className="w-24 h-24 flex items-center justify-center shrink-0 -ml-4">
-                  <img src={one} alt="Sponsor & Partner" className="w-full h-full object-contain" />
+                  <img loading="lazy" decoding="async" src={one} alt="Sponsor & Partner" className="w-full h-full object-contain" />
                 </div>
                 <div className="pt-1">
                   <h3 className="text-[21px] font-black text-white uppercase tracking-tight leading-tight">

@@ -49,8 +49,7 @@ export default function PaperPresentationHero() {
       {/* Hero Section */}
       <div className="relative h-[420px] md:h-[500px] lg:h-[580px]">
         {/* Full Width Background Image */}
-        <img
-          src={paperHero}
+        <img loading="lazy" decoding="async" src={paperHero}
           alt="Paper Presentation"
           className="absolute inset-0 h-full w-full object-cover object-[center_20%]"
         />

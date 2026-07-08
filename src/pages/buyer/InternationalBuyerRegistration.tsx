@@ -1040,8 +1040,7 @@ const InternationalBuyerRegistration = () => {
 
                                                                         {/* Top — Logo + org name */}
                                                                         <div className="flex flex-col items-center gap-1">
-                                                                            <img
-                                                                                src="/buyer/icoa.png"
+                                                                            <img loading="lazy" decoding="async" src="/buyer/icoa.png"
                                                                                 alt="ICOA"
                                                                                 className="w-48 h-auto object-contain"
                                                                                 style={{

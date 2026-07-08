@@ -200,10 +200,10 @@ const AttendanceInfo = () => {
 
               {/* Image Circle Container */}
               <div className="absolute inset-0 rounded-full border-[6px] md:border-[10px] border-white shadow-2xl overflow-hidden grid grid-cols-2 grid-rows-2 gap-1 bg-white">
-                <div className="overflow-hidden bg-gray-50 border-r border-b border-white"><img src={image1} className="w-full h-full object-cover" alt="1" /></div>
-                <div className="overflow-hidden bg-gray-50 border-l border-b border-white"><img src={image2} className="w-full h-full object-cover" alt="2" /></div>
-                <div className="overflow-hidden bg-gray-50 border-r border-t border-white"><img src={image3} className="w-full h-full object-cover" alt="3" /></div>
-                <div className="overflow-hidden bg-gray-50 border-l border-t border-white"><img src={image4} className="w-full h-full object-cover" alt="4" /></div>
+                <div className="overflow-hidden bg-gray-50 border-r border-b border-white"><img loading="lazy" decoding="async" src={image1} className="w-full h-full object-cover" alt="1" /></div>
+                <div className="overflow-hidden bg-gray-50 border-l border-b border-white"><img loading="lazy" decoding="async" src={image2} className="w-full h-full object-cover" alt="2" /></div>
+                <div className="overflow-hidden bg-gray-50 border-r border-t border-white"><img loading="lazy" decoding="async" src={image3} className="w-full h-full object-cover" alt="3" /></div>
+                <div className="overflow-hidden bg-gray-50 border-l border-t border-white"><img loading="lazy" decoding="async" src={image4} className="w-full h-full object-cover" alt="4" /></div>
               </div>
 
               {/* Center Overlay Circle */}

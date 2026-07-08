@@ -102,8 +102,7 @@ const FabricationPackages: React.FC<FabricationPackagesProps> = ({ packages }) =
                 className="w-[46px] h-[46px] rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden"
                 style={{ backgroundColor: pkg.color }}
               >
-                <img
-                  src={pkg.image}
+                <img loading="lazy" decoding="async" src={pkg.image}
                   alt={pkg.name}
                   className="w-[30px] h-[30px] object-contain brightness-0 invert"
                 />

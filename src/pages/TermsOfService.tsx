@@ -341,8 +341,7 @@ const TermsOfService: React.FC = () => {
         <div className="w-full relative h-[280px] sm:h-[330px] md:h-[380px] lg:h-[430px] bg-[#eef5f0] overflow-hidden">
           {/* Background Layer */}
           <div className="absolute inset-0 w-full h-full">
-            <img
-              src={termBanner}
+            <img loading="lazy" decoding="async" src={termBanner}
               alt="Terms Banner"
               className="w-full h-full object-cover object-center"
             />
@@ -391,7 +390,7 @@ const TermsOfService: React.FC = () => {
             {/* Col 1 */}
             <div className="flex gap-4 items-center w-full lg:w-5/12">
               <div className="w-12 h-12 md:w-[52px] md:h-[52px] flex items-center justify-center shrink-0">
-                <img src={doc22Icon} alt="IHWE Edition" className="w-full h-full object-contain" />
+                <img loading="lazy" decoding="async" src={doc22Icon} alt="IHWE Edition" className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col justify-center">
                 <span className="text-[#115d33] font-[800] text-[12px] md:text-[13px] tracking-wide mb-0.5">9th Edition of</span>
@@ -405,7 +404,7 @@ const TermsOfService: React.FC = () => {
             {/* Col 2 */}
             <div className="flex gap-3 md:gap-4 items-center w-full lg:w-3/12">
               <div className="w-10 h-10 md:w-11 md:h-11 rounded-full bg-[#f0f7f3] border border-[#115d33]/20 flex items-center justify-center shrink-0 p-1.5">
-                <img src={team1Icon} alt="Organised By" className="w-full h-full object-contain" />
+                <img loading="lazy" decoding="async" src={team1Icon} alt="Organised By" className="w-full h-full object-contain" />
               </div>
               <div className="flex flex-col justify-center">
                 <span className="text-slate-800 font-[800] text-[10px] md:text-[11px] uppercase tracking-wider mb-0.5">Organised by:</span>

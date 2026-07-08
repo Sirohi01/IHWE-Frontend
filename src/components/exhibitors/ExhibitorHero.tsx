@@ -70,7 +70,7 @@ const ExhibitorHero = () => {
                                 className="flex flex-col gap-2 mb-2"
                             >
                                 <div className="w-10 h-10 md:w-14 md:h-14 flex items-center justify-start mt-2">
-                                    <img src={stat.icon} alt={stat.label} className="w-8 h-8 md:w-12 md:h-12 object-contain" />
+                                    <img loading="lazy" decoding="async" src={stat.icon} alt={stat.label} className="w-8 h-8 md:w-12 md:h-12 object-contain" />
                                 </div>
                                 <div>
                                     <div className="text-xl font-bold text-white">{stat.value}</div>

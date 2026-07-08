@@ -144,8 +144,7 @@ const ConferenceAgenda: React.FC<ConferenceAgendaProps> = ({ isModal = false }) 
           {!isModal && (
             <div className="hidden lg:block w-[380px] flex-shrink-0">
               <div className="w-full h-[520px] rounded-[24px] overflow-hidden shadow-lg border border-[#E2E8F0]">
-                <img
-                  src={amconImage}
+                <img loading="lazy" decoding="async" src={amconImage}
                   alt="Agenda visual"
                   className="w-full h-full object-cover"
                 />

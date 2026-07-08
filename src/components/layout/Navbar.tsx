@@ -152,8 +152,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
             <div className="relative z-[150] h-full flex items-center gap-2">
               <Link to="/" className="h-full flex items-center min-w-[120px] md:min-w-[155px]">
                 {settings?.logo ? (
-                  <img
-                    src={`${SERVER_URL}${settings.logo}`}
+                  <img loading="lazy" decoding="async" src={`${SERVER_URL}${settings.logo}`}
                     alt="IHWE Logo"
                     className="absolute top-[58%] -translate-y-1/2 left-0 h-32 md:h-40 w-auto object-contain transition-transform duration-500 drop-shadow-[0_12px_25px_rgba(0,0,0,0.15)]"
                   />
@@ -334,8 +333,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
           <div className="flex xl:hidden items-center justify-between h-[60px] relative">
             <Link to="/" className="relative z-[150] flex items-center h-full w-[130px]">
               {settings?.logo ? (
-                <img
-                  src={`${SERVER_URL}${settings.logo}`}
+                <img loading="lazy" decoding="async" src={`${SERVER_URL}${settings.logo}`}
                   alt="IHWE Logo"
                   className="absolute top-[56%] -translate-y-1/2 left-0 h-20 md:h-24 w-auto object-contain drop-shadow-[0_8px_20px_rgba(0,0,0,0.15)]"
                 />
@@ -353,8 +351,7 @@ const Navbar = ({ onRegisterVisit }: NavbarProps) => {
                 {settings?.isMsmeLogoActive && settings?.msmeLogos?.filter(l => l.isActive).length > 0 && (
                   <div className="flex flex-col items-center relative z-[110]">
                     <span className="text-[6.5px] font-bold text-slate-500 uppercase tracking-tighter leading-none mb-1 whitespace-nowrap">Approved By</span>
-                    <img
-                      src={`${SERVER_URL}${settings.msmeLogos.filter(l => l.isActive)[0].imageUrl}`}
+                    <img loading="lazy" decoding="async" src={`${SERVER_URL}${settings.msmeLogos.filter(l => l.isActive)[0].imageUrl}`}
                       alt="Approved By"
                       className="h-8 w-auto object-contain drop-shadow-[0_2px_8px_rgba(0,0,0,0.1)] rounded transition-all active:scale-110"
                     />

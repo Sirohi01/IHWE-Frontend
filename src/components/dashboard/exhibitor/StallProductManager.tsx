@@ -503,7 +503,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                                                             <div className="w-10 h-10 bg-slate-100 rounded-sm overflow-hidden border flex">
                                                                 {/* @ts-ignore */}
                                                                 {enq.productId?.images?.[0] ? (
-                                                                    <img src={`${backendBaseUrl}${enq.productId.images[0]}`} alt="" className="w-full h-full object-contain m-auto" />
+                                                                    <img loading="lazy" decoding="async" src={`${backendBaseUrl}${enq.productId.images[0]}`} alt="" className="w-full h-full object-contain m-auto" />
                                                                 ) : <Package className="w-full h-full p-2 text-slate-300" />}
                                                             </div>
                                                             <div className="min-w-0">
@@ -596,7 +596,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                                         <div className="flex items-center gap-4">
                                             <div className="w-16 h-16 bg-slate-100 rounded-sm overflow-hidden border">
                                                 {analytics.topProduct.images?.[0] ? (
-                                                    <img src={`${backendBaseUrl}${analytics.topProduct.images[0]}`} alt="" className="w-full h-full object-cover" />
+                                                    <img loading="lazy" decoding="async" src={`${backendBaseUrl}${analytics.topProduct.images[0]}`} alt="" className="w-full h-full object-cover" />
                                                 ) : <Package className="w-full h-full p-3 text-slate-300" />}
                                             </div>
                                             <div>
@@ -722,7 +722,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                                         <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
                                             {imagePreviews.map((url, i) => (
                                                 <div key={i} className="aspect-square bg-slate-100 rounded-sm relative group overflow-hidden border flex">
-                                                    <img src={url} alt="" className="w-full h-full object-contain m-auto" />
+                                                    <img loading="lazy" decoding="async" src={url} alt="" className="w-full h-full object-contain m-auto" />
                                                     <button
                                                         type="button"
                                                         onClick={() => removePreview(i)}
@@ -787,7 +787,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                                 <div className="flex items-center gap-4">
                                     <div className="w-12 h-12 bg-slate-50 border rounded-sm overflow-hidden">
                                         {selectedEnquiryProduct.images?.[0] ? (
-                                            <img src={`${backendBaseUrl}${selectedEnquiryProduct.images[0]}`} alt="" className="w-full h-full object-cover" />
+                                            <img loading="lazy" decoding="async" src={`${backendBaseUrl}${selectedEnquiryProduct.images[0]}`} alt="" className="w-full h-full object-cover" />
                                         ) : <Package className="w-full h-full p-2 text-slate-300" />}
                                     </div>
                                     <div>
@@ -889,8 +889,7 @@ export default function StallProductManager({ data, mode = 'seller', initialSect
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {selectedProduct.images?.map((img, i) => (
                                         <div key={i} className="group aspect-square bg-white border border-slate-200 rounded-sm overflow-hidden shadow-sm relative flex">
-                                            <img
-                                                src={`${backendBaseUrl}${img}`}
+                                            <img loading="lazy" decoding="async" src={`${backendBaseUrl}${img}`}
                                                 alt=""
                                                 className="w-full h-full object-contain m-auto transition-transform duration-700 group-hover:scale-110"
                                             />
@@ -935,8 +934,7 @@ function ProductGrid({ products, baseUrl, onDelete, onEnquiries, onView, onEdit 
                 >
                     <div className="aspect-square bg-slate-50 relative overflow-hidden">
                         {p.images?.[0] ? (
-                            <img
-                                src={`${baseUrl}${p.images[0]}`}
+                            <img loading="lazy" decoding="async" src={`${baseUrl}${p.images[0]}`}
                                 alt={p.name}
                                 className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                             />

@@ -43,7 +43,7 @@ export default function HealthcareHighlights({ currentDay = 1, data = {} }: { cu
   return (
     <div className="w-full px-6 lg:px-14  pb-2">
       <div className="relative overflow-hidden rounded-xl">
-        <img src={heighlights} alt="high lights bg" className="absolute inset-0 w-full h-full object-cover" />
+        <img loading="lazy" decoding="async" src={heighlights} alt="high lights bg" className="absolute inset-0 w-full h-full object-cover" />
         {/* subtle glow */}
         {/* <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_65%)]" /> */}
 

@@ -570,7 +570,7 @@ const PartnerRegistration = () => {
         <div className="min-h-screen bg-[#f8faf9] font-inter relative">
             {/* HERO BANNER */}
             <section className="relative pb-2 overflow-hidden px-4 md:px-10 w-full max-w-[1400px] mx-auto ">
-                <img src={heroImg} alt="partner form" className="w-full h-auto object-cover" />
+                <img loading="lazy" decoding="async" src={heroImg} alt="partner form" className="w-full h-auto object-cover" />
             </section>
 
             {/* MAIN CONTENT */}
@@ -996,7 +996,7 @@ const PartnerRegistration = () => {
 
                                 {/* ABOUT IHWE 2026 */}
                                 <div className="relative rounded-[24px] overflow-hidden shadow-xl group border border-white/10 min-h-[270px]">
-                                    <img src={BottomImage} alt="IHWE Venue" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                                    <img loading="lazy" decoding="async" src={BottomImage} alt="IHWE Venue" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
                                     <div className="absolute inset-0 bg-gradient-to-r from-[#0b1a3a] via-[#0b1a3a]/85 to-transparent p-6 md:p-10 flex flex-col justify-center">
                                         <div className="relative z-10">
                                             <h3 className="text-[18px] font-semibold uppercase tracking-widest mb-6 text-white drop-shadow-md">About IHWE 2026</h3>
@@ -1036,7 +1036,7 @@ const PartnerRegistration = () => {
 
                                 {/* CTA BANNER */}
                                 <div className="min-h-[200px] relative rounded-[24px] overflow-hidden shadow-2xl group ">
-                                    <img src={MiddleImage} alt="Handshake" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
+                                    <img loading="lazy" decoding="async" src={MiddleImage} alt="Handshake" className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" />
                                     <div className="absolute inset-0 bg-gradient-to-r from-[#1b5e20] via-[#1b5e20]/90 to-transparent p-6 md:p-10 flex flex-col justify-center">
                                         <div className="max-w-full md:max-w-[75%] mb-2">
                                             <h4 className="text-white font-semibold text-[22px] uppercase leading-[1.1] mb-4 drop-shadow-lg">Become An Official IHWE 2026 <br /> Service Partner</h4>

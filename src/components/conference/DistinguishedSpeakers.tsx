@@ -233,8 +233,7 @@ const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
                   </div>
 
                   <div className="w-[95px] h-[95px] rounded-full overflow-hidden mb-2 shadow-sm mt-2 flex-shrink-0">
-                    <img
-                      src={
+                    <img loading="lazy" decoding="async" src={
                         speaker.image ||
                         `https://ui-avatars.com/api/?name=${encodeURIComponent(
                           speaker.name

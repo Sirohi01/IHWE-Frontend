@@ -241,8 +241,7 @@ const AdvisoryForm = () => {
                 style={{ backgroundImage: `url(${advisoryHeroImage})` }}
             >
                 <div className="absolute top-4 md:top-[28px] left-4 md:left-[50px] flex flex-col gap-2 md:gap-3">
-                    <img
-                        src="/logo.png"
+                    <img loading="lazy" decoding="async" src="/logo.png"
                         alt="IHWE Logo"
                         className="w-[200px] md:w-[380px] h-auto object-contain drop-shadow-md"
                     />

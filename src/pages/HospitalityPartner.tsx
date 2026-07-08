@@ -62,7 +62,7 @@ const HospitalityPartner = () => {
                 {/* DESKTOP VIEW - Visible only on Desktop (>= md) */}
                 <div className="hidden md:block relative w-full overflow-hidden bg-white min-h-[440px]">
                     <div className="absolute right-0 top-0 bottom-0 w-[85%] pointer-events-none z-0">
-                        <img src={heroTopImg} alt="Hospitality Background" className="w-full h-full object-cover" />
+                        <img loading="lazy" decoding="async" src={heroTopImg} alt="Hospitality Background" className="w-full h-full object-cover" />
                     </div>
 
                     <SectionContainer className="relative z-10 py-2">
@@ -255,7 +255,7 @@ const HospitalityPartner = () => {
                                 return (
                                     <div key={i} className={`py-4 px-3 sm:px-4 flex items-center gap-2 sm:gap-4 border-r border-b md:border-b-0 border-slate-100 last:border-b-0 ${i === 4 ? 'col-span-2 sm:col-span-1 justify-center' : ''}`}>
                                         <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full flex items-center justify-center shrink-0 shadow-md">
-                                            <img src={iconSrc} alt="" className="w-12 h-12 sm:w-16 sm:h-16 object-contain" />
+                                            <img loading="lazy" decoding="async" src={iconSrc} alt="" className="w-12 h-12 sm:w-16 sm:h-16 object-contain" />
                                         </div>
                                         <div className="flex flex-col text-left">
                                             <h5 className="text-[#0b1a3a] font-black text-sm sm:text-[16px] leading-none mb-1">{stat.val}</h5>
@@ -278,7 +278,7 @@ const HospitalityPartner = () => {
                                         </div>
                                         <div className="px-6 py-4 md:py-2 flex-1 flex flex-col items-center text-center justify-center bg-white">
                                             <div className="w-16 h-16 flex items-center justify-center mb-2">
-                                                <img src={iconSrc} alt="" className="w-16 h-16 object-contain" />
+                                                <img loading="lazy" decoding="async" src={iconSrc} alt="" className="w-16 h-16 object-contain" />
                                             </div>
                                             <p className="text-[10px] text-slate-600 leading-tight font-medium">{benefit.desc}</p>
                                         </div>
@@ -303,7 +303,7 @@ const HospitalityPartner = () => {
                                     <div key={i} className={`flex flex-col items-center text-center py-6 px-3 border-r border-b md:border-b-0 border-slate-200 last:border-b-0 ${i === 4 ? 'col-span-2 sm:col-span-1 border-r-0' : ''}`}>
                                         <div className="w-12 h-12 flex items-center justify-center mb-2">
                                             {adv.isImg
-                                                ? <img src={adv.icon as string} alt="" className="w-10 h-10 object-contain" />
+                                                ? <img loading="lazy" decoding="async" src={adv.icon as string} alt="" className="w-10 h-10 object-contain" />
                                                 : <adv.icon className="w-8 h-8 text-[#0b1a3a]" />}
                                         </div>
                                         <p className="text-[9px] font-bold text-[#0b1a3a] leading-tight uppercase tracking-tight max-w-[90px] mx-auto">{adv.text}</p>

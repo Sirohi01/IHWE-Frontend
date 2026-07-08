@@ -373,13 +373,13 @@ const DocumentsCenter1: React.FC = () => {
                          pendingUploads[selectedDoc.id].ext === 'PDF' ? (
                              <iframe src={pendingUploads[selectedDoc.id].url} className="w-full h-full border-0" title="PDF Preview" />
                          ) : (
-                             <img src={pendingUploads[selectedDoc.id].url} alt="Preview" className="max-w-full max-h-full object-contain" />
+                             <img loading="lazy" decoding="async" src={pendingUploads[selectedDoc.id].url} alt="Preview" className="max-w-full max-h-full object-contain" />
                          )
                     ) : selectedDoc.previewUrl ? (
                          selectedDoc.type === 'PDF' ? (
                              <iframe src={selectedDoc.previewUrl} className="w-full h-full border-0" title="PDF Preview" />
                          ) : (
-                             <img src={selectedDoc.previewUrl} alt="Preview" className="max-w-full max-h-full object-contain" />
+                             <img loading="lazy" decoding="async" src={selectedDoc.previewUrl} alt="Preview" className="max-w-full max-h-full object-contain" />
                          )
                     ) : selectedDoc.status === "Pending Upload" ? (
                         <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-lg bg-gray-50">
@@ -389,7 +389,7 @@ const DocumentsCenter1: React.FC = () => {
                         </div>
                     ) : (
                         <div className="w-full h-full border border-gray-100 flex flex-col items-center p-6 text-center opacity-80" style={{ background: 'repeating-linear-gradient(45deg, #f9fafb, #f9fafb 10px, #ffffff 10px, #ffffff 20px)' }}>
-                            <img src="/logo.png" alt="Logo" className="w-16 mb-4 grayscale opacity-50" />
+                            <img loading="lazy" decoding="async" src="/logo.png" alt="Logo" className="w-16 mb-4 grayscale opacity-50" />
                             <h5 className="font-bold text-gray-800 text-sm mb-1 uppercase tracking-wide">{selectedDoc.title}</h5>
                             <div className="w-12 h-0.5 bg-gray-300 mx-auto mb-4"></div>
                             <div className="w-full space-y-2">

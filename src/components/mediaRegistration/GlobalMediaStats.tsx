@@ -64,8 +64,7 @@ export default function GlobalMediaStats() {
                             className="relative flex justify-center lg:justify-start"
                         >
                             <div className="relative w-full max-w-[520px]">
-                                <img
-                                    src={global_stats_bg}
+                                <img loading="lazy" decoding="async" src={global_stats_bg}
                                     alt="World Map"
                                     className="w-full opacity-90"
                                 />

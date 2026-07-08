@@ -230,8 +230,7 @@ useEffect(()=>{
                                     }`}
                                 >
                                     <div className="relative w-[90px] h-[65px] rounded-lg overflow-hidden shrink-0">
-                                        <img
-                                            src={video.thumbnail}
+                                        <img loading="lazy" decoding="async" src={video.thumbnail}
                                             alt={video.title}
                                             className="w-full h-full object-cover"
                                         />

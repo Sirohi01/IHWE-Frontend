@@ -94,8 +94,7 @@ export default function PartnersAndActionsSection({ currentDay, data }: { curren
             {associates.map((logo, i) => (
               <SwiperSlide key={i}>
                 <div className="group flex h-[90px] items-center justify-center rounded-xl bg-white p-3 shadow-sm border border-gray-100 transition-all duration-300 hover:border-[#2F8B2E] hover:shadow-md cursor-pointer">
-                  <img
-                    src={`${SERVER_URL}${logo}`}
+                  <img loading="lazy" decoding="async" src={`${SERVER_URL}${logo}`}
                     alt="partner"
                     className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
                   />

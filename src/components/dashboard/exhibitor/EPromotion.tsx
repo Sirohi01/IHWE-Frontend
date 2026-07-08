@@ -51,8 +51,7 @@ export default function EPromotion({ data }: any) {
       {/* INTRO */}
       <div className="w-full -mt-1.5">
           <div className="w-full relative flex flex-col justify-center rounded-none">
-              <img 
-                  src={bg222} 
+              <img loading="lazy" decoding="async" src={bg222} 
                   alt="E-Promotion Banner" 
                   className="w-full h-[100px] md:h-[120px] lg:h-[140px] object-cover object-center rounded-none"
               />
@@ -95,8 +94,7 @@ export default function EPromotion({ data }: any) {
               className="flex items-center gap-3 p-4 flex-1 min-w-[200px]"
             >
               {/* ICON */}
-              <img
-                src={item.icon}
+              <img loading="lazy" decoding="async" src={item.icon}
                 className="w-10 h-10 object-contain"
                 alt="icon"
               />
@@ -216,8 +214,7 @@ export default function EPromotion({ data }: any) {
               key={i}
               className="bg-white rounded-xl border p-4 text-center shadow-sm hover:shadow-md transition"
             >
-              <img
-                src={item.image}
+              <img loading="lazy" decoding="async" src={item.image}
                 alt={item.label}
                 className="w-12 h-12 object-contain mx-auto mb-3"
               />
@@ -278,8 +275,7 @@ export default function EPromotion({ data }: any) {
                   key={i}
                   className="bg-gray-50 border rounded-xl p-4 text-center hover:shadow-md transition"
                 >
-                  <img
-                    src={item[0]}
+                  <img loading="lazy" decoding="async" src={item[0]}
                     alt={item[2]}
                     className="w-12 h-12 object-contain mx-auto mb-2"
                   />
@@ -336,8 +332,7 @@ export default function EPromotion({ data }: any) {
 
                 {/* RIGHT IMAGE */}
                 <div className="relative h-[120px] md:h-auto overflow-hidden">
-                  <img
-                    src="/images/epromotion/test.png"
+                  <img loading="lazy" decoding="async" src="/images/epromotion/test.png"
                     alt="Testimonial"
                     className="w-full h-full object-cover"
                   />
@@ -370,8 +365,7 @@ export default function EPromotion({ data }: any) {
 
               {/* ICON */}
               <div className="w-[62px] h-[62px] shrink-0 flex items-center justify-center shadow-md">
-                <img
-                  src="/images/epromotion/megaphone.png"
+                <img loading="lazy" decoding="async" src="/images/epromotion/megaphone.png"
                   alt="Megaphone"
                   className="w-20 h-20 object-contain"
                 />
@@ -462,8 +456,7 @@ export default function EPromotion({ data }: any) {
                 {/* IMAGE ICON */}
                 <div className="w-10 h-10 rounded-full bg-[#0d3a20] border border-[#7ea35f] flex items-center justify-center shrink-0 p-2">
 
-                  <img
-                    src={item[0]}
+                  <img loading="lazy" decoding="async" src={item[0]}
                     alt={item[2]}
                     className="w-full h-full object-contain"
                   />
@@ -494,24 +487,21 @@ export default function EPromotion({ data }: any) {
               </p>
 
               <a href="#">
-                <img
-                  src="/images/social/instagram.png"
+                <img loading="lazy" decoding="async" src="/images/social/instagram.png"
                   alt="Instagram"
                   className="w-5 h-5 object-contain hover:scale-110 transition"
                 />
               </a>
 
               <a href="#">
-                <img
-                  src="/images/social/linkedin.png"
+                <img loading="lazy" decoding="async" src="/images/social/linkedin.png"
                   alt="LinkedIn"
                   className="w-5 h-5 object-contain hover:scale-110 transition"
                 />
               </a>
 
               <a href="#">
-                <img
-                  src="/images/social/youtube.png"
+                <img loading="lazy" decoding="async" src="/images/social/youtube.png"
                   alt="YouTube"
                   className="w-5 h-5 object-contain hover:scale-110 transition"
                 />

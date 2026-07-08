@@ -97,8 +97,7 @@ const IndustryZoneDetail = () => {
             {/* ── HERO SECTION ── */}
             <section className="relative h-[55vh] min-h-[450px] flex items-start pt-12 md:pt-16 overflow-hidden">
                 <div className="absolute inset-0 z-0">
-                    <img
-                        src={detail?.heroImage ? `${SERVER_URL}${detail.heroImage}` : `${SERVER_URL}${zone.image}`}
+                    <img loading="lazy" decoding="async" src={detail?.heroImage ? `${SERVER_URL}${detail.heroImage}` : `${SERVER_URL}${zone.image}`}
                         alt={detail?.heroImageAlt || zone.title}
                         className="w-full h-full object-cover"
                     />

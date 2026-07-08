@@ -19,8 +19,7 @@ const DelegateHero: React.FC = () => {
 
 
       <div className="absolute top-0 right-0 w-2/3 h-full hidden md:block">
-        <img
-          src={delegateBg}
+        <img loading="lazy" decoding="async" src={delegateBg}
           alt="Conference Venue"
           className="w-full h-full object-inherit object-left"
         />

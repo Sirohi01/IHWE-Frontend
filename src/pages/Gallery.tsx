@@ -385,8 +385,7 @@ const Gallery = () => {
                                     onClick={() => setActiveEvent(event.title)}
                                 >
                                     <div className="relative overflow-hidden rounded-[2px] bg-slate-900 shadow-sm hover:shadow-2xl transition-all duration-700 aspect-[3/2]">
-                                        <img
-                                            src={event.coverImage}
+                                        <img loading="lazy" decoding="async" src={event.coverImage}
                                             alt={event.title}
                                             className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
                                         />
@@ -439,8 +438,7 @@ const Gallery = () => {
                                                 <div className="absolute inset-0 bg-black/10" />
                                             </div>
                                         ) : (
-                                            <img
-                                                src={event.coverImage}
+                                            <img loading="lazy" decoding="async" src={event.coverImage}
                                                 alt={event.title}
                                                 className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
                                                 onError={(e) => {
@@ -525,8 +523,7 @@ const Gallery = () => {
                                                                     <div className="absolute inset-0 bg-black/10" />
                                                                 </div>
                                                             ) : item.thumbnail ? (
-                                                                <img 
-                                                                    src={item.thumbnail} 
+                                                                <img loading="lazy" decoding="async" src={item.thumbnail} 
                                                                     referrerPolicy="no-referrer"
                                                                     className="absolute inset-0 w-full h-full object-cover opacity-60"
                                                                     onError={(e) => {
@@ -687,7 +684,7 @@ const Gallery = () => {
                                     )}
                                 </div>
                             ) : (
-                                <img src={selectedMedia.src} className="max-w-full max-h-[85vh] mx-auto object-contain shadow-2xl" />
+                                <img loading="lazy" decoding="async" src={selectedMedia.src} className="max-w-full max-h-[85vh] mx-auto object-contain shadow-2xl" />
                             )}
                             {selectedMedia.description && (
                                 <div className="mt-4 text-center">

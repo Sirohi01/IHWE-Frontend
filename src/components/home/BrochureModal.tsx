@@ -43,8 +43,7 @@ const BrochureModal: React.FC<BrochureModalProps> = ({ isOpen, onClose }) => {
 
             {/* Banner Image Container */}
             <div className="relative h-56 md:h-64 overflow-hidden">
-              <img 
-                src={bannerImg} 
+              <img loading="lazy" decoding="async" src={bannerImg} 
                 alt="IHWE 2026 Brochure" 
                 className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700"
               />

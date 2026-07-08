@@ -82,8 +82,7 @@ const WhoShouldAttendSection: React.FC = () => {
                     <div className="grid lg:grid-cols-2 gap-10 lg:gap-20 items-stretch relative z-10">
                         {/* Image Side */}
                         <div className="relative group overflow-hidden rounded-[2.5rem] shadow-2xl order-2 lg:order-1 min-h-[500px] lg:min-h-[600px]" data-aos="fade-right">
-                            <img
-                                src={imageUrl}
+                            <img loading="lazy" decoding="async" src={imageUrl}
                                 alt={data.imageAlt}
                                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                             />

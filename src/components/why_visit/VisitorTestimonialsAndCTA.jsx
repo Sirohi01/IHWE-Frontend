@@ -63,7 +63,7 @@ const VisitorTestimonialsAndCTA = () => {
                                     <div className="flex-grow flex flex-col justify-between h-full min-h-[110px]">
                                         {/* Top: Quote & Testimonial */}
                                         <div className="flex items-start gap-2.5 mb-3">
-                                            <img src="/whyVisit/quote.svg" alt="Quote" className="w-5 h-5 object-contain shrink-0 mt-0.5 opacity-90" />
+                                            <img loading="lazy" decoding="async" src="/whyVisit/quote.svg" alt="Quote" className="w-5 h-5 object-contain shrink-0 mt-0.5 opacity-90" />
                                             <p className="text-[12px] text-gray-700 leading-relaxed font-medium">
                                                 {item.text}
                                             </p>
@@ -74,7 +74,7 @@ const VisitorTestimonialsAndCTA = () => {
                                             {/* 5 Gold Stars */}
                                             <div className="flex items-center gap-0.5 mb-1.5 pl-7">
                                                 {[...Array(5)].map((_, i) => (
-                                                    <img key={i} src="/whyVisit/star.svg" alt="Star" className="w-5 h-5" />
+                                                    <img loading="lazy" decoding="async" key={i} src="/whyVisit/star.svg" alt="Star" className="w-5 h-5" />
                                                 ))}
                                             </div>
 
@@ -87,7 +87,7 @@ const VisitorTestimonialsAndCTA = () => {
 
                                     {/* Right Column: Round Avatar */}
                                     {/* <div className="w-20 h-20 shrink-0 rounded-full overflow-hidden border-2 border-gray-100 bg-gray-50 self-center ml-1">
-                                        <img src={item.avatar} alt={item.author} className="w-full h-full object-cover" />
+                                        <img loading="lazy" decoding="async" src={item.avatar} alt={item.author} className="w-full h-full object-cover" />
                                     </div> */}
                                 </div>
                             ))}
@@ -100,8 +100,7 @@ const VisitorTestimonialsAndCTA = () => {
             <div className="w-full bg-[#011630] relative overflow-hidden py-2">
                 {/* High-tech overlay digital earth on far right */}
                 <div className="absolute right-0 top-0 bottom-0 w-[40%] hidden lg:block">
-                    <img
-                        src="/whyVisit/cta_earth.png"
+                    <img loading="lazy" decoding="async" src="/whyVisit/cta_earth.png"
                         alt="digital sphere"
                         className="w-full h-full object-contain object-right scale-110 opacity-75 mix-blend-screen select-none pointer-events-none"
                     />
@@ -154,7 +153,7 @@ const VisitorTestimonialsAndCTA = () => {
                             const content = (
                                 <>
                                     <div className="w-8 h-8 shrink-0 flex items-center justify-center">
-                                        <img src={detail.icon} alt="event detail icon" className="w-6 h-6 object-contain" />
+                                        <img loading="lazy" decoding="async" src={detail.icon} alt="event detail icon" className="w-6 h-6 object-contain" />
                                     </div>
                                     <span className="text-[11px] md:text-[12px] font-extrabold text-[#011630] tracking-wide leading-snug whitespace-pre-line">
                                         {detail.label}

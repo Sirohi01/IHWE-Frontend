@@ -34,7 +34,7 @@ const AwardsHero = () => {
           >
             {/* Awards Logo */}
             <div className="flex justify-center md:justify-start w-full mt-2 md:-mt-8 mb-1">
-              <img src={awardsLogo} alt="Namo Gange Awards Logo" className="h-auto w-[240px] sm:w-[300px] md:w-[500px] object-contain" />
+              <img loading="lazy" decoding="async" src={awardsLogo} alt="Namo Gange Awards Logo" className="h-auto w-[240px] sm:w-[300px] md:w-[500px] object-contain" />
             </div>
 
             {/* <div className="flex items-center gap-4">

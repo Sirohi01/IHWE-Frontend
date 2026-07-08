@@ -108,7 +108,7 @@ const DelegateFooter: React.FC = () => {
         <div className="max-w-[1360px] mx-auto flex flex-col md:flex-row items-center justify-between gap-8 md:gap-6 pl-0 md:pl-[30px]">
           {/* Logo & Info */}
           <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-8 text-center sm:text-left">
-            <img src={logo} alt="Arogya Sanghoshthi" className="h-16 w-auto" />
+            <img loading="lazy" decoding="async" src={logo} alt="Arogya Sanghoshthi" className="h-16 w-auto" />
             <div className="border-t sm:border-t-0 sm:border-l border-gray-100 pt-4 sm:pt-0 sm:pl-8">
               <h3 className="text-[20px] font-black text-[#143111] uppercase tracking-tight leading-none">AROGYA SANGHOSHTI 2026</h3>
               <div className="h-[1px] w-20 bg-gray-100 my-2 mx-auto sm:mx-0" />
@@ -121,8 +121,7 @@ const DelegateFooter: React.FC = () => {
             <div className="flex flex-col items-center md:items-start">
               <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2">Part of</p>
               <div className="flex items-center gap-4">
-                <img
-                  src="/logo.png"
+                <img loading="lazy" decoding="async" src="/logo.png"
                   alt="International Health & Wellness Expo"
                   className="w-14 h-14 object-contain"
                 />
@@ -140,8 +139,7 @@ const DelegateFooter: React.FC = () => {
               <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2 text-center md:text-left w-full">Supported By</p>
               <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 justify-center">
                 <div className="flex items-center gap-3">
-                  <img
-                    src="/MSME.png"
+                  <img loading="lazy" decoding="async" src="/MSME.png"
                     alt="Govt of India"
                     className="w-10 h-10 object-contain"
                   />
@@ -151,8 +149,7 @@ const DelegateFooter: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <img
-                    src="/MSME.png"
+                  <img loading="lazy" decoding="async" src="/MSME.png"
                     alt="NITI Aayog"
                     className="w-10 h-10 object-contain"
                   />

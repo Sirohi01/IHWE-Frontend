@@ -121,8 +121,7 @@ const IndustryZones = () => {
                             {/* Image Part */}
                             <div className="relative w-full overflow-hidden" style={{ aspectRatio: '16/9' }}>
                                 {card.image ? (
-                                    <img
-                                        src={`${SERVER_URL}${card.image}`}
+                                    <img loading="lazy" decoding="async" src={`${SERVER_URL}${card.image}`}
                                         alt={card.imageAlt || card.title}
                                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                                     />

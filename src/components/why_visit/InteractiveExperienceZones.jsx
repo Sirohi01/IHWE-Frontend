@@ -71,8 +71,7 @@ const InteractiveExperienceZones = () => {
                         >
                             {/* Image Container */}
                             <div className="w-full h-32 overflow-hidden relative">
-                                <img
-                                    src={zone.image}
+                                <img loading="lazy" decoding="async" src={zone.image}
                                     alt={zone.title}
                                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                                 />
@@ -83,7 +82,7 @@ const InteractiveExperienceZones = () => {
                             {/* Floating Round Badge (Transparent Container) */}
                             <div className="absolute top-[96px] left-1/2 -translate-x-1/2 w-16 h-16 flex items-center justify-center z-10">
                                 <div className="">
-                                    <img src={zone.icon} alt={zone.alt} className="w-14 h-14 object-contain" />
+                                    <img loading="lazy" decoding="async" src={zone.icon} alt={zone.alt} className="w-14 h-14 object-contain" />
                                 </div>
                             </div>
 

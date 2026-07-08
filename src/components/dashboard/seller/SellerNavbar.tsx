@@ -23,7 +23,7 @@ export default function SellerNavbar({ logo, data, sidebarOpen, setSidebarOpen, 
                 </button>
                 <div className="flex items-center" style={{ height: '56px' }}>
                     {logo ? (
-                        <img src={`${SERVER_URL}${logo}`} style={{ height: '56px', width: 'auto', objectFit: 'contain', maxWidth: '220px' }} alt="Logo" />
+                        <img loading="lazy" decoding="async" src={`${SERVER_URL}${logo}`} style={{ height: '56px', width: 'auto', objectFit: 'contain', maxWidth: '220px' }} alt="Logo" />
                     ) : (
                         <div className="h-10 w-10 bg-[#23471d] rounded-lg flex items-center justify-center text-white font-black text-xl shadow-lg">S</div>
                     )}
@@ -50,7 +50,7 @@ export default function SellerNavbar({ logo, data, sidebarOpen, setSidebarOpen, 
                         </div> */}
                         <div className="w-9 h-9 bg-slate-100 rounded-full border border-slate-200 flex items-center justify-center overflow-hidden">
                             {data?.companyLogo ? (
-                                <img src={data.companyLogo} alt="Logo" className="w-full h-full object-cover" />
+                                <img loading="lazy" decoding="async" src={data.companyLogo} alt="Logo" className="w-full h-full object-cover" />
                             ) : (
                                 <User size={18} className="text-slate-400" />
                             )}

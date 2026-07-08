@@ -15,7 +15,7 @@ const fixUrl = (url?: string) => {
 const Avatar = ({ url, alt, className }: { url?: string; alt: string; className: string }) => {
     const resolved = fixUrl(url);
     return resolved ? (
-        <img src={resolved} alt={alt} className={`${className} object-cover`} />
+        <img loading="lazy" decoding="async" src={resolved} alt={alt} className={`${className} object-cover`} />
     ) : (
         <div className={`${className} bg-slate-100 flex items-center justify-center text-slate-300`}>
             <User className="w-1/2 h-1/2" />

@@ -55,12 +55,12 @@ import headerConsentImg from "../../../assets/arogyasangostiimageform/Consent.pn
 
 export const BasicDetailsSection = ({ form, set, industryCategory, setIndustryCategory }: any) => {
     const categories = [
-        { label: "Doctor", icon: <img src={doctorImg} alt="Doctor" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
-        { label: "AYUSH Practitioner", icon: <img src={ayushIconImg} alt="AYUSH" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
-        { label: "Hospital", icon: <img src={hospitalImg} alt="Hospital" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
-        { label: "University / Academic", icon: <img src={universityImg} alt="University" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
-        { label: "Pharma / Healthcare Company", icon: <img src={pharmaImg} alt="Pharma" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
-        { label: "Startup / Innovator", icon: <img src={startupImg} alt="Startup" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
+        { label: "Doctor", icon: <img loading="lazy" decoding="async" src={doctorImg} alt="Doctor" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
+        { label: "AYUSH Practitioner", icon: <img loading="lazy" decoding="async" src={ayushIconImg} alt="AYUSH" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
+        { label: "Hospital", icon: <img loading="lazy" decoding="async" src={hospitalImg} alt="Hospital" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
+        { label: "University / Academic", icon: <img loading="lazy" decoding="async" src={universityImg} alt="University" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
+        { label: "Pharma / Healthcare Company", icon: <img loading="lazy" decoding="async" src={pharmaImg} alt="Pharma" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
+        { label: "Startup / Innovator", icon: <img loading="lazy" decoding="async" src={startupImg} alt="Startup" style={{ width: 48, height: 48, objectFit: "contain" }} /> },
         { label: "Other", icon: <OtherDotsIcon /> },
     ];
 
@@ -110,13 +110,13 @@ export const ContactDetailsSection = ({ form, set }: any) => (
 
 export const SpeakerProfileSection = ({ form, set, expertise, toggleExpertise }: any) => {
     const expertiseAreas = [
-        { label: "Ayurveda", icon: <img src={ayurvedaImg} alt="Ayurveda" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
-        { label: "Modern Medicine", icon: <img src={modernMedImg} alt="Modern Medicine" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
-        { label: "Digital Health / AI", icon: <img src={digitalHealthImg} alt="Digital Health" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
-        { label: "Wellness & Lifestyle", icon: <img src={wellnessImg} alt="Wellness" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
-        { label: "Hospital Management", icon: <img src={hospMgmtImg} alt="Hospital Mgmt" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
-        { label: "Research & Education", icon: <img src={researchImg} alt="Research" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
-        { label: "Policy / Government", icon: <img src={policyImg} alt="Policy" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
+        { label: "Ayurveda", icon: <img loading="lazy" decoding="async" src={ayurvedaImg} alt="Ayurveda" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
+        { label: "Modern Medicine", icon: <img loading="lazy" decoding="async" src={modernMedImg} alt="Modern Medicine" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
+        { label: "Digital Health / AI", icon: <img loading="lazy" decoding="async" src={digitalHealthImg} alt="Digital Health" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
+        { label: "Wellness & Lifestyle", icon: <img loading="lazy" decoding="async" src={wellnessImg} alt="Wellness" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
+        { label: "Hospital Management", icon: <img loading="lazy" decoding="async" src={hospMgmtImg} alt="Hospital Mgmt" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
+        { label: "Research & Education", icon: <img loading="lazy" decoding="async" src={researchImg} alt="Research" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
+        { label: "Policy / Government", icon: <img loading="lazy" decoding="async" src={policyImg} alt="Policy" style={{ width: 20, height: 20, objectFit: "contain" }} /> },
         { label: "Other", icon: <OtherDotsIcon /> },
     ];
 
@@ -177,9 +177,9 @@ export const SessionDetailsSection = ({ form, set, preferredTrack, setPreferredT
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "var(--track-grid-cols, repeat(3, 1fr))", gap: 10 }}>
                 {[
-                    { label: "AYUSH &\nWellness", key: "ayush", icon: <img src={ayushWellnessImg} alt="AYUSH" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
-                    { label: "Medical &\nHealthcare", key: "medical", icon: <img src={medicalHealthcareImg} alt="Medical" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
-                    { label: "Both", key: "both", icon: <img src={bothImg} alt="Both" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+                    { label: "AYUSH &\nWellness", key: "ayush", icon: <img loading="lazy" decoding="async" src={ayushWellnessImg} alt="AYUSH" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+                    { label: "Medical &\nHealthcare", key: "medical", icon: <img loading="lazy" decoding="async" src={medicalHealthcareImg} alt="Medical" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+                    { label: "Both", key: "both", icon: <img loading="lazy" decoding="async" src={bothImg} alt="Both" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
                 ].map((t) => (
                     <TrackChip
                         key={t.key}
@@ -202,9 +202,9 @@ export const SessionDetailsSection = ({ form, set, preferredTrack, setPreferredT
             <div style={{ fontSize: 13, color: TEXT_DARK, fontWeight: 700, marginBottom: 12 }}>Session Type <span style={{ color: "#94A3B8", fontWeight: 400 }}>(Select one)</span></div>
             <div style={{ display: "grid", gridTemplateColumns: "var(--session-grid-cols, repeat(3, 1fr))", gap: 10 }}>
                 {[
-                    { label: "Keynote", key: "keynote", icon: <img src={keynoteImg} alt="Keynote" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
-                    { label: "Panel Discussion", key: "panel", icon: <img src={panelImg} alt="Panel" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
-                    { label: "Expert Talk", key: "expert", icon: <img src={expertImg} alt="Expert" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+                    { label: "Keynote", key: "keynote", icon: <img loading="lazy" decoding="async" src={keynoteImg} alt="Keynote" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+                    { label: "Panel Discussion", key: "panel", icon: <img loading="lazy" decoding="async" src={panelImg} alt="Panel" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
+                    { label: "Expert Talk", key: "expert", icon: <img loading="lazy" decoding="async" src={expertImg} alt="Expert" style={{ width: 32, height: 32, objectFit: "contain" }} /> },
                 ].map((s) => (
                     <SessionChip key={s.key} label={s.label} icon={s.icon} selected={sessionType === s.key} onClick={() => setSessionType(s.key)} />
                 ))}
@@ -259,21 +259,21 @@ export const SupportingDetailsSection = ({ files, setFiles }: { files: any; setF
             key: "speakerPhoto",
             label: "Speaker Photo\n(HD)",
             sub: "JPG, PNG",
-            icon: <img src={speakerPhotoImg} alt="Speaker" style={{ width: 40, height: 40, objectFit: "contain" }} />,
+            icon: <img loading="lazy" decoding="async" src={speakerPhotoImg} alt="Speaker" style={{ width: 40, height: 40, objectFit: "contain" }} />,
             accept: ".jpg,.jpeg,.png",
         },
         {
             key: "companyLogo",
             label: "Company Logo\n(if applicable)",
             sub: "JPG, PNG",
-            icon: <img src={companyLogoImg} alt="Company" style={{ width: 40, height: 40, objectFit: "contain" }} />,
+            icon: <img loading="lazy" decoding="async" src={companyLogoImg} alt="Company" style={{ width: 40, height: 40, objectFit: "contain" }} />,
             accept: ".jpg,.jpeg,.png",
         },
         {
             key: "presentation",
             label: "Presentation\n(optional)",
             sub: "PPT, PDF (10MB)",
-            icon: <img src={presentationImg} alt="Presentation" style={{ width: 40, height: 40, objectFit: "contain" }} />,
+            icon: <img loading="lazy" decoding="async" src={presentationImg} alt="Presentation" style={{ width: 40, height: 40, objectFit: "contain" }} />,
             accept: ".ppt,.pptx,.pdf",
         },
     ];
@@ -333,7 +333,7 @@ export const ExpectationsSection = ({ expectations, toggleExpectation }: any) =>
                     ))}
                 </div>
             </div>
-            <img src={expectationImg} alt="Expectations" style={{ width: 110, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px", mixBlendMode: "multiply", alignSelf: "flex-end", display: "var(--illustration-display, block)" }} />
+            <img loading="lazy" decoding="async" src={expectationImg} alt="Expectations" style={{ width: 110, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px", mixBlendMode: "multiply", alignSelf: "flex-end", display: "var(--illustration-display, block)" }} />
         </div>
     </SectionBox>
 );
@@ -401,7 +401,7 @@ export const ConsentSection = ({ consent1, setConsent1, consent2, setConsent2, o
                     </button>
                 </div>
             </div>
-            <img src={consentImg} alt="Consent" style={{ width: 130, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px", mixBlendMode: "multiply", alignSelf: "flex-end", display: "var(--illustration-display, block)" }} />
+            <img loading="lazy" decoding="async" src={consentImg} alt="Consent" style={{ width: 130, objectFit: "contain", marginRight: "-10px", marginBottom: "-10px", mixBlendMode: "multiply", alignSelf: "flex-end", display: "var(--illustration-display, block)" }} />
         </div>
     </SectionBox>
 );

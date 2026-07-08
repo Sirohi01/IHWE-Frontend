@@ -37,8 +37,7 @@ export default function DashboardHero({ pageId, defaultTitle, defaultSubtitle, t
             style={{ aspectRatio: '4 / 1' }}
         >
             {/* Image — fills 4:1 container exactly, object-cover crops if needed */}
-            <img
-                src={imageUrl}
+            <img loading="lazy" decoding="async" src={imageUrl}
                 alt=""
                 className="absolute inset-0 w-full h-full object-cover object-center"
             />
@@ -70,7 +69,7 @@ export default function DashboardHero({ pageId, defaultTitle, defaultSubtitle, t
 
             {/* Decorative Element */}
             <div className="absolute bottom-0 right-0 p-8 opacity-10 pointer-events-none group-hover:opacity-20 transition-opacity">
-                <img src="/logo-icon-white.png" alt="" className="w-32 h-32 rotate-12" />
+                <img loading="lazy" decoding="async" src="/logo-icon-white.png" alt="" className="w-32 h-32 rotate-12" />
             </div>
         </div>
     );

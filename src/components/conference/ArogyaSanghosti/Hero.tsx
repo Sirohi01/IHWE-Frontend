@@ -19,8 +19,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
             }}
         >
 
-            <img
-                src={heroImg}
+            <img loading="lazy" decoding="async" src={heroImg}
                 alt="Hero Banner"
                 style={{
                     width: "100%",
@@ -55,7 +54,7 @@ export const HeroSection: React.FC<HeroProps> = ({ heroImg, arogyaLogo }) => {
                 }}>
 
                     {/* Logo */}
-                    <img src={arogyaLogo} alt="Arogya Logo" style={{
+                    <img loading="lazy" decoding="async" src={arogyaLogo} alt="Arogya Logo" style={{
                         height: "var(--hero-logo-height, 20vw)",
                         minHeight: "var(--hero-logo-min-height, 160px)",
                         width: "auto",

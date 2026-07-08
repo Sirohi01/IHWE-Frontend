@@ -87,8 +87,7 @@ const GlobalPlatform: React.FC = () => {
               >
                 {data.images[0]?.url ? (
                   
-                  <img
-                    src={getImageUrl(data.images[0].url)}
+                  <img loading="lazy" decoding="async" src={getImageUrl(data.images[0].url)}
                     alt={data.images[0]?.altText || ''}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />

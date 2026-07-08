@@ -39,7 +39,7 @@ const ProfileDetailsSection = ({ form, update }: Props) => (
           />
         </div>
         <div className="hidden md:block shrink-0 mb-1">
-          <img src={profileImg} alt="Profile" className="w-16 h-16 object-contain opacity-70" />
+          <img loading="lazy" decoding="async" src={profileImg} alt="Profile" className="w-16 h-16 object-contain opacity-70" />
         </div>
       </div>
     </div>

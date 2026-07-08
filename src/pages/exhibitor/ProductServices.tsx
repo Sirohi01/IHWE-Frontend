@@ -235,7 +235,7 @@ export default function ProductServices() {
 
             {/* Banner Section */}
             <div className='rounded-2xl overflow-hidden mb-3'>
-                <img src={productImage} alt="Products & Services" className="w-full h-full object-cover" />
+                <img loading="lazy" decoding="async" src={productImage} alt="Products & Services" className="w-full h-full object-cover" />
             </div>
             {/* <div className="rounded-2xl px-4 md:px-5 mb-3 flex flex-col md:flex-row items-center justify-between overflow-hidden relative bg-gradient-to-r from-sky-200 to-sky-100/70">
                 <div className="md:w-1/2 py-3 relative z-10">
@@ -247,7 +247,7 @@ export default function ProductServices() {
                     </p>
                 </div>
                 <div className="md:w-1/2 flex justify-center items-end relative z-10">
-                    <img src={productImage} alt="Healthcare Products" className="h-20 md:h-28 object-contain" />
+                    <img loading="lazy" decoding="async" src={productImage} alt="Healthcare Products" className="h-20 md:h-28 object-contain" />
                 </div>
             </div> */}
 
@@ -375,7 +375,7 @@ export default function ProductServices() {
                                     <div className="flex items-center gap-2.5 flex-1 min-w-0">
                                         <div className="w-14 h-10 sm:w-16 sm:h-12 bg-slate-100 rounded-lg overflow-hidden shrink-0 border border-slate-200">
                                             {item.image ? (
-                                                <img src={item.image} alt={item.title} className="w-full h-full object-cover" />
+                                                <img loading="lazy" decoding="async" src={item.image} alt={item.title} className="w-full h-full object-cover" />
                                             ) : (
                                                 <div className="w-full h-full flex items-center justify-center text-slate-300">
                                                     <ImageIcon size={16} />
@@ -543,8 +543,7 @@ export default function ProductServices() {
                         <div className="md:col-span-3 bg-slate-100 min-h-[280px] md:min-h-[520px] flex flex-col">
                             <div className="flex-1 flex items-center justify-center p-6">
                                 {viewingItem.images?.[activeViewImage] ? (
-                                    <img
-                                        src={viewingItem.images[activeViewImage]}
+                                    <img loading="lazy" decoding="async" src={viewingItem.images[activeViewImage]}
                                         alt={viewingItem.title}
                                         className="max-w-full max-h-[420px] object-contain rounded-lg bg-white shadow-sm"
                                     />
@@ -564,7 +563,7 @@ export default function ProductServices() {
                                             onClick={() => setActiveViewImage(index)}
                                             className={`w-14 h-14 rounded-md border-2 overflow-hidden bg-white shrink-0 ${activeViewImage === index ? 'border-[#10b981]' : 'border-transparent opacity-60 hover:opacity-100'}`}
                                         >
-                                            <img src={img} alt="" className="w-full h-full object-cover" />
+                                            <img loading="lazy" decoding="async" src={img} alt="" className="w-full h-full object-cover" />
                                         </button>
                                     ))}
                                 </div>

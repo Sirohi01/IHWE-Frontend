@@ -283,8 +283,7 @@ const Footer = () => {
           <div className="flex items-center gap-4 w-full md:w-auto justify-center md:justify-start">
             <div className="bg-white rounded-xl py-2 px-4 shadow-lg flex items-center gap-4 shrink-0">
               <Link to="/" className="shrink-0">
-                <img
-                  src="/logo.png"
+                <img loading="lazy" decoding="async" src="/logo.png"
                   alt="IHWE"
                   className="h-10 md:h-11 w-auto object-contain hover:opacity-90 transition-opacity"
                 />

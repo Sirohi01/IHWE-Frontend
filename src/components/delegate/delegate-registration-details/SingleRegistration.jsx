@@ -53,7 +53,7 @@ const SingleRegistration = () => {
                         {/* bg-gradient-to-br from-[#e8f5e8] to-[#c8e6c8] rounded-2xl */}
                         <div className=" flex items-end justify-start overflow-hidden">
                             {/* Add your illustration image here */}
-                            <img src={leftImg} alt="IHWE" className="h-full object-contain" />
+                            <img loading="lazy" decoding="async" src={leftImg} alt="IHWE" className="h-full object-contain" />
                         </div>
 
                         {/* Why Attend */}

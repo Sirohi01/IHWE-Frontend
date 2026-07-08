@@ -55,7 +55,7 @@ const ExperienceSection = () => {
                     </div>
                     {/* Small Leaf below title */}
                     <div className="mt-2 flex justify-center">
-                        <img src="/whyVisit/leaf.png" alt="Leaf" className="h-4 object-contain" />
+                        <img loading="lazy" decoding="async" src="/whyVisit/leaf.png" alt="Leaf" className="h-4 object-contain" />
                     </div>
                 </div>
 
@@ -69,7 +69,7 @@ const ExperienceSection = () => {
                         >
                             {/* Icon container */}
                             <div className="w-20 h-20 flex items-center justify-center">
-                                <img src={item.icon} alt={item.alt} className="w-16 h-16 object-contain" />
+                                <img loading="lazy" decoding="async" src={item.icon} alt={item.alt} className="w-16 h-16 object-contain" />
                             </div>
 
                             {/* Title */}

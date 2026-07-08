@@ -308,7 +308,7 @@ export default function ExhibitorSidebar({
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(37,112,255,0.15),transparent_50%),linear-gradient(180deg,#08204d_0%,#031b47_58%,#06306b_100%)]" />
             {/* <div className="absolute inset-x-0 bottom-0 h-44 opacity-55 bg-[linear-gradient(180deg,transparent,#06d6a0_180%),repeating-linear-gradient(90deg,transparent_0_18px,rgba(41,208,255,.28)_19px_20px)]" /> */}
             <div className="absolute inset-x-0 bottom-0 h-52 opacity-55 pointer-events-none">
-                <img src="/exhibition/1.png" alt="" className="w-full h-full object-cover object-bottom" />
+                <img loading="lazy" decoding="async" src="/exhibition/1.png" alt="" className="w-full h-full object-cover object-bottom" />
             </div>
             {/* Logo */}
             <div className="relative z-10 flex pt-2 pb-2 items-center justify-center px-4 mb-2 border-b border-white/10">
@@ -316,8 +316,7 @@ export default function ExhibitorSidebar({
                     {/* Soft white glowing aura behind the logo for readability */}
                     <div className="w-[120px] h-[40px] bg-white/60 rounded-full blur-2xl" />
                 </div>
-                <img 
-                    src="/logo.png" 
+                <img loading="lazy" decoding="async" src="/logo.png" 
                     alt="IHWE 2026" 
                     className="relative h-[60px] w-full object-contain" 
                     style={{ filter: "drop-shadow(0px 0px 15px rgba(255,255,255,0.8)) drop-shadow(0px 0px 4px rgba(255,255,255,1))" }}

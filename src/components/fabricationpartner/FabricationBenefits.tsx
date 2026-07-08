@@ -4,7 +4,7 @@ import * as Icons from 'lucide-react';
 const IconOrImageRenderer = ({ icon, className }: { icon: string, className?: string }) => {
   if (!icon) return null;
   if (icon.startsWith('/') || icon.startsWith('http') || icon.includes('.')) {
-    return <img src={icon} alt="" className={className} />;
+    return <img loading="lazy" decoding="async" src={icon} alt="" className={className} />;
   }
   const IconComponent = (Icons as any)[icon] || Icons.Star;
   return <IconComponent className={className} />;

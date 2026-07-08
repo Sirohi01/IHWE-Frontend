@@ -23,8 +23,7 @@ const LogoShowcase = () => {
                   { src: "/knowledge3.png", alt: "Knowledge Partner 3" }
                 ].map((logo, idx) => (
                   <div key={idx} className="mx-6 md:mx-8 lg:mx-10 transition-transform duration-300 hover:-translate-y-1 flex items-center justify-center">
-                    <img 
-                      src={logo.src} 
+                    <img loading="lazy" decoding="async" src={logo.src} 
                       alt={logo.alt} 
                       className="h-12 md:h-14 lg:h-16 w-auto max-w-[100px] md:max-w-[120px] lg:max-w-[140px] object-contain transition-all duration-300"
                       onError={(e) => {
@@ -51,8 +50,7 @@ const LogoShowcase = () => {
                   { src: "/forlog.png", alt: "Healthcare Partner 3" }
                 ].map((logo, idx) => (
                   <div key={idx} className="mx-6 md:mx-8 lg:mx-10 transition-transform duration-300 hover:-translate-y-1 flex items-center justify-center">
-                    <img 
-                      src={logo.src} 
+                    <img loading="lazy" decoding="async" src={logo.src} 
                       alt={logo.alt} 
                       className="h-12 md:h-14 lg:h-16 w-auto max-w-[100px] md:max-w-[120px] lg:max-w-[140px] object-contain transition-all duration-300"
                       onError={(e) => {
@@ -80,8 +78,7 @@ const LogoShowcase = () => {
                   { src: "/Supporting%20Association%20(2).webp", alt: "Supporting Association 2" }
                 ].map((logo, idx) => (
                   <div key={idx} className="mx-6 md:mx-8 lg:mx-10 transition-transform duration-300 hover:-translate-y-1 flex items-center justify-center">
-                    <img 
-                      src={logo.src} 
+                    <img loading="lazy" decoding="async" src={logo.src} 
                       alt={logo.alt} 
                       className="h-12 md:h-14 lg:h-16 w-auto max-w-[100px] md:max-w-[120px] lg:max-w-[140px] object-contain transition-all duration-300"
                       onError={(e) => {

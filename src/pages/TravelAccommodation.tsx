@@ -216,8 +216,7 @@ const TravelAccommodation = () => {
                                 className="group bg-white rounded-sm border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500"
                             >
                                 <div className="relative aspect-[16/10] overflow-hidden">
-                                    <img 
-                                        src={hotel.image?.startsWith('http') ? hotel.image : `${SERVER_URL}${hotel.image}`} 
+                                    <img loading="lazy" decoding="async" src={hotel.image?.startsWith('http') ? hotel.image : `${SERVER_URL}${hotel.image}`} 
                                         alt={hotel.alt || hotel.title} 
                                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
                                     />

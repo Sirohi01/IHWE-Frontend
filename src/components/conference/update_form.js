@@ -109,7 +109,7 @@ const newHeader = `{/* ── HEADER ──────────────�
                 }}
             >
                 <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-                    <img src="/arogyasangosti.png" alt="Arogya Sanghosthi" style={{ height: 90, objectFit: 'contain' }} />
+                    <img loading="lazy" decoding="async" src="/arogyasangosti.png" alt="Arogya Sanghosthi" style={{ height: 90, objectFit: 'contain' }} />
                 </div>
                 
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", borderLeft: \`3px solid \${TEAL}\`, paddingLeft: 24 }}>

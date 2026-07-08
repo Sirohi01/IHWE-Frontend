@@ -1,42 +1,29 @@
+import React, { Suspense, lazy } from "react";
 import HeroSection from "@/components/dashboard/exhibitor/home/HeroSection";
-import AboutSection from "@/components/home/AboutSection";
-import AttendanceInfo from "@/components/home/AttendanceInfo";
-import EventInfoBanner from "@/components/home/EventInfoBanner";
-import HealthcareSectors from "@/components/home/HealthcareSectors";
-import MarqueeStrip from "@/components/home/MarqueeStrip";
-import Testimonials from "@/components/home/Testimonials";
-import TestimonialsCarousel from "@/components/home/TestimonialsCarousel";
-import WhoWeAre from "@/components/home/WhoWeAre";
-import StatsCounter from "@/components/home/StatsCounter";
-import CountersSection from "@/components/home/CountersSection";
-import KeyHighlights from "@/components/home/KeyHighlights";
-import PastParticipants from "@/components/home/PastParticipants";
-import ParallaxSection from "@/components/home/ParallaxSection";
-import GlobalPartners from "@/components/home/GlobalPartners";
-import BlogPreview from "@/components/home/BlogPreview";
-import PreFooterCTA from "@/components/home/PreFooterCTA";
-import ExhibitionGrid from "@/components/home/ExhibitionGrid";
-import IndustryZones from "@/components/home/IndustryZones";
-import GallerySection from "@/components/home/GallerySection";
-import ExhibitorLogos from "@/components/home/ExhibitorLogos";
-import FAQSection from "@/components/home/FAQSection";
-import EventHighlights from "@/components/home/EventHighlights";
-import DownloadsSection from "@/components/home/DownloadsSection";
-import TrustedBy from "@/components/home/TrustedBy";
-import IntroductionSection from "@/components/home/IntroductionSection";
-import GlobalPlatformSection from "@/components/home/GlobalPlatformSection";
-import PowerfulPillars from "@/components/home/PowerfulPillars";
-import CoreValues from "@/components/home/CoreValues";
-import EventGlimpses from "@/components/home/EventGlimpses";
-import WhyParticipate from "@/components/home/WhyParticipate";
-import ConferenceSeminars from "@/components/home/ConferenceSeminars";
-import LogoShowcase from "@/components/home/LogoShowcase";
-import ExhibitionCategories from "@/components/home/ExhibitionCategories";
-import BeyondExhibition from "@/components/home/BeyondExhibition";
-import FloatingVideo from "@/components/home/FloatingVideo";
-import SponsorshipSection, { UpcomingBrands } from "@/components/home/SponsorshipSection";
-import BuyerSellerMeet from "@/components/home/BuyerSellerMeet";
 import BrochureDownloadPopup from "@/components/home/BrochureDownloadPopup";
+
+// Lazy load below-the-fold components
+const TrustedBy = lazy(() => import("@/components/home/TrustedBy"));
+const IntroductionSection = lazy(() => import("@/components/home/IntroductionSection"));
+const GlobalPlatformSection = lazy(() => import("@/components/home/GlobalPlatformSection"));
+const PowerfulPillars = lazy(() => import("@/components/home/PowerfulPillars"));
+const CoreValues = lazy(() => import("@/components/home/CoreValues"));
+const WhyParticipate = lazy(() => import("@/components/home/WhyParticipate"));
+const ConferenceSeminars = lazy(() => import("@/components/home/ConferenceSeminars"));
+const ExhibitionCategories = lazy(() => import("@/components/home/ExhibitionCategories"));
+const BeyondExhibition = lazy(() => import("@/components/home/BeyondExhibition"));
+const AttendanceInfo = lazy(() => import("@/components/home/AttendanceInfo"));
+const EventInfoBanner = lazy(() => import("@/components/home/EventInfoBanner"));
+const SponsorshipSection = lazy(() => import("@/components/home/SponsorshipSection"));
+const UpcomingBrands = lazy(() => import("@/components/home/SponsorshipSection").then(module => ({ default: module.UpcomingBrands })));
+const LogoShowcase = lazy(() => import("@/components/home/LogoShowcase"));
+const HealthcareSectors = lazy(() => import("@/components/home/HealthcareSectors"));
+const MarqueeStrip = lazy(() => import("@/components/home/MarqueeStrip"));
+const BuyerSellerMeet = lazy(() => import("@/components/home/BuyerSellerMeet"));
+const EventGlimpses = lazy(() => import("@/components/home/EventGlimpses"));
+const TestimonialsCarousel = lazy(() => import("@/components/home/TestimonialsCarousel"));
+const BlogPreview = lazy(() => import("@/components/home/BlogPreview"));
+const FloatingVideo = lazy(() => import("@/components/home/FloatingVideo"));
 
 interface IndexProps {
   onRegisterVisit: () => void;
@@ -46,53 +33,36 @@ const Index = ({ onRegisterVisit }: IndexProps) => {
   return (
     <>
       <BrochureDownloadPopup />
+      {/* HeroSection is kept synchronous for LCP optimization */}
       <HeroSection onRegisterVisit={onRegisterVisit} forceNewTab={true} />
-      <TrustedBy />
-      <IntroductionSection />
-      <GlobalPlatformSection />
-      <PowerfulPillars />
-      <CoreValues />
-      <WhyParticipate />
-      <ConferenceSeminars />
+      
+      <Suspense fallback={<div className="min-h-[200px] flex items-center justify-center"><div className="w-8 h-8 border-4 border-[#23471d] border-t-transparent rounded-full animate-spin"></div></div>}>
+        <TrustedBy />
+        <IntroductionSection />
+        <GlobalPlatformSection />
+        <PowerfulPillars />
+        <CoreValues />
+        <WhyParticipate />
+        <ConferenceSeminars />
 
-      <ExhibitionCategories />
-      <BeyondExhibition />
-      {/* <MsmePmsSection /> */}
+        <ExhibitionCategories />
+        <BeyondExhibition />
 
-      <AttendanceInfo />
-      <EventInfoBanner />
+        <AttendanceInfo />
+        <EventInfoBanner />
 
-      <SponsorshipSection />
-      <LogoShowcase />
-      <UpcomingBrands />
-      <HealthcareSectors />
-      <MarqueeStrip />
-      <BuyerSellerMeet />
-      <EventGlimpses />
-      {/* <AboutSection /> */}
-      {/* <DownloadsSection /> */}
+        <SponsorshipSection />
+        <LogoShowcase />
+        <UpcomingBrands />
+        <HealthcareSectors />
+        <MarqueeStrip />
+        <BuyerSellerMeet />
+        <EventGlimpses />
 
-      {/* <WhoWeAre /> */}
-
-      {/* <IndustryZones /> */}
-      {/* <Testimonials /> */}
-      <TestimonialsCarousel />
-      {/* <GallerySection /> */}
-
-      {/* <ExhibitorLogos /> */}
-      {/* <ExhibitionGrid /> */}
-      {/* <CountersSection /> */}
-      {/* <KeyHighlights /> */}
-      {/* <PastParticipants /> */}
-
-      {/* <ParallaxSection /> */}
-      {/* <GlobalPartners /> */}
-      {/* <Testimonials />
-       <FAQSection /> */}
-      <BlogPreview />
-      <FloatingVideo />
-
-      {/* <PreFooterCTA onBookStand={onBookStand} /> */}
+        <TestimonialsCarousel />
+        <BlogPreview />
+        <FloatingVideo />
+      </Suspense>
     </>
   );
 };

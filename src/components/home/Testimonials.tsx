@@ -115,8 +115,7 @@ const Testimonials = () => {
         transform: 'rotate(-5deg)',
         transformOrigin: 'top left',
       }}>
-        <img 
-          src={leftImg} 
+        <img loading="lazy" decoding="async" src={leftImg} 
           alt="decorative pattern" 
           style={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'left top' }} 
         />
@@ -205,7 +204,7 @@ const Testimonials = () => {
               pointerEvents: 'none',
               opacity: 0.6,
             }}>
-              <img src={rightImg} alt="pattern" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+              <img loading="lazy" decoding="async" src={rightImg} alt="pattern" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
             </div>
 
             {/* Faint Heartbeat Line to the right of card */}
@@ -247,7 +246,7 @@ const Testimonials = () => {
                 zIndex: 0,
                 pointerEvents: 'none',
               }}>
-                <img src={rightImg} alt="pattern" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.1 }} />
+                <img loading="lazy" decoding="async" src={rightImg} alt="pattern" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.1 }} />
               </div>
 
               {/* LEFT border: big green opening quote ON the border */}
@@ -372,8 +371,7 @@ const Testimonials = () => {
                     marginTop: -20,
                     overflow: 'hidden',
                   }}>
-                    <img 
-                      src={card.cardTopImage ? `${SERVER_URL}${card.cardTopImage}` : (TOP_IMAGES_MAP[card.icon] || test23)} 
+                    <img loading="lazy" decoding="async" src={card.cardTopImage ? `${SERVER_URL}${card.cardTopImage}` : (TOP_IMAGES_MAP[card.icon] || test23)} 
                       alt="testimonial icon" 
                       style={{ 
                         width: '100%', 
@@ -437,8 +435,7 @@ const Testimonials = () => {
 
                 {/* Bottom-Right Organic Corner Sweep / Custom Image */}
                 {card.cardBottomImage ? (
-                  <img 
-                    src={`${SERVER_URL}${card.cardBottomImage}`} 
+                  <img loading="lazy" decoding="async" src={`${SERVER_URL}${card.cardBottomImage}`} 
                     alt="corner" 
                     style={{ 
                       position: 'absolute',

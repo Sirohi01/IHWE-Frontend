@@ -202,8 +202,7 @@ export default function SellerSubscriptionPlanDetail() {
                     {/* Image */}
                     <div className="bg-white border-2 border-slate-200 rounded-lg overflow-hidden shadow-lg">
                         {imageUrl ? (
-                            <img 
-                                src={imageUrl} 
+                            <img loading="lazy" decoding="async" src={imageUrl} 
                                 alt={plan.name}
                                 className="w-full h-64 object-contain bg-slate-50 p-4"
                             />

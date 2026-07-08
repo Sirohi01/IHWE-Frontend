@@ -276,7 +276,7 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
             <div ref={printRef} className="bg-white border border-slate-300 p-4 text-[11px] font-sans text-black" style={{ fontFamily: 'Arial, sans-serif' }}>
                 {headerImageUrl && (
                     <div style={{ marginBottom: 8, textAlign: 'center' }}>
-                        <img src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
+                        <img loading="lazy" decoding="async" src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
                     </div>
                 )}
                 <div style={{ fontWeight: 'normal', textAlign: 'center', fontSize: '18px', padding: '10px 0' }}>Tax Invoice</div>
@@ -486,8 +486,8 @@ export default function BuyerInvoices({ data, settings, cur, total, paid, balanc
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center', verticalAlign: 'bottom' }}>
                                 <div style={{ height: 60, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
-                                    {sigUrl && <img src={sigUrl} alt="Signature" style={{ maxHeight: 50, maxWidth: 130 }} />}
-                                    {stampUrl && <img src={stampUrl} alt="Stamp" style={{ maxHeight: 50, maxWidth: 60 }} />}
+                                    {sigUrl && <img loading="lazy" decoding="async" src={sigUrl} alt="Signature" style={{ maxHeight: 50, maxWidth: 130 }} />}
+                                    {stampUrl && <img loading="lazy" decoding="async" src={stampUrl} alt="Stamp" style={{ maxHeight: 50, maxWidth: 60 }} />}
                                 </div>
                                 <div style={{ borderTop: '1px solid #e5e7eb', width: '120px', margin: '0 auto', paddingTop: 4, fontWeight: 700 }}>Auth Signatory</div>
                             </td>

@@ -56,7 +56,7 @@ const fixUrl = (url) => {
 
 const Avatar = ({ url, alt, className }) => (
     url ? (
-        <img src={fixUrl(url)} alt={alt} className={`${className} object-cover`} />
+        <img loading="lazy" decoding="async" src={fixUrl(url)} alt={alt} className={`${className} object-cover`} />
     ) : (
         <div className={`${className} bg-slate-100 flex items-center justify-center text-slate-300`}>
             <User className="w-1/2 h-1/2" />
@@ -420,8 +420,7 @@ export default function ExProfile() {
 
                         {/* Interactive Overlapping Avatar Logo Container */}
                         <div className="w-[172px] h-[172px] rounded-full bg-white border-[6px] border-white shadow-[0_10px_28px_rgba(15,23,42,0.16)] flex items-center justify-center overflow-hidden shrink-0 -mt-[82px] relative group z-10">
-                            <img
-                                src={data?.companyLogoUrl ? fixUrl(data.companyLogoUrl) : DEFAULT_PLACEHOLDER}
+                            <img loading="lazy" decoding="async" src={data?.companyLogoUrl ? fixUrl(data.companyLogoUrl) : DEFAULT_PLACEHOLDER}
                                 alt="Company Logo"
                                 className="w-full h-full object-contain p-3"
                             />

@@ -128,15 +128,13 @@ const ConferenceSeminars = () => {
           className="w-full lg:w-[40%]"
         >
           <div className="relative rounded-[1.2rem] overflow-hidden border-[5px] border-white/20 shadow-2xl group">
-            <img
-              src={learnImg}
+            <img loading="lazy" decoding="async" src={learnImg}
               alt="Conference and Seminars"
               className="w-full h-[200px] object-cover group-hover:scale-105 transition-transform duration-700"
             />
             {/* Arogya Logo with white glow for clear visibility */}
             <div className="absolute top-3 left-3">
-              <img
-                src={arogyaLogo}
+              <img loading="lazy" decoding="async" src={arogyaLogo}
                 alt="Arogya Logo"
                 className="h-10 md:h-12 w-auto object-contain"
                 style={{

@@ -22,7 +22,7 @@ const renderIcon = (icon) => {
             const src = normalizedUrl.startsWith('http://') || normalizedUrl.startsWith('https://')
                 ? normalizedUrl
                 : `${SERVER_URL}${normalizedUrl.startsWith('/') ? normalizedUrl : `/${normalizedUrl}`}`;
-            return <img src={src} alt="icon" className="w-4 h-4 object-contain" />;
+            return <img loading="lazy" decoding="async" src={src} alt="icon" className="w-4 h-4 object-contain" />;
         }
 
         const IconComponent = (LucideIcons as any)[icon] || LucideIcons.HelpCircle;

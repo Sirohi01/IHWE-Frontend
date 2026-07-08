@@ -745,7 +745,7 @@ const GroupRegistration: React.FC<{ embedded?: boolean }> = ({ embedded = false 
                                 ].map((stat, i) => (
                                     <React.Fragment key={i}>
                                         <div className="flex flex-col items-center text-center px-4 md:px-6">
-                                            <img src={stat.img} alt={stat.label} className="w-8 h-8 object-contain opacity-95 mb-2" />
+                                            <img loading="lazy" decoding="async" src={stat.img} alt={stat.label} className="w-8 h-8 object-contain opacity-95 mb-2" />
                                             <div className="text-[11px] md:text-[12px] font-bold text-white tracking-tight leading-snug whitespace-pre-line">{stat.label}</div>
                                         </div>
                                         {i < 3 && <div className="w-[1px] h-10 bg-white/25 shrink-0" />}
@@ -754,7 +754,7 @@ const GroupRegistration: React.FC<{ embedded?: boolean }> = ({ embedded = false 
                             </div>
                         </div>
                         <div className="shrink-0 flex items-center justify-center lg:mr-12 z-20">
-                            <img src="/visitor/free_register_now.png" alt="Register Now" className="w-[160px] sm:w-[200px] lg:w-[240px] h-auto object-contain drop-shadow-2xl" />
+                            <img loading="lazy" decoding="async" src="/visitor/free_register_now.png" alt="Register Now" className="w-[160px] sm:w-[200px] lg:w-[240px] h-auto object-contain drop-shadow-2xl" />
                         </div>
                     </div>
                 </div>

@@ -408,8 +408,7 @@ const SponsorshipSection = () => {
 
             {/* ── CENTER: Expo Image ── */}
             <div className="relative h-[400px] lg:h-[300px] w-full flex justify-center">
-              <img
-                src={bgImage}
+              <img loading="lazy" decoding="async" src={bgImage}
                 alt="IHWE Expo"
                 className="w-full h-full object-contain object-center relative z-20 scale-[1.2] lg:scale-[1.2] lg:-mt-12 lg:-ml-4 lg:-mb-[160px]"
               />
@@ -512,7 +511,7 @@ const SponsorshipSection = () => {
                   style={{ background: "transparent" }}
                 >
                   {opp.image ? (
-                    <img src={opp.image} alt={opp.title} className="w-full h-full object-contain scale-[2.2]" />
+                    <img loading="lazy" decoding="async" src={opp.image} alt={opp.title} className="w-full h-full object-contain scale-[2.2]" />
                   ) : opp.icon ? (
                     <opp.icon
                       className="w-9 h-9"
@@ -571,8 +570,7 @@ const SponsorshipSection = () => {
             {/* 2. Dark Green CTA Card */}
             <div className="bg-[#012011] rounded-2xl lg:rounded-l-2xl lg:rounded-r-none p-5 lg:px-8 lg:py-10 relative overflow-hidden shadow-xl flex flex-col h-fit justify-between">
               {/* Decorative Leaf Image */}
-              <img
-                src={leafImg}
+              <img loading="lazy" decoding="async" src={leafImg}
                 alt="decorative"
                 className="absolute -bottom-6 -left-10 w-48 h-48 opacity-40 pointer-events-none object-contain"
               />
@@ -982,8 +980,7 @@ const SponsorshipSection = () => {
                 <div key={idx} className="flex items-center">
                   <div className="flex flex-col items-center gap-0.5 transition-all mx-5 md:mx-8">
                     {brand.logo ? (
-                      <img
-                        src={brand.logo}
+                      <img loading="lazy" decoding="async" src={brand.logo}
                         alt={brand.name}
                         className={`${brand.name === "Dabur" ? "h-12 md:h-20 lg:h-16" : brand.name === "HEALTHKART" ? "h-10 md:h-16 lg:h-14" : "h-9 md:h-14 lg:h-12"} w-auto object-contain transition-all duration-300`}
                       />
@@ -1057,8 +1054,7 @@ export const UpcomingBrands = () => {
               {[...data.items, ...data.items].map((brand: any, idx: number) => (
                 <div key={`${brand._id}-${idx}`} className="flex items-center">
                   <div className="flex flex-col items-center gap-0.5 transition-all mx-5 md:mx-8">
-                    <img
-                      src={`${SERVER_URL}${brand.logo}`}
+                    <img loading="lazy" decoding="async" src={`${SERVER_URL}${brand.logo}`}
                       alt={brand.altText || 'Brand Logo'}
                       className="h-10 md:h-16 w-auto object-contain transition-all duration-300"
                     />

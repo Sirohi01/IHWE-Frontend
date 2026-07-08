@@ -92,8 +92,7 @@ const VisitorPassAndGlance = () => {
                                 >
                                     {col.items.map((item, itemIndex) => (
                                         <div key={itemIndex} className="flex flex-col items-center text-center w-full">
-                                            <img
-                                                src={item.icon}
+                                            <img loading="lazy" decoding="async" src={item.icon}
                                                 alt="Icon"
                                                 className="w-10 h-10 object-contain mb-2"
                                             />
@@ -125,7 +124,7 @@ const VisitorPassAndGlance = () => {
                                 {stats.map((stat, sIndex) => (
                                     <div key={sIndex} className="flex items-center gap-3 border-b border-gray-50 pb-2 last:border-0 last:pb-0">
                                         <div className="w-10 h-10 shrink-0 flex items-center justify-center">
-                                            <img src={stat.icon} alt="stat" className="w-8 h-8 object-contain" />
+                                            <img loading="lazy" decoding="async" src={stat.icon} alt="stat" className="w-8 h-8 object-contain" />
                                         </div>
                                         <div className="flex flex-row items-baseline gap-2">
                                             <span className={`text-sm font-extrabold tracking-tight ${stat.color}`}>
@@ -143,15 +142,13 @@ const VisitorPassAndGlance = () => {
                             <div className="md:col-span-8 grid grid-cols-3 gap-1 self-center">
                                 {/* Top Row: 2 images */}
                                 <div className="col-span-2 h-28 rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:opacity-95 transition-opacity">
-                                    <img
-                                        src="/whyVisit/glance_conf_hall.png"
+                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_conf_hall.png"
                                         alt="Seminar Hall"
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <div className="col-span-1 h-28 rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:opacity-95 transition-opacity">
-                                    <img
-                                        src="/whyVisit/glance_handshake.png"
+                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_handshake.png"
                                         alt="Handshake"
                                         className="w-full h-full object-cover"
                                     />
@@ -159,22 +156,19 @@ const VisitorPassAndGlance = () => {
 
                                 {/* Bottom Row: 3 images */}
                                 <div className="col-span-1 h-28 rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:opacity-95 transition-opacity">
-                                    <img
-                                        src="/whyVisit/glance_massage.png"
+                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_massage.png"
                                         alt="Spa Massage"
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <div className="col-span-1 h-28 rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:opacity-95 transition-opacity">
-                                    <img
-                                        src="/whyVisit/glance_expo_aisle.png"
+                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_expo_aisle.png"
                                         alt="Convention Hall"
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <div className="col-span-1 h-28 rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:opacity-95 transition-opacity">
-                                    <img
-                                        src="/whyVisit/glance_cosmetics.png"
+                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_cosmetics.png"
                                         alt="Cosmetics Shelf"
                                         className="w-full h-full object-cover"
                                     />

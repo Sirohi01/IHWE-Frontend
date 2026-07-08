@@ -41,7 +41,7 @@ const fixUrl = (url?: string) => {
 const Avatar = ({ url, alt, className }: { url?: string; alt: string; className: string }) => {
     const resolved = fixUrl(url);
     return resolved ? (
-        <img src={resolved} alt={alt} className={`${className} object-cover`} />
+        <img loading="lazy" decoding="async" src={resolved} alt={alt} className={`${className} object-cover`} />
     ) : (
         <div className={`${className} bg-slate-100 flex items-center justify-center text-slate-300`}>
             <User className="w-1/2 h-1/2" />
@@ -334,7 +334,7 @@ export default function OverviewStart() {
                             <div className="relative shrink-0 group" style={{ marginTop: "-48px" }}>
                                 <div className="w-28 h-28 rounded-full bg-white border-4 border-white shadow-xl flex flex-col items-center justify-center overflow-hidden">
                                     {data?.companyLogoUrl ? (
-                                        <img src={fixUrl(data.companyLogoUrl) || DEFAULT_PLACEHOLDER} alt="Company Logo" className="w-full h-full object-contain p-2" />
+                                        <img loading="lazy" decoding="async" src={fixUrl(data.companyLogoUrl) || DEFAULT_PLACEHOLDER} alt="Company Logo" className="w-full h-full object-contain p-2" />
                                     ) : (
                                         <>
                                             <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center mb-1 shadow-sm">

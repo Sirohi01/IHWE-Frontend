@@ -91,7 +91,7 @@ const WhatPar = () => {
                                     <div className="border-l-[1.5px] border-dashed border-white/30 self-stretch mx-1" />
                                 )}
                                 <div className="flex flex-col items-center gap-2 px-1.5">
-                                    <img src={item.icon} alt="" className="w-[70px] h-[70px] object-contain" />
+                                    <img loading="lazy" decoding="async" src={item.icon} alt="" className="w-[70px] h-[70px] object-contain" />
                                     <div className="text-[28px] font-extrabold text-[#d4a832] leading-none">
                                         {item.num}
                                     </div>
@@ -112,7 +112,7 @@ const WhatPar = () => {
                             { icon: '/bsmeet/bsm4.png', num: 'Global', label: 'World Wide\nParticipation' },
                         ].map((item, i) => (
                             <div key={i} className="flex flex-col items-center gap-2 px-1.5">
-                                <img src={item.icon} alt="" className="w-[60px] h-[60px] object-contain" />
+                                <img loading="lazy" decoding="async" src={item.icon} alt="" className="w-[60px] h-[60px] object-contain" />
                                 <div className="text-[26px] font-extrabold text-[#d4a832] leading-none">
                                     {item.num}
                                 </div>

@@ -29,8 +29,7 @@ const ExhibitorGrid: React.FC<Props> = ({ exhibitors }) => {
                             className="group relative bg-white border border-gray-100 rounded-xl p-1 flex items-center justify-center aspect-square shadow-sm hover:shadow-xl hover:border-green-100 transition-all duration-300"
                         >
                             <div className="w-full h-full flex items-center justify-center overflow-hidden">
-                                <img
-                                    src={exhi.image.startsWith('http') ? exhi.image : `${SERVER_URL}${exhi.image}`}
+                                <img decoding="async" src={exhi.image.startsWith('http') ? exhi.image : `${SERVER_URL}${exhi.image}`}
                                     alt={exhi.altText || exhi.title}
                                     loading="lazy"
                                     className="max-w-[92%] max-h-[92%] object-contain group-hover:scale-110 transition-transform duration-500"

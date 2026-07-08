@@ -30,7 +30,7 @@ const LogisticFooter: React.FC<LogisticFooterProps> = ({ data }) => {
       <div className="max-w-[1350px] mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 px-4">
         <div className="flex flex-col sm:flex-row items-center text-center sm:text-left gap-4">
           <div className="hidden sm:block">
-            <img src={busAndTruck} alt="Logistics" className="w-auto h-[60px] object-contain" />
+            <img loading="lazy" decoding="async" src={busAndTruck} alt="Logistics" className="w-auto h-[60px] object-contain" />
           </div>
 
 

@@ -53,7 +53,7 @@ const BuyerContactsHero: React.FC = () => {
                 </div>
                 {/* CENTER: Illustration */}
                 <div className="flex-shrink-0 flex items-center justify-center">
-                    <img src={Hero} alt="" className="h-[135px] w-[310px] object-contain" />
+                    <img loading="lazy" decoding="async" src={Hero} alt="" className="h-[135px] w-[310px] object-contain" />
                 </div>
             </div>
 

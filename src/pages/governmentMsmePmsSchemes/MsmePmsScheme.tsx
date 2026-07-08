@@ -401,7 +401,7 @@ const MsmePmsScheme = () => {
               {/* Gold Ribbon - Fixed position with refined spacing */}
               <div className="absolute top-3 left-2 sm:top-8 lg:left-0 z-30">
                 <div className="relative w-24 h-32 sm:w-28 sm:h-36 lg:w-32 lg:h-44 flex items-center justify-center">
-                  <img src="/msmepmsscheme/gold-ribbon.png" alt="Limited Slots" className="absolute inset-0 w-full h-full object-contain" />
+                  <img loading="lazy" decoding="async" src="/msmepmsscheme/gold-ribbon.png" alt="Limited Slots" className="absolute inset-0 w-full h-full object-contain" />
                 </div>
               </div>
 
@@ -426,8 +426,7 @@ const MsmePmsScheme = () => {
                   {/* Left: Icon & Amount Container */}
                   <div className="relative flex items-center gap-3 md:gap-5 shrink-0">
                     <div className="relative w-20 h-24 md:w-24 md:h-32 shrink-0 flex items-center justify-center">
-                      <img
-                        src={pageData.subsidyImg}
+                      <img loading="lazy" decoding="async" src={pageData.subsidyImg}
                         alt="Subsidy Bag"
                         className="w-full h-full object-contain relative z-10 drop-shadow-xl"
                       />
@@ -477,8 +476,7 @@ const MsmePmsScheme = () => {
 
         {/* Right Side: Image Banner - Bleeding to edge */}
         <div className="hidden lg:block absolute top-0 right-0 bottom-0 lg:w-[42%] xl:w-[50%] overflow-hidden">
-          <img
-            src={pageData.heroBannerImg}
+          <img loading="lazy" decoding="async" src={pageData.heroBannerImg}
             alt="MSME Exhibition"
             className="w-full h-full object-cover object-[center_20%]"
           />
@@ -486,7 +484,7 @@ const MsmePmsScheme = () => {
           {/* <div className="absolute top-8 right-8 bg-white/95 backdrop-blur shadow-2xl p-4 rounded-xl flex items-center gap-4 border border-slate-100 z-20">
             <div className="flex flex-col items-center">
               <span className="text-[7px] font-black text-slate-400 uppercase tracking-tighter mb-1">SUPPORTED BY</span>
-              <img src="/msmepmsscheme/MSME.png" alt="Ministry of MSME" className="h-10 object-contain" />
+              <img loading="lazy" decoding="async" src="/msmepmsscheme/MSME.png" alt="Ministry of MSME" className="h-10 object-contain" />
             </div>
             <div className="w-[1px] h-10 bg-slate-200"></div>
             <div className="flex flex-col text-[8px] font-black text-slate-800 leading-tight">
@@ -502,8 +500,7 @@ const MsmePmsScheme = () => {
 
         {/* Mobile Image (Visible only on mobile) */}
         <div className="lg:hidden relative min-h-[300px] overflow-hidden">
-          <img
-            src={pageData.heroBannerImg}
+          <img loading="lazy" decoding="async" src={pageData.heroBannerImg}
             alt="MSME Exhibition"
             className="absolute inset-0 w-full h-full object-cover object-[center_20%]"
           />
@@ -547,7 +544,7 @@ const MsmePmsScheme = () => {
               ].map((stat: any, i: number, arr: any[]) => (
                 <React.Fragment key={i}>
                   <div className="flex flex-col items-center text-center group flex-1">
-                    <img src={stat.img} alt={stat.label} className="w-6 h-6 md:w-7 md:h-7 mb-0.5 object-contain brightness-0 invert" />
+                    <img loading="lazy" decoding="async" src={stat.img} alt={stat.label} className="w-6 h-6 md:w-7 md:h-7 mb-0.5 object-contain brightness-0 invert" />
                     <h4 className="text-base md:text-lg font-bold text-white leading-none">
                       <LocalStatCounter value={stat.val} />
                     </h4>
@@ -577,7 +574,7 @@ const MsmePmsScheme = () => {
 
               <div className="flex flex-row gap-5 items-center">
                 <div className="w-24 h-24 lg:w-28 lg:h-28 shrink-0 transition-transform hover:scale-105">
-                  <img src={pageData.aboutImg} alt={pageData.aboutTitle} className="w-full h-full object-contain" />
+                  <img loading="lazy" decoding="async" src={pageData.aboutImg} alt={pageData.aboutTitle} className="w-full h-full object-contain" />
                 </div>
                 <div className="space-y-3 flex-1">
                   {pageData.aboutParagraphs.map((para: string, i: number) => (
@@ -601,7 +598,7 @@ const MsmePmsScheme = () => {
                   <div key={i} className={`p-4 hover:bg-slate-50 transition-all border-b border-r border-slate-100 last:border-r-0 group`}>
                     <div className="flex flex-row gap-4 items-center">
                       <div className="w-[64px] h-[64px] md:w-[80px] md:h-[80px] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
-                        <img src={benefit.img} alt={benefit.title} className="w-full h-full object-contain" />
+                        <img loading="lazy" decoding="async" src={benefit.img} alt={benefit.title} className="w-full h-full object-contain" />
                       </div>
                       <div className="flex-1">
                         <h4 className="text-[11px] md:text-[12px] font-black text-slate-800 leading-tight mb-1 group-hover:text-[#23471d] transition-colors">{benefit.title}</h4>
@@ -628,8 +625,7 @@ const MsmePmsScheme = () => {
             {/* Left: Imagery Collage */}
             <div className="lg:col-span-3">
               <div className="rounded-[20px] overflow-hidden shadow-lg border border-slate-100 h-full">
-                <img
-                  src={pageData.collageImg}
+                <img loading="lazy" decoding="async" src={pageData.collageImg}
                   alt="Exhibition Stalls"
                   className="w-full h-full object-cover"
                 />
@@ -659,7 +655,7 @@ const MsmePmsScheme = () => {
               {/* Why PMS Scheme */}
               <div className="bg-[#f9fafb] rounded-[20px] p-6 border border-[#e5e7eb] flex flex-col group transition-all hover:bg-white hover:shadow-xl">
                 <div className="flex items-center gap-3 mb-6">
-                  <img src={pageData.whyPmsImg} alt={pageData.whyPmsTitle} className="w-8 h-8 object-contain shrink-0" />
+                  <img loading="lazy" decoding="async" src={pageData.whyPmsImg} alt={pageData.whyPmsTitle} className="w-8 h-8 object-contain shrink-0" />
                   <h3 className="text-[18px] font-black text-[#1a3615] uppercase tracking-tight">{pageData.whyPmsTitle}</h3>
                 </div>
                 <ul className="space-y-4 flex-1">
@@ -713,7 +709,7 @@ const MsmePmsScheme = () => {
                 ].map((doc, i) => (
                   <li key={i} className="flex gap-5 items-center group">
                     <div className="w-8 h-8 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
-                      <img src={doc.img} alt={doc.label} className="w-full h-full object-contain" />
+                      <img loading="lazy" decoding="async" src={doc.img} alt={doc.label} className="w-full h-full object-contain" />
                     </div>
                     <span className="text-[14px] font-bold text-slate-700 leading-tight">{doc.label}</span>
                   </li>
@@ -774,8 +770,7 @@ const MsmePmsScheme = () => {
 
               {/* Checklist Graphic */}
               <div className="w-full md:w-[300px] shrink-0 flex items-center justify-center relative">
-                <img
-                  src="/msmepmsscheme/approved.png"
+                <img loading="lazy" decoding="async" src="/msmepmsscheme/approved.png"
                   alt="Application Approved"
                   className="w-full max-w-[240px] h-auto object-contain drop-shadow-2xl"
                 />
@@ -813,7 +808,7 @@ const MsmePmsScheme = () => {
                 <div className="bg-[#fdf8f1] rounded-xl p-4 border border-orange-100">
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-6 h-6 bg-[#1a3615] rounded-full flex items-center justify-center text-yellow-400">
-                      <img src="/msmepmsscheme/impnotice.png" alt="Important Note" className="w-full h-full object-contain" />
+                      <img loading="lazy" decoding="async" src="/msmepmsscheme/impnotice.png" alt="Important Note" className="w-full h-full object-contain" />
                     </div>
                     <span className="text-[9px] font-black text-[#1a3615] uppercase tracking-wider">IMPORTANT NOTE</span>
                   </div>
@@ -1073,7 +1068,7 @@ const MsmePmsScheme = () => {
 
             <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 text-center sm:text-left">
               <div className="w-24 h-24 md:w-32 md:h-32 shrink-0 -my-8 md:-my-10 relative z-10 drop-shadow-xl transition-transform hover:scale-105">
-                <img src={pageData.footerCtaImg || "/msmepmsscheme/Announcement.png"} alt="Announcement" className="w-full h-full object-contain" />
+                <img loading="lazy" decoding="async" src={pageData.footerCtaImg || "/msmepmsscheme/Announcement.png"} alt="Announcement" className="w-full h-full object-contain" />
               </div>
 
               <div className="space-y-1 mt-4 sm:mt-0">
@@ -1127,7 +1122,7 @@ const MsmePmsScheme = () => {
               {(pageData.footerStats && pageData.footerStats.length > 0 ? pageData.footerStats : DEFAULT_PAGE_DATA.footerStats).map((stat: any, i: number) => (
                 <div key={i} className={`flex items-center gap-2.5 ${i !== (pageData.footerStats && pageData.footerStats.length > 0 ? pageData.footerStats : DEFAULT_PAGE_DATA.footerStats).length - 1 ? 'lg:border-r lg:border-white/10 lg:pr-5 lg:mr-5' : ''}`}>
                   <div className="flex items-center justify-center shrink-0 w-12 h-12 md:w-14 md:h-14">
-                    <img src={stat.img} alt={stat.label} className={`object-contain opacity-90 w-[75%] h-[75%]`} />
+                    <img loading="lazy" decoding="async" src={stat.img} alt={stat.label} className={`object-contain opacity-90 w-[75%] h-[75%]`} />
                   </div>
                   <div className="flex flex-col justify-center">
                     <span className="text-[13px] md:text-[15px] font-black text-white leading-tight">{stat.val}</span>

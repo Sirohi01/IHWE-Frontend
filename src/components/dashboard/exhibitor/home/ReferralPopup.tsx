@@ -200,9 +200,8 @@ export default function ReferralPopup({ isOpen, onClose }: { isOpen: boolean, on
                         <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
                             {/* Left Side: Image */}
                             <div className="hidden md:flex w-[46%] shrink-0 relative bg-gradient-to-b from-[#f0fdf4] to-[#dcfce7]">
-                                <img src="/logo.png" alt="Logo" className="absolute top-3 left-3 z-10 h-8 w-auto drop-shadow-md" />
-                                <img
-                                    src={exbanImg}
+                                <img loading="lazy" decoding="async" src="/logo.png" alt="Logo" className="absolute top-3 left-3 z-10 h-8 w-auto drop-shadow-md" />
+                                <img loading="lazy" decoding="async" src={exbanImg}
                                     alt="Refer and Earn"
                                     className="w-full h-full object-fill object-center"
                                 />
@@ -210,7 +209,7 @@ export default function ReferralPopup({ isOpen, onClose }: { isOpen: boolean, on
 
                             {/* Right Side */}
                             <div className="w-full md:w-[54%] flex flex-col bg-white">
-                                <img src={extopImg} alt="Earn 10% Referral Bonus" className="w-[88%] mx-auto h-auto object-contain shrink-0 mt-0.5" />
+                                <img loading="lazy" decoding="async" src={extopImg} alt="Earn 10% Referral Bonus" className="w-[88%] mx-auto h-auto object-contain shrink-0 mt-0.5" />
 
                                 <div className="px-3 pb-2 pt-1 flex flex-col gap-1.5 flex-1 font-inter overflow-hidden">
                                     {step === 1 ? (

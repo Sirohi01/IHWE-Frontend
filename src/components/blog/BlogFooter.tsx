@@ -11,8 +11,7 @@ const BlogFooter: React.FC = () => {
           {/* Left: Building Illustration */}
           <div className="w-full lg:w-[25%] flex justify-center lg:justify-start pr-6">
             <div className="relative w-full max-w-[240px] h-20 opacity-80">
-              <img
-                src={lotusImg}
+              <img loading="lazy" decoding="async" src={lotusImg}
                 alt="Lotus Temple"
                 className="w-full h-full object-contain"
               />

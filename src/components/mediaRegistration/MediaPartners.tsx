@@ -106,8 +106,7 @@ export default function MediaPartners() {
                                             }}
                                             className="flex items-center justify-center"
                                         >
-                                            <img
-                                                src={logo}
+                                            <img loading="lazy" decoding="async" src={logo}
                                                 alt="partner-logo"
                                                 className="h-8 md:h-9 object-contain max-w-[120px]"
                                             />

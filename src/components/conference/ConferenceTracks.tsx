@@ -257,7 +257,7 @@ const ConferenceTracks: React.FC = () => {
                 style={{ backgroundColor: track.color, color: track.iconColor }}
               >
                 {typeof track.icon === "string" ? (
-                  <img src={track.icon} alt="" className="w-12 h-12 object-contain mix-blend-multiply" />
+                  <img loading="lazy" decoding="async" src={track.icon} alt="" className="w-12 h-12 object-contain mix-blend-multiply" />
                 ) : (
                   track.icon
                 )}

@@ -93,8 +93,7 @@ const VerifyCheck = () => {
                                 {/* TOP IMAGE WITH OVERLAPPING ICON */}
                                 <div className="w-full h-[120px] relative bg-gray-100 overflow-hidden border-b border-gray-100">
                                     {/* Background Image */}
-                                    <img
-                                        src={card.img}
+                                    <img loading="lazy" decoding="async" src={card.img}
                                         alt={card.title}
                                         className="w-full h-full object-cover object-center opacity-90 saturate-[0.85]"
                                         onError={(e) => { e.target.src = "https://placehold.co/300x200?text=Image"; }}
@@ -257,8 +256,7 @@ const VerifyCheck = () => {
                         {/* Floating Money Bag image overlap for depth */}
                         <div className="absolute inset-0 flex items-center justify-center z-10 translate-x-4">
                             <div className="relative w-[80%] h-[80%] rounded-3xl overflow-hidden border-[4px] border-[#22c55e] shadow-2xl rotate-[-3deg]">
-                                <img
-                                    src="/msmepmsscheme/mony-bag.png"
+                                <img loading="lazy" decoding="async" src="/msmepmsscheme/mony-bag.png"
                                     className="w-full h-full object-cover rotate-[3deg] scale-110"
                                     alt=""
                                     onError={(e) => { e.target.style.display = 'none'; }}

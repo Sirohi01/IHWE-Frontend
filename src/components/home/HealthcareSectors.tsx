@@ -190,8 +190,7 @@ const HealthcareSectors = () => {
                     height: '100%',
                     background: '#f0f4f0',
                   }}>
-                    <img
-                      src={sector.image?.startsWith('http') ? sector.image : `${SERVER_URL}${sector.image}`}
+                    <img loading="lazy" decoding="async" src={sector.image?.startsWith('http') ? sector.image : `${SERVER_URL}${sector.image}`}
                       alt={sector.imageAlt || sector.title}
                       style={{
                         width: '100%',

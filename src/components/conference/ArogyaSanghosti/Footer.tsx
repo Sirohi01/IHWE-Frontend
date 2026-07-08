@@ -61,7 +61,7 @@ export const BottomTagline = () => (
                         justifyContent: "center",
                         marginBottom: 2
                     }}>
-                        <img src={item.img} alt={item.label} style={{ width: 32, height: 32, objectFit: "contain" }} />
+                        <img loading="lazy" decoding="async" src={item.img} alt={item.label} style={{ width: 32, height: 32, objectFit: "contain" }} />
                     </div>
                     {item.label.split("\n").map((l, i) => <div key={i}>{l}</div>)}
                 </div>

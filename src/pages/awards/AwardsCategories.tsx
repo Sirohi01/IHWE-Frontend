@@ -116,8 +116,7 @@ const AwardsCategories = () => {
             >
               <div className="w-24 h-24 flex items-center justify-center">
                 {cat.icon ? (
-                  <img
-                    src={cat.icon}
+                  <img loading="lazy" decoding="async" src={cat.icon}
                     alt={cat.title}
                     className="w-full h-full object-contain scale-[0.95]"
                   />
@@ -146,7 +145,7 @@ const AwardsCategories = () => {
               )}
               <div className="w-14 h-14 md:w-11 md:h-11 flex items-center justify-center shrink-0 bg-white/5 rounded-xl md:bg-transparent">
                 {stat.icon ? (
-                  <img src={stat.icon} alt={stat.label} className="w-full h-full object-contain scale-[1.2] md:scale-[1.3]" />
+                  <img loading="lazy" decoding="async" src={stat.icon} alt={stat.label} className="w-full h-full object-contain scale-[1.2] md:scale-[1.3]" />
                 ) : null}
               </div>
               <div className="flex flex-col">

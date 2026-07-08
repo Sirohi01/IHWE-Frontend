@@ -38,8 +38,7 @@ const AwardsNomination = () => {
             viewport={{ once: true }}
             className="w-full h-[130px] overflow-hidden hidden md:flex items-center justify-center -mb-2"
           >
-            <img
-              src={lineImg}
+            <img loading="lazy" decoding="async" src={lineImg}
               alt="Nomination Process"
               className="w-full h-auto min-h-full object-contain"
               style={{ objectPosition: 'center' }}

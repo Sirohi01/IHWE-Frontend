@@ -108,8 +108,7 @@ export default function FeaturedMediaCoverage() {
                                 >
                                     {/* LOGO */}
                                     <div className="h-[56px] flex items-center justify-center border-b border-gray-100 bg-white px-3">
-                                        <img
-                                            src={item.logo}
+                                        <img loading="lazy" decoding="async" src={item.logo}
                                             alt="Media Logo"
                                             className="max-h-6 object-cover grayscale min-h-25 hover:grayscale-0 transition-all"
                                         />
@@ -117,8 +116,7 @@ export default function FeaturedMediaCoverage() {
 
                                     {/* IMAGE */}
                                     <div className="relative h-[150px] overflow-hidden">
-                                        <img
-                                            src={item.image}
+                                        <img loading="lazy" decoding="async" src={item.image}
                                             alt={item.title}
                                             className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                                         />

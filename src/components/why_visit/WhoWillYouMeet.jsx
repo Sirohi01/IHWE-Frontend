@@ -5,32 +5,32 @@ const attendees = [
     {
         title: "HEALTHCARE\nPROFESSIONALS",
         desc: "Doctors, hospitals, clinics & medical experts",
-        icon: <img src="/whyVisit/healthcare_icon.svg" alt="Healthcare" className="w-11 h-11 object-contain" />
+        icon: <img loading="lazy" decoding="async" src="/whyVisit/healthcare_icon.svg" alt="Healthcare" className="w-11 h-11 object-contain" />
     },
     {
         title: "BUYERS &\nDISTRIBUTORS",
         desc: "Importers, wholesalers, retailers & procurement heads",
-        icon: <img src="/whyVisit/buyers_icon.svg" alt="Buyers" className="w-11 h-11 object-contain" />
+        icon: <img loading="lazy" decoding="async" src="/whyVisit/buyers_icon.svg" alt="Buyers" className="w-11 h-11 object-contain" />
     },
     {
         title: "WELLNESS\nENTHUSIASTS",
         desc: "Fitness lovers, Ayurveda users & health-conscious consumers",
-        icon: <img src="/whyVisit/wellness.png" alt="Wellness" className="w-11 h-11 object-contain" />
+        icon: <img loading="lazy" decoding="async" src="/whyVisit/wellness.png" alt="Wellness" className="w-11 h-11 object-contain" />
     },
     {
         title: "INVESTORS &\nSTARTUPS",
         desc: "Investors, founders, wellness startups & innovators",
-        icon: <img src="/whyVisit/investors.png" alt="Investors" className="w-11 h-11 object-contain" />
+        icon: <img loading="lazy" decoding="async" src="/whyVisit/investors.png" alt="Investors" className="w-11 h-11 object-contain" />
     },
     {
         title: "AYUSH\nPROFESSIONALS",
         desc: "Ayurveda, Yoga, Naturopathy & holistic practitioners",
-        icon: <img src="/whyVisit/ayush.png" alt="Ayush" className="w-11 h-11 object-contain" />
+        icon: <img loading="lazy" decoding="async" src="/whyVisit/ayush.png" alt="Ayush" className="w-11 h-11 object-contain" />
     },
     {
         title: "HOSPITALITY &\nSPA CHAINS",
         desc: "Hotels, spas, resorts & wellness retreat operators",
-        icon: <img src="/whyVisit/hostpitality.png" alt="Hospitality" className="w-11 h-11 object-contain" />
+        icon: <img loading="lazy" decoding="async" src="/whyVisit/hostpitality.png" alt="Hospitality" className="w-11 h-11 object-contain" />
     }
 ];
 
@@ -49,7 +49,7 @@ const WhoWillYouMeet = () => {
                     </div>
                     {/* Small Leaf below title */}
                     <div className="mt-2 flex justify-center">
-                        <img src="/whyVisit/leaf.png" alt="Leaf" className="h-4 object-contain" />
+                        <img loading="lazy" decoding="async" src="/whyVisit/leaf.png" alt="Leaf" className="h-4 object-contain" />
                     </div>
                 </div>
 

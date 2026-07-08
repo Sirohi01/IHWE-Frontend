@@ -555,7 +555,7 @@ export default function ExhibitorPaymentPage() {
                             <div className="flex items-start gap-3">
                                 {data?.companyLogoUrl ? (
                                     <div className="w-12 h-12 bg-white rounded-full border border-slate-200 flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
-                                        <img src={fixUrl(data.companyLogoUrl)} alt="Company Logo" className="w-full h-full object-contain" />
+                                        <img loading="lazy" decoding="async" src={fixUrl(data.companyLogoUrl)} alt="Company Logo" className="w-full h-full object-contain" />
                                     </div>
                                 ) : (
                                     <div className="w-12 h-12 bg-[#ecfdf5] rounded-full border border-[#d1fae5] flex items-center justify-center shrink-0 shadow-sm">
@@ -1026,7 +1026,7 @@ export default function ExhibitorPaymentPage() {
                                 animate={{ scale: 1, opacity: 1 }}
                                 className="w-full rounded-xl overflow-hidden shadow-sm border border-slate-200"
                             >
-                                <img src={paymentCompleteImg} alt="Payment Complete" className="w-full h-auto object-cover" />
+                                <img loading="lazy" decoding="async" src={paymentCompleteImg} alt="Payment Complete" className="w-full h-auto object-cover" />
                             </motion.div>
                         )}
 

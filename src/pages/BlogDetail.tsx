@@ -251,8 +251,7 @@ const BlogDetail = () => {
                     >
                       {/* Thumbnail */}
                       <div className="w-16 h-16 shrink-0 overflow-hidden bg-slate-100 rounded-lg">
-                        <img
-                          src={recent.image.startsWith('http') ? recent.image : `${SERVER_URL}${recent.image}`}
+                        <img loading="lazy" decoding="async" src={recent.image.startsWith('http') ? recent.image : `${SERVER_URL}${recent.image}`}
                           alt={recent.title}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         />

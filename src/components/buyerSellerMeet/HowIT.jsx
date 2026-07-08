@@ -6,31 +6,31 @@ const steps = [
         num: 1,
         title: "REGISTER\nONLINE",
         desc: "Sign up as Buyer or Seller",
-        icon: <img src="/bsmeet/howit11.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit11.png" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 2,
         title: "PROFILE SCREENING\n& APPROVAL",
         desc: "Our team verifies your profile",
-        icon: <img src="/bsmeet/howit22.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit22.png" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 3,
         title: "MEETING\nMATCHMAKING",
         desc: "We match you with relevant partners",
-        icon: <img src="/bsmeet/howit33.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit33.png" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 4,
         title: "SCHEDULE\nCONFIRMATION",
         desc: "Get your meeting calendar",
-        icon: <img src="/bsmeet/howit44.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit44.png" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 5,
         title: "FACE-TO-FACE\nMEETINGS AT EXPO",
         desc: "Meet, discuss & grow your business",
-        icon: <img src="/bsmeet/howit55.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit55.png" alt="" className="w-full h-full object-contain" />,
     },
 ]
 
@@ -179,7 +179,7 @@ const HowIT = () => {
 
                                 return (
                                     <div key={i} className={`py-0.5 px-1 flex flex-col items-center justify-center gap-2 border-[#c5d9c0] ${!isRightEdge ? 'border-r-[1.5px]' : ''} ${!isBottomEdge ? 'border-b-[1.5px]' : ''}`}>
-                                        <img src={item.icon} alt={item.label} className="w-[36px] h-[36px] object-contain" />
+                                        <img loading="lazy" decoding="async" src={item.icon} alt={item.label} className="w-[36px] h-[36px] object-contain" />
                                         <div className="font-['Barlow',sans-serif] text-[12px] font-medium text-[#1a3d20] text-center leading-[1.2] whitespace-pre-line">
                                             {item.label}
                                         </div>
@@ -199,7 +199,7 @@ const HowIT = () => {
 
                                 return (
                                     <div key={i} className={`py-3 px-1.5 flex flex-col items-center justify-center gap-2 border-[#c5d9c0] ${!isRightEdge ? 'border-r-[1.5px]' : ''} ${!isBottomEdge ? 'border-b-[1.5px]' : ''}`}>
-                                        <img src={item.icon} alt={item.label} className="w-[36px] h-[36px] object-contain" />
+                                        <img loading="lazy" decoding="async" src={item.icon} alt={item.label} className="w-[36px] h-[36px] object-contain" />
                                         <div className="font-['Barlow',sans-serif] text-[11px] font-semibold text-[#1a3d20] text-center leading-[1.2] whitespace-pre-line">
                                             {item.label}
                                         </div>

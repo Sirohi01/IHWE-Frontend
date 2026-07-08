@@ -10,8 +10,7 @@ const ConferenceCTA: React.FC = () => {
     <section className="relative w-full py-1 overflow-hidden bg-[#0A1A31]">
       {/* Background */}
       <Link to="/travel-partner" target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-0 block cursor-pointer">
-        <img
-          src={lastBg}
+        <img loading="lazy" decoding="async" src={lastBg}
           alt="CTA Background"
           className="w-full h-full object-cover opacity-55"
         />
@@ -26,8 +25,7 @@ const ConferenceCTA: React.FC = () => {
 
           {/* Bigger Leaf Image + More Height */}
           <Link to="/travel-partner" target="_blank" rel="noopener noreferrer" className="hidden md:block flex-shrink-0 w-[125px] relative h-[24px] cursor-pointer">
-            <img
-              src={leafImg}
+            <img loading="lazy" decoding="async" src={leafImg}
               alt="Leaf Icon"
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 h-[180px] w-auto object-contain opacity-100 drop-shadow-[0_0_18px_rgba(163,230,53,0.35)]"
             />

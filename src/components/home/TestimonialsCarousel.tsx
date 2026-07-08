@@ -125,8 +125,7 @@ const TestimonialCard = ({ item, expandedCardId, setExpandedCardId }: { item: an
             className="w-16 h-16 rounded-full border-[3px] border-white flex items-center justify-center overflow-hidden bg-white"
             style={{ boxShadow: "0 4px 18px rgba(0,0,0,0.15), 0 0 0 2px #e2e8f0" }}
           >
-            <img
-              src={`${SERVER_URL}${item.logo}`}
+            <img loading="lazy" decoding="async" src={`${SERVER_URL}${item.logo}`}
               alt="logo"
               className="w-full h-full object-contain p-0.5 transform scale-110"
             />
@@ -194,7 +193,7 @@ const TestimonialCard = ({ item, expandedCardId, setExpandedCardId }: { item: an
               >
                 {item.logo ? (
                   <div className="w-8 h-8 rounded-full border border-slate-200 overflow-hidden bg-white flex-shrink-0">
-                    <img src={`${SERVER_URL}${item.logo}`} alt="logo" className="w-full h-full object-contain p-0 transform scale-110" />
+                    <img loading="lazy" decoding="async" src={`${SERVER_URL}${item.logo}`} alt="logo" className="w-full h-full object-contain p-0 transform scale-110" />
                   </div>
                 ) : (
                   <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-[5px] font-black flex-shrink-0" style={{ color: item.color || '#23471d' }}>
@@ -305,8 +304,7 @@ const TestimonialCard = ({ item, expandedCardId, setExpandedCardId }: { item: an
 
           {/* Bottom decorative image */}
           {item.bottomImage && (
-            <img
-              src={`${SERVER_URL}${item.bottomImage}`}
+            <img loading="lazy" decoding="async" src={`${SERVER_URL}${item.bottomImage}`}
               alt=""
               className="absolute bottom-0 right-0 pointer-events-none opacity-10 md:opacity-20"
               style={{ width: 65, height: 65, objectFit: 'contain', zIndex: 1 }}
@@ -347,7 +345,7 @@ const VideoCard = ({ item }: { item: any }) => {
       className="relative rounded-2xl overflow-hidden flex-1 min-w-full sm:min-w-[280px] md:min-w-0 h-48 md:h-40 group cursor-pointer shadow-lg"
     >
       <div className="absolute inset-0" style={{ background: bg }}>
-        {thumb && <img src={thumb} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300" alt="" />}
+        {thumb && <img loading="lazy" decoding="async" src={thumb} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300" alt="" />}
       </div>
       <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-all duration-300" />
       <div className="absolute inset-0 flex items-center justify-center">
@@ -563,8 +561,7 @@ const TestimonialsCarousel = () => {
       {/* ─── TOP HERO BANNER ─── */}
       <div className="relative w-full min-h-[420px] md:min-h-[380px] flex items-center overflow-hidden py-12 md:py-0">
         <div className="absolute inset-0 z-0">
-          <img
-            src={settings.heroBgImage ? `${SERVER_URL}${settings.heroBgImage}` : testImg}
+          <img loading="lazy" decoding="async" src={settings.heroBgImage ? `${SERVER_URL}${settings.heroBgImage}` : testImg}
             className="w-full h-full object-cover opacity-60 md:opacity-100"
             alt={settings.heroBgAlt || "IHWE Expo Background"}
           />
@@ -653,7 +650,7 @@ const TestimonialsCarousel = () => {
       {/* ─── VIDEO SECTION ─── */}
       <div className="relative pt-6 pb-0 md:pb-2">
         <div className="absolute -left-10 bottom-0 w-44 h-44 opacity-20 pointer-events-none rotate-45 select-none z-0">
-          <img src={leafPng} alt="" className="w-full h-full object-contain" />
+          <img loading="lazy" decoding="async" src={leafPng} alt="" className="w-full h-full object-contain" />
         </div>
 
         <SectionContainer className="relative z-10">
@@ -678,7 +675,7 @@ const TestimonialsCarousel = () => {
         </SectionContainer>
 
         <div className="absolute -right-12 bottom-4 w-48 h-48 opacity-20 pointer-events-none -rotate-12 select-none z-0">
-          <img src={leafPng} alt="" className="w-full h-full object-contain" />
+          <img loading="lazy" decoding="async" src={leafPng} alt="" className="w-full h-full object-contain" />
         </div>
       </div>
 

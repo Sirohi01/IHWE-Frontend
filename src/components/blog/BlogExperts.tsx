@@ -69,8 +69,7 @@ const BlogExperts: React.FC<BlogExpertsProps> = ({ experts }) => {
                 {/* Top Row: Photo & Info */}
                 <div className="flex items-center gap-4 mb-6">
                   <div className="relative w-20 h-20 rounded-full border-4 border-slate-50 shadow-md overflow-hidden shrink-0">
-                    <img
-                      src={expert.image.startsWith('http') ? expert.image : `${SERVER_URL}${expert.image}`}
+                    <img loading="lazy" decoding="async" src={expert.image.startsWith('http') ? expert.image : `${SERVER_URL}${expert.image}`}
                       alt={expert.name}
                       className="w-full h-full object-cover"
                     />

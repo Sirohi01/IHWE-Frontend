@@ -67,8 +67,7 @@ const OrgLogo = ({ src, alt }: { src: string; alt: string }) => {
   const [err, setErr] = useState(false);
   if (!src || err) return <PlaceholderLogo label={alt} />;
   return (
-    <img
-      src={src}
+    <img loading="lazy" decoding="async" src={src}
       alt={alt}
       onError={() => setErr(true)}
       className="w-16 h-16 object-contain shrink-0"

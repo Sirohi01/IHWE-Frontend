@@ -241,8 +241,7 @@ const ExhibitorLogin = () => {
                                     />
                                     <div className="relative z-10 flex-1 flex flex-col">
                                         <div className="mt-8 mb-8">
-                                            <img
-                                                src="/logo.png"
+                                            <img loading="lazy" decoding="async" src="/logo.png"
                                                 alt="IHWE Logo"
                                                 className="h-20 w-auto object-contain -ml-2"
                                             />
@@ -315,7 +314,7 @@ const ExhibitorLogin = () => {
                                                     {/* Icon circle */}
                                                     <div className="h-20 mx-auto  flex items-center justify-center mb-4  text-[#23471d]">
                                                         {/* <Store size={36} strokeWidth={1.5} /> */}
-                                                        <img src="/exhibition/namo_logo.webp" className='h-[90%] w-auto' alt="" />
+                                                        <img loading="lazy" decoding="async" src="/exhibition/namo_logo.webp" className='h-[90%] w-auto' alt="" />
                                                     </div>
 
 

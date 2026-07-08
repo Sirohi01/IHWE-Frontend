@@ -364,8 +364,7 @@ const MediaBanner = () => {
                                         }}
                                         className="h-16 rounded-xl border border-gray-100 flex items-center justify-center hover:shadow-md transition-all duration-300 bg-white"
                                     >
-                                        <img
-                                            src={logo}
+                                        <img loading="lazy" decoding="async" src={logo}
                                             alt={`Media Logo ${index + 1}`}
                                             className="object-contain min-h-10 max-h-20"
                                         />

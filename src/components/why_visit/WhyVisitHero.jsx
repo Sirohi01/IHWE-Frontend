@@ -156,7 +156,7 @@ const WhyVisitHero = () => {
                     {/* Top Bar */}
                     <div className="flex items-center gap-5 py-4 ">
                         <div className="flex items-center gap-2">
-                            {/* <img src="/whyVisit/logo1.png" alt="IHWE" className="h-24 object-contain" /> */}
+                            {/* <img loading="lazy" decoding="async" src="/whyVisit/logo1.png" alt="IHWE" className="h-24 object-contain" /> */}
                             <div>
                                 <p className="text-lg font-semibold uppercase tracking-wider text-[#011630] leading-tight">International</p>
                                 <p className="text-lg font-semibold uppercase tracking-wider text-[#185653] leading-tight">Health & Wellness</p>

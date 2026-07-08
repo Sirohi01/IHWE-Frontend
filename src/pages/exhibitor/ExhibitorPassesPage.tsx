@@ -580,7 +580,7 @@ export default function ExhibitorPassesPage() {
             <div className="flex flex-col xl:flex-row items-stretch justify-between gap-1.5 mb-1">
                 {/* Left Description & Brand Illustration replaced entirely by passes1.png */}
                 <div className="flex-1 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center p-0 xl:h-[220px]">
-                    <img src={passesImg} alt="Exhibitor Passes Banner" className="w-full h-full object-contain object-center" />
+                    <img loading="lazy" decoding="async" src={passesImg} alt="Exhibitor Passes Banner" className="w-full h-full object-contain object-center" />
                 </div>
 
                 {/* Right: Complimentary Quota Summary */}
@@ -729,7 +729,7 @@ export default function ExhibitorPassesPage() {
                             }}>
                                 <span className="text-[9.5px] font-black text-slate-800 text-center mb-1 block">Packed Thali Lunch</span>
                                 <div className="flex items-center justify-between gap-1">
-                                    <img src={thaliImg} alt="Packed Thali Lunch" className="w-[40px] h-[35px] object-contain shrink-0" />
+                                    <img loading="lazy" decoding="async" src={thaliImg} alt="Packed Thali Lunch" className="w-[40px] h-[35px] object-contain shrink-0" />
                                     <div className="text-center flex-1">
                                         <span className="text-[18px] font-black text-[#15803d] leading-none block">
                                             {passConfigs.find(c => c.passType === 'lunch')?.complimentaryQuota ?? 2}
@@ -770,7 +770,7 @@ export default function ExhibitorPassesPage() {
                             }}>
                                 <span className="text-[9.5px] font-black text-slate-800 text-center mb-1 block">Water Bottle</span>
                                 <div className="flex items-center justify-between gap-1">
-                                    <img src={bottleImg} alt="Water Bottle" className="w-[40px] h-[35px] object-contain shrink-0" />
+                                    <img loading="lazy" decoding="async" src={bottleImg} alt="Water Bottle" className="w-[40px] h-[35px] object-contain shrink-0" />
                                     <div className="text-center flex-1">
                                         <span className="text-[18px] font-black text-blue-600 leading-none block">
                                             {passConfigs.find(c => c.passType === 'water')?.complimentaryQuota ?? 2}
@@ -808,7 +808,7 @@ export default function ExhibitorPassesPage() {
 
                         {/* Steps Image */}
                         <div className="flex items-center justify-center py-0.5">
-                            <img src={howitworksImg} alt="How it Works" className="w-[95%] h-auto object-contain max-h-[64px]" />
+                            <img loading="lazy" decoding="async" src={howitworksImg} alt="How it Works" className="w-[95%] h-auto object-contain max-h-[64px]" />
                         </div>
 
                         {/* Steps Text Grid */}
@@ -869,7 +869,7 @@ export default function ExhibitorPassesPage() {
                             </div>
                             {/* Notepad Clipboard image */}
                             <div className="w-[95px] shrink-0 flex items-center justify-center self-center">
-                                <img src={notepadImg} alt="Notepad Clipboard" className="max-w-full h-auto object-contain max-h-[105px]" />
+                                <img loading="lazy" decoding="async" src={notepadImg} alt="Notepad Clipboard" className="max-w-full h-auto object-contain max-h-[105px]" />
                             </div>
                         </div>
                     </div>
@@ -916,11 +916,11 @@ export default function ExhibitorPassesPage() {
                         {/* Lunch and Water Bottles row */}
                         <div className="mt-1.5 flex items-center gap-4 text-[9px] font-black text-slate-700">
                             <span className="flex items-center gap-1">
-                                + <img src={thaliImg} alt="Lunch" className="w-[16px] h-[16px] object-contain shrink-0" /> {data?.entitlements?.lunchCount || 2} Packed Thali Lunch ({data?.entitlements?.lunchCount || 2} Persons Per Day)
+                                + <img loading="lazy" decoding="async" src={thaliImg} alt="Lunch" className="w-[16px] h-[16px] object-contain shrink-0" /> {data?.entitlements?.lunchCount || 2} Packed Thali Lunch ({data?.entitlements?.lunchCount || 2} Persons Per Day)
                             </span>
                             <span className="text-slate-300 font-normal">|</span>
                             <span className="flex items-center gap-1">
-                                + <img src={bottleImg} alt="Water" className="w-[16px] h-[16px] object-contain shrink-0" /> {data?.entitlements?.waterBottleCount || 2} Water Bottles ({data?.entitlements?.waterBottleCount || 2} Per Day)
+                                + <img loading="lazy" decoding="async" src={bottleImg} alt="Water" className="w-[16px] h-[16px] object-contain shrink-0" /> {data?.entitlements?.waterBottleCount || 2} Water Bottles ({data?.entitlements?.waterBottleCount || 2} Per Day)
                             </span>
                         </div>
                     </div>
@@ -946,7 +946,7 @@ export default function ExhibitorPassesPage() {
 
                     {/* Shopping Cart image */}
                     <div className="w-[130px] shrink-0 flex items-center justify-center">
-                        <img src={shoppingImg} alt="Shopping Cart" className="max-w-full h-auto object-contain max-h-[78px]" />
+                        <img loading="lazy" decoding="async" src={shoppingImg} alt="Shopping Cart" className="max-w-full h-auto object-contain max-h-[78px]" />
                     </div>
                 </div>
             </div>

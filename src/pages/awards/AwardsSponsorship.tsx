@@ -103,8 +103,7 @@ const AwardsSponsorship = () => {
                       <type.icon />
                     </div>
                   ) : (
-                    <img
-                      src={type.image}
+                    <img loading="lazy" decoding="async" src={type.image}
                       alt={type.title}
                       className="w-full h-full object-contain scale-[1.15]"
                       style={{ objectPosition: 'center' }}

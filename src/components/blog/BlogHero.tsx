@@ -36,8 +36,7 @@ const BlogHero: React.FC<BlogHeroProps> = ({ settings, onSearch, heroImage }) =>
         {/* Hero background image — right side */}
         {heroImage ? (
           <div className="absolute inset-0 z-0">
-            <img
-              src={heroImage}
+            <img loading="lazy" decoding="async" src={heroImage}
               className="absolute inset-0 w-full h-full object-cover object-right-bottom"
               alt="Hero Background"
             />

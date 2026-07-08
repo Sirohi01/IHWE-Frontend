@@ -68,8 +68,7 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <img
-                    src={`${SERVER_URL}${item.speaker.image}`}
+                  <img loading="lazy" decoding="async" src={`${SERVER_URL}${item.speaker.image}`}
                     className="h-8 w-8 rounded-full object-cover"
                     alt={item.speaker.name}
                   />
@@ -151,8 +150,7 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
                   <SwiperSlide key={i} className="h-auto">
                     <div className="flex h-[190px] flex-col items-center overflow-hidden rounded-xl border border-[#e9e9e9] bg-white px-2 py-4 text-center transition hover:shadow-sm">
                       {/* Avatar */}
-                      <img
-                        src={`${SERVER_URL}${speaker?.image}`}
+                      <img loading="lazy" decoding="async" src={`${SERVER_URL}${speaker?.image}`}
                         alt={speaker.name}
                         className="mb-3 h-16 w-16 shrink-0 rounded-full object-cover"
                       />
