@@ -130,6 +130,7 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
         { id: "exhibitor-pass", label: "Passes & Hospitality", sub: moduleStats.passRequests ? `${moduleStats.approvedPassRequests}/${moduleStats.passRequests} approved` : "No requests yet", icon: Ticket, link: "/exhibitor-dashboard/exhibitor-pass", iconBg: "bg-gradient-to-br from-[#10b981] to-[#059669]" },
         { id: "add-product", label: "My Product/Services", sub: `${moduleStats.products} product${moduleStats.products === 1 ? '' : 's'} listed`, icon: Package, link: "/exhibitor-dashboard/product", iconBg: "bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9]" },
         { id: "document-center", label: "Documentations", sub: data?.msme?.udyamRegNo ? "Udyam details added" : "Upload & manage", icon: FolderOpen, link: "/exhibitor-dashboard/document-center", iconBg: "bg-gradient-to-br from-[#a855f7] to-[#9333ea]" },
+        { id: "pms-document", label: "MSME PMS Documents", sub: data?.msme?.udyamRegNo ? "Udyam details added" : "Upload & manage", icon: FolderOpen, link: "/exhibitor-dashboard/psm-claim/reports", iconBg: "bg-gradient-to-br from-[#a855f7] to-[#9333ea]" },
         ...(import.meta.env.DEV ? [{ id: "buyer-contacts", label: "Buyers Management", sub: `${moduleStats.leads} captured lead${moduleStats.leads === 1 ? '' : 's'}`, icon: UsersRound, link: "/exhibitor-dashboard/buyer-contacts", iconBg: "bg-gradient-to-br from-[#14b8a6] to-[#0d9488]" }] : []),
         { id: "payments", label: "Make Payment", sub: balance > 0 ? `Balance ${data?.participation?.currency || 'INR'} ${balance.toLocaleString('en-IN')}` : "No balance due", icon: CreditCard, link: "/exhibitor-dashboard/payments", iconBg: "bg-gradient-to-br from-[#f97316] to-[#ea6c0a]" },
         ...(import.meta.env.DEV ? [{ id: "epromotion", label: "E-Promotion", sub: `${moduleStats.marketingTemplates} template${moduleStats.marketingTemplates === 1 ? '' : 's'} available`, icon: Megaphone, link: "/exhibitor-dashboard/epromotion", iconBg: "bg-gradient-to-br from-[#ec4899] to-[#db2777]" }] : []),
@@ -249,17 +250,17 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
                     {/* Pagination Controls in Header */}
                     {!loadingUpdates && totalPages > 1 && (
                         <div className="flex items-center gap-2">
-                            <button 
+                            <button
                                 onClick={() => setPage(p => Math.max(1, p - 1))}
                                 disabled={page === 1}
                                 className="text-slate-700 disabled:opacity-30 hover:bg-slate-200 p-0.5 rounded-md transition-colors"
                             >
-                                    <ChevronLeft size={14} />
-                                </button>
-                                <span className="text-[9px] font-medium text-gray-500 whitespace-nowrap">
-                                    {page} / {totalPages}
-                                </span>
-                                <button 
+                                <ChevronLeft size={14} />
+                            </button>
+                            <span className="text-[9px] font-medium text-gray-500 whitespace-nowrap">
+                                {page} / {totalPages}
+                            </span>
+                            <button
                                 onClick={() => setPage(p => Math.min(totalPages, p + 1))}
                                 disabled={page === totalPages}
                                 className="text-slate-700 disabled:opacity-30 hover:bg-slate-200 p-0.5 rounded-md transition-colors"

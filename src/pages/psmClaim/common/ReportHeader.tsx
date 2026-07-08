@@ -13,22 +13,22 @@ const ReportHeader: React.FC<ReportHeaderProps> = ({ title }) => {
         <div className="bg-white border-b border-slate-200 no-print w-full">
             {/* Breadcrumbs Row */}
             <div className="px-6 py-1.5 flex items-center gap-1.5 text-[10px] font-medium text-slate-400 border-b border-slate-100/50">
-                <button 
-                    onClick={() => navigate('/exhibitor-dashboard/msme')} 
+                <button
+                    onClick={() => navigate('/exhibitor-dashboard/msme')}
                     className="hover:text-blue-600 transition-colors uppercase tracking-wider"
                 >
                     MSME
                 </button>
                 <ChevronRight size={10} className="text-slate-300" />
-                <button 
-                    onClick={() => navigate('/exhibitor-dashboard/psm-claim')} 
+                <button
+                    onClick={() => navigate('/exhibitor-dashboard/psm-claim')}
                     className="hover:text-blue-600 transition-colors uppercase tracking-wider"
                 >
                     PSM CLAIM
                 </button>
                 <ChevronRight size={10} className="text-slate-300" />
-                <button 
-                    onClick={() => navigate('/exhibitor-dashboard/psm-claim/reports')} 
+                <button
+                    onClick={() => navigate('/exhibitor-dashboard/psm-claim/reports')}
                     className="hover:text-blue-600 transition-colors uppercase tracking-wider"
                 >
                     Reports
@@ -38,9 +38,9 @@ const ReportHeader: React.FC<ReportHeaderProps> = ({ title }) => {
             </div>
 
             {/* Title Bar */}
-            <div className="px-6 py-3 flex justify-between items-center shadow-sm">
-                <h1 className="text-xl font-bold text-slate-800 tracking-tight">{title}</h1>
-            </div>
+            {/* <div className="px-6 py-1 flex justify-between items-center shadow-sm">
+                <h1 className="text-lg font-medium text-slate-800 tracking-tight">{title}</h1>
+            </div> */}
         </div>
     );
 };

@@ -37,7 +37,7 @@ const ReportLayout: React.FC<ReportLayoutProps> = ({
         <div className="flex flex-col gap-0 mx-auto min-h-screen bg-slate-50/50">
             <ReportHeader title={title} />
 
-            <div className="p-4 sm:p-8 flex flex-col items-center">
+            <div className="p-4 flex flex-col items-center">
                 <div
                     ref={componentRef}
                     id="printable-form"
@@ -71,13 +71,13 @@ const ReportLayout: React.FC<ReportLayoutProps> = ({
             </div>
 
             {/* Bottom Save Button */}
-            <div className="flex justify-center mb-12 no-print">
+            <div className="flex justify-center mb-2 no-print">
                 <button
                     onClick={handleSave}
                     disabled={saving}
-                    className="flex items-center gap-2 px-8 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-all shadow-lg active:scale-95 font-semibold disabled:opacity-50"
+                    className="flex items-center text-[12px] gap-2 px-4 py-1.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-lg active:scale-95 font-medium disabled:opacity-50"
                 >
-                    {saving ? <Loader2 size={20} className="animate-spin" /> : <Save size={20} />}
+                    {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
                     {reportId ? 'Update Report' : 'Save Report'}
                 </button>
             </div>
