@@ -134,6 +134,9 @@ export default function StallInformation() {
     const powerService = services.find((s: any) => /electric|power/i.test(s.name || ''));
     const powerAllocation = powerService ? serviceSubText(powerService).replace(/[()]/g, '') : 'TBA';
     const hallNumber = stallParts.hall === 'TBA' ? '8, 9, 10' : stallParts.hall;
+    const stallQrValue = typeof window !== 'undefined'
+        ? `${window.location.origin}/exhibitor-dashboard/stall-information?stall=${encodeURIComponent(stallParts.stall || String(stallNo))}`
+        : String(stallNo);
 
     const overviewRows = [
         { label: 'Hall Number', value: hallNumber, icon: Map },
@@ -261,10 +264,10 @@ export default function StallInformation() {
                                     <p className="text-[12px] font-bold text-[#002855] mb-0.5">Stall No.</p>
                                     <h2 className="text-[14px] md:text-[20px] font-bold text-[#002855] tracking-tight leading-tight">{stallNo}</h2>
                                 </div>
-                                <div className="text-center flex flex-col items-center ml-3 border border-slate-200 rounded-lg px-2.5 py-1 bg-slate-100">
-                                    <p className="text-[10px] font-bold text-black mb-0.5">Stall QR Code</p>
-                                    <div className="w-16 h-16 bg-white rounded-lg p-1 flex items-center justify-center">
-                                        <QRCode value={String(stallNo)} size={32} fgColor="#1a5c2e" style={{ height: 'auto', maxWidth: '100%', width: '100%' }} />
+                                <div className="text-center flex flex-col items-center ml-3 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-100">
+                                    <p className="text-[10px] font-bold text-black mb-1">Stall QR Code</p>
+                                    <div className="w-24 h-24 bg-white rounded-lg p-2 flex items-center justify-center">
+                                        <QRCode value={stallQrValue} size={80} fgColor="#000000" bgColor="#ffffff" level="M" />
                                     </div>
                                 </div>
                             </div>
