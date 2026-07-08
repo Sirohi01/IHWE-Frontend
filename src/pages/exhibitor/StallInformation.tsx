@@ -113,6 +113,7 @@ export default function StallInformation() {
     const [usefulDocs, setUsefulDocs] = useState<any[]>([]);
     const [requirementRequests, setRequirementRequests] = useState<any[]>([]);
     const [loadingRequirements, setLoadingRequirements] = useState(false);
+    const [showFloorPlanPreview, setShowFloorPlanPreview] = useState(false);
     const participation = data?.participation || {};
     const stallDetails = data?.stallDetails || {};
     const stallNo = participation.stallFor || stallDetails.stallNumber || participation.stallNo || 'TBA';
@@ -308,9 +309,14 @@ export default function StallInformation() {
                     <div className="lg:col-span-6 bg-white rounded-2xl shadow-sm border border-slate-200 p-3 flex flex-col min-h-[200px]">
                         <h3 className="text-sm font-bold text-slate-800 pl-3">Your Stall Location</h3>
                         <div className="flex-1 flex flex-col items-center overflow-visible">
-                            <div className="w-full h-[190px] sm:h-[220px] rounded-xl overflow-hidden bg-slate-50">
+                            <button
+                                type="button"
+                                onClick={() => setShowFloorPlanPreview(true)}
+                                className="w-full h-[190px] sm:h-[220px] rounded-xl overflow-hidden bg-slate-50 cursor-zoom-in"
+                                aria-label="Open floor plan preview"
+                            >
                                 <FloorPlanPreview currentStallNo={String(stallNo)} />
-                            </div>
+                            </button>
                             <div className="flex flex-wrap justify-between items-center gap-y-1.5 mt-1.5 text-[9px] font-semibold text-slate-700 w-full px-3">
                                 <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-200/60"></span> Available</div>
                                 <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-[#0052cc]"></span> Booked</div>
@@ -322,6 +328,32 @@ export default function StallInformation() {
                         </div>
                     </div>
                 </div>
+
+                {showFloorPlanPreview && (
+                    <div className="fixed inset-0 z-50 bg-black/70 p-4 md:p-6 flex items-center justify-center">
+                        <div className="w-full max-w-7xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
+                            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+                                <div>
+                                    <h3 className="text-sm md:text-base font-black text-slate-900">Your Stall Location</h3>
+                                    <p className="text-[11px] font-bold text-slate-500">Stall No. {stallParts.stall}</p>
+                                </div>
+                                <button
+                                    type="button"
+                                    onClick={() => setShowFloorPlanPreview(false)}
+                                    className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center"
+                                    aria-label="Close floor plan preview"
+                                >
+                                    ×
+                                </button>
+                            </div>
+                            <div className="h-[72vh] bg-slate-50 overflow-auto">
+                                <div className="min-w-[1200px] h-full p-4">
+                                    <FloorPlanPreview currentStallNo={String(stallNo)} />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <div className="flex flex-col lg:flex-row gap-3 md:gap-3 mt-2.5 lg:w-2/3">
                     <div className="flex-[1.3] bg-[#ecfdf5] rounded-xl p-3 md:p-3.5 flex flex-row items-center gap-3 shadow-[0_1px_3px_rgba(0,0,0,0.02)] border border-slate-200">
@@ -387,7 +419,7 @@ export default function StallInformation() {
                         <div className="bg-white mt-2 rounded-2xl shadow-sm border border-slate-200 p-2.5 h-[300px] flex flex-col min-h-0">
                             <div className="flex justify-between items-center mb-1.5">
                                 <h3 className="text-sm font-bold text-slate-800">Additional Requirements</h3>
-                                <button onClick={() => navigate('/exhibitor-dashboard/accessories')} className="text-[10px] font-bold text-[#0052cc] hover:text-[#003d99]">Manage Requests</button>
+                                <button onClick={() => navigate('/exhibitor-dashboard/accessories')} className="text-[10px] font-bold text-black hover:text-slate-700">Manage Requests</button>
                             </div>
                             {loadingRequirements ? (
                                 <div className="text-[11px] font-semibold text-slate-500 bg-slate-50 border border-dashed border-slate-200 rounded-xl p-4 text-center">
@@ -465,7 +497,7 @@ export default function StallInformation() {
                                     </div>
                                 ))}
                             </div>
-                            <Button onClick={() => navigate('/exhibitor-dashboard/chat')} variant="outline" className="w-full mt-2.5 bg-blue-50/50 border-blue-100 text-[#0052cc] hover:bg-blue-100 hover:text-[#003d99] font-bold text-[10px] h-7 flex justify-between px-3 transition-colors">
+                            <Button onClick={() => navigate('/exhibitor-dashboard/chat')} variant="outline" className="w-full mt-2.5 bg-blue-50/50 border-blue-100 text-black hover:bg-blue-100 hover:text-slate-700 font-bold text-[10px] h-7 flex justify-between px-3 transition-colors">
                                 <div className="flex items-center gap-1.5">
                                     <Headset size={13} />
                                     Request Changes / Assistance
