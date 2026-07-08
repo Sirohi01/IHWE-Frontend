@@ -786,7 +786,7 @@ const BookAStand = () => {
                 }
 
                 const options = {
-                    key: orderData.key || RAZORPAY_KEY_ID,
+                    key: orderData.key || import.meta.env.VITE_RAZORPAY_KEY_ID,
                     amount: orderData.order.amount,
                     currency: isUSD ? 'USD' : 'INR',
                     name: "IHWE Registration",
@@ -795,8 +795,6 @@ const BookAStand = () => {
                     handler: async (response: any) => {
                         setPaymentModal({ status: 'processing' });
                         try {
-                            // Step 3: Verify payment and update registration
-                            // amountPaid = original finalAmount (NOT gatewayAmount) — gateway fee stays with Razorpay
                             const verifyRes = await fetch(`${API_URL}/payment/verify-payment`, {
                                 method: 'POST',
                                 headers: { 'Content-Type': 'application/json' },
@@ -886,7 +884,7 @@ const BookAStand = () => {
             <div className="min-h-screen bg-white font-sans flex flex-col items-center justify-center relative overflow-hidden">
                 {/* Background with Overlay */}
                 <div
-                    className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[20000ms] hover:scale-110"
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform [transition-duration:20000ms] hover:scale-110"
                     style={{ backgroundImage: `url(${HeroBg})` }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-[#23471d]/95 via-black/70 to-black/90" />

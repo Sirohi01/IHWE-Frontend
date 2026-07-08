@@ -969,7 +969,7 @@ const BuyerRegistration = () => {
             <div className="min-h-screen bg-white  flex flex-col items-center justify-center relative overflow-hidden">
 
                 <div
-                    className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform duration-[20000ms] hover:scale-110"
+                    className="absolute inset-0 bg-cover bg-center bg-no-repeat transition-transform [transition-duration:20000ms] hover:scale-110"
                     style={{ backgroundImage: `url(${HeroBg})` }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-br from-[#23471d]/95 via-black/70 to-black/90" />

@@ -387,7 +387,7 @@ const Gallery = () => {
                                     <div className="relative overflow-hidden rounded-[2px] bg-slate-900 shadow-sm hover:shadow-2xl transition-all duration-700 aspect-[3/2]">
                                         <img loading="lazy" decoding="async" src={event.coverImage}
                                             alt={event.title}
-                                            className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
+                                            className="w-full h-full object-cover transition-transform [transition-duration:1.2s] ease-out group-hover:scale-105"
                                         />
                                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6 text-white text-left">
                                             <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
@@ -440,7 +440,7 @@ const Gallery = () => {
                                         ) : (
                                             <img loading="lazy" decoding="async" src={event.coverImage}
                                                 alt={event.title}
-                                                className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
+                                                className="w-full h-full object-cover transition-transform [transition-duration:1.2s] ease-out group-hover:scale-105"
                                                 onError={(e) => {
                                                     const target = e.target as HTMLImageElement;
                                                     const parent = target.parentElement;
@@ -552,7 +552,7 @@ const Gallery = () => {
                                                             src={item.src}
                                                             alt={item.title}
                                                             effect="blur"
-                                                            className="w-full h-auto object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110"
+                                                            className="w-full h-auto object-cover transition-transform [transition-duration:1.2s] ease-out group-hover:scale-110"
                                                             wrapperClassName="w-full"
                                                         />
                                                     )}
