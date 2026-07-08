@@ -1023,8 +1023,10 @@ interface CartItem {
 export default function StallExtras({ data }: StallExtrasProps) {
     const [catalog, setCatalog] = useState<any[]>([]);
     const [orders, setOrders] = useState<any[]>([]);
+    const [entitlements, setEntitlements] = useState<any[]>([]);
     const [loadingCatalog, setLoadingCatalog] = useState(true);
     const [loadingOrders, setLoadingOrders] = useState(true);
+    const [loadingEntitlements, setLoadingEntitlements] = useState(true);
     const [cart, setCart] = useState<CartItem[]>([]);
     const [showCartMobile, setShowCartMobile] = useState(false);
     const [showCheckout, setShowCheckout] = useState(false);
@@ -1070,7 +1072,19 @@ export default function StallExtras({ data }: StallExtrasProps) {
             .finally(() => setLoadingOrders(false));
     };
 
-    useEffect(() => { loadCatalog(); loadOrders(); }, [data?._id]);
+    const loadEntitlements = () => {
+        if (!token) { setLoadingEntitlements(false); return; }
+        setLoadingEntitlements(true);
+        fetch(`${API_URL}/stall-accessories/my-entitlements`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(r => r.json())
+            .then(res => setEntitlements(res.data || []))
+            .catch(() => { })
+            .finally(() => setLoadingEntitlements(false));
+    };
+
+    useEffect(() => { loadCatalog(); loadOrders(); loadEntitlements(); }, [data?._id]);
 
 
     const addToCart = (item: any) => {
@@ -1201,6 +1215,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                             setShowCartMobile(false);
                             loadOrders();
                             loadCatalog();
+                            loadEntitlements();
                         } else {
                             toast.error(verifyRes.message || 'Payment verification failed');
                         }
@@ -1273,6 +1288,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
 
             loadOrders();
             loadCatalog();
+            loadEntitlements();
 
         } catch (err: any) {
             toast.error(err.message || 'Failed to submit NEFT payment');
@@ -1804,7 +1820,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
             )}
 
             {/* My Orders and Complimentary Inclusions (moved to bottom) */}
-            {false && (orders.length > 0 || complimentaryItems.length > 0) && (
+            {(orders.length > 0 || complimentaryItems.length > 0) && (
                 <div className="mt-12 pt-8 border-t border-slate-200">
                     <h2 className="text-[18px] font-black text-[#1e293b] mb-6">My Inclusions & Orders</h2>
 
@@ -1869,7 +1885,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                         {/* Complimentary */}
                         <div>
                             <Section title="Complimentary Inclusions (Free with your stall)" icon={Gift}>
-                                {loadingCatalog ? (
+                                {loadingCatalog || loadingEntitlements ? (
                                     <div className="py-6 flex justify-center"><Loader2 className="w-5 h-5 animate-spin text-[#23471d]" /></div>
                                 ) : complimentaryItems.length === 0 ? (
                                     <div className="py-6 text-center text-[11px] text-slate-400 font-bold uppercase border border-slate-200 rounded-[2px]">
@@ -1877,30 +1893,35 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                     </div>
                                 ) : (
                                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                        {complimentaryItems.map((item: any) => (
-                                            <div key={item._id} className="border border-emerald-200 bg-emerald-50/40 p-3 rounded-[2px] flex items-start gap-3">
-                                                <div className="w-10 h-10 bg-white border border-emerald-100 rounded-sm overflow-hidden flex-shrink-0 flex items-center justify-center">
-                                                    {item.imageUrl ? (
-                                                        <img loading="lazy" decoding="async" src={`${SERVER_URL}${item.imageUrl}`} alt={item.name} className="w-full h-full object-cover" />
-                                                    ) : (
-                                                        <Gift size={14} className="text-emerald-400" />
-                                                    )}
-                                                </div>
-                                                <div className="flex-1 min-w-0">
-                                                    <p className="text-[12px] font-bold text-slate-800">{item.name}</p>
-                                                    {item.description && <p className="text-[10px] text-slate-500 mt-0.5 line-clamp-1">{item.description}</p>}
-                                                    {item.dimensionUnit && (item.length || item.width || item.height) && (
-                                                        <p className="text-[9px] font-bold text-slate-400 mt-0.5 uppercase">
-                                                            Size: {[item.length, item.width, item.height].filter(Boolean).join('×')} {item.dimensionUnit}
-                                                        </p>
-                                                    )}
-                                                    <div className="flex items-center gap-2 mt-1.5">
-                                                        <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-black uppercase rounded-full">FREE</span>
-                                                        <span className="text-[10px] text-slate-500">Qty: {item.includedQty} {item.unit}</span>
+                                        {complimentaryItems.map((item: any) => {
+                                            const entitlement = entitlements.find((e: any) => e.accessoryId === item._id);
+                                            const entitledQty = entitlement?.entitledQty ?? item.includedQty;
+                                            const remainingQty = entitlement?.remainingQty ?? item.includedQty;
+                                            return (
+                                                <div key={item._id} className="border border-emerald-200 bg-emerald-50/40 p-3 rounded-[2px] flex items-start gap-3">
+                                                    <div className="w-10 h-10 bg-white border border-emerald-100 rounded-sm overflow-hidden flex-shrink-0 flex items-center justify-center">
+                                                        {item.imageUrl ? (
+                                                            <img src={`${SERVER_URL}${item.imageUrl}`} alt={item.name} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <Gift size={14} className="text-emerald-400" />
+                                                        )}
+                                                    </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <p className="text-[12px] font-bold text-slate-800">{item.name}</p>
+                                                        {item.description && <p className="text-[10px] text-slate-500 mt-0.5 line-clamp-1">{item.description}</p>}
+                                                        {item.dimensionUnit && (item.length || item.width || item.height) && (
+                                                            <p className="text-[9px] font-bold text-slate-400 mt-0.5 uppercase">
+                                                                Size: {[item.length, item.width, item.height].filter(Boolean).join('×')} {item.dimensionUnit}
+                                                            </p>
+                                                        )}
+                                                        <div className="flex items-center gap-2 mt-1.5">
+                                                            <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-black uppercase rounded-full">FREE</span>
+                                                            <span className="text-[10px] text-slate-500">Qty: {entitledQty} {item.unit}</span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
                                 )}
                             </Section>

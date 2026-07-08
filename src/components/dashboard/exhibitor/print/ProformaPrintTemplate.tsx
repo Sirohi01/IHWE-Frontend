@@ -1,5 +1,6 @@
 import { useState, useLayoutEffect, useRef } from 'react';
 import type { CSSProperties } from 'react';
+import { getFirstCleanValue, normalizeContactName, getFirstAddressValue, joinAddressParts, getDiscountPercent, getItemTaxable, formatSize, formatArea } from './templateHelpers';
 const MAX_PAGE_CONTENT_HEIGHT = 1300;
 
 function toWords(n: number): string {
@@ -16,7 +17,8 @@ function toWords(n: number): string {
         return convert(Math.floor(num / 10000000)) + ' Crore' + (num % 10000000 ? ' ' + convert(num % 10000000) : '');
     };
     const intPart = Math.floor(n);
-    return 'RUPEES ' + convert(intPart) + ' Only.';
+    let words = convert(intPart).trim();
+    return 'Rupees ' + words + ' Only.';
 }
 const FIRST_PAGE_ITEM_ROWS = 10;
 const OTHER_PAGE_ITEM_ROWS = 16;
@@ -35,10 +37,10 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
 
     const items = document?.items || [];
     const estNo = document?.est_no || '';
-    const estDate = document?.supply_date ? new Date(document.supply_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+    const estDate = document?.supply_date ? new Date(document.supply_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' }) : '';
     const createdDateTime = document?.added
-        ? new Date(document.added).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
-        : new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        ? new Date(document.added).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }).replace(',', '')
+        : new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }).replace(',', '');
 
     const totalTaxable = items.reduce((sum: number, item: any) => {
         const amt = parseFloat(item.amount) || 0;
@@ -54,14 +56,98 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
 
     const PROFORMA_EVENT_NAME = '9th Edition of International Health & Wellness Expo (IHWE Global Edition)';
     const PROFORMA_PLACE_OF_SUPPLY = 'Hall Nos. 8, 9 & 10, Pragati Maidan, New Delhi - 110001, Bharat';
-    const PROFORMA_EVENT_GST_NO = '08AAFCN9238F1Z6';
+    const PROFORMA_EVENT_STATE = 'Delhi';
+    const PROFORMA_PLACE_OF_SUPPLY_WITH_CODE = 'Delhi (07)';
+    const PROFORMA_EVENT_GST_NO = '07AAFCN9238F1Z6';
 
     const clientCompanyName = document?.company_name || company?.companyName || company?.exhibitorName || '—';
-    const clientCompanyAddress = document?.company_addr || [company?.address, company?.city, company?.pincode ? `- ${company.pincode}` : '', company?.state, company?.country].filter(Boolean).join(', ');
+    const titledContactPerson = [c1.title, c1.firstName, c1.surname].filter(Boolean).join(' ');
+    const rawClientContactPerson = getFirstCleanValue(
+        document?.contact_person,
+        document?.company_contact_person,
+        document?.consignee_person,
+        titledContactPerson,
+        company?.contactPerson,
+        company?.contact_person
+    ) || '—';
+    const clientContactPerson = normalizeContactName(rawClientContactPerson, titledContactPerson);
+    
+    const clientContactNo = getFirstCleanValue(
+        document?.contact_no,
+        document?.contact_phone,
+        document?.company_contact_no,
+        document?.company_phone,
+        document?.mobile,
+        document?.phone,
+        document?.consignee_phone,
+        c1.mobile,
+        company?.landline,
+        company?.mobile
+    ) || '—';
+    
+    const clientEmail = getFirstCleanValue(
+        document?.company_email,
+        document?.contact_email,
+        document?.email,
+        c1.email,
+        company?.companyEmail,
+        company?.email
+    ) || '—';
+    
+    const clientAddressLine = getFirstAddressValue(
+        document?.company_addr,
+        document?.address,
+        company?.address,
+        company?.companyAddress,
+        company?.company_addr
+    );
+    const clientCity = getFirstAddressValue(
+        document?.company_city,
+        document?.city,
+        company?.city,
+        company?.district
+    );
+    const clientState = getFirstAddressValue(
+        document?.company_state,
+        document?.state,
+        company?.state
+    );
+    const clientCountry = getFirstAddressValue(
+        document?.company_country,
+        document?.country,
+        company?.country
+    );
+    const clientPincode = getFirstAddressValue(
+        document?.company_pincode,
+        document?.pincode,
+        document?.pin_code,
+        document?.postal_code,
+        document?.zip_code,
+        company?.pincode,
+        company?.pinCode,
+        company?.pin_code,
+        company?.postalCode,
+        company?.postal_code,
+        company?.zipCode,
+        company?.zip_code
+    );
+    const clientCompanyAddress = joinAddressParts([
+        clientAddressLine,
+        clientCity,
+        clientPincode,
+        clientState,
+        clientCountry,
+    ]);
     const clientGstNo = document?.company_gst_no || document?.gst_no;
 
     const eventName = document?.event_name || document?.consignee_name || PROFORMA_EVENT_NAME;
-    const eventPlaceOfSupply = document?.event_place_of_supply || document?.consignee_addr || PROFORMA_PLACE_OF_SUPPLY;
+    const eventPlaceOfSupply = joinAddressParts([
+        (document?.event_place_of_supply || document?.consignee_addr || PROFORMA_PLACE_OF_SUPPLY)
+            .replace(/,\s*Bharat$/i, ''),
+        PROFORMA_EVENT_STATE,
+        'Bharat',
+    ]);
+    const shipmentAddress = eventPlaceOfSupply;
     const eventGstNo = document?.event_gst_no || PROFORMA_EVENT_GST_NO;
 
     const isIgst = document?.est_type
@@ -136,21 +222,21 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                                 <tr>
                                     <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact Person</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{[c1.title, c1.firstName, c1.surname].filter(Boolean).join(' ') || document?.consignee_person || '—'}</td>
+                                    <td style={{ border: 'none', padding: '1px 0', textTransform: 'capitalize' }}>{clientContactPerson}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact No.</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{c1.mobile || document?.consignee_phone || '—'}</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{clientContactNo}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Email</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{c1.email || company?.email || '—'}</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{clientEmail}</td>
                                 </tr>
                                 {clientGstNo && (
                                     <tr>
-                                        <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>GSTIN.</td>
+                                        <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>GSTIN/PAN</td>
                                         <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
                                         <td style={{ border: 'none', padding: '1px 0' }}>{clientGstNo}</td>
                                     </tr>
@@ -160,26 +246,26 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                     </td>
                     <td style={{ border: '1px solid #ccc', padding: '4px 8px', verticalAlign: 'top', fontSize: 11, lineHeight: '1.2' }}>
                         <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>{eventName}</div>
-                        <div style={{ marginTop: 2 }}>{eventPlaceOfSupply}</div>
+                        <div style={{ marginTop: 2 }}>{shipmentAddress}</div>
                         <table style={{ borderCollapse: 'collapse', border: 'none', lineHeight: '1.3', width: '100%', marginTop: 4 }}>
                             <tbody>
                                 <tr>
-                                    <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Place of Supply</td>
+                                    <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Place of Supply &amp; Code</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{document?.state || '—'}</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{PROFORMA_PLACE_OF_SUPPLY_WITH_CODE}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact Person</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{[c1.title, c1.firstName, c1.surname].filter(Boolean).join(' ') || document?.consignee_person || '—'}</td>
+                                    <td style={{ border: 'none', padding: '1px 0', textTransform: 'capitalize' }}>{clientContactPerson}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact No.</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{c1.mobile || document?.consignee_phone || '—'}</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{clientContactNo}</td>
                                 </tr>
                                 <tr>
-                                    <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>GSTIN.</td>
+                                    <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>GSTIN</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
                                     <td style={{ border: 'none', padding: '1px 0' }}>{eventGstNo}</td>
                                 </tr>
@@ -226,8 +312,8 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                         { label: 'Item Description', width: '48%' },
                         { label: 'HSN Code', width: '7%' },
                         { label: 'Qty.', width: '4%' },
-                        { label: 'Area', width: '7%' },
                         { label: 'Size', width: '7%' },
+                        { label: 'Area', width: '7%' },
                         { label: 'Unit', width: '6%' },
                         { label: 'Rate', width: '7%' },
                         { label: 'Discount', width: '8%' },
@@ -256,9 +342,9 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.hsn}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.qty}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.area || '—'}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.size || '—'}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.unit}</td>
+                              <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center', whiteSpace: 'nowrap' }}>{formatSize(item?.area || item?.stall_area)}</td>
+                              <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center', whiteSpace: 'nowrap' }}>{formatArea(item?.size || item?.stall_size)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>Nos.</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(item?.rate)}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{fmtNum(item?.disc)}%</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(taxable)}</td>
@@ -327,7 +413,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                     })}
                     <tr style={{ background: '#f8fafc', textTransform: 'uppercase' }}>
                         <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>GST Amount in Words</td>
-                        <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px', textTransform: 'capitalize' }}>{toWords(Math.round(totalGstAmount)).toUpperCase()}</td>
+                        <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px', textTransform: 'none' }}>{toWords(Math.round(totalGstAmount))}</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Total GST Amount</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(totalGstAmount)}</td>
                     </tr>
@@ -336,7 +422,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                     </tr>
                     <tr style={{ background: '#f8fafc', textTransform: 'uppercase' }}>
                         <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
-                        <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px', textTransform: 'capitalize' }}>{toWords(Math.round(grandTotal)).toUpperCase()}</td>
+                        <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px', textTransform: 'none' }}>{toWords(Math.round(grandTotal))}</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Grand Total</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right', fontSize: 13, color: '#000' }}>{fmtNum(grandTotal)}</td>
                     </tr>

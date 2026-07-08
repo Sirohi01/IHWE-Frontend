@@ -1,5 +1,7 @@
 import { useState, useLayoutEffect, useRef } from 'react';
 import type { CSSProperties } from 'react';
+import { getFirstCleanValue, normalizeContactName, getFirstAddressValue, joinAddressParts, getDiscountPercent, getItemTaxable, formatSize, formatArea } from './templateHelpers';
+
 const MAX_PAGE_CONTENT_HEIGHT = 1300;
 
 function toWords(n: number): string {
@@ -16,7 +18,8 @@ function toWords(n: number): string {
         return convert(Math.floor(num / 10000000)) + ' Crore' + (num % 10000000 ? ' ' + convert(num % 10000000) : '');
     };
     const intPart = Math.floor(n);
-    return 'RUPEES ' + convert(intPart) + ' Only.';
+    let words = convert(intPart).trim();
+    return 'Rupees ' + words + ' Only.';
 }
 const FIRST_PAGE_ITEM_ROWS_WITH_CHALLAN = 6;
 const FIRST_PAGE_ITEM_ROWS = 10;
@@ -40,31 +43,114 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
     const items = document?.items || [];
     const invoiceNo = document?.invoice_no || '';
     const dateVal = document?.invoice_date || document?.supply_date;
-    const invoiceDate = dateVal ? new Date(dateVal).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '';
+    const invoiceDate = dateVal ? new Date(dateVal).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' }) : '';
     const createdDateTime = document?.added
-        ? new Date(document.added).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
-        : new Date().toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        ? new Date(document.added).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }).replace(',', '')
+        : new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }).replace(',', '');
     const supplyDateTime = document?.supply_date
-        ? new Date(document.supply_date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
+        ? new Date(document.supply_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' })
         : '';
 
     const totalTaxable = items.reduce((sum: number, item: any) => sum + (parseFloat(item.taxableValue) || 0), 0);
     const totalGstAmount = items.reduce((sum: number, item: any) => sum + (parseFloat(item.gstAmount) || 0), 0);
     const grandTotal = document?.finalAmount || items.reduce((sum: number, item: any) => sum + (parseFloat(item.total) || 0), 0);
-
     const c1 = company?.contacts?.[0] || company?.contact1 || {};
     const companyName = 'Namo Gange Wellness Pvt. Ltd.';
 
     const PROFORMA_EVENT_NAME = '9th Edition of International Health & Wellness Expo (IHWE Global Edition)';
     const PROFORMA_PLACE_OF_SUPPLY = 'Hall Nos. 8, 9 & 10, Pragati Maidan, New Delhi - 110001, Bharat';
-    const PROFORMA_EVENT_GST_NO = '08AAFCN9238F1Z6';
+    const PROFORMA_EVENT_STATE = 'Delhi';
+    const PROFORMA_PLACE_OF_SUPPLY_WITH_CODE = 'Delhi (07)';
+    const PROFORMA_EVENT_GST_NO = '07AAFCN9238F1Z6';
 
     const clientCompanyName = document?.company_name || company?.companyName || company?.exhibitorName || '—';
-    const clientCompanyAddress = document?.company_addr || [company?.address, company?.city, company?.pincode ? `- ${company.pincode}` : '', company?.state, company?.country].filter(Boolean).join(', ');
+    const titledContactPerson = [c1.title, c1.firstName, c1.surname].filter(Boolean).join(' ');
+    const rawClientContactPerson = getFirstCleanValue(
+        document?.contact_person,
+        document?.company_contact_person,
+        document?.consignee_person,
+        titledContactPerson,
+        company?.contactPerson,
+        company?.contact_person
+    ) || '—';
+    const clientContactPerson = normalizeContactName(rawClientContactPerson, titledContactPerson);
+    
+    const clientContactNo = getFirstCleanValue(
+        document?.contact_no,
+        document?.contact_phone,
+        document?.company_contact_no,
+        document?.company_phone,
+        document?.mobile,
+        document?.phone,
+        document?.consignee_phone,
+        c1.mobile,
+        company?.landline,
+        company?.mobile
+    ) || '—';
+    
+    const clientEmail = getFirstCleanValue(
+        document?.company_email,
+        document?.contact_email,
+        document?.email,
+        c1.email,
+        company?.companyEmail,
+        company?.email
+    ) || '—';
+    
+    const clientAddressLine = getFirstAddressValue(
+        document?.company_addr,
+        document?.address,
+        company?.address,
+        company?.companyAddress,
+        company?.company_addr
+    );
+    const clientCity = getFirstAddressValue(
+        document?.company_city,
+        document?.city,
+        company?.city,
+        company?.district
+    );
+    const clientState = getFirstAddressValue(
+        document?.company_state,
+        document?.state,
+        company?.state
+    );
+    const clientCountry = getFirstAddressValue(
+        document?.company_country,
+        document?.country,
+        company?.country
+    );
+    const clientPincode = getFirstAddressValue(
+        document?.company_pincode,
+        document?.pincode,
+        document?.pin_code,
+        document?.postal_code,
+        document?.zip_code,
+        company?.pincode,
+        company?.pinCode,
+        company?.pin_code,
+        company?.postalCode,
+        company?.postal_code,
+        company?.zipCode,
+        company?.zip_code
+    );
+    const clientCompanyAddress = joinAddressParts([
+        clientAddressLine,
+        clientCity,
+        clientPincode,
+        clientState,
+        clientCountry,
+    ]);
     const clientGstNo = document?.company_gst_no || document?.gst_no;
 
     const eventName = document?.event_name || document?.consignee_name || PROFORMA_EVENT_NAME;
-    const eventPlaceOfSupply = document?.event_place_of_supply || document?.consignee_addr || PROFORMA_PLACE_OF_SUPPLY;
+    const eventPlaceOfSupply = joinAddressParts([
+        (document?.event_place_of_supply || document?.consignee_addr || PROFORMA_PLACE_OF_SUPPLY)
+            .replace(/,\s*Bharat$/i, ''),
+        PROFORMA_EVENT_STATE,
+        'Bharat',
+    ]);
+    const shipmentAddress = eventPlaceOfSupply;
     const eventGstNo = document?.event_gst_no || PROFORMA_EVENT_GST_NO;
 
     const currentInvoiceType = document?.type_of_invoice || document?.est_type;
@@ -84,6 +170,7 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
     const stampUrl = settings?.companyStamp || null;
     const cancelled = String(document?.status || '').toLowerCase() === 'cancelled';
     const deliveryChallans = document?.delivery_challans || [];
+    const challanNos = deliveryChallans.map((c: any) => c.challan_no).filter(Boolean);
 
     // ── Split items into pages ──────────────────────────────────────────────
     const itemChunks: any[][] = [];
@@ -98,10 +185,6 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
             first = false;
         } while (i < items.length);
     }
-    // Whether the GST/terms/bank/signature block can share the page with the last
-    // items chunk is decided by actually measuring the rendered height (below), not
-    // by guessing — a fixed row-count heuristic was wrong in both directions (fit a
-    // 2-item invoice that didn't fit; force a split for one that would have fit).
     const [summaryFitsLastPage, setSummaryFitsLastPage] = useState(true);
     const [measuredHeight, setMeasuredHeight] = useState<number | null>(null);
     const lastPageRef = useRef<HTMLDivElement>(null);
@@ -155,21 +238,21 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                                 <tr>
                                     <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact Person</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{[c1.title, c1.firstName, c1.surname].filter(Boolean).join(' ') || '—'}</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{clientContactPerson}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact No.</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{c1.mobile || company?.landline || '—'}</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{clientContactNo}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Email</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{c1.email || company?.email || '—'}</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{clientEmail}</td>
                                 </tr>
                                 {clientGstNo && (
                                     <tr>
-                                        <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>GSTIN.</td>
+                                        <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>GSTIN/PAN</td>
                                         <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
                                         <td style={{ border: 'none', padding: '1px 0' }}>{clientGstNo}</td>
                                     </tr>
@@ -185,23 +268,25 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                                 <tr>
                                     <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Place of Supply &amp; Code</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{document?.place_of_supply || document?.state || '—'}</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{PROFORMA_PLACE_OF_SUPPLY_WITH_CODE}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact Person</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{[c1.title, c1.firstName, c1.surname].filter(Boolean).join(' ') || '—'}</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{clientContactPerson}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact No.</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{c1.mobile || company?.landline || '—'}</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{clientContactNo}</td>
                                 </tr>
-                                <tr>
-                                    <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>GSTIN.</td>
-                                    <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{eventGstNo}</td>
-                                </tr>
+                                {eventGstNo && eventGstNo !== '—' && (
+                                    <tr>
+                                        <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>GSTIN</td>
+                                        <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                        <td style={{ border: 'none', padding: '1px 0' }}>{eventGstNo}</td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </td>
@@ -213,27 +298,10 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                                     <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
                                     <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{invoiceNo}</td>
                                 </tr>
-                                {Number(document?.revision_no || 0) > 0 && (
-                                    <tr>
-                                        <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Revision</td>
-                                        <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                        <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>Rev {document.revision_no}</td>
-                                    </tr>
-                                )}
                                 <tr>
                                     <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Invoice Date</td>
                                     <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
                                     <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{invoiceDate}</td>
-                                </tr>
-                                <tr>
-                                    <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Created Date</td>
-                                    <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{createdDateTime}</td>
-                                </tr>
-                                <tr>
-                                    <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Created By</td>
-                                    <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right', textTransform: 'capitalize' }}>{document?.added_by || 'Admin'}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>PO No.</td>
@@ -245,6 +313,16 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                                     <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
                                     <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{supplyDateTime || '—'}</td>
                                 </tr>
+                                <tr>
+                                    <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Created Date</td>
+                                    <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{createdDateTime}</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Created By</td>
+                                    <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right', textTransform: 'capitalize' }}>{document?.added_by || 'Admin'}</td>
+                                </tr>
                             </tbody>
                         </table>
                     </td>
@@ -253,65 +331,7 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
         </table>
     );
 
-    const renderChallanSection = () => deliveryChallans.length > 0 && (
-        <div style={{ marginBottom: 4 }}>
-            <div style={{ background: '#0d1f3c', color: '#fff', border: '1px solid #0d1f3c', padding: '3px 6px', textAlign: 'center', textTransform: 'uppercase', fontSize: 10, fontWeight: 'bold' }}>
-                Delivery Challan Details
-            </div>
-            {deliveryChallans.map((challan: any, challanIndex: number) => (
-                <div key={challan.delivery_challan_id || `${challan.challan_no}-${challanIndex}`} className="avoid-break" style={{ border: '1px solid #ccc', borderTop: 0, padding: 4 }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 3 }}>
-                        <tbody>
-                            <tr>
-                                <td style={{ width: '25%', padding: '1px 5px' }}><b>Challan No.:</b> {challan.challan_no || '—'}</td>
-                                <td style={{ width: '20%', padding: '1px 5px' }}><b>Date:</b> {challan.challan_date ? new Date(challan.challan_date).toLocaleDateString('en-IN') : '—'}</td>
-                                <td style={{ width: '15%', padding: '1px 5px', textTransform: 'capitalize' }}><b>Status:</b> {challan.status || '—'}</td>
-                                <td style={{ width: '40%', padding: '1px 5px' }}><b>Delivery:</b> {challan.delivery_address || '—'}</td>
-                            </tr>
-                            <tr>
-                                <td style={{ padding: '1px 5px' }}><b>Transporter:</b> {challan.transporter_name || '—'}</td>
-                                <td style={{ padding: '1px 5px' }}><b>Vehicle:</b> {challan.vehicle_no || '—'}</td>
-                                <td style={{ padding: '1px 5px' }}><b>E-way Bill:</b> {challan.eway_bill || '—'}</td>
-                                <td style={{ padding: '1px 5px' }}><b>Bilty No.:</b> {challan.bilty_no || '—'}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    {/* <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                        <thead>
-                            <tr style={{ background: '#eef2f7' }}>
-                                <th style={{ border: '1px solid #ccc', padding: 2, width: '4%' }}>#</th>
-                                <th style={{ border: '1px solid #ccc', padding: 2, textAlign: 'left' }}>Delivered Item</th>
-                                <th style={{ border: '1px solid #ccc', padding: 2, width: '9%' }}>HSN</th>
-                                <th style={{ border: '1px solid #ccc', padding: 2, width: '7%' }}>Qty.</th>
-                                <th style={{ border: '1px solid #ccc', padding: 2, width: '7%' }}>Unit</th>
-                                <th style={{ border: '1px solid #ccc', padding: 2, width: '9%' }}>Rate</th>
-                                <th style={{ border: '1px solid #ccc', padding: 2, width: '9%' }}>Discount</th>
-                                <th style={{ border: '1px solid #ccc', padding: 2, width: '10%' }}>Amount</th>
-                                <th style={{ border: '1px solid #ccc', padding: 2, width: '9%' }}>GST</th>
-                                <th style={{ border: '1px solid #ccc', padding: 2, width: '10%' }}>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {(challan.items || []).map((item: any, itemIndex: number) => (
-                                <tr key={`${challan.challan_no}-${itemIndex}`}>
-                                    <td style={{ border: '1px solid #ccc', padding: 2, textAlign: 'center' }}>{itemIndex + 1}</td>
-                                    <td style={{ border: '1px solid #ccc', padding: 2 }}>{item.description || '—'}</td>
-                                    <td style={{ border: '1px solid #ccc', padding: 2, textAlign: 'center' }}>{item.hsn || '—'}</td>
-                                    <td style={{ border: '1px solid #ccc', padding: 2, textAlign: 'center' }}>{item.qty ?? '—'}</td>
-                                    <td style={{ border: '1px solid #ccc', padding: 2, textAlign: 'center' }}>{item.unit || '—'}</td>
-                                    <td style={{ border: '1px solid #ccc', padding: 2, textAlign: 'right' }}>{item.rate != null ? fmtNum(item.rate) : '—'}</td>
-                                    <td style={{ border: '1px solid #ccc', padding: 2, textAlign: 'right' }}>{item.discount != null ? fmtNum(item.discount) : '—'}</td>
-                                    <td style={{ border: '1px solid #ccc', padding: 2, textAlign: 'right' }}>{item.taxable != null ? fmtNum(item.taxable) : '—'}</td>
-                                    <td style={{ border: '1px solid #ccc', padding: 2, textAlign: 'right' }}>{item.gstAmount != null ? `${fmtNum(item.gstAmount)}${item.gstRate ? ` (${item.gstRate}%)` : ''}` : '—'}</td>
-                                    <td style={{ border: '1px solid #ccc', padding: 2, textAlign: 'right', fontWeight: 700 }}>{item.finalAmount != null ? fmtNum(item.finalAmount) : '—'}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table> */}
-                </div>
-            ))}
-        </div>
-    );
+
 
     const renderItemsTable = (chunk: any[], startIndex: number, showSubtotal: boolean) => (
         <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 5 }}>
@@ -322,8 +342,8 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                         { label: 'Item Description', width: '48%' },
                         { label: 'HSN Code', width: '7%' },
                         { label: 'Qty.', width: '4%' },
-                        { label: 'Area', width: '7%' },
                         { label: 'Size', width: '7%' },
+                        { label: 'Area', width: '7%' },
                         { label: 'Unit', width: '6%' },
                         { label: 'Rate', width: '7%' },
                         { label: 'Discount', width: '8%' },
@@ -351,9 +371,9 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.hsn}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.qty}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.area || '—'}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.size || '—'}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.unit}</td>
+                              <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center', whiteSpace: 'nowrap' }}>{formatSize(item?.area || item?.stall_area)}</td>
+                              <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center', whiteSpace: 'nowrap' }}>{formatArea(item?.size || item?.stall_size)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>Nos.</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(item?.rate)}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{Math.round(discPct)}%</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(item.taxableValue)}</td>
@@ -366,10 +386,15 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                     </tr>
                 ))}
                 {showSubtotal && (
-                    <tr style={{ textTransform: 'uppercase' }}>
-                        <td colSpan={9} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right', background: '#f8fafc' }}>Taxable Value</td>
-                        <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(totalTaxable)}</td>
-                    </tr>
+                      <tr style={{ textTransform: 'uppercase' }}>
+                          <td colSpan={7} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, borderRight: 'none', background: '#fff' }}>
+                              {challanNos.length > 0 ? `DELIVERY CHALLAN NO.: ${challanNos.join(', ')}` : ''}
+                          </td>
+                          <td colSpan={2} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right', background: '#f8fafc', borderLeft: 'none' }}>
+                              Taxable Value
+                          </td>
+                          <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(totalTaxable)}</td>
+                      </tr>
                 )}
             </tbody>
         </table>
@@ -419,7 +444,7 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                     })}
                     <tr style={{ background: '#f8fafc', textTransform: 'uppercase' }}>
                         <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>GST Amount in Words ({currAbbr})</td>
-                        <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px', textTransform: 'capitalize' }}>{toWords(Math.round(totalGstAmount)).toUpperCase()}</td>
+                        <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px', textTransform: 'none' }}>{toWords(Math.round(totalGstAmount))}</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Total GST Amount</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(totalGstAmount)}</td>
                     </tr>
@@ -428,7 +453,7 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                     </tr>
                     <tr style={{ background: '#f8fafc', textTransform: 'uppercase' }}>
                         <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words ({currAbbr})</td>
-                        <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px', textTransform: 'capitalize' }}>{toWords(Math.round(grandTotal)).toUpperCase()}</td>
+                        <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px', textTransform: 'none' }}>{toWords(Math.round(grandTotal))}</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Grand Total</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right', fontSize: 13, color: '#000' }}>{fmtNum(grandTotal)}</td>
                     </tr>
@@ -565,7 +590,6 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                         )}
                         {renderHeaderAndTitle()}
                         {renderDetailsTable()}
-                        {pageIdx === 0 && renderChallanSection()}
                         {renderItemsTable(chunk, startIndex, isLastItemPage)}
                         {attemptCombine && renderClosingSections()}
                         {renderPageNumber(pageIdx + 1)}

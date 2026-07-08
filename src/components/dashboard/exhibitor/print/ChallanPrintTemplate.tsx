@@ -1,5 +1,6 @@
 import { useState, useLayoutEffect, useRef } from 'react';
 import type { CSSProperties } from 'react';
+import { getFirstCleanValue, normalizeContactName, getFirstAddressValue, joinAddressParts, formatSize, formatArea } from './templateHelpers';
 const MAX_PAGE_CONTENT_HEIGHT = 1300;
 function toWords(n: number): string {
     const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
@@ -15,7 +16,8 @@ function toWords(n: number): string {
         return convert(Math.floor(num / 10000000)) + ' Crore' + (num % 10000000 ? ' ' + convert(num % 10000000) : '');
     };
     const intPart = Math.floor(n);
-    return 'RUPEES ' + convert(intPart) + ' Only.';
+    const words = convert(intPart).trim();
+    return 'Rupees ' + words + ' Only.';
 }
 const FIRST_PAGE_ITEM_ROWS = 10;
 const OTHER_PAGE_ITEM_ROWS = 16;
@@ -23,13 +25,14 @@ const MIN_PADDED_ROWS = 5;
 
 interface Props {
     challan: any;
+    company?: any;
     settings?: any;
     bankDetails?: any;
     headerImageUrl?: string | null;
     copyLabel?: string;
 }
 
-export default function ChallanPrintTemplate({ challan, settings, bankDetails, headerImageUrl, copyLabel = 'ORIGINAL' }: Props) {
+export default function ChallanPrintTemplate({ challan, company, settings, bankDetails, headerImageUrl, copyLabel = 'ORIGINAL FOR RECIPIENT' }: Props) {
     const fmtNum = (value: any, decimals = 0) => {
         const number = Number(value);
         if (!Number.isFinite(number)) return decimals ? '0.00' : '0';
@@ -40,7 +43,7 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
         if (!value) return '-';
         const d = new Date(value);
         if (isNaN(d.getTime())) return '-';
-        return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+        return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' });
     };
 
     const items = challan.items || [];
@@ -85,8 +88,96 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
         acc[hsn].gst += lineValue(item, 'gstAmount');
         return acc;
     }, {}));
+    
     const companyName = settings?.companyName || 'Namo Gange Wellness Pvt. Ltd.';
-    const companyGst = settings?.companyGst || settings?.companyGstin || '09AAFCN9238F1Z6';
+    const companyGst = settings?.companyGst || settings?.companyGstin || '07AAFCN9238F1Z6';
+
+    const buyerAddressLine = getFirstAddressValue(
+        challan.company_address,
+        challan.company_addr,
+        challan.companyAddress,
+        challan.address,
+        challan.company?.address,
+        challan.company?.companyAddress,
+        challan.company?.company_addr
+    );
+    const buyerCity = getFirstAddressValue(
+        challan.company_city,
+        challan.city,
+        challan.company?.city,
+        challan.company?.district
+    );
+    const buyerState = getFirstAddressValue(
+        challan.company_state,
+        challan.state,
+        challan.company?.state
+    );
+    const buyerCountry = getFirstAddressValue(
+        challan.company_country,
+        challan.country,
+        challan.company?.country
+    );
+    const buyerPincode = getFirstAddressValue(
+        challan.company_pincode,
+        challan.pincode,
+        challan.pin_code,
+        challan.postal_code,
+        challan.zip_code,
+        challan.company?.pincode,
+        challan.company?.pinCode,
+        challan.company?.pin_code,
+        challan.company?.postalCode,
+        challan.company?.postal_code,
+        challan.company?.zipCode,
+        challan.company?.zip_code
+    );
+    const buyerCompanyAddress = joinAddressParts([
+        buyerAddressLine,
+        buyerCity,
+        buyerPincode,
+        buyerState,
+        buyerCountry,
+    ]);
+
+    const titledBuyerContactPerson = [challan.company?.contact1?.title, challan.company?.contact1?.firstName, challan.company?.contact1?.surname].filter(Boolean).join(' ');
+    const rawBuyerContactPerson = getFirstCleanValue(
+        challan.contact_person,
+        challan.company_contact_person,
+        challan.consignee_person,
+        titledBuyerContactPerson,
+        challan.company?.contactPerson,
+        challan.company?.contact_person
+    ) || '—';
+    const buyerContactPerson = normalizeContactName(rawBuyerContactPerson, titledBuyerContactPerson);
+
+    const buyerContactNo = getFirstCleanValue(
+        challan.contact_phone,
+        challan.contact_no,
+        challan.company_contact_no,
+        challan.company_phone,
+        challan.mobile,
+        challan.phone,
+        challan.consignee_phone,
+        challan.company?.contact1?.mobile,
+        challan.company?.landline,
+        challan.company?.mobile
+    ) || '—';
+
+    const buyerEmail = getFirstCleanValue(
+        challan.company_email,
+        challan.contact_email,
+        challan.email,
+        company?.companyEmail,
+        company?.contact1?.email,
+        company?.email,
+        challan.company?.contact1?.email,
+        challan.company?.companyEmail,
+        challan.company?.email,
+        challan.user?.email
+    ) || '-';
+
+    const buyerGstNo = challan.company_gst_no || challan.gst_no || challan.gstin || challan.company?.gstNo || challan.company?.gst_no || '—';
+
     const bank = bankDetails || {};
     const bankName = bank.bankname || bank.bankName || settings?.bankName || '-';
     const accountName = bank.accountname || bank.accountName || settings?.accountName || companyName;
@@ -163,15 +254,16 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
             </thead>
             <tbody>
                 <tr>
-                    <td style={{ ...topTd }}>
+                    <td style={{ ...topTd, overflowWrap: "anywhere", wordBreak: "break-word" }}>
                         <div style={{ ...topInfoLine, fontWeight: 800, textTransform: 'uppercase', marginBottom: 1 }}>{challan.company_name || '-'}</div>
-                        <div style={{ ...topInfoLine, whiteSpace: 'pre-wrap' }}>{challan.company_address || '-'}</div>
+                        <div style={{ ...topInfoLine, whiteSpace: 'pre-wrap' }}>{buyerCompanyAddress}</div>
                         <table style={{ borderCollapse: 'collapse', border: 'none', lineHeight: 1.3, width: '100%', marginTop: 4 }}>
                             <tbody>
                                 {[
-                                    ['GSTIN/PAN', challan.company_gst_no || '-'],
-                                    ['Contact Person', challan.contact_person || '-'],
-                                    ['Contact No.', challan.contact_phone || '-'],
+                                    ['Contact Person', buyerContactPerson],
+                                    ['Contact No.', buyerContactNo],
+                                    ['Email', buyerEmail],
+                                    ['GSTIN/PAN', buyerGstNo],
                                 ].map(([label, value]) => (
                                     <tr key={label}>
                                         <td style={labelCell}>{label}</td>
@@ -239,8 +331,8 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
                         ['Item Description', '38%'],
                         ['HSN Code', '8%'],
                         ['Qty.', '5%'],
-                        ['Area', '6%'],
                         ['Size', '6%'],
+                        ['Area', '6%'],
                         ['Unit', '5%'],
                         ['Rate', '7%'],
                         ['Discount', '7%'],
@@ -265,9 +357,9 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
                             </td>
                             <td style={{ ...td, textAlign: 'center' }}>{item.hsn || '-'}</td>
                             <td style={{ ...td, textAlign: 'center' }}>{fmtNum(item.qty)}</td>
-                            <td style={{ ...td, textAlign: 'center' }}>{item.area || '-'}</td>
-                            <td style={{ ...td, textAlign: 'center' }}>{item.size || '-'}</td>
-                            <td style={{ ...td, textAlign: 'center' }}>{item.unit || '-'}</td>
+                            <td style={{ ...td, textAlign: 'center', whiteSpace: 'nowrap' }}>{formatSize(item.area || item.stall_area)}</td>
+                            <td style={{ ...td, textAlign: 'center', whiteSpace: 'nowrap' }}>{formatArea(item.size || item.stall_size)}</td>
+                            <td style={{ ...td, textAlign: 'center' }}>Nos.</td>
                             <td style={{ ...td, textAlign: 'right' }}>{fmtNum(item.rate || 0)}</td>
                             <td style={{ ...td, textAlign: 'center' }}>{Math.round(discPct)}%</td>
                             <td style={{ ...td, textAlign: 'right', fontWeight: 700 }}>{fmtNum(taxable)}</td>
@@ -321,7 +413,7 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
                     })}
                     <tr>
                         <td colSpan={3} style={mutedCell}>GST Amount in Words</td>
-                        <td colSpan={6} style={{ ...td, textTransform: 'capitalize' }}>{toWords(Math.round(totalGst)).toUpperCase()}</td>
+                        <td colSpan={6} style={{ ...td, textTransform: 'none' }}>{toWords(Math.round(totalGst))}</td>
                         <td style={mutedCell}>Total GST Amount</td>
                         <td style={{ ...td, textAlign: 'right', fontWeight: 800 }}>{fmtNum(totalGst)}</td>
                     </tr>
@@ -330,7 +422,7 @@ export default function ChallanPrintTemplate({ challan, settings, bankDetails, h
                     </tr>
                     <tr>
                         <td colSpan={3} style={mutedCell}>Amount in Words (INR)</td>
-                        <td colSpan={6} style={{ ...td, textTransform: 'capitalize' }}>{toWords(Math.round(grandTotal)).toUpperCase()}</td>
+                        <td colSpan={6} style={{ ...td }}>{toWords(Math.round(grandTotal))}</td>
                         <td style={mutedCell}>Total Value</td>
                         <td style={{ ...td, textAlign: 'right', fontWeight: 800 }}>{fmtNum(grandTotal)}</td>
                     </tr>

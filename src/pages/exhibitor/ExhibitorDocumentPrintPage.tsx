@@ -57,7 +57,7 @@ export default function ExhibitorDocumentPrintPage() {
                 const img = templateRes?.data?.headerImage || templateRes?.headerImage;
                 if (img) setHeaderImageUrl(mediaUrl(img));
 
-                if (docType !== 'challan' && docJson.document?.companyId) {
+                if (docJson.document?.companyId) {
                     fetch(`${SERVER_URL}/api/companies/lookup/${docJson.document.companyId}`)
                         .then((r) => r.json())
                         .then((res) => setCompany(res?.data || res))
@@ -101,7 +101,7 @@ export default function ExhibitorDocumentPrintPage() {
 
             <div className="print-root">
                 {docType === 'challan' ? (
-                    <ChallanPrintTemplate challan={document} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} />
+                    <ChallanPrintTemplate challan={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} />
                 ) : docType === 'proforma' ? (
                     <ProformaPrintTemplate document={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} />
                 ) : (

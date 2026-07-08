@@ -43,6 +43,7 @@ const singleDate = (date?: string) => {
 function useCountdown(targetDate: Date) {
     const targetTime = targetDate.getTime();
     const calc = () => {
+        if (Number.isNaN(targetTime)) return { days: 0, hrs: 0, mins: 0, secs: 0 };
         const diff = Math.max(0, targetTime - Date.now());
         return {
             days: Math.floor(diff / 86400000),
@@ -54,6 +55,7 @@ function useCountdown(targetDate: Date) {
     const [time, setTime] = useState(calc);
     useEffect(() => {
         setTime(calc());
+        if (Number.isNaN(targetTime)) return;
         const t = setInterval(() => setTime(calc()), 1000);
         return () => clearInterval(t);
     }, [targetTime]);
@@ -102,7 +104,11 @@ function InfoCard({ icon: Icon, iconBg, label, value, sub }: {
 
 export default function MyEventHero({ data }: { data: any }) {
     const navigate = useNavigate();
-    const eventStart = data?.eventId?.startDate ? new Date(data.eventId.startDate) : new Date();
+    const fallbackDate = new Date("2026-08-21T00:00:00");
+    const rawDate = data?.eventId?.startDate ? new Date(data.eventId.startDate) : null;
+    const isInvalidOrPast = !rawDate || Number.isNaN(rawDate.getTime()) || rawDate.getTime() <= Date.now();
+    const eventStart = isInvalidOrPast ? fallbackDate : rawDate;
+    
     const { days, hrs, mins, secs } = useCountdown(eventStart);
     const eventDates = formatDateRange(data?.eventId?.startDate, data?.eventId?.endDate);
     const setupDates = shiftDateRange(data?.eventId?.startDate);
