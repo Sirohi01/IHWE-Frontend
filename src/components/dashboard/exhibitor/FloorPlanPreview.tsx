@@ -134,7 +134,20 @@ const isCurrentStall = (backendId: string, currentStallNo?: string) => {
   return backendId.split(',').map((id) => id.trim().replace(/^0+/, '')).includes(current.replace(/^0+/, ''));
 };
 
-const wrappedText = (text: string) => text.split('\n');
+const stallLabelLines = (stall: StallShape, current: boolean, currentStallLabel: string) => {
+  if (current && currentStallLabel) return ['STALL', currentStallLabel];
+  const ids = stall.backendId.split(',').map((id) => id.trim()).filter(Boolean);
+  if (ids.length <= 2) return [ids.join(', ')];
+  return [ids.slice(0, 2).join(', '), ids.slice(2).join(', ')];
+};
+
+const fitFontSize = (stall: StallShape, lines: string[], current: boolean) => {
+  if (current) return Math.min(8, Math.max(6, stall.w / 5));
+  const longest = Math.max(...lines.map((line) => line.length), 1);
+  const widthFit = (stall.w - 4) / (longest * 0.58);
+  const heightFit = (stall.h - 4) / Math.max(lines.length, 1);
+  return Math.max(4.5, Math.min(7, widthFit, heightFit));
+};
 
 export default function FloorPlanPreview({ currentStallNo }: { currentStallNo?: string }) {
   const currentStallLabel = normalizeStallNo(currentStallNo);
@@ -194,7 +207,9 @@ export default function FloorPlanPreview({ currentStallNo }: { currentStallNo?: 
         const current = isCurrentStall(stall.backendId, currentStallNo);
         const fill = current ? '#10b981' : colorForStatus(stall.defaultStatus);
         const textFill = fill === '#cbd5e1' ? '#1e293b' : '#ffffff';
-        const lines = current && currentStallLabel ? ['Your Stall', currentStallLabel] : wrappedText(stall.id);
+        const lines = stallLabelLines(stall, current, currentStallLabel);
+        const fontSize = fitFontSize(stall, lines, current);
+        const lineHeight = fontSize + 1.5;
         return (
           <g key={`${stall.backendId}-${stall.x}-${stall.y}`}>
             {current && (
@@ -220,15 +235,15 @@ export default function FloorPlanPreview({ currentStallNo }: { currentStallNo?: 
             />
             <text
               x={stall.x + stall.w / 2}
-              y={stall.y + stall.h / 2 - (lines.length - 1) * (current ? 5 : 4)}
+              y={stall.y + stall.h / 2 - ((lines.length - 1) * lineHeight) / 2}
               textAnchor="middle"
               dominantBaseline="middle"
-              fontSize={current ? 8 : 7}
+              fontSize={fontSize}
               fontWeight={current ? 900 : 700}
               fill={textFill}
             >
               {lines.map((line, index) => (
-                <tspan key={line + index} x={stall.x + stall.w / 2} dy={index === 0 ? 0 : current ? 8 : 8}>
+                <tspan key={line + index} x={stall.x + stall.w / 2} dy={index === 0 ? 0 : lineHeight}>
                   {line}
                 </tspan>
               ))}
