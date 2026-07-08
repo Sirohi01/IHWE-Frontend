@@ -10,8 +10,8 @@ import { Button } from '@/components/ui/button';
 import QRCode from 'react-qr-code';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { API_URL, downloadPdfApi, SERVER_URL } from '@/lib/api';
+import FloorPlanPreview from '@/components/dashboard/exhibitor/FloorPlanPreview';
 import stallImage from '@/assets/stallImage.png';
-import locationMapImage from '@/assets/stallRightImagefinal.png';
 
 const dateFmt = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 
@@ -130,7 +130,6 @@ export default function StallInformation() {
     const setupDeadline = shiftDate(eventStart, -3);
     const allottedOn = data?.updatedAt || data?.createdAt;
     const services = Array.isArray(data?.complimentaryServices) ? data.complimentaryServices : [];
-    const locationImage = data?.stallLocationImage || data?.floorPlanImage || locationMapImage;
     const powerService = services.find((s: any) => /electric|power/i.test(s.name || ''));
     const powerAllocation = powerService ? serviceSubText(powerService).replace(/[()]/g, '') : 'TBA';
     const hallNumber = stallParts.hall === 'TBA' ? '8, 9, 10' : stallParts.hall;
@@ -310,7 +309,7 @@ export default function StallInformation() {
                         <h3 className="text-sm font-bold text-slate-800 pl-3">Your Stall Location</h3>
                         <div className="flex-1 flex flex-col items-center overflow-visible">
                             <div className="w-full h-[190px] sm:h-[220px] rounded-xl overflow-hidden bg-slate-50">
-                                <img src={locationImage} alt="Your stall location" className="w-full h-full object-contain" />
+                                <FloorPlanPreview currentStallNo={String(stallNo)} />
                             </div>
                             <div className="flex flex-wrap justify-between items-center gap-y-1.5 mt-1.5 text-[9px] font-semibold text-slate-700 w-full px-3">
                                 <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-200/60"></span> Available</div>
