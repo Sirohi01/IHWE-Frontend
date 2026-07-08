@@ -1916,8 +1916,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                                         )}
                                                         <div className="flex items-center gap-2 mt-1.5">
                                                             <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-black uppercase rounded-full">FREE</span>
-                                                            <span className="text-[10px] text-slate-500">Entitled: {entitledQty} {item.unit}</span>
-                                                            <span className="text-[10px] text-slate-500">· Remaining: {remainingQty}</span>
+                                                            <span className="text-[10px] text-slate-500">Qty: {entitledQty} {item.unit}</span>
                                                         </div>
                                                     </div>
                                                 </div>
