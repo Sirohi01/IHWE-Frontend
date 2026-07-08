@@ -279,19 +279,39 @@ export default function ExhibitorInvoicesPage() {
         navigate(`/exhibitor-print-all?ids=${ids}&types=${types}`);
     };
 
-    const handleDownloadAllReceipts = () => {
+    const handleDownloadAllReceipts = async () => {
         const receipts = documents.filter((doc: any) => doc.documentType === 'Payment');
         if (receipts.length === 0) {
             toast.error('No receipts found to download');
             return;
         }
 
-        toast.info(`Downloading ${receipts.length} receipts...`, { duration: 5000 });
-        receipts.forEach((doc: any, index: number) => {
-            setTimeout(() => {
-                window.open(`${API_URL.replace('/api', '')}/api/payments/${doc.id}/receipt`, '_blank');
-            }, index * 800);
-        });
+        const toastId = toast.loading(`Downloading ${receipts.length} receipts...`);
+        for (let i = 0; i < receipts.length; i++) {
+            const doc = receipts[i];
+            try {
+                const res = await fetch(`${API_URL.replace('/api', '')}/api/payments/${doc.id}/receipt`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const blob = await res.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.style.display = 'none';
+                    a.href = url;
+                    a.download = `Receipt_${doc.documentNo || 'Payment'}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    a.remove();
+                }
+            } catch (err) {
+                console.error('Failed to download receipt', doc.documentNo, err);
+            }
+            // Small delay to prevent browser throttling multiple rapid downloads
+            await new Promise(r => setTimeout(r, 600));
+        }
+        toast.success('All receipts downloaded successfully!', { id: toastId });
     };
 
 
@@ -666,6 +686,15 @@ export default function ExhibitorInvoicesPage() {
                                                                     <Eye size={13} />
                                                                 </button>
                                                             )}
+                                                            {doc.documentType === 'Payment' && (
+                                                                <button
+                                                                    onClick={() => window.open(`${API_URL.replace('/api', '')}/api/payments/${doc.id}/receipt`, '_blank')}
+                                                                    title="View Receipt"
+                                                                    className="p-1 text-blue-600 hover:bg-blue-50 rounded transition-colors"
+                                                                >
+                                                                    <Eye size={13} />
+                                                                </button>
+                                                            )}
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -904,7 +933,7 @@ export default function ExhibitorInvoicesPage() {
                                 <ChevronRight size={14} />
                             </button>
 
-                            <button onClick={() => navigate('/exhibitor-dashboard/profile')} className="w-full flex items-center justify-between py-2 hover:bg-slate-50 transition-colors">
+                            <button onClick={() => navigate('/exhibitor-dashboard/ex-profile1')} className="w-full flex items-center justify-between py-2 hover:bg-slate-50 transition-colors">
                                 <div className="flex items-center gap-3">
                                     <Edit2 size={14} />
                                     <span className="font-medium text-[12px]">
