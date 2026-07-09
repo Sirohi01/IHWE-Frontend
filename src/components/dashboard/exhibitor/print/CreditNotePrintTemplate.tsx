@@ -62,7 +62,7 @@ const DetailRows = ({ rows }: { rows: [string, any][] }) => (
 );
 
 const SectionHeader = ({ icon: Icon, label }: { icon?: any; label: string }) => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: NAVY, color: '#fff', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', padding: '4px 6px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: NAVY, color: '#fff', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', padding: '4px 6px' }}>
         {Icon && <Icon size={14} strokeWidth={2} />} {label}
     </div>
 );
@@ -118,8 +118,10 @@ export default function CreditNotePrintTemplate({ document, company, settings, h
                 </div>
             )}
 
-            <div style={{ textAlign: 'center', marginBottom: 2, color: NAVY, textTransform: 'uppercase' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', marginBottom: 4, color: NAVY, textTransform: 'uppercase' }}>
+                <span aria-hidden="true" />
                 <div style={{ fontWeight: 400, fontSize: 18 }}>CREDIT NOTE</div>
+                <div style={{ justifySelf: 'end', fontWeight: 700, fontSize: 11 }}>ORIGINAL COPY</div>
             </div>
 
             <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 4, border: '1px solid #ccc' }}>
