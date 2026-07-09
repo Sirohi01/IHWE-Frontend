@@ -81,10 +81,10 @@ export default function DebitNotePrintTemplate({ document, company, settings, he
                 </div>
             )}
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', marginBottom: 4, color: NAVY, textTransform: 'uppercase' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', marginTop: 0, marginBottom: 2, color: NAVY, textTransform: 'uppercase' }}>
                 <span aria-hidden="true" />
-                <div style={{ fontWeight: 400, fontSize: 18 }}>DEBIT NOTE</div>
-                <div style={{ justifySelf: 'end', fontWeight: 700, fontSize: 11 }}>ORIGINAL COPY</div>
+                <div style={{ fontWeight: 400, fontSize: 18, lineHeight: 1 }}>DEBIT NOTE</div>
+                <div style={{ justifySelf: 'end', fontWeight: 700, fontSize: 11, lineHeight: 1 }}>ORIGINAL COPY</div>
             </div>
 
             <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 4, border: '1px solid #ccc' }}>
@@ -114,8 +114,6 @@ export default function DebitNotePrintTemplate({ document, company, settings, he
                                 ['Debit Note Date', fmtDate(document?.debit_note_date)],
                                 ['Original Invoice No.', firstAllocation?.invoiceNo],
                                 ['Original Invoice Date', fmtDate(firstAllocation?.invoiceDate)],
-                                ['Proforma Invoice No.', document?.proforma_invoice_no],
-                                ['Event / Project Name', EVENT_NAME],
                                 ['Place of Supply', PLACE_OF_SUPPLY],
                             ]} />
                         </td>
@@ -234,10 +232,10 @@ export default function DebitNotePrintTemplate({ document, company, settings, he
                         <td style={{ border: '1px solid #ccc', padding: '4px 8px', textAlign: 'center' }}>Adjustment Type</td>
                     </tr>
                     <tr>
-                        <td style={{ border: '1px solid #ccc', padding: '6px 8px' }} />
-                        <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center' }}>{firstAllocation?.invoiceNo || '—'}</td>
-                        <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center' }}>{fmtDate(firstAllocation?.invoiceDate)}</td>
-                        <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center' }}>Against Invoice</td>
+                        <td style={{ border: '1px solid #ccc', padding: '4px 8px' }} />
+                        <td style={{ border: '1px solid #ccc', padding: '4px 8px', textAlign: 'center' }}>{firstAllocation?.invoiceNo || '—'}</td>
+                        <td style={{ border: '1px solid #ccc', padding: '4px 8px', textAlign: 'center' }}>{fmtDate(firstAllocation?.invoiceDate)}</td>
+                        <td style={{ border: '1px solid #ccc', padding: '4px 8px', textAlign: 'center' }}>Against Invoice</td>
                     </tr>
                 </tbody>
             </table>
