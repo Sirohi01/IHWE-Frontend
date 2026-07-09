@@ -4,6 +4,8 @@ import { API_URL, SERVER_URL, settingsApi } from '@/lib/api';
 import InvoicePrintTemplate from '@/components/dashboard/exhibitor/print/InvoicePrintTemplate';
 import ProformaPrintTemplate from '@/components/dashboard/exhibitor/print/ProformaPrintTemplate';
 import ChallanPrintTemplate from '@/components/dashboard/exhibitor/print/ChallanPrintTemplate';
+import CreditNotePrintTemplate from '@/components/dashboard/exhibitor/print/CreditNotePrintTemplate';
+import DebitNotePrintTemplate from '@/components/dashboard/exhibitor/print/DebitNotePrintTemplate';
 import { Printer, Loader2 } from 'lucide-react';
 
 const mediaUrl = (value?: string) => {
@@ -104,6 +106,10 @@ export default function ExhibitorDocumentPrintPage() {
                     <ChallanPrintTemplate challan={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} />
                 ) : docType === 'proforma' ? (
                     <ProformaPrintTemplate document={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} />
+                ) : docType === 'creditnote' ? (
+                    <CreditNotePrintTemplate document={document} company={company} settings={settings} headerImageUrl={headerImageUrl} />
+                ) : docType === 'debitnote' ? (
+                    <DebitNotePrintTemplate document={document} company={company} settings={settings} headerImageUrl={headerImageUrl} />
                 ) : (
                     <InvoicePrintTemplate document={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} heading="TAX INVOICE" />
                 )}

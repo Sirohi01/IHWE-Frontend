@@ -134,6 +134,8 @@ const DOC_TYPE_SLUGS: Record<string, string> = {
     'Invoice': 'invoice',
     'Proforma Invoice': 'proforma',
     'Delivery Challan': 'challan',
+    'Credit Note': 'creditnote',
+    'Debit Note': 'debitnote',
 };
 
 const ITEMS_PER_PAGE = 10;

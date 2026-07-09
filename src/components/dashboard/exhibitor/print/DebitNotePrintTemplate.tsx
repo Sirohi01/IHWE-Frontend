@@ -1,0 +1,311 @@
+import { SquarePen, Phone, Mail, Globe } from 'lucide-react';
+
+const NAVY = '#0d1f3c';
+const PLACE_OF_SUPPLY = 'Delhi (07)';
+const EVENT_NAME = '9th Edition of International Health & Wellness Expo (IHWE Global Edition)';
+
+interface Props {
+    document: any;
+    company?: any;
+    settings?: any;
+    headerImageUrl?: string | null;
+}
+
+function toWords(n: number): string {
+    const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+        'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+    const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+    if (n === 0) return 'Zero';
+    const convert = (num: number): string => {
+        if (num < 20) return ones[num];
+        if (num < 100) return tens[Math.floor(num / 10)] + (num % 10 ? ' ' + ones[num % 10] : '');
+        if (num < 1000) return ones[Math.floor(num / 100)] + ' Hundred' + (num % 100 ? ' ' + convert(num % 100) : '');
+        if (num < 100000) return convert(Math.floor(num / 1000)) + ' Thousand' + (num % 1000 ? ' ' + convert(num % 1000) : '');
+        if (num < 10000000) return convert(Math.floor(num / 100000)) + ' Lakh' + (num % 100000 ? ' ' + convert(num % 100000) : '');
+        return convert(Math.floor(num / 10000000)) + ' Crore' + (num % 10000000 ? ' ' + convert(num % 10000000) : '');
+    };
+    return 'Rupees ' + convert(Math.round(n)).trim() + ' Only.';
+}
+
+const fmtNum = (n: any) => Math.round(Number(n || 0)).toLocaleString('en-IN');
+const fmtDate = (v: any) => {
+    if (!v) return '—';
+    const d = new Date(v);
+    return Number.isNaN(d.getTime()) ? '—' : d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+};
+
+const DetailRows = ({ rows }: { rows: [string, any][] }) => (
+    <table style={{ borderCollapse: 'collapse', border: 'none', lineHeight: 1.5, width: '100%' }}>
+        <tbody>
+            {rows.map(([label, value]) => (
+                <tr key={label}>
+                    <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>{label}</td>
+                    <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
+                    <td style={{ border: 'none', padding: '1px 0' }}>{value || '—'}</td>
+                </tr>
+            ))}
+        </tbody>
+    </table>
+);
+
+const SectionHeader = ({ icon: Icon, label }: { icon?: any; label: string }) => (
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: NAVY, color: '#fff', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', padding: '4px 6px' }}>
+        {Icon && <Icon size={14} strokeWidth={2} />} {label}
+    </div>
+);
+
+export default function DebitNotePrintTemplate({ document, company, settings, headerImageUrl }: Props) {
+    const items = document?.items || [];
+    const totalTaxable = document?.taxableAmount || items.reduce((s: number, it: any) => s + (Number(it.amount) || 0), 0);
+    const totalGstAmount = document?.gstAmount || items.reduce((s: number, it: any) => s + (Number(it.gstAmount) || 0), 0);
+    const grandTotal = document?.totalAmount || (totalTaxable + totalGstAmount);
+    const tdsAmount = Number(document?.tdsDeduction || 0);
+    const netPayable = grandTotal - tdsAmount;
+    const isIgst = false;
+
+    const c1 = company?.contacts?.[0] || company?.contact1 || {};
+    const companyName = document?.clientName || company?.companyName || company?.exhibitorName || '—';
+    const address = [company?.address, company?.city, company?.pincode ? `- ${company.pincode}` : '', company?.state, company?.country]
+        .filter(Boolean).join(', ');
+
+    const firstAllocation = (document?.allocations || [])[0];
+
+    const sigUrl = settings?.authorizedSignature || null;
+    const stampUrl = settings?.companyStamp || null;
+
+    return (
+        <div className="bg-white border border-slate-300 p-6 text-[11px] font-sans text-black" style={{ fontFamily: 'Calibri, Arial, sans-serif', maxWidth: '1000px', margin: '0 auto 24px' }}>
+            {headerImageUrl && (
+                <div style={{ marginBottom: 2, textAlign: 'center' }}>
+                    <img loading="lazy" decoding="async" src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
+                </div>
+            )}
+
+            <div style={{ textAlign: 'center', marginBottom: 2, color: NAVY, textTransform: 'uppercase' }}>
+                <div style={{ fontWeight: 400, fontSize: 18 }}>DEBIT NOTE</div>
+            </div>
+
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 4, border: '1px solid #ccc' }}>
+                <colgroup><col style={{ width: '38%' }} /><col style={{ width: '38%' }} /><col style={{ width: '24%' }} /></colgroup>
+                <thead>
+                    <tr>
+                        <th style={{ border: 'none', borderRight: '1px solid #fff', padding: 0 }}><SectionHeader icon={SquarePen} label="Billed To (Customer Details)" /></th>
+                        <th style={{ border: 'none', borderRight: '1px solid #fff', padding: 0 }}><SectionHeader icon={SquarePen} label="Debit Note Details" /></th>
+                        <th style={{ border: 'none', padding: 0 }}><SectionHeader icon={SquarePen} label="Reason for Debit Note" /></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style={{ border: 'none', borderRight: '1px solid #ccc', padding: '8px', verticalAlign: 'top' }}>
+                            <div style={{ fontWeight: 700, fontSize: 13, textTransform: 'uppercase', marginBottom: 2 }}>{companyName}</div>
+                            <div style={{ marginBottom: 12 }}>{address || '—'}</div>
+                            <DetailRows rows={[
+                                ['Contact Person', [c1.title, c1.firstName, c1.surname].filter(Boolean).join(' ')],
+                                ['Contact No.', c1.mobile || company?.landline],
+                                ['Email', c1.email || company?.email],
+                                ['GSTIN/PAN', company?.gstNumber],
+                            ]} />
+                        </td>
+                        <td style={{ border: 'none', borderRight: '1px solid #ccc', padding: '8px', verticalAlign: 'top' }}>
+                            <DetailRows rows={[
+                                ['Debit Note No.', document?.debit_note_no],
+                                ['Debit Note Date', fmtDate(document?.debit_note_date)],
+                                ['Original Invoice No.', firstAllocation?.invoiceNo],
+                                ['Original Invoice Date', fmtDate(firstAllocation?.invoiceDate)],
+                                ['Proforma Invoice No.', document?.proforma_invoice_no],
+                                ['Event / Project Name', EVENT_NAME],
+                                ['Place of Supply', PLACE_OF_SUPPLY],
+                            ]} />
+                        </td>
+                        <td style={{ border: 'none', padding: '8px', verticalAlign: 'top', whiteSpace: 'pre-wrap' }}>
+                            <div style={{ fontWeight: 700, marginBottom: 4 }}>{document?.type || '—'}</div>
+                            <div>{document?.reason || '—'}{document?.remarks ? `\n${document.remarks}` : ''}</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 4 }}>
+                <thead>
+                    <tr style={{ background: NAVY, color: '#fff', textTransform: 'uppercase' }}>
+                        {[
+                            { label: 'S.No.', width: '5%' },
+                            { label: 'Item Description', width: '42%' },
+                            { label: 'HSN Code', width: '10%' },
+                            { label: 'Qty.', width: '8%' },
+                            { label: 'Unit', width: '8%' },
+                            { label: 'Rate', width: '13%' },
+                            { label: 'Total', width: '14%' },
+                        ].map((h) => (
+                            <th key={h.label} style={{ border: `1px solid ${NAVY}`, padding: '3px 2px', textAlign: 'center', fontSize: 10, background: NAVY, color: '#fff', fontWeight: 'bold', width: h.width }}>{h.label}</th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    {items.map((item: any, i: number) => (
+                        <tr key={i}>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{i + 1}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', fontWeight: 700 }}>{item.description}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item.hsn || '—'}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item.qty}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item.unit}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(item.rate)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(item.amount)}</td>
+                        </tr>
+                    ))}
+                    <tr style={{ background: '#f8fafc' }}>
+                        <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right', textTransform: 'uppercase' }}>Total Before Tax</td>
+                        <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(totalTaxable)}</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 4 }}>
+                <tbody>
+                    <tr>
+                        <td style={{ width: '52%', verticalAlign: 'top', padding: 0, border: 'none' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid #ccc' }}>
+                                <thead><tr><th colSpan={4} style={{ border: 'none', padding: 0 }}><SectionHeader label="GST Details" /></th></tr></thead>
+                                <tbody>
+                                    <tr style={{ background: '#f8fafc', fontWeight: 700, fontSize: 10 }}>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>Tax Head</td>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>Rate (%)</td>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>Taxable Value (₹)</td>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>Amount (₹)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>CGST</td>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{isIgst ? '-' : '9%'}</td>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{isIgst ? '-' : fmtNum(totalTaxable)}</td>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{isIgst ? '-' : fmtNum(totalGstAmount / 2)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>SGST</td>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{isIgst ? '-' : '9%'}</td>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{isIgst ? '-' : fmtNum(totalTaxable)}</td>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{isIgst ? '-' : fmtNum(totalGstAmount / 2)}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>IGST</td>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>-</td>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>-</td>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>-</td>
+                                    </tr>
+                                    <tr style={{ background: '#f8fafc', fontWeight: 700 }}>
+                                        <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>Total GST Amount</td>
+                                        <td style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{fmtNum(totalGstAmount)}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </td>
+                        <td style={{ width: '2%', border: 'none' }} />
+                        <td style={{ width: '46%', verticalAlign: 'top', padding: 0, border: 'none' }}>
+                            <table style={{ width: '100%', borderCollapse: 'collapse', border: '1px solid #ccc' }}>
+                                <thead><tr><th style={{ border: 'none', padding: 0 }}><SectionHeader label="Amount Summary" /></th></tr></thead>
+                                <tbody>
+                                    {([
+                                        ['Debit Amount (Before Tax)', fmtNum(totalTaxable), false],
+                                        ['GST Amount', fmtNum(totalGstAmount), false],
+                                        ['TOTAL DEBIT NOTE VALUE', fmtNum(grandTotal), true],
+                                        ['TDS Impact (If Any)', fmtNum(tdsAmount), false],
+                                        ['NET PAYABLE AMOUNT', fmtNum(netPayable), true],
+                                    ] as [string, string, boolean][]).map(([label, value, strong]) => (
+                                        <tr key={label} style={strong ? { background: '#fff7ed' } : undefined}>
+                                            <td style={{ border: '1px solid #ccc', padding: '5px 6px', fontWeight: strong ? 700 : 500 }}>{label}</td>
+                                            <td style={{ border: '1px solid #ccc', padding: '5px 6px', textAlign: 'right', fontWeight: strong ? 700 : 500, color: strong ? '#c2410c' : undefined }}>₹ {value}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 4, border: '1px solid #ccc' }}>
+                <thead><tr><th colSpan={4} style={{ border: 'none', padding: 0 }}><SectionHeader label="Additional Details" /></th></tr></thead>
+                <tbody>
+                    <tr style={{ background: '#f8fafc', fontWeight: 700, fontSize: 10 }}>
+                        <td style={{ border: '1px solid #ccc', padding: '4px 8px', width: '34%' }}>This Debit Note is raised against the following invoice.</td>
+                        <td style={{ border: '1px solid #ccc', padding: '4px 8px', textAlign: 'center' }}>Against Invoice No.</td>
+                        <td style={{ border: '1px solid #ccc', padding: '4px 8px', textAlign: 'center' }}>Against Invoice Date</td>
+                        <td style={{ border: '1px solid #ccc', padding: '4px 8px', textAlign: 'center' }}>Adjustment Type</td>
+                    </tr>
+                    <tr>
+                        <td style={{ border: '1px solid #ccc', padding: '6px 8px' }} />
+                        <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center' }}>{firstAllocation?.invoiceNo || '—'}</td>
+                        <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center' }}>{fmtDate(firstAllocation?.invoiceDate)}</td>
+                        <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center' }}>Against Invoice</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 4 }}>
+                <tbody>
+                    <tr>
+                        <td style={{ width: '70%', border: '1px solid #ccc', padding: '4px 6px', verticalAlign: 'middle' }}>
+                            <span style={{ fontWeight: 700 }}>Amount in Words: </span>{toWords(grandTotal)}
+                        </td>
+                        <td style={{ width: '30%', border: '1px solid #ccc', background: NAVY, color: '#fff', padding: '4px 6px', verticalAlign: 'middle' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                                <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Debit Note Value</span>
+                                <span style={{ fontSize: 15, fontWeight: 700 }}>₹ {fmtNum(grandTotal)}</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 4, border: '1px solid #ccc' }}>
+                <tbody>
+                    <tr>
+                        {[
+                            { label: 'Prepared By', name: document?.preparedBy?.name, designation: document?.preparedBy?.designation },
+                            { label: 'Reviewed By', name: document?.reviewedBy?.name, designation: document?.reviewedBy?.designation },
+                        ].map((col) => (
+                            <td key={col.label} style={{ width: '25%', border: 'none', borderRight: '1px solid #ccc', padding: '8px', verticalAlign: 'top', fontSize: 10 }}>
+                                <div style={{ fontWeight: 700, marginBottom: 4 }}>{col.label}</div>
+                                <DetailRows rows={[
+                                    ['Name', col.name],
+                                    ['Designation', col.designation],
+                                    ['Date', fmtDate(document?.debit_note_date)],
+                                ]} />
+                                <div style={{ borderTop: '1px solid #ccc', marginTop: 40, paddingTop: 4, textAlign: 'center', color: '#888', fontStyle: 'italic', fontSize: 9 }}>(Signature)</div>
+                            </td>
+                        ))}
+                        <td style={{ width: '50%', border: 'none', padding: '8px', verticalAlign: 'top', fontSize: 10 }}>
+                            <div style={{ fontWeight: 700, marginBottom: 4 }}>Authorized Signatory</div>
+                            <div style={{ height: 55, marginTop: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+                                {sigUrl && <img loading="lazy" decoding="async" src={sigUrl} alt="Signature" style={{ maxHeight: 55, maxWidth: 120 }} />}
+                                {stampUrl && <img loading="lazy" decoding="async" src={stampUrl} alt="Stamp" style={{ maxHeight: 55, maxWidth: 55 }} />}
+                            </div>
+                            <div style={{ borderTop: '1px solid #ccc', marginTop: 20, paddingTop: 4, fontWeight: 700, width: '60%', marginLeft: 'auto', marginRight: 'auto', textAlign: 'center' }}>Auth. Sign.</div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div style={{ textAlign: 'center', fontSize: 10, color: '#666', marginBottom: 8 }}>
+                <b>Note:</b> Applicable TDS, if deducted, must be supported with TDS certificate / Form 16A.
+            </div>
+
+            <div style={{ position: 'relative', height: 62, overflow: 'hidden', border: '1px solid #ccc' }}>
+                <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 34, background: NAVY, zIndex: 0 }} />
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, fontSize: 10, fontWeight: 600, color: NAVY, zIndex: 2 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <Phone size={12} />
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" /></svg>
+                        +91 96549 00525
+                    </div>
+                    <div style={{ width: 1, height: 12, background: '#ccc' }} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Mail size={12} /> info@namogangewellness.com</div>
+                    <div style={{ width: 1, height: 12, background: '#ccc' }} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Globe size={12} /> www.namogangewellness.com</div>
+                </div>
+                <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 10.5, zIndex: 2 }}>
+                    <span>This is a computer generated document and does not require a physical signature.</span>
+                </div>
+            </div>
+        </div>
+    );
+}
