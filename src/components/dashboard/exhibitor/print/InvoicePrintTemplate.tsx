@@ -37,7 +37,7 @@ interface Props {
     invoiceCopy?: string;
 }
 
-export default function InvoicePrintTemplate({ document, company, bankDetails, settings, headerImageUrl, heading = 'TAX INVOICE', invoiceCopy = 'ORIGINAL INVOICE' }: Props) {
+export default function InvoicePrintTemplate({ document, company, bankDetails, settings, headerImageUrl, heading = 'TAX INVOICE', invoiceCopy = 'ORIGINAL COPY' }: Props) {
     const cur = '₹';
     const fmtNum = (n: any) => Math.round(Number(n || 0)).toLocaleString('en-IN');
 
@@ -212,7 +212,7 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                     <img loading="lazy" decoding="async" src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
                 </div>
             )}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', marginBottom: 4, paddingTop: 2, paddingBottom: 2, color: '#0d1f3c', textTransform: 'uppercase' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', marginBottom: 2, paddingTop: 0, paddingBottom: 0, color: '#0d1f3c', textTransform: 'uppercase' }}>
                 <span aria-hidden="true" />
                 <div style={{ fontWeight: 400, fontSize: 18 }}>{heading}</div>
                 <div style={{ justifySelf: 'end', fontWeight: 700, fontSize: 11 }}>{invoiceCopy}</div>
@@ -476,6 +476,7 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                         <td style={{ width: '40%', border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10, background: '#fafafa' }}>
                             <div style={{ fontWeight: 700, marginBottom: 2 }}>Payment Conditions:</div>
                             <div>1. 100% Advance Payment.</div>
+                            <div>2. Applicable TDS, if deducted, must be supported with TDS certificate / Form 16A.</div>
                         </td>
                     </tr>
                 </tbody>
