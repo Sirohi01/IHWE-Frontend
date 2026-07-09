@@ -60,14 +60,14 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
         const qty = Number(item.qty || 0);
         const sourceQty = Number(item.sourceQty || item.piQty || item.originalQty || 0);
         const ratio = sourceQty > 0 ? qty / sourceQty : 1;
-        
+
         const rateAmount = Number(item.rate || 0) * qty;
         const amount = Number(item.amount || rateAmount) * ratio;
-        
+
         // discount stored in DB is the absolute discount amount for the full sourceQty
         const discountAmt = Number(item.discount ?? item.discountAmount ?? item.disc ?? 0) * ratio;
         const computedTaxable = amount - discountAmt;
-        
+
         const gstRate = parseFloat(item.gstRate) || parseFloat(item.gst_per) || 18;
         const computedGstAmount = (computedTaxable * gstRate) / 100;
 
@@ -75,7 +75,7 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
         if (key === 'discount') return discountAmt;
         if (key === 'taxable') return computedTaxable;
         if (key === 'gstAmount') return computedGstAmount;
-        
+
         return 0;
     };
     const totalTaxable = items.reduce((sum: number, it: any) => sum + lineValue(it, 'taxable'), 0);
@@ -89,7 +89,7 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
         acc[hsn].gst += lineValue(item, 'gstAmount');
         return acc;
     }, {}));
-    
+
     const companyName = settings?.companyName || 'Namo Gange Wellness Pvt. Ltd.';
     const companyGst = settings?.companyGst || settings?.companyGstin || '07AAFCN9238F1Z6';
 
@@ -233,13 +233,16 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
     const renderHeaderAndTitle = () => (
         <>
             {headerImageUrl && (
-                <div style={{ marginBottom: 5, textAlign: 'center' }}>
+                <div className="invoice-header-image" style={{ marginBottom: 0, textAlign: 'center' }}>
                     <img loading="lazy" decoding="async" src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
                 </div>
             )}
-            <div style={{ position: 'relative', textAlign: 'center', marginBottom: 2, paddingTop: 0, paddingBottom: 0 }}>
-                <div style={{ fontWeight: 400, fontSize: 18, color: '#0d1f3c', marginBottom: 0 }}>DELIVERY CHALLAN</div>
-                <div style={{ position: 'absolute', right: 0, top: 5, fontWeight: 700, fontSize: 10, color: '#0d1f3c', textTransform: 'uppercase', textAlign: 'right', whiteSpace: 'nowrap' }}>{copyLabel}</div>
+            <div
+                className="invoice-title-bar"
+                style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 22, marginBottom: 0, paddingTop: 0, paddingBottom: 0, color: '#0d1f3c', textTransform: 'uppercase' }}
+            >
+                <div style={{ fontWeight: 500, fontSize: 15, lineHeight: 1, textAlign: 'center' }}>DELIVERY CHALLAN</div>
+                <div className="invoice-copy-label" style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', fontWeight: 600, fontSize: 11, lineHeight: 1, paddingRight: 2, whiteSpace: 'nowrap', textAlign: 'right', letterSpacing: '-0.35px' }}>{copyLabel}</div>
             </div>
         </>
     );
@@ -467,18 +470,18 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
                     <col style={{ width: '34%' }} />
                 </colgroup>
                 <thead>
-                    <tr>
-                        <th style={{ border: 'none', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fff', textAlign: 'center' }}>
+                    <tr style={{ background: '#fafafa' }}>
+                        <th style={{ border: 'none', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fafafa', textAlign: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#0d1f3c', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
                                 <Landmark size={14} strokeWidth={2} /> NGWPL Bank Details
                             </div>
                         </th>
-                        <th style={{ border: 'none', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fff', textAlign: 'center' }}>
+                        <th style={{ border: 'none', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fafafa', textAlign: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#0d1f3c', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
                                 <SquarePen size={14} strokeWidth={2} /> Receiver&apos;s Acknowledgement
                             </div>
                         </th>
-                        <th style={{ border: 'none', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fff', textAlign: 'center' }}>
+                        <th style={{ border: 'none', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fafafa', textAlign: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#0d1f3c', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
                                 <SquarePen size={14} strokeWidth={2} /> For {companyName}
                             </div>
@@ -508,19 +511,16 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
                         </td>
                         <td style={{ border: 'none', borderRight: '1px solid #ccc', padding: '16px 8px 8px', verticalAlign: 'top', fontSize: 10 }}>
                             <div>Received the above goods / services in good condition.</div>
-                            <div style={{ borderTop: '1px solid #ccc', margin: '60px 10px 8px' }}></div>
-                            <div style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontSize: 9, marginTop: 6 }}>(Signature &amp; Company Seal)</div>
+                            <div style={{ borderTop: '1px solid #ccc', margin: '75px 10px 8px' }}></div>
+                            <div style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontSize: 10, marginTop: 6 }}>(Signature &amp; Company Seal)</div>
                         </td>
                         <td style={{ border: 'none', padding: '2px 8px 8px', textAlign: 'center', verticalAlign: 'bottom' }}>
-                            {(settings?.companyStamp || settings?.authorizedSignature) ? (
-                                <div style={{ height: 55, marginTop: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12, overflow: 'hidden' }}>
-                                    {settings?.authorizedSignature && <img loading="lazy" decoding="async" src={settings.authorizedSignature} alt="" style={{ maxHeight: 55, maxWidth: 120, objectFit: 'contain' }} />}
-                                    {settings?.companyStamp && <img loading="lazy" decoding="async" src={settings.companyStamp} alt="" style={{ maxHeight: 55, maxWidth: 55, objectFit: 'contain' }} />}
-                                </div>
-                            ) : (
-                                <div style={{ height: 55, marginTop: 15 }}></div>
-                            )}
-                            <div style={{ borderTop: '1px solid #ccc', marginTop: 20, paddingTop: 4, fontWeight: 700, width: '60%', marginLeft: 'auto', marginRight: 'auto' }}>Auth. Sign.</div>
+                            <div style={{ height: 55, marginTop: 15, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+                                {settings?.authorizedSignature && <img loading="lazy" decoding="async" src={settings.authorizedSignature} alt="Signature" style={{ maxHeight: 55, maxWidth: 120, objectFit: 'contain' }} />}
+                                {settings?.companyStamp && <img loading="lazy" decoding="async" src={settings.companyStamp} alt="Stamp" style={{ maxHeight: 55, maxWidth: 55, objectFit: 'contain' }} />}
+                            </div>
+                            <div style={{ borderTop: '1px solid #ccc', margin: '35px 10px 8px' }}></div>
+                            <div style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontSize: 10, marginTop: 6 }}>Authorized Signatory.</div>
                         </td>
                     </tr>
                 </tbody>
