@@ -513,7 +513,7 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
                                         <tr key={label}>
                                             <td style={labelCell}>{label}</td>
                                             <td style={colonCell}>:</td>
-                                            <td style={{ ...valueCell, wordBreak: 'break-word', whiteSpace: 'normal', ...(label === 'IFSC Code' ? { fontWeight: 700, color: '#0d1f3c' } : {}) }}>{value}</td>
+                                            <td style={{ ...valueCell, wordBreak: 'break-word', whiteSpace: 'normal' }}>{value}</td>
                                         </tr>
                                     ))}
                                 </tbody>
