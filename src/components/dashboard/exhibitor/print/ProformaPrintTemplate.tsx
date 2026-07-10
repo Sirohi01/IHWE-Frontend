@@ -56,7 +56,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
     const companyName = 'Namo Gange Wellness Pvt. Ltd.';
 
     const PROFORMA_EVENT_NAME = '9th Edition of International Health & Wellness Expo (IHWE Global Edition)';
-    const PROFORMA_PLACE_OF_SUPPLY = 'Hall Nos. 8, 9 & 10, Pragati Maidan, New Delhi - 110001, Bharat';
+    const PROFORMA_PLACE_OF_SUPPLY = 'Hall Nos. 8, 9 & 10, Pragati Maidan, New Delhi - 110001, India';
     const PROFORMA_EVENT_STATE = 'Delhi';
     const PROFORMA_PLACE_OF_SUPPLY_WITH_CODE = 'Delhi (07)';
     const PROFORMA_EVENT_GST_NO = '07AAFCN9238F1Z6';
@@ -72,7 +72,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
         company?.contact_person
     ) || '—';
     const clientContactPerson = normalizeContactName(rawClientContactPerson, titledContactPerson);
-    
+
     const clientContactNo = getFirstCleanValue(
         document?.contact_no,
         document?.contact_phone,
@@ -85,7 +85,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
         company?.landline,
         company?.mobile
     ) || '—';
-    
+
     const clientEmail = getFirstCleanValue(
         document?.company_email,
         document?.contact_email,
@@ -94,7 +94,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
         company?.companyEmail,
         company?.email
     ) || '—';
-    
+
     const clientAddressLine = getFirstAddressValue(
         document?.company_addr,
         document?.address,
@@ -146,7 +146,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
         (document?.event_place_of_supply || document?.consignee_addr || PROFORMA_PLACE_OF_SUPPLY)
             .replace(/,\s*Bharat$/i, ''),
         PROFORMA_EVENT_STATE,
-        'Bharat',
+        'India',
     ]);
     const shipmentAddress = eventPlaceOfSupply;
     const eventGstNo = document?.event_gst_no || PROFORMA_EVENT_GST_NO;
@@ -192,14 +192,13 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
     const renderHeaderAndTitle = () => (
         <>
             {headerImageUrl && (
-                <div style={{ marginBottom: 5, textAlign: 'center' }}>
+                <div style={{ marginBottom: 0, textAlign: 'center' }}>
                     <img loading="lazy" decoding="async" src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
                 </div>
             )}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center', marginBottom: 2, paddingTop: 0, paddingBottom: 0, color: '#0d1f3c', textTransform: 'uppercase' }}>
-                <span aria-hidden="true" />
-                <div style={{ fontWeight: 400, fontSize: 18 }}>PROFORMA INVOICE</div>
-                <div style={{ justifySelf: 'end', fontWeight: 700, fontSize: 11 }}>{invoiceCopy}</div>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 22, marginBottom: 0, paddingTop: 0, paddingBottom: 0, color: '#0d1f3c', textTransform: 'uppercase' }}>
+                <div style={{ fontWeight: 500, fontSize: 15, lineHeight: 1, textAlign: 'center' }}>PROFORMA INVOICE</div>
+                <div style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', fontWeight: 600, fontSize: 11, lineHeight: 1, paddingRight: 2, whiteSpace: 'nowrap', textAlign: 'right', letterSpacing: '-0.35px' }}>{invoiceCopy}</div>
             </div>
         </>
     );
@@ -343,8 +342,8 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                             </td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.hsn}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.qty}</td>
-                              <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center', whiteSpace: 'nowrap' }}>{formatSize(item?.area || item?.stall_area)}</td>
-                              <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center', whiteSpace: 'nowrap' }}>{formatArea(item?.size || item?.stall_size)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center', whiteSpace: 'nowrap' }}>{formatSize(item?.area || item?.stall_area)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center', whiteSpace: 'nowrap' }}>{formatArea(item?.size || item?.stall_size)}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>Nos.</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(item?.rate)}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{fmtNum(item?.disc)}%</td>
@@ -452,18 +451,18 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                     <col style={{ width: '34%' }} />
                 </colgroup>
                 <thead>
-                    <tr>
-                        <th style={{ border: 'none', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fff', textAlign: 'center' }}>
+                    <tr style={{ background: '#fafafa' }}>
+                        <th style={{ border: 'none', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fafafa', textAlign: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#0d1f3c', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
                                 <Landmark size={14} strokeWidth={2} /> NGWPL Bank Details
                             </div>
                         </th>
-                        <th style={{ border: 'none', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fff', textAlign: 'center' }}>
+                        <th style={{ border: 'none', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fafafa', textAlign: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#0d1f3c', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
                                 <SquarePen size={14} strokeWidth={2} /> Receiver&apos;s Acknowledgement
                             </div>
                         </th>
-                        <th style={{ border: 'none', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fff', textAlign: 'center' }}>
+                        <th style={{ border: 'none', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fafafa', textAlign: 'center' }}>
                             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#0d1f3c', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
                                 <SquarePen size={14} strokeWidth={2} /> For {companyName}
                             </div>
@@ -505,15 +504,16 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                         </td>
                         <td style={{ border: 'none', borderRight: '1px solid #ccc', padding: '16px 8px 8px', verticalAlign: 'top', fontSize: 10 }}>
                             <div>Received the above goods / services in good condition.</div>
-                            <div style={{ borderTop: '1px solid #ccc', margin: '60px 10px 8px' }}></div>
-                            <div style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontSize: 9, marginTop: 6 }}>(Signature &amp; Company Seal)</div>
+                            <div style={{ borderTop: '1px solid #ccc', margin: '75px 10px 8px' }}></div>
+                            <div style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontSize: 10, marginTop: 6 }}>(Signature &amp; Company Seal)</div>
                         </td>
                         <td style={{ border: 'none', padding: '2px 8px 8px', textAlign: 'center', verticalAlign: 'bottom' }}>
                             <div style={{ height: 55, marginTop: 15, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
                                 {sigUrl && <img loading="lazy" decoding="async" src={sigUrl} alt="Signature" style={{ maxHeight: 55, maxWidth: 120 }} />}
                                 {stampUrl && <img loading="lazy" decoding="async" src={stampUrl} alt="Stamp" style={{ maxHeight: 55, maxWidth: 55 }} />}
                             </div>
-                            <div style={{ borderTop: '1px solid #ccc', marginTop: 20, paddingTop: 4, fontWeight: 700, width: '60%', marginLeft: 'auto', marginRight: 'auto' }}>Auth. Sign.</div>
+                            <div style={{ borderTop: '1px solid #ccc', margin: '35px 10px 8px' }}></div>
+                            <div style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontSize: 10, marginTop: 6 }}>Authorized Signatory.</div>
                         </td>
                     </tr>
                 </tbody>

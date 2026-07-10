@@ -339,8 +339,40 @@ ${content.innerHTML}
                 )}
 
                 {/* ── TAX INVOICE TITLE ── */}
-                <div className="invoice-title-bar" style={{ textAlign: 'center', marginBottom: 8, paddingTop: 10, paddingBottom: 10 }}>
-                    <div style={{ fontWeight: 400, fontSize: 18, color: '#0d1f3c', marginBottom: 2, }}>PROFORMA INVOICE</div>
+                <div
+                    className="invoice-title-bar"
+                    style={{
+                        position: 'relative',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        minHeight: 22,
+                        marginBottom: 0,
+                        paddingTop: 0,
+                        paddingBottom: 0,
+                        color: '#0d1f3c',
+                        textTransform: 'uppercase',
+                    }}
+                >
+                    <div style={{ fontWeight: 500, fontSize: 15, lineHeight: 1, textAlign: 'center' }}>PROFORMA INVOICE</div>
+                    <div
+                        className="invoice-copy-label"
+                        style={{
+                            position: 'absolute',
+                            right: 0,
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            fontWeight: 600,
+                            fontSize: 11,
+                            lineHeight: 1,
+                            paddingRight: 2,
+                            whiteSpace: 'nowrap',
+                            textAlign: 'right',
+                            letterSpacing: '-0.35px',
+                        }}
+                    >
+                        ORIGINAL COPY
+                    </div>
                 </div>
 
                 {/* ── BUYER / SHIPMENT / INVOICE DETAILS (3 columns) ── */}
