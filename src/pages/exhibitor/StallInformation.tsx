@@ -252,7 +252,7 @@ export default function StallInformation() {
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 md:gap-3">
                     <div className="lg:col-span-6 bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden flex flex-col md:flex-row">
                         <div className="w-full md:w-[45%] relative min-h-[200px] md:min-h-[250px] bg-slate-100">
-                            <img src={stallImage} alt="Exhibition Stall" className="w-full h-full object-cover absolute inset-0" />
+                            <img loading="lazy" decoding="async" src={stallImage} alt="Exhibition Stall" className="w-full h-full object-cover absolute inset-0" />
                             <div className={`${isConfirmed ? 'bg-[#10b981]' : 'bg-amber-500'} absolute top-2 left-2 text-white text-[10px] font-bold px-2.5 py-1 rounded-full flex items-center gap-1 shadow-md`}>
                                 <CheckCircle2 size={11} />
                                 {isConfirmed ? 'Stall Confirmed' : 'Stall Pending'}

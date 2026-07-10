@@ -1901,7 +1901,7 @@ export default function StallExtras({ data }: StallExtrasProps) {
                                                 <div key={item._id} className="border border-emerald-200 bg-emerald-50/40 p-3 rounded-[2px] flex items-start gap-3">
                                                     <div className="w-10 h-10 bg-white border border-emerald-100 rounded-sm overflow-hidden flex-shrink-0 flex items-center justify-center">
                                                         {item.imageUrl ? (
-                                                            <img src={`${SERVER_URL}${item.imageUrl}`} alt={item.name} className="w-full h-full object-cover" />
+                                                            <img loading="lazy" decoding="async" src={`${SERVER_URL}${item.imageUrl}`} alt={item.name} className="w-full h-full object-cover" />
                                                         ) : (
                                                             <Gift size={14} className="text-emerald-400" />
                                                         )}
