@@ -237,12 +237,9 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
                     <img loading="lazy" decoding="async" src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
                 </div>
             )}
-            <div
-                className="invoice-title-bar"
-                style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 22, marginBottom: 0, paddingTop: 0, paddingBottom: 0, color: '#0d1f3c', textTransform: 'uppercase' }}
-            >
-                <div style={{ fontWeight: 500, fontSize: 15, lineHeight: 1, textAlign: 'center' }}>DELIVERY CHALLAN</div>
-                <div className="invoice-copy-label" style={{ position: 'absolute', right: 0, top: '50%', transform: 'translateY(-50%)', fontWeight: 600, fontSize: 11, lineHeight: 1, paddingRight: 2, whiteSpace: 'nowrap', textAlign: 'right', letterSpacing: '-0.35px' }}>{copyLabel}</div>
+            <div className="invoice-title-bar" style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 22, marginBottom: 0, paddingTop: 10, paddingBottom: 4, color: '#0d1f3c', textTransform: 'uppercase' }}>
+                <div style={{ fontWeight: 500, fontSize: 18, lineHeight: 1, textAlign: 'center' }}>DELIVERY CHALLAN</div>
+                <div className="invoice-copy-label" style={{ position: 'absolute', right: 0, bottom: 0, fontWeight: 600, fontSize: 11, lineHeight: 1, paddingRight: 2, whiteSpace: 'nowrap', textAlign: 'right', letterSpacing: '-0.35px' }}>{copyLabel}</div>
             </div>
         </>
     );
