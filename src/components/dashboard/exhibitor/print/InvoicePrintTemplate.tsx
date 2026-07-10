@@ -465,7 +465,7 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                 <tbody>
                     <tr>
                         <td style={{ width: '60%', border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10, background: '#fafafa' }}>
-                            <div style={{ fontWeight: 700, marginBottom: 2 }}>Terms and Conditions:</div>
+                            <div style={{ fontWeight: 700, marginBottom: 4, background: '#F8FAFC', borderBottom: '1px solid #ccc', padding: '4px 8px', margin: '-6px -8px 6px' }}>Terms and Conditions:</div>
                             <div style={{ whiteSpace: 'pre-wrap' }}>
                                 {estimateTerms?.termsAndConditions?.length ? (
                                     estimateTerms.termsAndConditions.map((t: string, i: number) => <div key={i}>{i + 1}. {t}</div>)
@@ -482,7 +482,7 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                             </div>
                         </td>
                         <td style={{ width: '40%', border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10, background: '#fafafa' }}>
-                            <div style={{ fontWeight: 700, marginBottom: 2 }}>Payment Conditions:</div>
+                            <div style={{ fontWeight: 700, marginBottom: 4, background: '#F8FAFC', borderBottom: '1px solid #ccc', padding: '4px 8px', margin: '-6px -8px 6px' }}>Payment Conditions:</div>
                             <div style={{ whiteSpace: 'pre-wrap' }}>
                                 {estimateTerms?.paymentConditions?.length ? (
                                     estimateTerms.paymentConditions.map((t: string, i: number) => <div key={i}>{i + 1}. {t}</div>)

@@ -435,7 +435,7 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
                 <tbody>
                     <tr>
                         <td style={{ ...td, width: '50%', verticalAlign: 'top', background: '#fafafa' }}>
-                            <div style={{ fontWeight: 800, marginBottom: 4 }}>Terms and Conditions:</div>
+                            <div style={{ fontWeight: 800, marginBottom: 6, background: '#F8FAFC', borderBottom: '1px solid #ccc', padding: '4px 8px', margin: '-6px -8px 6px' }}>Terms and Conditions:</div>
                             <div style={{ marginLeft: 4, whiteSpace: 'pre-wrap' }}>
                                 {estimateTerms?.termsAndConditions?.length ? (
                                     estimateTerms.termsAndConditions.map((t: string, i: number) => <div key={i}>{i + 1}. {t}</div>)
