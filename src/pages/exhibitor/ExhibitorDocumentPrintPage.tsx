@@ -106,7 +106,7 @@ export default function ExhibitorDocumentPrintPage() {
                     <ChallanPrintTemplate challan={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} />
                 ) : docType === 'proforma' ? (
                     <ProformaPrintTemplate document={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} />
-                ) : docType === 'creditnote' ? (
+                ) : docType === 'creditnote' || docType === 'legacycreditnote' ? (
                     <CreditNotePrintTemplate document={document} company={company} settings={settings} headerImageUrl={headerImageUrl} />
                 ) : docType === 'debitnote' ? (
                     <DebitNotePrintTemplate document={document} company={company} settings={settings} headerImageUrl={headerImageUrl} />

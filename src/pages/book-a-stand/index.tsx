@@ -743,6 +743,27 @@ const BookAStand = () => {
             return;
         }
 
+        // Best-effort re-check right before starting payment — the form can sit open for
+        // several minutes (filling details, OTP verification) during which someone else
+        // may have booked this same stall. The booking itself is still guarded atomically
+        // server-side regardless of this check, but this avoids a customer going through
+        // the whole OTP + payment flow only to hit that guard at the very end.
+        if (selectedEventId) {
+            try {
+                const latestStalls = await stallApi.getByEvent(selectedEventId);
+                const stillAvailable = Array.isArray(latestStalls) && latestStalls.some(
+                    (s: any) => s._id === formData.participation.stallNo
+                );
+                if (!stillAvailable) {
+                    Swal.fire('Stall No Longer Available', 'This stall was just booked by someone else. Please select a different stall.', 'error');
+                    return;
+                }
+            } catch {
+                // If the re-check itself fails (network hiccup), don't block submission —
+                // the server-side atomic booking check is still the real safety net.
+            }
+        }
+
         setIsLoading(true);
         try {
             if (formData.paymentMode === 'online') {

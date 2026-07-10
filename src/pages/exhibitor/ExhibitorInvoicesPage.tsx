@@ -69,15 +69,8 @@ const TAB_DOC_TYPES: Record<string, string[]> = {
     'Invoice': ['Invoice'],
     'Delivery Challan': ['Delivery Challan'],
     'Payment': ['Payment'],
-    'Credit Notes': ['Debit Note'],
-    'Debit Notes': ['Credit Note', 'Credit Note (Legacy)'],
-};
-
-const getDisplayDocumentType = (type: string) => {
-    if (type === 'Debit Note') return 'Credit Note';
-    if (type === 'Credit Note') return 'Debit Note';
-    if (type === 'Credit Note (Legacy)') return 'Debit Note (Legacy)';
-    return type;
+    'Credit Notes': ['Credit Note', 'Credit Note (Legacy)'],
+    'Debit Notes': ['Debit Note'],
 };
 
 const STATUS_STYLES: Record<string, string> = {
@@ -135,6 +128,7 @@ const DOC_TYPE_SLUGS: Record<string, string> = {
     'Proforma Invoice': 'proforma',
     'Delivery Challan': 'challan',
     'Credit Note': 'creditnote',
+    'Credit Note (Legacy)': 'legacycreditnote',
     'Debit Note': 'debitnote',
 };
 
