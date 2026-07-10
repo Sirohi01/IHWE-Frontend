@@ -24,6 +24,7 @@ export default function ExhibitorPrintAllInvoicesPage() {
     const [companyMap, setCompanyMap] = useState<Record<string, any>>({});
     const [settings, setSettings] = useState<any>(null);
     const [bankDetails, setBankDetails] = useState<any>(null);
+    const [estimateTerms, setEstimateTerms] = useState<any>(null);
     const [headerImageUrl, setHeaderImageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [isExporting, setIsExporting] = useState(false);
@@ -72,12 +73,15 @@ export default function ExhibitorPrintAllInvoicesPage() {
                 setDocuments(validDocs);
 
                 // Fetch global settings, banks, templates
-                const [settingsData, banksRes, templateRes] = await Promise.all([
+                const [settingsData, banksRes, templateRes, performaTerms, taxTerms, challanTerms] = await Promise.all([
                     settingsApi.get().catch(() => null),
                     fetch(`${SERVER_URL}/api/banks`).then((r) => r.json()).catch(() => []),
                     fetch(`${SERVER_URL}/api/message-templates/exhibitor-registration`, {
                         headers: { Authorization: `Bearer ${token}` },
                     }).then((r) => r.json()).catch(() => null),
+                    fetch(`${SERVER_URL}/api/estimate-terms-config/performa`).then((r) => r.json()).catch(() => null),
+                    fetch(`${SERVER_URL}/api/estimate-terms-config/tax-invoice`).then((r) => r.json()).catch(() => null),
+                    fetch(`${SERVER_URL}/api/estimate-terms-config/delivery-challan`).then((r) => r.json()).catch(() => null),
                 ]);
 
                 setSettings(settingsData ? {
@@ -88,6 +92,12 @@ export default function ExhibitorPrintAllInvoicesPage() {
 
                 const banks = Array.isArray(banksRes) ? banksRes : [];
                 setBankDetails(banks.find((b: any) => b.status === 'active') || banks[0] || null);
+
+                setEstimateTerms({
+                    proforma: performaTerms?.success ? performaTerms.data : null,
+                    invoice: taxTerms?.success ? taxTerms.data : null,
+                    challan: challanTerms?.success ? challanTerms.data : null,
+                });
 
                 const img = templateRes?.data?.headerImage || templateRes?.headerImage;
                 if (img) setHeaderImageUrl(mediaUrl(img));
@@ -219,15 +229,16 @@ export default function ExhibitorPrintAllInvoicesPage() {
                 {documents.map((doc, index) => {
                     const type = doc._docType;
                     const company = doc.companyId ? companyMap[doc.companyId] : null;
+                    const terms = type === 'challan' ? estimateTerms?.challan : type === 'proforma' ? estimateTerms?.proforma : estimateTerms?.invoice;
 
                     return (
                         <div key={doc._id || index} className="print-page-wrapper">
                             {type === 'challan' ? (
-                                <ChallanPrintTemplate challan={doc} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} />
+                                <ChallanPrintTemplate challan={doc} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} estimateTerms={terms} />
                             ) : type === 'proforma' ? (
-                                <ProformaPrintTemplate document={doc} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} />
+                                <ProformaPrintTemplate document={doc} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} estimateTerms={terms} />
                             ) : (
-                                <InvoicePrintTemplate document={doc} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} heading="TAX INVOICE" />
+                                <InvoicePrintTemplate document={doc} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} heading="TAX INVOICE" estimateTerms={terms} />
                             )}
                         </div>
                     );

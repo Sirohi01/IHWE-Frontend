@@ -25,6 +25,7 @@ export default function ExhibitorDocumentPrintPage() {
     const [company, setCompany] = useState<any>(null);
     const [settings, setSettings] = useState<any>(null);
     const [bankDetails, setBankDetails] = useState<any>(null);
+    const [estimateTerms, setEstimateTerms] = useState<any>(null);
     const [headerImageUrl, setHeaderImageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
     const [isExporting, setIsExporting] = useState(false);
@@ -46,12 +47,17 @@ export default function ExhibitorDocumentPrintPage() {
                 }
                 setDocument(docJson.document);
 
-                const [settingsData, banksRes, templateRes] = await Promise.all([
+                let termEndpoint = 'performa';
+                if (docType === 'challan') termEndpoint = 'delivery-challan';
+                else if (docType !== 'proforma' && docType !== 'creditnote' && docType !== 'debitnote' && docType !== 'legacycreditnote') termEndpoint = 'tax-invoice';
+
+                const [settingsData, banksRes, templateRes, termsRes] = await Promise.all([
                     settingsApi.get().catch(() => null),
                     fetch(`${SERVER_URL}/api/banks`).then((r) => r.json()).catch(() => []),
                     fetch(`${SERVER_URL}/api/message-templates/exhibitor-registration`, {
                         headers: { Authorization: `Bearer ${token}` },
                     }).then((r) => r.json()).catch(() => null),
+                    fetch(`${SERVER_URL}/api/estimate-terms-config/${termEndpoint}`).then((r) => r.json()).catch(() => null),
                 ]);
                 setSettings(settingsData ? {
                     ...settingsData,
@@ -60,6 +66,9 @@ export default function ExhibitorDocumentPrintPage() {
                 } : null);
                 const banks = Array.isArray(banksRes) ? banksRes : [];
                 setBankDetails(banks.find((b: any) => b.status === 'active') || banks[0] || null);
+                if (termsRes?.success && termsRes?.data) {
+                    setEstimateTerms(termsRes.data);
+                }
                 const img = templateRes?.data?.headerImage || templateRes?.headerImage;
                 if (img) setHeaderImageUrl(mediaUrl(img));
 
@@ -157,15 +166,15 @@ export default function ExhibitorDocumentPrintPage() {
 
             <div className="print-root" ref={printRef}>
                 {docType === 'challan' ? (
-                    <ChallanPrintTemplate challan={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} />
+                    <ChallanPrintTemplate challan={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} estimateTerms={estimateTerms} />
                 ) : docType === 'proforma' ? (
-                    <ProformaPrintTemplate document={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} />
+                    <ProformaPrintTemplate document={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} estimateTerms={estimateTerms} />
                 ) : docType === 'creditnote' || docType === 'legacycreditnote' ? (
                     <CreditNotePrintTemplate document={document} company={company} settings={settings} headerImageUrl={headerImageUrl} />
                 ) : docType === 'debitnote' ? (
                     <DebitNotePrintTemplate document={document} company={company} settings={settings} headerImageUrl={headerImageUrl} />
                 ) : (
-                    <InvoicePrintTemplate document={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} heading="TAX INVOICE" />
+                    <InvoicePrintTemplate document={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} heading="TAX INVOICE" estimateTerms={estimateTerms} />
                 )}
             </div>
 
