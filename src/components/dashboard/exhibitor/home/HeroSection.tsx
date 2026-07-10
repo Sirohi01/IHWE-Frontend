@@ -32,11 +32,20 @@ interface HeroSectionProps {
 }
 
 const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionProps) => {
-  const [slides, setSlides] = useState<any[]>([]);
+  const [slides, setSlides] = useState<any[]>(() => {
+    try {
+      const cached = localStorage.getItem('hero_slides_cache');
+      return cached ? JSON.parse(cached) : [];
+    } catch (e) {
+      return [];
+    }
+  });
   const [current, setCurrent] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(() => {
+    return !localStorage.getItem('hero_slides_cache');
+  });
 
   useEffect(() => {
     const fetchSlides = async () => {
@@ -63,6 +72,7 @@ const HeroSection = ({ onRegisterVisit, forceNewTab, hideStats }: HeroSectionPro
 
           if (activeSlides.length > 0) {
             setSlides(activeSlides);
+            localStorage.setItem('hero_slides_cache', JSON.stringify(activeSlides));
           }
         }
       } catch (error) {

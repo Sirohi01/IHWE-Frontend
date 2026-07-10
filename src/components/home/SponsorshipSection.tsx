@@ -13,14 +13,14 @@ import {
 import { motion, AnimatePresence, useInView, animate } from 'framer-motion';
 
 import bgImage from '../../assets/12345.png';
-import titleSponsorImg from '../../assets/icon111.png';
-import poweredByImg from '../../assets/icon222.png';
-import associateSponsorImg from '../../assets/icon333.png';
-import conferenceSponsorImg from '../../assets/icon444.png';
-import registrationSponsorImg from '../../assets/icon555.png';
-import lanyardSponsorImg from '../../assets/icon666.png';
-import wellnessSponsorImg from '../../assets/icon777.png';
-import digitalSponsorImg from '../../assets/icon888.png';
+import titleSponsorImg from '../../assets/icon111.webp';
+import poweredByImg from '../../assets/icon222.webp';
+import associateSponsorImg from '../../assets/icon333.webp';
+import conferenceSponsorImg from '../../assets/icon444.webp';
+import registrationSponsorImg from '../../assets/icon555.webp';
+import lanyardSponsorImg from '../../assets/icon666.webp';
+import wellnessSponsorImg from '../../assets/icon777.webp';
+import digitalSponsorImg from '../../assets/icon888.webp';
 import leafImg from '../../assets/leave.png';
 import logo1 from '../../logos/logo1.png';
 import logo2 from '../../logos/logo2.png';
