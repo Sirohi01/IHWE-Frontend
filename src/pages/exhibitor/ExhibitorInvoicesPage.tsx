@@ -235,6 +235,33 @@ export default function ExhibitorInvoicesPage() {
         window.open(`/exhibitor-print/${slug}/${doc.id}`, '_blank', 'noopener,noreferrer');
     };
 
+    const viewReceipt = async (doc: any) => {
+        const receiptWindow = window.open('', '_blank', 'noopener,noreferrer');
+
+        try {
+            const res = await fetch(`${API_URL.replace('/api', '')}/api/payments/${doc.id}/receipt`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (!res.ok) throw new Error('Failed to open receipt');
+
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+
+            if (receiptWindow) {
+                receiptWindow.location.href = url;
+            } else {
+                window.open(url, '_blank', 'noopener,noreferrer');
+            }
+
+            setTimeout(() => window.URL.revokeObjectURL(url), 60 * 1000);
+        } catch (err) {
+            if (receiptWindow) receiptWindow.close();
+            console.error('Failed to open receipt', doc.documentNo, err);
+            toast.error('Failed to open receipt');
+        }
+    };
+
     const handleDownloadStatement = async () => {
         if (!data?._id) return;
         try {
@@ -684,7 +711,7 @@ export default function ExhibitorInvoicesPage() {
                                                             )}
                                                             {doc.documentType === 'Payment' && (
                                                                 <button
-                                                                    onClick={() => window.open(`${API_URL.replace('/api', '')}/api/payments/${doc.id}/receipt`, '_blank')}
+                                                                    onClick={() => viewReceipt(doc)}
                                                                     title="View Receipt"
                                                                     className="p-1 text-blue-600 hover:bg-blue-50 rounded transition-colors"
                                                                 >
