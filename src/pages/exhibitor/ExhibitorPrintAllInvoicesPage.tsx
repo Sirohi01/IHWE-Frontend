@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { API_URL, SERVER_URL, settingsApi } from '@/lib/api';
 import InvoicePrintTemplate from '@/components/dashboard/exhibitor/print/InvoicePrintTemplate';
 import ProformaPrintTemplate from '@/components/dashboard/exhibitor/print/ProformaPrintTemplate';
 import ChallanPrintTemplate from '@/components/dashboard/exhibitor/print/ChallanPrintTemplate';
-import { Printer, Loader2, ArrowLeft } from 'lucide-react';
+import { Printer, Download, Loader2, ArrowLeft } from 'lucide-react';
+import { toPng } from 'html-to-image';
+import { jsPDF } from 'jspdf';
 
 const mediaUrl = (value?: string) => {
     if (!value) return null;
@@ -17,12 +19,15 @@ export default function ExhibitorPrintAllInvoicesPage() {
     const navigate = useNavigate();
     const token = localStorage.getItem('exhibitorToken');
 
+    const printRef = useRef<HTMLDivElement>(null);
     const [documents, setDocuments] = useState<any[]>([]);
     const [companyMap, setCompanyMap] = useState<Record<string, any>>({});
     const [settings, setSettings] = useState<any>(null);
     const [bankDetails, setBankDetails] = useState<any>(null);
+    const [estimateTerms, setEstimateTerms] = useState<any>(null);
     const [headerImageUrl, setHeaderImageUrl] = useState<string | null>(null);
     const [loading, setLoading] = useState(true);
+    const [isExporting, setIsExporting] = useState(false);
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -68,12 +73,15 @@ export default function ExhibitorPrintAllInvoicesPage() {
                 setDocuments(validDocs);
 
                 // Fetch global settings, banks, templates
-                const [settingsData, banksRes, templateRes] = await Promise.all([
+                const [settingsData, banksRes, templateRes, performaTerms, taxTerms, challanTerms] = await Promise.all([
                     settingsApi.get().catch(() => null),
                     fetch(`${SERVER_URL}/api/banks`).then((r) => r.json()).catch(() => []),
                     fetch(`${SERVER_URL}/api/message-templates/exhibitor-registration`, {
                         headers: { Authorization: `Bearer ${token}` },
                     }).then((r) => r.json()).catch(() => null),
+                    fetch(`${SERVER_URL}/api/estimate-terms-config/performa`).then((r) => r.json()).catch(() => null),
+                    fetch(`${SERVER_URL}/api/estimate-terms-config/tax-invoice`).then((r) => r.json()).catch(() => null),
+                    fetch(`${SERVER_URL}/api/estimate-terms-config/delivery-challan`).then((r) => r.json()).catch(() => null),
                 ]);
 
                 setSettings(settingsData ? {
@@ -84,6 +92,12 @@ export default function ExhibitorPrintAllInvoicesPage() {
 
                 const banks = Array.isArray(banksRes) ? banksRes : [];
                 setBankDetails(banks.find((b: any) => b.status === 'active') || banks[0] || null);
+
+                setEstimateTerms({
+                    proforma: performaTerms?.success ? performaTerms.data : null,
+                    invoice: taxTerms?.success ? taxTerms.data : null,
+                    challan: challanTerms?.success ? challanTerms.data : null,
+                });
 
                 const img = templateRes?.data?.headerImage || templateRes?.headerImage;
                 if (img) setHeaderImageUrl(mediaUrl(img));
@@ -128,6 +142,44 @@ export default function ExhibitorPrintAllInvoicesPage() {
         }
     }, [loading, error, documents, navigate]);
 
+    const handleDownloadPdf = async () => {
+        if (!printRef.current) return;
+        setIsExporting(true);
+        try {
+            await new Promise(resolve => setTimeout(resolve, 100)); // allow UI update
+            const dataUrl = await toPng(printRef.current, {
+                quality: 1,
+                pixelRatio: 2,
+                backgroundColor: '#ffffff',
+            });
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const imgProps = pdf.getImageProperties(dataUrl);
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+            
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            let heightLeft = pdfHeight;
+            let position = 0;
+
+            pdf.addImage(dataUrl, 'PNG', 0, position, pdfWidth, pdfHeight);
+            heightLeft -= pageHeight;
+
+            while (heightLeft >= 0) {
+                position = heightLeft - pdfHeight;
+                pdf.addPage();
+                pdf.addImage(dataUrl, 'PNG', 0, position, pdfWidth, pdfHeight);
+                heightLeft -= pageHeight;
+            }
+
+            pdf.save(`Bulk_Invoices_${new Date().getTime()}.pdf`);
+        } catch (error) {
+            console.error('Error generating PDF:', error);
+            alert('Failed to generate PDF. Use Print instead.');
+        } finally {
+            setIsExporting(false);
+        }
+    };
+
     if (loading) {
         return (
             <div className="min-h-screen flex flex-col items-center justify-center bg-white text-slate-500 gap-4">
@@ -147,34 +199,46 @@ export default function ExhibitorPrintAllInvoicesPage() {
 
     return (
         <div className="min-h-screen bg-[#f1f5f9] py-6">
-            <div className="no-print max-w-[1000px] mx-auto mb-4 flex justify-between items-center px-4">
+            <div className="no-print max-w-[1000px] mx-auto mb-6 flex justify-between items-center px-4 pt-4">
                 <button
                     onClick={() => navigate('/exhibitor-dashboard/invoices')}
-                    className="flex items-center gap-2 px-4 py-2 text-slate-600 hover:text-slate-900 transition-colors"
+                    className="flex items-center gap-2 px-4 py-2 text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-all font-medium text-sm"
                 >
-                    <ArrowLeft size={18} /> Back to Invoices
+                    <ArrowLeft size={16} /> Back to Invoices
                 </button>
-                <button
-                    onClick={() => window.print()}
-                    className="flex items-center gap-2 px-5 py-2.5 bg-[#00a651] hover:bg-[#00914a] text-white rounded-lg text-sm font-semibold shadow-sm transition-colors"
-                >
-                    <Printer size={18} /> Print / Save PDF
-                </button>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={() => window.print()}
+                        className="group relative flex items-center gap-2 px-5 py-2 bg-white border border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-600 hover:text-slate-900 rounded-lg text-sm font-medium shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-300 active:scale-95"
+                    >
+                        <Printer size={16} className="text-slate-400 group-hover:text-slate-600 transition-colors" /> 
+                        Print Invoices
+                    </button>
+                    <button
+                        onClick={handleDownloadPdf}
+                        disabled={isExporting}
+                        className="group relative flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-[#00a651] to-[#00914a] hover:from-[#00914a] hover:to-[#007f41] text-white rounded-lg text-sm font-medium shadow-[0_4px_12px_rgba(0,166,81,0.25)] hover:shadow-[0_6px_16px_rgba(0,166,81,0.35)] hover:-translate-y-0.5 transition-all duration-300 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
+                    >
+                        {isExporting ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} className="text-emerald-100 group-hover:text-white transition-colors" />} 
+                        {isExporting ? 'Generating PDFs...' : 'Download PDFs'}
+                    </button>
+                </div>
             </div>
 
-            <div className="print-root">
+            <div className="print-root" ref={printRef}>
                 {documents.map((doc, index) => {
                     const type = doc._docType;
                     const company = doc.companyId ? companyMap[doc.companyId] : null;
+                    const terms = type === 'challan' ? estimateTerms?.challan : type === 'proforma' ? estimateTerms?.proforma : estimateTerms?.invoice;
 
                     return (
                         <div key={doc._id || index} className="print-page-wrapper">
                             {type === 'challan' ? (
-                                <ChallanPrintTemplate challan={doc} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} />
+                                <ChallanPrintTemplate challan={doc} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} estimateTerms={terms} />
                             ) : type === 'proforma' ? (
-                                <ProformaPrintTemplate document={doc} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} />
+                                <ProformaPrintTemplate document={doc} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} estimateTerms={terms} />
                             ) : (
-                                <InvoicePrintTemplate document={doc} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} heading="TAX INVOICE" />
+                                <InvoicePrintTemplate document={doc} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} heading="TAX INVOICE" estimateTerms={terms} />
                             )}
                         </div>
                     );
