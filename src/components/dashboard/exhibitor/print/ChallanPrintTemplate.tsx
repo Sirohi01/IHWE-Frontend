@@ -31,9 +31,10 @@ interface Props {
     bankDetails?: any;
     headerImageUrl?: string | null;
     copyLabel?: string;
+    estimateTerms?: any;
 }
 
-export default function ChallanPrintTemplate({ challan, company, settings, bankDetails, headerImageUrl, copyLabel = 'ORIGINAL COPY' }: Props) {
+export default function ChallanPrintTemplate({ challan, company, settings, bankDetails, headerImageUrl, copyLabel = 'ORIGINAL COPY', estimateTerms }: Props) {
     const fmtNum = (value: any, decimals = 0) => {
         const number = Number(value);
         if (!Number.isFinite(number)) return decimals ? '0.00' : '0';
@@ -435,24 +436,36 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
                     <tr>
                         <td style={{ ...td, width: '50%', verticalAlign: 'top', background: '#fafafa' }}>
                             <div style={{ fontWeight: 800, marginBottom: 4 }}>Terms and Conditions:</div>
-                            <div style={{ marginLeft: 4 }}>
-                                <div>1. Goods once delivered will not be taken back.</div>
-                                <div>2. Please check the goods in presence of our delivery executive.</div>
-                                <div>3. Any discrepancy should be reported within 24 hours.</div>
-                                <div>4. Goods are delivered in good condition.</div>
-                                <div>5. Subject to Delhi Jurisdiction only.</div>
+                            <div style={{ marginLeft: 4, whiteSpace: 'pre-wrap' }}>
+                                {estimateTerms?.termsAndConditions?.length ? (
+                                    estimateTerms.termsAndConditions.map((t: string, i: number) => <div key={i}>{i + 1}. {t}</div>)
+                                ) : (
+                                    <>
+                                        <div>1. Goods once delivered will not be taken back.</div>
+                                        <div>2. Please check the goods in presence of our delivery executive.</div>
+                                        <div>3. Any discrepancy should be reported within 24 hours.</div>
+                                        <div>4. Goods are delivered in good condition.</div>
+                                        <div>5. Subject to Delhi Jurisdiction only.</div>
+                                    </>
+                                )}
                             </div>
                         </td>
                         <td style={{ ...td, width: '50%', verticalAlign: 'top', background: '#fafafa' }}>
                             <div style={{ fontWeight: 800, marginBottom: 4 }}>Delivery Notes:</div>
-                            <div style={{ marginLeft: 4 }}>
-                                <div>1. Goods delivered as per Purchase Order.</div>
-                                <div>2. For any queries, please contact our office.</div>
+                            <div style={{ marginLeft: 4, whiteSpace: 'pre-wrap' }}>
+                                {estimateTerms?.deliveryNotes?.length ? (
+                                    estimateTerms.deliveryNotes.map((t: string, i: number) => <div key={i}>{i + 1}. {t}</div>)
+                                ) : (
+                                    <>
+                                        <div>1. Goods delivered as per Purchase Order.</div>
+                                        <div>2. For any queries, please contact our office.</div>
+                                    </>
+                                )}
                             </div>
-                            {challan.remarks && (
+                            {(estimateTerms?.specialRemark || challan.remarks) && (
                                 <>
                                     <div style={{ fontWeight: 800, marginTop: 8, marginBottom: 4 }}>Special Remark:</div>
-                                    <div style={{ marginLeft: 4 }}>{challan.remarks}</div>
+                                    <div style={{ marginLeft: 4, whiteSpace: 'pre-wrap' }}>{estimateTerms?.specialRemark || challan.remarks}</div>
                                 </>
                             )}
                         </td>

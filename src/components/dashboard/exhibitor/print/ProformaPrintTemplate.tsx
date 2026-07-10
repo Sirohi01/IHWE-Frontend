@@ -32,8 +32,9 @@ interface Props {
     settings?: any;
     headerImageUrl?: string | null;
     invoiceCopy?: string;
+    estimateTerms?: any;
 }
-export default function ProformaPrintTemplate({ document, company, bankDetails, settings, headerImageUrl, invoiceCopy = 'ORIGINAL COPY' }: Props) {
+export default function ProformaPrintTemplate({ document, company, bankDetails, settings, headerImageUrl, invoiceCopy = 'ORIGINAL COPY', estimateTerms }: Props) {
     const fmtNum = (n: any) => Math.round(Number(n || 0)).toLocaleString('en-IN');
 
     const items = document?.items || [];
@@ -434,11 +435,23 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                     <tr>
                         <td style={{ width: '60%', border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10, background: '#fafafa' }}>
                             <div style={{ fontWeight: 700, marginBottom: 2 }}>Terms and Conditions:</div>
-                            <div style={{ whiteSpace: 'pre-wrap' }}>{document?.terms || '1. Payment must be made in favor of Namo Gange Wellness Pvt. Ltd. via Cheque / DD / RTGS / NEFT / UPI only.\n2. This is a Proforma Invoice and not a demand for payment.\n3. All disputes are subject to Delhi Jurisdiction only.'}</div>
+                            <div style={{ whiteSpace: 'pre-wrap' }}>
+                                {estimateTerms?.termsAndConditions?.length ? (
+                                    estimateTerms.termsAndConditions.map((t: string, i: number) => <div key={i}>{i + 1}. {t}</div>)
+                                ) : (
+                                    document?.terms || '1. Payment must be made in favor of Namo Gange Wellness Pvt. Ltd. via Cheque / DD / RTGS / NEFT / UPI only.\n2. This is a Proforma Invoice and not a demand for payment.\n3. All disputes are subject to Delhi Jurisdiction only.'
+                                )}
+                            </div>
                         </td>
                         <td style={{ width: '40%', border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10, background: '#fafafa' }}>
                             <div style={{ fontWeight: 700, marginBottom: 2 }}>Payment Conditions:</div>
-                            <div>1. 100% Advance Payment.</div>
+                            <div style={{ whiteSpace: 'pre-wrap' }}>
+                                {estimateTerms?.paymentConditions?.length ? (
+                                    estimateTerms.paymentConditions.map((t: string, i: number) => <div key={i}>{i + 1}. {t}</div>)
+                                ) : (
+                                    '1. 100% Advance Payment.'
+                                )}
+                            </div>
                         </td>
                     </tr>
                 </tbody>
