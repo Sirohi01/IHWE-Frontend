@@ -197,7 +197,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                     <img loading="lazy" decoding="async" src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
                 </div>
             )}
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 22, marginBottom: 0, paddingTop: 10, paddingBottom: 4, color: '#0d1f3c', textTransform: 'uppercase' }}>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 22, marginBottom: 0, paddingTop: 10, paddingBottom: 4, color: '#0d1f3c', textTransform: 'uppercase' , whiteSpace: 'nowrap' }}>
                 <div style={{ fontWeight: 500, fontSize: 18, lineHeight: 1, textAlign: 'center' }}>PROFORMA INVOICE</div>
                 <div style={{ position: 'absolute', right: 0, bottom: 3, fontWeight: 600, fontSize: 11, lineHeight: 1, paddingRight: 2, whiteSpace: 'nowrap', textAlign: 'right', letterSpacing: '-0.35px' }}>{invoiceCopy}</div>
             </div>
@@ -279,22 +279,22 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                                 <tr>
                                     <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Proforma No.</td>
                                     <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{estNo}</td>
+                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right', whiteSpace: 'nowrap' }}>{estNo}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Proforma Date</td>
                                     <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{estDate}</td>
+                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right', whiteSpace: 'nowrap' }}>{estDate}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Created Date</td>
                                     <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{createdDateTime}</td>
+                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right', whiteSpace: 'nowrap' }}>{createdDateTime}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Created By</td>
                                     <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right', textTransform: 'capitalize' }}>{document?.added_by || 'Admin'}</td>
+                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right', textTransform: 'capitalize', whiteSpace: 'nowrap' }}>{document?.added_by || 'Admin'}</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -434,7 +434,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                 <tbody>
                     <tr>
                         <td style={{ width: '60%', border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10, background: '#fafafa' }}>
-                            <div style={{ fontWeight: 700, marginBottom: 2 }}>Terms and Conditions:</div>
+                            <div style={{ fontWeight: 700, marginBottom: 4, background: '#F8FAFC', borderBottom: '1px solid #ccc', padding: '4px 8px', margin: '-6px -8px 6px' }}>Terms and Conditions:</div>
                             <div style={{ whiteSpace: 'pre-wrap' }}>
                                 {estimateTerms?.termsAndConditions?.length ? (
                                     estimateTerms.termsAndConditions.map((t: string, i: number) => <div key={i}>{i + 1}. {t}</div>)
@@ -444,7 +444,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                             </div>
                         </td>
                         <td style={{ width: '40%', border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10, background: '#fafafa' }}>
-                            <div style={{ fontWeight: 700, marginBottom: 2 }}>Payment Conditions:</div>
+                            <div style={{ fontWeight: 700, marginBottom: 4, background: '#F8FAFC', borderBottom: '1px solid #ccc', padding: '4px 8px', margin: '-6px -8px 6px' }}>Payment Conditions:</div>
                             <div style={{ whiteSpace: 'pre-wrap' }}>
                                 {estimateTerms?.paymentConditions?.length ? (
                                     estimateTerms.paymentConditions.map((t: string, i: number) => <div key={i}>{i + 1}. {t}</div>)
@@ -466,17 +466,17 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                 <thead>
                     <tr style={{ background: '#fafafa' }}>
                         <th style={{ border: 'none', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fafafa', textAlign: 'center' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#0d1f3c', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#0d1f3c', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' , whiteSpace: 'nowrap' }}>
                                 <Landmark size={14} strokeWidth={2} /> NGWPL Bank Details
                             </div>
                         </th>
                         <th style={{ border: 'none', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fafafa', textAlign: 'center' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#0d1f3c', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#0d1f3c', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' , whiteSpace: 'nowrap' }}>
                                 <SquarePen size={14} strokeWidth={2} /> Receiver&apos;s Acknowledgement
                             </div>
                         </th>
                         <th style={{ border: 'none', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fafafa', textAlign: 'center' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#0d1f3c', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#0d1f3c', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' , whiteSpace: 'nowrap' }}>
                                 <SquarePen size={14} strokeWidth={2} /> For {companyName}
                             </div>
                         </th>
@@ -505,7 +505,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                                     <tr>
                                         <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>IFSC Code</td>
                                         <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
-                                        <td style={{ border: 'none', padding: '1px 0', fontWeight: 700, color: '#0d1f3c', wordBreak: 'break-word' }}>{bankDetails?.ifsccode || 'KKBK0004584'}</td>
+                                        <td style={{ border: 'none', padding: '1px 0', wordBreak: 'break-word' }}>{bankDetails?.ifsccode || 'KKBK0004584'}</td>
                                     </tr>
                                     <tr>
                                         <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>Branch Name</td>
@@ -515,8 +515,8 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                                 </tbody>
                             </table>
                         </td>
-                        <td style={{ border: 'none', borderRight: '1px solid #ccc', padding: '8px', verticalAlign: 'top', textAlign: 'center', width: '33.33%' }}>
-                            <span style={{ fontSize: 10 }}>Received the above goods / services in good condition.</span>
+                        <td style={{ border: 'none', borderRight: '1px solid #ccc', padding: '2px 8px 8px', verticalAlign: 'top', textAlign: 'center', width: '33.33%' }}>
+                            <span style={{ fontSize: 9, whiteSpace: 'nowrap' }}>Received the above goods / services in good condition.</span>
                         </td>
                         <td style={{ border: 'none', padding: '8px', verticalAlign: 'top', textAlign: 'center', width: '33.33%' }}>
                             <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
