@@ -187,7 +187,7 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
     const ifscCode = bank.ifsccode || bank.ifscCode || settings?.ifscCode || '-';
     const bankBranch = bank.bankbranch || bank.branch || settings?.bankBranch || '-';
 
-    const th: CSSProperties = { border: '1px solid #0d1f3c', background: '#0d1f3c', color: '#fff', padding: '3px 2px', fontSize: 10, lineHeight: 1.1, fontWeight: 700, textAlign: 'center', textTransform: 'uppercase' };
+    const th: CSSProperties = { border: '1px solid #0d1f3c', background: '#0d1f3c', color: '#fff', padding: '3px 2px', fontSize: 10, lineHeight: 1.1, fontWeight: 700, textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap' };
     const td: CSSProperties = { border: '1px solid #ccc', padding: '6px', fontSize: 11, lineHeight: 1.2, verticalAlign: 'top' };
     const topTh = { ...th };
     const topTd = { ...td, padding: '4px 7px' };

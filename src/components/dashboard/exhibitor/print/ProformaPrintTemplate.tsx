@@ -320,7 +320,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                         { label: 'Discount', width: '8%' },
                         { label: 'Total', width: '10%' },
                     ].map(h => (
-                        <th key={h.label} style={{ border: '1px solid #0d1f3c', padding: '3px 2px', textAlign: 'center', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold', width: h.width }}>{h.label}</th>
+                        <th key={h.label} style={{ border: '1px solid #0d1f3c', padding: '3px 2px', textAlign: 'center', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold', width: h.width, whiteSpace: 'nowrap' }}>{h.label}</th>
                     ))}
                 </tr>
             </thead>
