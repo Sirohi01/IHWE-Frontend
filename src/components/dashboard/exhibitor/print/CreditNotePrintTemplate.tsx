@@ -1,7 +1,10 @@
+import { Fragment } from 'react';
 import { SquarePen, Phone, Mail, Globe } from 'lucide-react';
 import { formatSize, formatArea } from './templateHelpers';
+import { SERVER_URL } from '@/lib/api';
 
 const NAVY = '#0d1f3c';
+const BAND_HEIGHT = 22;
 const PLACE_OF_SUPPLY = 'Delhi (07)';
 const EVENT_NAME = '9th Edition of International Health & Wellness Expo (IHWE Global Edition)';
 const EVENT_TITLE = '9TH EDITION OF INTERNATIONAL HEALTH & WELLNESS EXPO (IHWE GLOBAL EDITION)';
@@ -39,11 +42,18 @@ const fmtDate = (v: any) => {
 // Safety net for records saved while preparedBy/reviewedBy were briefly stored as a
 // raw JSON string instead of a real object (fixed server-side, but old records may
 // still have the string form until they're re-saved).
-const asNamedPerson = (value: any, fallbackName = '', fallbackDesignation = ''): { name?: string; designation?: string } => {
+const mediaUrl = (value?: string | null) => {
+    if (!value) return null;
+    if (/^https?:\/\//i.test(value)) return value;
+    return `${SERVER_URL}${value.startsWith('/') ? '' : '/'}${value}`;
+};
+
+const asNamedPerson = (value: any, fallbackName = '', fallbackDesignation = ''): { name?: string; designation?: string; signatureImage?: string } => {
     if (value && typeof value === 'object') {
         return {
             name: value.name || fallbackName,
             designation: value.designation || fallbackDesignation,
+            signatureImage: value.signatureImage || '',
         };
     }
     if (typeof value === 'string' && value.trim()) {
@@ -52,6 +62,7 @@ const asNamedPerson = (value: any, fallbackName = '', fallbackDesignation = ''):
             return {
                 name: parsed?.name || fallbackName,
                 designation: parsed?.designation || fallbackDesignation,
+                signatureImage: parsed?.signatureImage || '',
             };
         } catch {
             return { name: value, designation: fallbackDesignation };
@@ -61,7 +72,7 @@ const asNamedPerson = (value: any, fallbackName = '', fallbackDesignation = ''):
 };
 
 const DetailRows = ({ rows }: { rows: [string, any][] }) => (
-    <table style={{ borderCollapse: 'collapse', border: 'none', lineHeight: 1.5, width: '100%' }}>
+    <table style={{ borderCollapse: 'collapse', border: 'none', lineHeight: 1.3, width: '100%' }}>
         <tbody>
             {rows.map(([label, value]) => (
                 <tr key={label}>
@@ -88,9 +99,36 @@ const CompactDetailRows = ({ rows }: { rows: [string, any][] }) => (
     </table>
 );
 
-const SectionHeader = ({ icon: Icon, label }: { icon?: any; label: string }) => (
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, background: NAVY, color: '#fff', fontWeight: 700, fontSize: 10, textTransform: 'uppercase', padding: '4px 6px' }}>
-        {Icon && <Icon size={14} strokeWidth={2} />} {label}
+const InlineSignatoryDetails = ({ name, designation, date }: { name?: string; designation?: string; date: any }) => (
+    <div style={{ display: 'flex', flexWrap: 'wrap', columnGap: 10, rowGap: 2, alignItems: 'center', lineHeight: 1.25 }}>
+        {[name, designation, fmtDate(date)].map((value, index) => (
+            <Fragment key={index}>
+                {index > 0 && <span>|</span>}
+                <span style={{ whiteSpace: 'nowrap' }}>{value || '—'}</span>
+            </Fragment>
+        ))}
+    </div>
+);
+
+const SignatoryCell = ({ name, designation, date, signatureUrl }: { name?: string; designation?: string; date: any; signatureUrl?: string | null }) => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <InlineSignatoryDetails name={name} designation={designation} date={date} />
+        {signatureUrl && (
+            <img
+                loading="lazy"
+                decoding="async"
+                src={signatureUrl}
+                alt=""
+                onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                style={{ maxHeight: 30, maxWidth: 95, objectFit: 'contain', alignSelf: 'center' }}
+            />
+        )}
+    </div>
+);
+
+const SectionHeader = ({ label }: { icon?: any; label: string }) => (
+    <div style={{ boxSizing: 'border-box', background: NAVY, color: '#fff', fontWeight: 'bold', fontSize: 10, textTransform: 'uppercase', padding: '3px 2px', textAlign: 'center', lineHeight: 'normal' }}>
+        {label}
     </div>
 );
 
@@ -144,7 +182,7 @@ export default function CreditNotePrintTemplate({ document, company, settings, h
     const reviewedBy = asNamedPerson(document?.reviewedBy, document?.reviewedByName || document?.reviewed_by || document?.approvedBy || '', document?.reviewedByDesignation || document?.reviewed_by_designation || '');
 
     return (
-        <div className="bg-white border border-slate-300 p-6 text-[11px] font-sans text-black" style={{ fontFamily: 'Calibri, Arial, sans-serif', maxWidth: '1000px', margin: '0 auto 24px' }}>
+        <div className="bg-white border border-slate-300 p-6 text-[11px] font-sans text-black credit-note-print" style={{ fontFamily: 'Calibri, Arial, sans-serif', fontSize: 11, lineHeight: 'normal', maxWidth: '1000px', margin: '0 auto 24px' }}>
             {headerImageUrl && (
                 <div className="invoice-header-image" style={{ marginBottom: 0, textAlign: 'center' }}>
                     <img loading="lazy" decoding="async" src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
@@ -159,37 +197,49 @@ export default function CreditNotePrintTemplate({ document, company, settings, h
                 <div className="invoice-copy-label" style={{ position: 'absolute', right: 0, bottom: 3, fontWeight: 600, fontSize: 11, lineHeight: 1, paddingRight: 2, whiteSpace: 'nowrap', textAlign: 'right', letterSpacing: '-0.35px' }}>ORIGINAL COPY</div>
             </div>
 
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 4, border: '1px solid #ccc' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 5 }}>
                 <colgroup><col style={{ width: '38%' }} /><col style={{ width: '38%' }} /><col style={{ width: '24%' }} /></colgroup>
                 <thead>
                     <tr>
-                        <th style={{ border: 'none', borderRight: '1px solid #fff', padding: 0 }}><SectionHeader icon={SquarePen} label="Billed To (Customer Details)" /></th>
-                        <th style={{ border: 'none', borderRight: '1px solid #fff', padding: 0 }}><SectionHeader icon={SquarePen} label="Credit Note Details" /></th>
-                        <th style={{ border: 'none', padding: 0 }}><SectionHeader icon={SquarePen} label="Reason for Credit Note" /></th>
+                        <th style={{ background: NAVY, color: '#fff', border: `1px solid ${NAVY}`, padding: 0, width: '38%', textAlign: 'center', fontSize: 10, fontWeight: 'bold', textTransform: 'uppercase' }}><SectionHeader icon={SquarePen} label="Billed To (Customer Details)" /></th>
+                        <th style={{ background: NAVY, color: '#fff', border: `1px solid ${NAVY}`, padding: 0, width: '38%', textAlign: 'center', fontSize: 10, fontWeight: 'bold', textTransform: 'uppercase' }}><SectionHeader icon={SquarePen} label="Credit Note Details" /></th>
+                        <th style={{ background: NAVY, color: '#fff', border: `1px solid ${NAVY}`, padding: 0, width: '24%', textAlign: 'center', fontSize: 10, fontWeight: 'bold', textTransform: 'uppercase' }}><SectionHeader icon={SquarePen} label="Reason for Credit Note" /></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td style={{ border: 'none', borderRight: '1px solid #ccc', padding: '8px', verticalAlign: 'top' }}>
-                            <div style={{ fontWeight: 700, fontSize: 13, textTransform: 'uppercase', marginBottom: 2 }}>{companyName}</div>
-                            <div style={{ marginBottom: 12 }}>{address || '—'}</div>
-                            <DetailRows rows={[
+                        <td style={{ border: '1px solid #ccc', padding: '4px 8px', verticalAlign: 'top', fontSize: 11, lineHeight: '1.2' }}>
+                            <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>{companyName}</div>
+                            <div style={{ marginTop: 2, textTransform: 'capitalize' }}>{address || '—'}</div>
+                            <div style={{ marginTop: 4 }}>
+                                <DetailRows rows={[
                                 ['Contact Person', contactName],
                                 ['Contact No.', contactNo],
                                 ['Email', contactEmail],
                                 ['GSTIN/PAN', gstin],
-                            ]} />
+                                ]} />
+                            </div>
                         </td>
-                        <td style={{ border: 'none', borderRight: '1px solid #ccc', padding: '8px', verticalAlign: 'top' }}>
-                            <DetailRows rows={[
-                                ['Credit Note No.', document?.create_note_no],
-                                ['Credit Note Date', fmtDate(document?.credit_note_date)],
-                                ['Original Invoice No.', document?.reference_invoice_no],
-                                ['Original Invoice Date', fmtDate(document?.invoice_date)],
-                                ['Place of Supply', PLACE_OF_SUPPLY],
-                            ]} />
+                        <td style={{ border: '1px solid #ccc', padding: '4px 8px', verticalAlign: 'top', fontSize: 11, lineHeight: '1.2' }}>
+                            <table style={{ borderCollapse: 'collapse', border: 'none', lineHeight: 1.3, width: '100%' }}>
+                                <tbody>
+                                    {[
+                                        ['Credit Note No.', document?.create_note_no],
+                                        ['Credit Note Date', fmtDate(document?.credit_note_date)],
+                                        ['Original Invoice No.', document?.reference_invoice_no],
+                                        ['Original Invoice Date', fmtDate(document?.invoice_date)],
+                                        ['Place of Supply', PLACE_OF_SUPPLY],
+                                    ].map(([label, value]) => (
+                                        <tr key={label}>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>{label}</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
+                                            <td style={{ border: 'none', padding: '1px 0' }}>{value || '—'}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
                         </td>
-                        <td style={{ border: 'none', padding: '8px', verticalAlign: 'top', whiteSpace: 'pre-wrap' }}>
+                        <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', whiteSpace: 'pre-wrap', fontSize: 11 }}>
                             <div style={{ fontWeight: 700, marginBottom: 4 }}>{document?.credit_note_type || '—'}</div>
                             <div>{document?.reason || '—'}</div>
                         </td>
@@ -197,12 +247,12 @@ export default function CreditNotePrintTemplate({ document, company, settings, h
                 </tbody>
             </table>
 
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 4 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 5 }}>
                 <thead>
                     <tr style={{ background: NAVY, color: '#fff', textTransform: 'uppercase' }}>
                         {[
                             { label: 'S.No.', width: '3%' },
-                            { label: 'Item Description', width: '38%' },
+                            { label: 'Item Description', width: '48%' },
                             { label: 'HSN Code', width: '7%' },
                             { label: 'Qty.', width: '4%' },
                             { label: 'Size', width: '7%' },
@@ -210,9 +260,9 @@ export default function CreditNotePrintTemplate({ document, company, settings, h
                             { label: 'Unit', width: '6%' },
                             { label: 'Rate', width: '7%' },
                             { label: 'Discount', width: '8%' },
-                            { label: 'Total', width: '13%' },
+                            { label: 'Total', width: '10%' },
                         ].map((h) => (
-                            <th key={h.label} style={{ border: `1px solid ${NAVY}`, padding: '3px 2px', textAlign: 'center', fontSize: 10, background: NAVY, color: '#fff', fontWeight: 'bold', width: h.width }}>{h.label}</th>
+                            <th key={h.label} style={{ border: `1px solid ${NAVY}`, padding: '3px 2px', textAlign: 'center', fontSize: 10, background: NAVY, color: '#fff', fontWeight: 'bold', width: h.width, whiteSpace: 'nowrap' }}>{h.label}</th>
                         ))}
                     </tr>
                 </thead>
@@ -282,7 +332,7 @@ export default function CreditNotePrintTemplate({ document, company, settings, h
                         <td style={{ width: '2%', border: 'none' }} />
                         <td style={{ width: '46%', verticalAlign: 'top', padding: 0, border: 'none' }}>
                             <table style={{ width: '100%', height: '100%', borderCollapse: 'collapse', border: '1px solid #ccc' }}>
-                                <thead><tr><th style={{ border: 'none', padding: 0 }}><SectionHeader icon={SquarePen} label="Adjustment Summary" /></th></tr></thead>
+                                <thead><tr><th colSpan={2} style={{ border: 'none', padding: 0 }}><SectionHeader icon={SquarePen} label="Adjustment Summary" /></th></tr></thead>
                                 <tbody>
                                     {([
                                         ['Credit Amount (Before Tax)', fmtNum(totalTaxable), false],
@@ -327,10 +377,10 @@ export default function CreditNotePrintTemplate({ document, company, settings, h
                         <td style={{ width: '70%', border: '1px solid #ccc', padding: '4px 6px', verticalAlign: 'middle' }}>
                             <span style={{ fontWeight: 700 }}>Amount in Words: </span>{toWords(grandTotal)}
                         </td>
-                        <td style={{ width: '30%', border: '1px solid #ccc', background: NAVY, color: '#fff', padding: '4px 6px', verticalAlign: 'middle' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                        <td style={{ width: '30%', height: BAND_HEIGHT, border: '1px solid #ccc', background: NAVY, color: '#fff', padding: '0 6px', verticalAlign: 'middle' }}>
+                            <div style={{ height: BAND_HEIGHT, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
                                 <span style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase' }}>Credit Note Value</span>
-                                <span style={{ fontSize: 15, fontWeight: 700 }}>₹ {fmtNum(grandTotal)}</span>
+                                <span style={{ fontSize: 13, fontWeight: 700 }}>₹ {fmtNum(grandTotal)}</span>
                             </div>
                         </td>
                     </tr>
@@ -344,36 +394,32 @@ export default function CreditNotePrintTemplate({ document, company, settings, h
                     <col style={{ width: '34%' }} />
                 </colgroup>
                 <thead>
-                    <tr style={{ background: '#fafafa' }}>
-                        <th style={{ border: 'none', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fafafa', textAlign: 'center' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: NAVY, fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
+                    <tr style={{ background: NAVY, height: BAND_HEIGHT }}>
+                        <th style={{ border: 'none', borderRight: '1px solid #fff', borderBottom: '1px solid #ccc', height: BAND_HEIGHT, padding: '0 8px', background: NAVY, textAlign: 'center' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#fff', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
                                 <SquarePen size={14} strokeWidth={2} /> Prepared By
                             </div>
                         </th>
-                        <th style={{ border: 'none', borderRight: '1px solid #ccc', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fafafa', textAlign: 'center' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: NAVY, fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
+                        <th style={{ border: 'none', borderRight: '1px solid #fff', borderBottom: '1px solid #ccc', height: BAND_HEIGHT, padding: '0 8px', background: NAVY, textAlign: 'center' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#fff', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
                                 <SquarePen size={14} strokeWidth={2} /> Reviewed By
                             </div>
                         </th>
-                        <th style={{ border: 'none', borderBottom: '1px solid #ccc', padding: '6px 8px', background: '#fafafa', textAlign: 'center' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: NAVY, fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
+                        <th style={{ border: 'none', borderBottom: '1px solid #ccc', height: BAND_HEIGHT, padding: '0 8px', background: NAVY, textAlign: 'center' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6, color: '#fff', fontWeight: 700, fontSize: 10.5, textTransform: 'uppercase' }}>
                                 <SquarePen size={14} strokeWidth={2} /> For {companyName}
                             </div>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
+                    <tr style={{ height: 61 }}>
                         {[
                             preparedBy,
                             reviewedBy,
                         ].map((col, idx) => (
-                            <td key={idx} style={{ border: 'none', borderRight: '1px solid #ccc', padding: '2px 8px 8px', verticalAlign: 'top', fontSize: 10, width: '33.33%' }}>
-                                <CompactDetailRows rows={[
-                                    ['Name', col.name],
-                                    ['Designation', col.designation],
-                                    ['Date', fmtDate(document?.credit_note_date)],
-                                ]} />
+                            <td key={idx} style={{ border: 'none', borderRight: '1px solid #ccc', padding: '4px 8px 8px', verticalAlign: 'top', fontSize: 10, width: '33.33%' }}>
+                                <SignatoryCell name={col.name} designation={col.designation} date={document?.credit_note_date} signatureUrl={mediaUrl(col.signatureImage)} />
                             </td>
                         ))}
                         <td style={{ border: 'none', padding: '8px', verticalAlign: 'top', textAlign: 'center', width: '33.33%' }}>
@@ -383,7 +429,7 @@ export default function CreditNotePrintTemplate({ document, company, settings, h
                             </div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr style={{ height: 19 }}>
                         <td style={{ border: 'none', borderRight: '1px solid #ccc', padding: '0 8px 2px', verticalAlign: 'bottom' }}>
                             <div style={{ borderTop: '1px solid #ccc', margin: '0 2px 4px' }}></div>
                             <div style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontSize: 10 }}>(Signature)</div>
@@ -401,8 +447,8 @@ export default function CreditNotePrintTemplate({ document, company, settings, h
             </table>
 
 
-            <div className="avoid-break" style={{ position: 'relative', height: 82, overflow: 'hidden', border: '1px solid #ccc', borderTop: 'none' }}>
-                <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 34, background: NAVY, zIndex: 0 }} />
+            <div className="avoid-break" style={{ position: 'relative', height: 72, overflow: 'hidden', border: '1px solid #ccc', borderTop: 'none' }}>
+                <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 24, background: NAVY, zIndex: 0 }} />
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, fontSize: 11, fontWeight: 500, color: NAVY, zIndex: 2 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
 
@@ -419,7 +465,7 @@ export default function CreditNotePrintTemplate({ document, company, settings, h
                     <span><b style={{ color: '#333' }}>Note:</b> Applicable TDS, if deducted, must be supported with TDS certificate / Form 16A.</span>
                 </div>
 
-                <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 10.5, zIndex: 2 }}>
+                <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 10.5, zIndex: 2 }}>
                     <span>This is a computer generated document and does not require a physical signature.</span>
                 </div>
             </div>
