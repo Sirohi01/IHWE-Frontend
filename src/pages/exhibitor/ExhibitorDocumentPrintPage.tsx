@@ -46,6 +46,9 @@ export default function ExhibitorDocumentPrintPage() {
                     return;
                 }
                 setDocument(docJson.document);
+                if (docJson.company) {
+                    setCompany(docJson.company);
+                }
 
                 let termEndpoint = 'performa';
                 if (docType === 'challan') termEndpoint = 'delivery-challan';
@@ -72,7 +75,7 @@ export default function ExhibitorDocumentPrintPage() {
                 const img = templateRes?.data?.headerImage || templateRes?.headerImage;
                 if (img) setHeaderImageUrl(mediaUrl(img));
 
-                if (docJson.document?.companyId) {
+                if (!docJson.company && docJson.document?.companyId) {
                     fetch(`${SERVER_URL}/api/companies/lookup/${docJson.document.companyId}`)
                         .then((r) => r.json())
                         .then((res) => setCompany(res?.data || res))

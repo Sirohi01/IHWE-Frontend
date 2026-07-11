@@ -94,30 +94,65 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
     const companyName = settings?.companyName || 'Namo Gange Wellness Pvt. Ltd.';
     const companyGst = settings?.companyGst || settings?.companyGstin || '07AAFCN9238F1Z6';
 
+    const c1 = company?.contacts?.[0] || company?.contact1 || {};
+
+    const buyerCompanyName = challan.company_name || company?.companyName || company?.exhibitorName || '—';
+    const titledBuyerContactPerson = [c1.title, c1.firstName, c1.surname].filter(Boolean).join(' ');
+    const rawBuyerContactPerson = getFirstCleanValue(
+        challan.contact_person,
+        challan.company_contact_person,
+        challan.consignee_person,
+        titledBuyerContactPerson,
+        company?.contactPerson,
+        company?.contact_person
+    ) || '—';
+    const buyerContactPerson = normalizeContactName(rawBuyerContactPerson, titledBuyerContactPerson);
+
+    const buyerContactNo = getFirstCleanValue(
+        challan.contact_no,
+        challan.contact_phone,
+        challan.company_contact_no,
+        challan.company_phone,
+        challan.mobile,
+        challan.phone,
+        challan.consignee_phone,
+        c1.mobile,
+        company?.landline,
+        company?.mobile
+    ) || '—';
+
+    const buyerEmail = getFirstCleanValue(
+        challan.company_email,
+        challan.contact_email,
+        challan.email,
+        c1.email,
+        company?.companyEmail,
+        company?.email
+    ) || '—';
+
     const buyerAddressLine = getFirstAddressValue(
-        challan.company_address,
         challan.company_addr,
-        challan.companyAddress,
+        challan.company_address,
         challan.address,
-        challan.company?.address,
-        challan.company?.companyAddress,
-        challan.company?.company_addr
+        company?.address,
+        company?.companyAddress,
+        company?.company_addr
     );
     const buyerCity = getFirstAddressValue(
         challan.company_city,
         challan.city,
-        challan.company?.city,
-        challan.company?.district
+        company?.city,
+        company?.district
     );
     const buyerState = getFirstAddressValue(
         challan.company_state,
         challan.state,
-        challan.company?.state
+        company?.state
     );
     const buyerCountry = getFirstAddressValue(
         challan.company_country,
         challan.country,
-        challan.company?.country
+        company?.country
     );
     const buyerPincode = getFirstAddressValue(
         challan.company_pincode,
@@ -125,13 +160,13 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
         challan.pin_code,
         challan.postal_code,
         challan.zip_code,
-        challan.company?.pincode,
-        challan.company?.pinCode,
-        challan.company?.pin_code,
-        challan.company?.postalCode,
-        challan.company?.postal_code,
-        challan.company?.zipCode,
-        challan.company?.zip_code
+        company?.pincode,
+        company?.pinCode,
+        company?.pin_code,
+        company?.postalCode,
+        company?.postal_code,
+        company?.zipCode,
+        company?.zip_code
     );
     const buyerCompanyAddress = joinAddressParts([
         buyerAddressLine,
@@ -141,44 +176,23 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
         buyerCountry,
     ]);
 
-    const titledBuyerContactPerson = [challan.company?.contact1?.title, challan.company?.contact1?.firstName, challan.company?.contact1?.surname].filter(Boolean).join(' ');
-    const rawBuyerContactPerson = getFirstCleanValue(
-        challan.contact_person,
-        challan.company_contact_person,
-        challan.consignee_person,
-        titledBuyerContactPerson,
-        challan.company?.contactPerson,
-        challan.company?.contact_person
-    ) || '—';
-    const buyerContactPerson = normalizeContactName(rawBuyerContactPerson, titledBuyerContactPerson);
+    const buyerGstNo = challan.company_gst_no || challan.gst_no || challan.gstin || company?.gstNo || company?.gst_no || '—';
 
-    const buyerContactNo = getFirstCleanValue(
-        challan.contact_phone,
-        challan.contact_no,
-        challan.company_contact_no,
-        challan.company_phone,
-        challan.mobile,
-        challan.phone,
-        challan.consignee_phone,
-        challan.company?.contact1?.mobile,
-        challan.company?.landline,
-        challan.company?.mobile
-    ) || '—';
+    const CHALLAN_EVENT_NAME = '9th Edition of International Health & Wellness Expo (IHWE Global Edition)';
+    const CHALLAN_PLACE_OF_SUPPLY = 'Hall Nos. 8, 9 & 10, Pragati Maidan, New Delhi - 110001, India';
+    const CHALLAN_EVENT_STATE = 'Delhi';
+    const CHALLAN_PLACE_OF_SUPPLY_WITH_CODE = 'Delhi (07)';
+    const CHALLAN_EVENT_GST_NO = '07AAFCN9238F1Z6';
 
-    const buyerEmail = getFirstCleanValue(
-        challan.company_email,
-        challan.contact_email,
-        challan.email,
-        company?.companyEmail,
-        company?.contact1?.email,
-        company?.email,
-        challan.company?.contact1?.email,
-        challan.company?.companyEmail,
-        challan.company?.email,
-        challan.user?.email
-    ) || '-';
-
-    const buyerGstNo = challan.company_gst_no || challan.gst_no || challan.gstin || challan.company?.gstNo || challan.company?.gst_no || '—';
+    const eventName = challan.event_name || challan.consignee_name || CHALLAN_EVENT_NAME;
+    const eventPlaceOfSupply = joinAddressParts([
+        (challan.event_place_of_supply || challan.delivery_address || challan.consignee_addr || CHALLAN_PLACE_OF_SUPPLY)
+            .replace(/,\s*Bharat$/i, ''),
+        CHALLAN_EVENT_STATE,
+        'India',
+    ]);
+    const shipmentAddress = eventPlaceOfSupply;
+    const eventGstNo = challan.event_gst_no || CHALLAN_EVENT_GST_NO;
 
     const bank = bankDetails || {};
     const bankName = bank.bankname || bank.bankName || settings?.bankName || '-';
@@ -249,71 +263,90 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
         <table className="avoid-break" style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 5 }}>
             <thead>
                 <tr>
-                    <th style={{ ...topTh, width: '35%' }}>Buyer's Name &amp; Address</th>
-                    <th style={{ ...topTh, width: '34%' }}>Shipment Details</th>
-                    <th style={{ ...topTh, width: '31%' }}>Delivery Challan Details</th>
+                    <th style={{ background: '#0d1f3c', color: '#fff', border: '1px solid #0d1f3c', padding: '3px 2px', width: '38%', textAlign: 'center', fontSize: 10, fontWeight: 'bold', textTransform: 'uppercase' }}>Buyer's Name &amp; Address</th>
+                    <th style={{ background: '#0d1f3c', color: '#fff', border: '1px solid #0d1f3c', padding: '3px 2px', width: '38%', textAlign: 'center', fontSize: 10, fontWeight: 'bold', textTransform: 'uppercase' }}>Shipment Details</th>
+                    <th style={{ background: '#0d1f3c', color: '#fff', border: '1px solid #0d1f3c', padding: '3px 2px', width: '24%', textAlign: 'center', fontSize: 10, fontWeight: 'bold', textTransform: 'uppercase' }}>Challan Details</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td style={{ ...topTd, overflowWrap: "anywhere", wordBreak: "break-word" }}>
-                        <div style={{ ...topInfoLine, fontWeight: 800, textTransform: 'uppercase', marginBottom: 1 }}>{challan.company_name || '-'}</div>
-                        <div style={{ ...topInfoLine, whiteSpace: 'pre-wrap' }}>{buyerCompanyAddress}</div>
-                        <table style={{ borderCollapse: 'collapse', border: 'none', lineHeight: 1.3, width: '100%', marginTop: 4 }}>
+                    <td style={{ border: '1px solid #ccc', padding: '4px 8px', verticalAlign: 'top', fontSize: 11, lineHeight: '1.2' }}>
+                        <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>{buyerCompanyName}</div>
+                        <div style={{ marginTop: 2, textTransform: 'capitalize' }}>{buyerCompanyAddress || '—'}</div>
+                        <table style={{ borderCollapse: 'collapse', border: 'none', lineHeight: '1.3', width: '100%', marginTop: 4 }}>
                             <tbody>
-                                {[
-                                    ['Contact Person', buyerContactPerson],
-                                    ['Contact No.', buyerContactNo],
-                                    ['Email', buyerEmail],
-                                    ['GSTIN/PAN', buyerGstNo],
-                                ].map(([label, value]) => (
-                                    <tr key={label}>
-                                        <td style={labelCell}>{label}</td>
-                                        <td style={colonCell}>:</td>
-                                        <td style={valueCell}>{value}</td>
+                                <tr>
+                                    <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact Person</td>
+                                    <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                    <td style={{ border: 'none', padding: '1px 0', textTransform: 'capitalize' }}>{buyerContactPerson}</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact No.</td>
+                                    <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{buyerContactNo}</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Email</td>
+                                    <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{buyerEmail}</td>
+                                </tr>
+                                {buyerGstNo && buyerGstNo !== '—' && (
+                                    <tr>
+                                        <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>GSTIN/PAN</td>
+                                        <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                        <td style={{ border: 'none', padding: '1px 0' }}>{buyerGstNo}</td>
                                     </tr>
-                                ))}
+                                )}
                             </tbody>
                         </table>
                     </td>
-                    <td style={{ ...topTd }}>
-                        <div style={{ ...topInfoLine, fontWeight: 800, textTransform: 'uppercase', marginBottom: 1 }}>{challan.event_name || '9TH EDITION OF INTERNATIONAL HEALTH & WELLNESS EXPO'}</div>
-                        <div style={{ ...topInfoLine, fontSize: 10.5, whiteSpace: 'nowrap' }}>{challan.delivery_address || challan.company_address || '-'}</div>
-                        <table style={{ borderCollapse: 'collapse', border: 'none', lineHeight: 1.3, width: '100%', marginTop: 4 }}>
+                    <td style={{ border: '1px solid #ccc', padding: '4px 8px', verticalAlign: 'top', fontSize: 11, lineHeight: '1.2' }}>
+                        <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>{eventName}</div>
+                        <div style={{ marginTop: 2 }}>{shipmentAddress}</div>
+                        <table style={{ borderCollapse: 'collapse', border: 'none', lineHeight: '1.3', width: '100%', marginTop: 4 }}>
                             <tbody>
-                                {[
-                                    ['Place of Supply', challan.shipped_to || '-'],
-                                    ['State Code', challan.state_code || '-'],
-                                    ['GSTIN', companyGst],
-                                ].map(([label, value]) => (
-                                    <tr key={label}>
-                                        <td style={labelCell}>{label}</td>
-                                        <td style={colonCell}>:</td>
-                                        <td style={valueCell}>{value}</td>
-                                    </tr>
-                                ))}
+                                <tr>
+                                    <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Place of Supply &amp; Code</td>
+                                    <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{CHALLAN_PLACE_OF_SUPPLY_WITH_CODE}</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact Person</td>
+                                    <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                    <td style={{ border: 'none', padding: '1px 0', textTransform: 'capitalize' }}>{buyerContactPerson}</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact No.</td>
+                                    <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{buyerContactNo}</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>GSTIN</td>
+                                    <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{eventGstNo}</td>
+                                </tr>
                             </tbody>
                         </table>
                     </td>
-                    <td style={{ ...topTd }}>
-                        <table style={{ borderCollapse: 'collapse', border: 'none', lineHeight: 1.3, width: '100%' }}>
+                    <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
+                        <table style={{ borderCollapse: 'collapse', border: 'none', lineHeight: '1.3', width: '100%' }}>
                             <tbody>
                                 {[
-                                    ['Delivery Challan No.', challan.challan_no || '-'],
-                                    ['Delivery Challan Date', fmtDateOnly(challan.challan_date)],
-                                    ['Delivery Challan Type', challan.challan_type || 'Outward'],
-                                    ['Type of Sale', challan.type_of_sale || '-'],
+                                    ['Challan No.', challan.challan_no || '-'],
+                                    ['Challan Date', fmtDateOnly(challan.challan_date)],
+                                    ['Challan Type', challan.challan_type || 'Outward'],
+                                    ['Sale Type', challan.type_of_sale || '-'],
                                     ['PO No.', challan.po_no || '-'],
                                     ['Bilty No.', challan.bilty_no || '-'],
                                     ['Vehicle No.', challan.vehicle_no || '-'],
                                     ['Transporter', challan.transporter_name || '-'],
-                                    ['E-Way Bill No.', challan.eway_bill || '-'],
+                                    ['E-Way Bill', challan.eway_bill || '-'],
                                     ['Proforma No.', challan.estimate_no || '-'],
                                 ].map(([label, value]) => (
                                     <tr key={label}>
-                                        <td style={detailLabelCell}>{label}</td>
-                                        <td style={detailColonCell}>:</td>
-                                        <td style={{ ...detailValueCell, textAlign: 'right', whiteSpace: 'nowrap' }}>{value}</td>
+                                        <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>{label}</td>
+                                        <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                        <td style={{ border: 'none', padding: '1px 0', textAlign: 'right', whiteSpace: 'nowrap' }}>{value}</td>
                                     </tr>
                                 ))}
                             </tbody>
