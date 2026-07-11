@@ -28,6 +28,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import Swal from 'sweetalert2';
 import { cn } from "@/lib/utils";
 import { API_URL } from "@/lib/api";
+import { PrintFeedbackReport } from "./PrintFeedbackReport";
 
 // ── Components ──────────────────────────────────────────────────────────────────
 
@@ -490,7 +491,8 @@ export default function ExhibitorFeedbackForm() {
     const progress = Math.round((Object.values(form).filter(v => v !== "" && v !== 0 && v !== false).length / Object.keys(form).length) * 100);
 
     return (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="w-full px-8 space-y-2 print:space-y-0 text-left print:px-0 mt-1">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="w-full px-8 print:px-0 space-y-2 print:space-y-0 text-left mt-1 print:mt-0 print:bg-white">
+            <div className="print:hidden w-full space-y-2">
 
             {/* Top Bar / Print Header */}
             <div className="bg-white rounded-xl border border-slate-200 px-4 py-2 flex flex-col md:flex-row print:flex-row items-center justify-between gap-4 shadow-sm print:shadow-none print:border-none print:p-0 print:mb-4 print:border-b-[1pt] print:border-black print:pb-2">
@@ -717,6 +719,11 @@ export default function ExhibitorFeedbackForm() {
                 </div>
             </form>
 
+            </div>
+            <div id="print-report" className="print:bg-white">
+                <PrintFeedbackReport form={form} />
+            </div>
+
             <style dangerouslySetInnerHTML={{
                 __html: `
                 .reg-input { border: 1px solid #e2e8f0; border-radius: 8px; padding-left: 12px; }
@@ -728,21 +735,36 @@ export default function ExhibitorFeedbackForm() {
                 @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&display=swap');
                 .font-signature { font-family: 'Dancing+Script', cursive !important; }
                 @media print {
-                    @page { size: A4; margin: 15mm; }
-                    body { padding: 0; margin: 0; }
-                    html, body { 
-                        background: white !important; 
-                        font-family: Arial, sans-serif !important;
+                    @page { size: A4; margin: 10mm; }
+                    
+                    /* Strip ALL backgrounds globally to prevent any dashboard theme/gray from leaking */
+                    * {
+                        background-color: transparent !important;
                         -webkit-print-color-adjust: exact !important; 
                         print-color-adjust: exact !important;
                     }
-                    .max-w-6xl, #root, .w-full, form, div { background: transparent !important; }
-                    .max-w-6xl { max-width: 100% !important; padding: 0 !important; }
-                    h2 { color: black !important; font-weight: bold !important; text-align: center !important; }
-                    h3 { color: black !important; margin: 0 !important; padding: 0 !important; border: none !important; }
-                    .grid { display: grid !important; }
-                    .shadow-sm, .shadow-md, .shadow-lg, .shadow-xl { box-shadow: none !important; }
-                    .print\\:hidden, .icons { display: none !important; }
+                    
+                    /* Restore white background to body so the page is actually white */
+                    html, body, #print-report {
+                        background-color: #ffffff !important;
+                    }
+
+                    /* Manually restore backgrounds for our specific colored boxes */
+                    #print-report .bg-blue-50 { background-color: #eff6ff !important; }
+                    #print-report .bg-blue-100 { background-color: #dbeafe !important; }
+                    #print-report .bg-blue-300 { background-color: #93c5fd !important; }
+                    #print-report .bg-blue-400 { background-color: #60a5fa !important; }
+                    #print-report .bg-blue-500 { background-color: #3b82f6 !important; }
+                    #print-report .bg-blue-600 { background-color: #2563eb !important; }
+                    #print-report .bg-blue-800 { background-color: #1e40af !important; }
+                    #print-report .bg-green-50 { background-color: #f0fdf4 !important; }
+                    #print-report .bg-green-200 { background-color: #bbf7d0 !important; }
+                    #print-report .bg-purple-50 { background-color: #faf5ff !important; }
+                    #print-report .bg-slate-50 { background-color: #f8fafc !important; }
+                    #print-report .bg-white { background-color: #ffffff !important; }
+                    
+                    /* Hide everything except the print report's parent container */
+                    body > *:not(#root) { display: none !important; }
                 }
             `}} />
         </motion.div>
