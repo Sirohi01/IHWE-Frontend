@@ -124,7 +124,7 @@ export default function Notification() {
                         <BellRing size={22} className="text-emerald-600" />
                     </div>
                     <div>
-                        <h1 className="text-[22px] font-black tracking-tight text-slate-800">Notifications</h1>
+                        <h1 className="text-[22px] font-normal tracking-tight text-slate-800">Notifications</h1>
                         <p className="text-xs font-semibold text-slate-500 mt-0.5">Stay updated with the latest updates and important alerts</p>
                     </div>
                 </div>
@@ -205,7 +205,7 @@ export default function Notification() {
 
                     {/* List Header & Tabs */}
                     <div className="p-4 border-b border-slate-200">
-                        <h2 className="text-[15px] font-bold text-slate-800 mb-4">All Notifications</h2>
+                        <h2 className="text-[15px] font-bold text-slate-800 mb-1">All Notifications</h2>
 
                         <div className="flex items-center justify-between">
                             {/* Tabs */}
@@ -221,7 +221,7 @@ export default function Notification() {
                                     <button
                                         key={tab.label}
                                         onClick={() => setStatusFilter(tab.label)}
-                                        className={`pb-3 text-[13px] font-bold transition-all relative whitespace-nowrap ${statusFilter === tab.label ? 'text-emerald-700' : 'text-slate-500 hover:text-slate-800'}`}
+                                        className={`pb-1 text-[13px] font-bold transition-all relative whitespace-nowrap ${statusFilter === tab.label ? 'text-emerald-700' : 'text-slate-500 hover:text-slate-800'}`}
                                     >
                                         {tab.label} {tab.count > 0 && `(${tab.count})`}
                                         {statusFilter === tab.label && (
@@ -246,12 +246,12 @@ export default function Notification() {
                     <div className="flex-1 min-h-[400px]">
                         {loading ? (
                             <div className="p-10 text-center">
-                                <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                                <div className="w-8 h-8 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-1"></div>
                                 <p className="text-sm font-semibold text-slate-500">Loading notifications...</p>
                             </div>
                         ) : filteredNotifications.length === 0 ? (
                             <div className="p-16 text-center">
-                                <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 border border-slate-100">
+                                <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-1 border border-slate-100">
                                     <BellRing size={24} className="text-slate-300" />
                                 </div>
                                 <h3 className="text-lg font-bold text-slate-700 mb-1">All Caught Up!</h3>
