@@ -322,21 +322,23 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
-      className="flex flex-row gap-2 flex-1 min-h-0 w-full"
+      className="flex flex-row gap-2 flex-1 min-h-0 w-full h-full"
     >
       {/* ── LEFT CONTAINER: Hero Banner + Channel Cards + Agent/Chat Columns ── */}
       <div className="flex-1 min-h-0 flex flex-col gap-1.5">
-        {/* HERO BANNER — Direct Static Image */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex-shrink-0">
-          <img loading="lazy" decoding="async" src={chatSupportImg}
-            alt="Chat Support"
-            className="w-full h-auto block"
-          />
-        </div>
+        {!inNavbar && (
+          <>
+            {/* HERO BANNER — Direct Static Image */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex-shrink-0">
+              <img loading="lazy" decoding="async" src={chatSupportImg}
+                alt="Chat Support"
+                className="w-full h-auto block"
+              />
+            </div>
 
 
-        {/* 3 CHANNEL CARDS */}
-        <div className="grid grid-cols-3 gap-1.5 flex-shrink-0">
+            {/* 3 CHANNEL CARDS */}
+            <div className="grid grid-cols-3 gap-1.5 flex-shrink-0">
           {/* Live Chat */}
           <div className="bg-[#f0faf2] rounded-2xl border border-[#e4f6e8] shadow-sm py-2.5 px-3.5 flex flex-col gap-2 hover:shadow-md transition-all duration-200">
             <div className="flex items-start justify-between">
@@ -413,19 +415,22 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
             </button>
           </div>
         </div>
+        </>
+        )}
 
 
         {/* 2-COLUMN PROFILE + CHAT SUB-GRID */}
         <div
           className="grid gap-1.5 flex-1 min-h-0"
           style={{
-            gridTemplateColumns: "260px 1fr",
+            gridTemplateColumns: inNavbar ? "1fr" : "260px 1fr",
           }}
         >
 
 
 
           {/* LEFT: Agent Profile + Contact + Call Back (Unified Card) */}
+          {!inNavbar && (
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between p-4 h-full min-w-0 overflow-hidden">
             <div className="flex flex-col gap-4">
               {/* Profile photo + name */}
@@ -524,9 +529,10 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
               Request Call Back
             </button>
           </div>
+          )}
 
           {/* CENTRE: Live Chat Window */}
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col overflow-hidden min-w-0">
+          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col overflow-hidden min-w-0 h-full">
             {/* Top bar */}
             <div className="px-4 py-2.5 border-b border-slate-100 flex items-center justify-between flex-shrink-0 bg-white">
               <div className="w-12" /> {/* Spacer to align date in center */}
@@ -640,7 +646,7 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
                             <div className={`max-w-[75%] flex flex-col gap-0.5 ${isMe ? "items-end" : "items-start"}`}>
                               {isMe ? (
                                 <div className="bg-[#e2f5e9] border border-[#d2edd9] text-slate-800 rounded-2xl rounded-tr-sm px-3.5 py-2 shadow-sm flex flex-col gap-1">
-                                  <span className="text-[13px] leading-relaxed font-semibold text-slate-800">{msg.message}</span>
+                                  <span className="text-[13px] leading-relaxed font-semibold text-slate-800 break-words break-all">{msg.message}</span>
                                   <div className="flex items-center gap-1 self-end mt-0.5">
                                     <span className="text-[10px] text-slate-500 font-medium">{timeStr(msg.createdAt)}</span>
                                     <CheckCheck size={13} className="text-[#108c2d] flex-shrink-0" />
@@ -648,7 +654,7 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
                                 </div>
                               ) : (
                                 <div className="bg-white text-slate-800 border border-slate-150 rounded-2xl rounded-tl-sm px-3.5 py-2.5 shadow-sm flex flex-col gap-1">
-                                  <span className="text-[13px] leading-relaxed font-semibold text-slate-800">{msg.message}</span>
+                                  <span className="text-[13px] leading-relaxed font-semibold text-slate-800 break-words break-all">{msg.message}</span>
                                   <span className="text-[10px] text-slate-400 self-start mt-0.5">{timeStr(msg.createdAt)}</span>
                                 </div>
                               )}
@@ -712,6 +718,7 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
       </div>
 
       {/* ── RIGHT COLUMN: Communication History (Full Height) ── */}
+      {!inNavbar && (
       <div className="w-[340px] flex-shrink-0 bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col overflow-hidden h-full">
 
         {/* Header */}
@@ -846,6 +853,7 @@ export default function ExhibitorChatTab({ data, inNavbar = false }: Props) {
           </button>
         </div>
       </div>
+      )}
 
       {/* Pop-up for All Conversations */}
       <AnimatePresence>
