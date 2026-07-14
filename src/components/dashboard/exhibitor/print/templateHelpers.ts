@@ -103,7 +103,7 @@ export const getDiscountPercent = (item: any = {}): number => {
 export const formatSize = (value: any): string => {
     if (!value) return '-';
     let valStr = String(value).toLowerCase().replace(/m$/, '').trim();
-    return `${valStr.replace(/\s*[xX*]\s*/g, 'X').trim()} m`;
+    return `${valStr.replace(/\s*[xX*]\s*/g, ' × ').trim()} m`;
 };
 
 export const formatArea = (value: any): string => {
