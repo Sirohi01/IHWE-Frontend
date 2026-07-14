@@ -12,7 +12,7 @@ const Advisory = lazy(() => import("./pages/Advisory"));
 const Exhibition = lazy(() => import("./pages/Exhibition"));
 const ExhibitorProfile = lazy(() => import("./pages/ExhibitorProfile"));
 const Partners = lazy(() => import("./pages/Partners"));
-import Conference from "./pages/Conference";
+const Conference = lazy(() => import("./pages/Conference"));
 const Exhibitors = lazy(() => import("./pages/Exhibitors"));
 const WhyExhibit = lazy(() => import("./pages/WhyExhibit"));
 const BookAStand = lazy(() => import("./pages/book-a-stand"));
@@ -120,7 +120,7 @@ const BuyerNotificationsPage = lazy(() => import("./pages/buyer/tabs/BuyerNotifi
 const BuyerCalendarPage = lazy(() => import("./pages/buyer/tabs/BuyerCalendarPage"));
 const HospitalityPartner = lazy(() => import("./pages/HospitalityPartner"));
 const DelegatesLogin = lazy(() => import("./pages/delegate/DelegatesLogin"));
-import { BuyerDocumentationPage } from "./pages/buyer/tabs/BuyerPlaceholders";
+const BuyerDocumentationPage = lazy(() => import("./pages/buyer/tabs/BuyerPlaceholders").then(m => ({ default: m.BuyerDocumentationPage })));
 
 import { AuthProvider as BuyerAuthProvider } from "@/context/BuyerAuthContext";
 import VisitorRegistrationDrawer from "@/components/VisitorRegistrationDrawer";
@@ -134,26 +134,26 @@ const PaymentReminders = lazy(() => import("@/pages/exhibitor/PaymentReminders")
 const Notification = lazy(() => import("@/pages/exhibitor/Notification"));
 const RelationshipManager = lazy(() => import("@/pages/exhibitor/RelationshipManager"));
 const ExProfile = lazy(() => import("@/pages/exhibitor/ExProfile"));
-import Overview from "@/pages/exhibitor/Overview";
+const Overview = lazy(() => import("@/pages/exhibitor/Overview"));
 const AddInternationalVistor = lazy(() => import("@/pages/visitors/international_vistor/AddInternationalVistor"));
 const SellerFeedbackForm = lazy(() => import("./pages/feedbacks/SellerFeedbackForm"));
 const WhyVisit = lazy(() => import("@/pages/why_visit/WhyVisit"));
 const EPromotionWeb = lazy(() => import("./pages/e_promotion_webPage/EPromotionWeb"));
-import DelegateRegistrationDetails from "./pages/delegate/DelegateRegistrationDetails";
+const DelegateRegistrationDetails = lazy(() => import("./pages/delegate/DelegateRegistrationDetails"));
 
 const Awards = lazy(() => import("./pages/awards/Awards"));
 const NominationFormPage = lazy(() => import("./pages/awards/NominationFormPage"));
 const DelegateRegistration = lazy(() => import("@/pages/delegate/DelegateRegistration"));
 const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"));
 import { SERVER_URL } from "./lib/api";
-import ProductServices from "./pages/exhibitor/ProductServices";
+const ProductServices = lazy(() => import("./pages/exhibitor/ProductServices"));
 const StallInformation = lazy(() => import("./pages/exhibitor/StallInformation"));
-import MyEvent from "./pages/exhibitor/MyEvent";
-import DocumentCenter from "./pages/exhibitor/DocumentCenter";
-import BuyerContacts from "./pages/exhibitor/BuyerContacts";
-import PaperPresentation from "./pages/presentation/PaperPresentation";
-import PosterPresentation from "./pages/presentation/PosterPresentation";
-import AbstractPresentation from "./pages/presentation/AbstractPresentation";
+const MyEvent = lazy(() => import("./pages/exhibitor/MyEvent"));
+const DocumentCenter = lazy(() => import("./pages/exhibitor/DocumentCenter"));
+const BuyerContacts = lazy(() => import("./pages/exhibitor/BuyerContacts"));
+const PaperPresentation = lazy(() => import("./pages/presentation/PaperPresentation"));
+const PosterPresentation = lazy(() => import("./pages/presentation/PosterPresentation"));
+const AbstractPresentation = lazy(() => import("./pages/presentation/AbstractPresentation"));
 
 const SitemapRedirect = () => {
   useEffect(() => {

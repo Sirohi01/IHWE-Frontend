@@ -58,6 +58,7 @@ const FloatingVideo: React.FC = () => {
               src={`${SERVER_URL}${currentVideo.videoUrl}#t=0.1`}
               muted
               playsInline
+              preload="metadata"
               className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
             />
             
