@@ -132,6 +132,7 @@ const ParticipantsFeedback = lazy(() => import("@/pages/psmClaim/ParticipantsFee
 const MandateForm = lazy(() => import("@/pages/psmClaim/MandateForm"));
 const PaymentReminders = lazy(() => import("@/pages/exhibitor/PaymentReminders"));
 const Notification = lazy(() => import("@/pages/exhibitor/Notification"));
+const SupportAssistance = lazy(() => import("@/pages/exhibitor/SupportAssistance"));
 const RelationshipManager = lazy(() => import("@/pages/exhibitor/RelationshipManager"));
 const ExProfile = lazy(() => import("@/pages/exhibitor/ExProfile"));
 const Overview = lazy(() => import("@/pages/exhibitor/Overview"));
@@ -297,6 +298,7 @@ const App = () => {
                     <Route path="mandate-form" element={<MandateForm />} />
                     <Route path="reminders" element={<PaymentReminders />} />
                     <Route path="notification" element={<Notification />} />
+                    <Route path="support" element={<SupportAssistance />} />
                     <Route path="relationship-manager" element={<RelationshipManager />} />
                     <Route path="feedback" element={<ExhibitorFeedbackForm />} />
                     <Route path="ex-profile" element={<ExProfile />} />
