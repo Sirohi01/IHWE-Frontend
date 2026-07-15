@@ -218,7 +218,7 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
                                         <p className="text-[11px] font-black text-slate-800 uppercase tracking-widest leading-none mb-1">
                                             {data?.contact1?.firstName || 'User'} {data?.contact1?.lastName || ''}
                                         </p>
-                                        <p className="text-[9px] font-bold text-slate-400 truncate">{data?.email || 'exhibitor@example.com'}</p>
+                                        <p className="text-[9px] font-bold text-slate-400 truncate">{data?.contact1?.email || data?.email || 'exhibitor@example.com'}</p>
                                     </div>
                                     <div className="p-1">
                                         <button

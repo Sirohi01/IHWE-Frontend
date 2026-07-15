@@ -1,226 +1,396 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Receipt, CheckCircle2, Clock, AlertCircle, CreditCard, ArrowRight } from 'lucide-react';
+import {
+    Bell, CheckCircle2, Clock, AlertTriangle, ArrowRight,
+    FileText, Calendar, Filter, CalendarDays,
+    PhoneCall, Mail, Settings, HeadphonesIcon, HelpCircle,
+    ChevronLeft, ChevronRight
+} from 'lucide-react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
+import { API_URL } from '@/lib/api';
 
-import DashboardHero from '@/components/dashboard/DashboardHero';
+const DOC_TYPE_SLUGS = {
+    'Invoice': 'invoice',
+    'Proforma Invoice': 'proforma',
+    'Delivery Challan': 'challan',
+    'Credit Note': 'creditnote',
+    'Credit Note (Legacy)': 'legacycreditnote',
+    'Debit Note': 'debitnote',
+};
 
 export default function PaymentReminders() {
     const { data } = useExhibitorCtx();
     const navigate = useNavigate();
+    const token = localStorage.getItem('exhibitorToken');
+
+    const [overview, setOverview] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
     const formatRupee = (amount) => {
         return new Intl.NumberFormat('en-IN', {
             style: 'currency',
             currency: 'INR',
-            maximumFractionDigits: 0
-        }).format(amount);
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }).format(amount || 0);
     };
 
-    const totalStallCost = data?.participation?.total || 0;
-    const outstandingAmount = data?.balanceAmount || 0;
-    const amountPaid = data?.amountPaid || (totalStallCost - outstandingAmount);
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '—';
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return '—';
+        return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    };
 
-    const dueDate = data?.createdAt
-        ? new Date(new Date(data.createdAt).getTime() + (30 * 24 * 60 * 60 * 1000)).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })
-        : '—';
+    useEffect(() => {
+        const fetchOverview = async () => {
+            if (!data?._id) return;
+            try {
+                setLoading(true);
+                const res = await fetch(`${API_URL}/exhibitor-auth/account-overview?id=${data._id}`, {
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                const json = await res.json();
+                if (json.success) {
+                    setOverview(json.data);
+                }
+            } catch (err) {
+                console.error('Failed to fetch account overview', err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchOverview();
+    }, [data?._id, token]);
+
+    const viewDocument = (doc) => {
+        const slug = DOC_TYPE_SLUGS[doc.documentType];
+        if (!slug) return;
+        window.open(`/exhibitor-print/${slug}/${doc.id}`, '_blank', 'noopener,noreferrer');
+    };
+
+    const financials = overview?.financials || {};
+    const recentDocuments = overview?.recentDocuments || [];
+
+    const invoices = recentDocuments.filter(doc => doc.documentType === 'Invoice');
+
+    const totalDue = financials?.remainingBalance || 0;
+    const totalPaid = financials?.paidAmount || 0;
+    const totalInvoices = invoices.length;
+
+    // Remaining by ID map
+    const remainingById = new Map(
+        (financials?.remainingBreakdown || []).map((entry) => [String(entry.id), entry.remainingAmount])
+    );
+
+    // Calculate details for each invoice
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const processedInvoices = invoices.map(inv => {
+        const amtDue = remainingById.get(String(inv.id)) || 0;
+        const dueDate = inv.dueDate ? new Date(inv.dueDate) : new Date(new Date(inv.date).getTime() + (30 * 24 * 60 * 60 * 1000));
+        dueDate.setHours(0, 0, 0, 0);
+
+        const diffTime = dueDate - today;
+        const daysLeft = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+        let status = amtDue <= 0 ? 'Paid' : 'Upcoming';
+        if (amtDue > 0 && daysLeft <= 3 && daysLeft >= 0) status = 'Due Soon';
+        if (amtDue > 0 && daysLeft < 0) status = 'Overdue';
+
+        return {
+            ...inv,
+            amtDue,
+            dueDateObj: dueDate,
+            dueDateStr: formatDate(dueDate),
+            daysLeft,
+            statusDisplay: status
+        };
+    }).sort((a, b) => {
+        if (a.amtDue > 0 && b.amtDue <= 0) return -1;
+        if (a.amtDue <= 0 && b.amtDue > 0) return 1;
+        return a.dueDateObj - b.dueDateObj;
+    });
+
+    const unpaidInvoices = processedInvoices.filter(inv => inv.amtDue > 0);
+    const nearestInvoice = unpaidInvoices.length > 0 ? unpaidInvoices[0] : null;
+
+    let dueInDays = '—';
+    let dueInDateStr = '—';
+    if (nearestInvoice) {
+        if (nearestInvoice.daysLeft < 0) dueInDays = `${Math.abs(nearestInvoice.daysLeft)} Days Ago`;
+        else if (nearestInvoice.daysLeft === 0) dueInDays = 'Today';
+        else dueInDays = `${nearestInvoice.daysLeft} Days`;
+
+        dueInDateStr = nearestInvoice.dueDateStr;
+    }
+
+    const companyName = data?.exhibitorName || 'Company Name';
+    const stallNo = data?.participation?.stallFor || data?.participation?.stall?.stallNumber || data?.participation?.stallNo || 'TBA';
+
+    // Pagination Logic
+    const totalPages = Math.ceil(processedInvoices.length / itemsPerPage);
+    const paginatedInvoices = processedInvoices.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
 
     return (
-        <div className="space-y-6 pb-10">
-            <DashboardHero 
-                pageId="ex-reminders" 
-                defaultTitle="Payment & Outstanding Summary" 
-                defaultSubtitle="Stay updated with your pending payments and ensure seamless participation"
-                type="exhibitor" 
-            />
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="w-full px-4"
-            >
-            {/* Header Section */}
-            <div className="bg-white px-6 py-3 rounded-sm shadow-sm border border-slate-200 mb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t-4 border-t-[#d26019]">
-                <div>
-                    <div className="flex items-center gap-2 mb-1">
-                        <div className="w-8 h-8 rounded-full bg-[#d26019]/10 flex items-center justify-center">
-                            <CreditCard size={16} className="text-[#d26019]" />
-                        </div>
-                        <h1 className="text-lg font-medium  tracking-tight text-slate-800">Payment & Outstanding Summary</h1>
+        <div className="space-y-2 font-inter bg-slate-50/50 px-2 lg:px-4 py-2 min-h-full">
+
+            {/* Header Box */}
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-2.5 px-4 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center border border-emerald-100 shrink-0">
+                        <Bell size={20} />
                     </div>
-                    <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400 ml-10">
-                        Stay updated with your pending payments and ensure seamless participation at IHWE 2026.
+                    <div>
+                        <h1 className="text-lg font-bold text-slate-800 leading-tight">Payment Reminders</h1>
+                        <p className="text-[11px] text-slate-500 font-medium">Stay updated on your due payments and avoid late fees.</p>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-2 bg-slate-50 px-3 py-1.5 rounded-xl border border-slate-200">
+                    <div className="w-8 h-8 rounded-full bg-[#182a3c] text-[#c9974c] flex items-center justify-center border-2 border-[#c9974c] text-xs font-bold shrink-0">
+                        {companyName.substring(0, 1)}
+                    </div>
+                    <div className="flex flex-col pr-2">
+                        <span className="text-[12px] font-bold text-slate-800 leading-none mb-0.5">{companyName}</span>
+                        <span className="text-[10px] font-semibold text-slate-500 leading-none">Stall No. {stallNo}</span>
+                    </div>
+                </div>
+            </div>
+
+            {/* Alert Banner */}
+            {unpaidInvoices.length > 0 && (
+                <motion.div
+                    initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+                    className="bg-red-50 rounded-xl border border-red-100 p-2.5 px-4 flex items-center justify-between gap-3"
+                >
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-red-100 text-red-500 flex items-center justify-center shrink-0">
+                            <Bell size={16} className="animate-pulse" />
+                        </div>
+                        <div>
+                            <h3 className="text-sm font-bold text-red-600 leading-tight">You have {unpaidInvoices.length} payment{unpaidInvoices.length > 1 ? 's' : ''} due!</h3>
+                            <p className="text-[11px] text-slate-600 font-medium mt-0.5">Make the payment on or before the due date to avoid late fees and service interruptions.</p>
+                        </div>
+                    </div>
+                    <button onClick={() => navigate('/exhibitor-dashboard/invoices')} className="px-3 py-1.5 bg-white text-slate-700 text-[11px] font-bold border border-slate-200 rounded-md hover:bg-slate-50 transition-colors whitespace-nowrap shadow-sm">
+                        View Invoice
+                    </button>
+                </motion.div>
+            )}
+
+            {/* Stats Row */}
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-3 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-red-50 text-red-500 flex items-center justify-center shrink-0">
+                        <FileText size={18} />
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Total Due</p>
+                        <h2 className="text-base font-bold text-slate-800 leading-none">{formatRupee(totalDue)}</h2>
+                        <p className="text-[10px] font-semibold text-red-500 mt-1">{unpaidInvoices.length} Due</p>
+                    </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-3 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-orange-50 text-orange-500 flex items-center justify-center shrink-0">
+                        <CalendarDays size={18} />
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Due In</p>
+                        <h2 className="text-base font-bold text-slate-800 leading-none">{dueInDays}</h2>
+                        <p className="text-[10px] font-semibold text-orange-500 mt-1">{dueInDateStr}</p>
+                    </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-3 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center shrink-0">
+                        <CheckCircle2 size={18} />
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Total Paid</p>
+                        <h2 className="text-base font-bold text-slate-800 leading-none">{formatRupee(totalPaid)}</h2>
+                        <p className="text-[10px] font-semibold text-emerald-600 mt-1">{invoices.length - unpaidInvoices.length} Paid</p>
+                    </div>
+                </div>
+
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-3 flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center shrink-0">
+                        <FileText size={18} />
+                    </div>
+                    <div>
+                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">Total Invoices</p>
+                        <h2 className="text-base font-bold text-slate-800 leading-none">{formatRupee(totalDue + totalPaid)}</h2>
+                        <p className="text-[10px] font-semibold text-purple-600 mt-1">{totalInvoices} Invoices</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Table Section */}
+            <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <div className="p-3 border-b border-slate-100 flex items-center justify-between">
+                    <h3 className="text-sm font-bold text-slate-800">Payment Reminders</h3>
+                    <div className="text-[11px] font-bold text-slate-500 bg-slate-50 px-3 py-1 rounded-md border border-slate-200">
+                        Total {invoices.length} Invoices
+                    </div>
+                </div>
+                <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                        <thead>
+                            <tr className="bg-slate-50 border-b border-slate-100">
+                                <th className="py-2 px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Invoice No.</th>
+                                <th className="py-2 px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Description</th>
+                                <th className="py-2 px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Due Date</th>
+                                <th className="py-2 px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Amount Due</th>
+                                <th className="py-2 px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Days Left</th>
+                                <th className="py-2 px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Status</th>
+                                <th className="py-2 px-3 text-[10px] font-bold text-slate-500 uppercase tracking-wider">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                            {paginatedInvoices.length === 0 && (
+                                <tr>
+                                    <td colSpan="7" className="py-6 text-center text-xs text-slate-500">No invoices found.</td>
+                                </tr>
+                            )}
+                            {paginatedInvoices.map((inv, idx) => {
+                                let statusStyles = "";
+                                let icon = null;
+                                let daysLeftText = inv.daysLeft < 0 ? 'Overdue' : `${inv.daysLeft} Days`;
+                                let daysLeftStyle = "";
+                                let rowHighlight = "";
+
+                                if (inv.statusDisplay === 'Paid') {
+                                    statusStyles = "bg-emerald-50 text-emerald-600 border border-emerald-100";
+                                    icon = <CheckCircle2 size={14} className="text-emerald-500 shrink-0" />;
+                                    daysLeftText = "Cleared";
+                                    daysLeftStyle = "text-emerald-500 font-bold";
+                                    rowHighlight = "hover:bg-slate-50/50";
+                                } else if (inv.statusDisplay === 'Overdue') {
+                                    statusStyles = "bg-red-50 text-red-600 border border-red-100";
+                                    icon = <AlertTriangle size={14} className="text-red-500 shrink-0" />;
+                                    daysLeftStyle = "text-red-600 font-bold";
+                                    rowHighlight = "bg-red-50 hover:bg-red-100";
+                                } else if (inv.statusDisplay === 'Due Soon') {
+                                    statusStyles = "bg-red-50 text-red-600 border border-red-100";
+                                    icon = <AlertTriangle size={14} className="text-red-500 shrink-0" />;
+                                    daysLeftStyle = "text-red-600 font-bold";
+                                    rowHighlight = "bg-orange-50 hover:bg-orange-100";
+                                } else {
+                                    statusStyles = "bg-orange-50 text-orange-600 border border-orange-100";
+                                    icon = <AlertTriangle size={14} className="text-orange-400 shrink-0" />;
+                                    daysLeftStyle = "text-orange-500 font-bold";
+                                    rowHighlight = "bg-yellow-50 hover:bg-yellow-100";
+                                }
+
+                                return (
+                                    <tr key={inv.id} className={`${rowHighlight} transition-colors border-b border-slate-50 last:border-0`}>
+                                        <td className="py-3 px-3 align-middle">
+                                            <div className="flex items-center gap-2">
+                                                {icon}
+                                                <span className="text-[12px] font-bold text-slate-700">{inv.documentNo}</span>
+                                            </div>
+                                        </td>
+                                        <td className="py-3 px-3 align-middle">
+                                            <p className="text-[12px] font-bold text-slate-800 leading-tight">Stall Booking</p>
+                                            <p className="text-[10px] text-slate-500 font-medium leading-none mt-0.5">{inv.type_of_invoice || 'Invoice'}</p>
+                                        </td>
+                                        <td className="py-3 px-3 align-middle">
+                                            <p className="text-[12px] font-bold text-slate-800 leading-none">{inv.dueDateStr}</p>
+                                        </td>
+                                        <td className="py-3 px-3 align-middle">
+                                            <p className="text-[12px] font-bold text-slate-800 leading-none">{formatRupee(inv.amtDue > 0 ? inv.amtDue : inv.amount)}</p>
+                                        </td>
+                                        <td className="py-3 px-3 align-middle">
+                                            <span className={`text-[11px] ${daysLeftStyle}`}>{daysLeftText}</span>
+                                        </td>
+                                        <td className="py-3 px-3 align-middle">
+                                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${statusStyles}`}>
+                                                {inv.statusDisplay}
+                                            </span>
+                                        </td>
+                                        <td className="py-3 px-3 align-middle">
+                                            <button onClick={() => viewDocument(inv)} className="px-2.5 py-1 bg-white border border-slate-200 text-emerald-700 text-[10px] font-bold rounded hover:bg-emerald-50 hover:border-emerald-200 transition-colors shadow-sm">
+                                                View Invoice
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })}
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                    <div className="p-2 border-t border-slate-100 flex items-center justify-between bg-slate-50">
+                        <span className="text-[11px] font-semibold text-slate-500 pl-2">
+                            Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, processedInvoices.length)} of {processedInvoices.length} Invoices
+                        </span>
+                        <div className="flex items-center gap-1">
+                            <button
+                                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                                disabled={currentPage === 1}
+                                className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <ChevronLeft size={14} />
+                            </button>
+                            <span className="text-[11px] font-bold text-slate-700 px-2">Page {currentPage} of {totalPages}</span>
+                            <button
+                                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                                disabled={currentPage === totalPages}
+                                className="w-6 h-6 flex items-center justify-center rounded border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                <ChevronRight size={14} />
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
+
+            {/* Bottom Cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {/* Tip Card */}
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-3 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+                        <Calendar size={14} />
+                    </div>
+                    <p className="text-[11px] font-bold text-slate-700 leading-tight">
+                        <span className="text-emerald-700">Tip:</span> Pay early to ensure uninterrupted services and a smooth event experience.
                     </p>
                 </div>
 
-                <div className="flex items-center justify-end">
-                    {outstandingAmount > 0 ? (
-                        <button
-                            onClick={() => navigate('/exhibitor-dashboard/invoices')}
-                            className="group flex flex-col items-end gap-1 px-5 py-2.5 bg-red-50 hover:bg-red-600 border border-red-200 hover:border-red-600 rounded-sm transition-all duration-300"
-                        >
-                            <span className="text-[9px] font-semibold uppercase text-red-600 group-hover:text-white transition-colors">Total Outstanding</span>
-                            <div className="flex items-center gap-2">
-                                <span className="text-lg font-semibold text-red-700 group-hover:text-white transition-colors">{formatRupee(outstandingAmount)}</span>
-                                <ArrowRight size={18} className="text-red-500 group-hover:text-white group-hover:translate-x-1 transition-all" />
-                            </div>
-                        </button>
-                    ) : (
-                        <div className="flex items-center gap-3 px-6 py-3 bg-emerald-50 border border-emerald-100 rounded-sm">
-                            <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center text-white shadow-sm">
-                                <CheckCircle2 size={18} />
-                            </div>
-                            <div>
-                                <p className="text-[10px] font-semibold uppercase text-emerald-600 leading-none mb-1">Status</p>
-                                <p className="text-sm font-medium text-slate-800 leading-none">Payment Completed</p>
-                            </div>
+                {/* Help Card */}
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-3 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 border border-emerald-100">
+                            <HeadphonesIcon size={16} />
                         </div>
-                    )}
-                </div>
-            </div>
-
-            {/* Payment Summary Highlight Box */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-2">
-                <div className="bg-white p-5 rounded-sm border-l-4 border-l-blue-600 shadow-sm border border-slate-200">
-                    <p className="text-[10px] font-semibold uppercase text-slate-400 tracking-widest mb-1">Total Stall Cost</p>
-                    <h2 className="text-lg font-medium text-slate-800">{formatRupee(totalStallCost)}</h2>
-                </div>
-                <div className="bg-white p-5 rounded-sm border-l-4 border-l-emerald-600 shadow-sm border border-slate-200">
-                    <p className="text-[10px] font-semibold uppercase text-slate-400 tracking-widest mb-1">Amount Paid</p>
-                    <h2 className="text-lg font-medium text-emerald-600">{formatRupee(amountPaid)}</h2>
-                </div>
-                <div className="bg-white p-5 rounded-sm border-l-4 border-l-red-600 shadow-sm border border-slate-200">
-                    <p className="text-[10px] font-semibold uppercase text-slate-400 tracking-widest mb-1">Outstanding Amount</p>
-                    <h2 className="text-lg font-medium text-red-600">{formatRupee(outstandingAmount)}</h2>
-                </div>
-                <div className="bg-white p-5 rounded-sm border-l-4 border-l-slate-400 shadow-sm border border-slate-200 relative overflow-hidden">
-                    <div className="relative z-10">
-                        <p className="text-[10px] font-semibold uppercase text-slate-400 tracking-widest mb-1">Payment Due Date</p>
-                        <h2 className="text-lg font-medium text-slate-800">{dueDate}</h2>
+                        <div>
+                            <h4 className="text-[12px] font-bold text-slate-800">Need Help?</h4>
+                            <p className="text-[10px] font-semibold text-slate-500 leading-none mt-0.5">Contact our support team.</p>
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-4 text-[11px] font-bold text-slate-600">
+                        <div className="flex items-center gap-1.5">
+                            <PhoneCall size={12} className="text-emerald-600" />
+                            +91-9654900525
+                        </div>
+                        <div className="flex items-center gap-1.5">
+                            <Mail size={12} className="text-emerald-600" />
+                            info@ihwe.com
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* Section Title */}
-            <div className="flex items-center justify-between mb-4 px-1">
-                <h3 className="text-sm font-semibold text-slate-800 uppercase tracking-widest flex items-center gap-2">
-                    <Receipt size={16} className="text-[#23471d]" />Payment Current Status
-                </h3>
-            </div>
-
-            {/* Conditional Status Banners */}
-            <div className="mb-4">
-                {(() => {
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-
-                    // Robust Date Parsing
-                    const regDate = data?.createdAt ? new Date(data.createdAt) : new Date();
-                    const dueLimit = new Date(regDate);
-                    dueLimit.setDate(regDate.getDate() + 30);
-                    dueLimit.setHours(0, 0, 0, 0);
-
-                    const isPaid = outstandingAmount <= 0;
-                    const isOverdue = !isPaid && today > dueLimit;
-                    const isNearDue = !isPaid && !isOverdue; // Catch-all for any pending payment not yet overdue
-
-                    // Days calculation
-                    const diffTime = Math.abs(today - dueLimit);
-                    const daysDiff = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                    if (isOverdue) {
-                        return (
-                            <motion.div
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className="bg-red-50 border border-red-200 rounded-sm p-5 shadow-sm"
-                            >
-                                <div className="flex items-start gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600 flex-shrink-0">
-                                        <AlertCircle size={20} />
-                                    </div>
-                                    <div className="space-y-3">
-                                        <h4 className="text-[13px] font-semibold text-red-700 uppercase tracking-widest flex items-center gap-2">
-                                            ⚠️ Payment Overdue
-                                        </h4>
-                                        <p className="text-sm text-slate-700 leading-relaxed">
-                                            Your payment is overdue by <span className="font-semibold text-red-600 border-b border-red-200">{daysDiff} days</span>.
-                                            Kindly clear the outstanding amount of <span className="font-semibold text-red-600">{formatRupee(outstandingAmount)}</span> at the earliest to avoid cancellation or reallocation of your stall.
-                                        </p>
-                                        <div className="flex items-center gap-2 text-[11px] font-bold text-red-800 bg-red-100/50 px-3 py-1.5 rounded-sm inline-block">
-                                            👉 Immediate action is required to continue enjoying all exhibitor benefits.
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        );
-                    }
-
-                    if (isNearDue) {
-                        return (
-                            <motion.div
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className="bg-amber-50 border border-amber-200 rounded-sm px-6 py-2 shadow-sm"
-                            >
-                                <div className="flex items-start gap-4">
-                                    <div className="w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 flex-shrink-0">
-                                        <Clock size={20} />
-                                    </div>
-                                    <div className="space-y-1 flex-1">
-                                        <h4 className="text-[13px] font-semibold text-amber-700 uppercase tracking-widest flex items-center gap-2">
-                                            ⏳ Payment Due Soon
-                                        </h4>
-                                        <p className="text-sm text-slate-700 leading-relaxed">
-                                            Your upcoming payment of <span className="font-semibold text-amber-700">{formatRupee(outstandingAmount)}</span> is due on <span className="font-semibold text-amber-700 underline">{dueDate}</span>.
-                                            We request you to complete the payment within the timeline to ensure uninterrupted participation.
-                                        </p>
-                                        <div className="flex items-center text-[13px] font-medium text-amber-800 bg-amber-100/50 py-1 rounded-sm inline-block">
-                                            👉 Timely payment will help you retain your stall allocation and access all event-related services smoothly.
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        );
-                    }
-
-                    if (isPaid) {
-                        return (
-                            <motion.div
-                                initial={{ opacity: 0, x: -10 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                className="bg-emerald-50 border border-emerald-200 rounded-sm px-6 py-3 shadow-sm border-l-4 border-l-emerald-500"
-                            >
-                                <div className="flex items-start gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 flex-shrink-0">
-                                        <CheckCircle2 size={24} />
-                                    </div>
-                                    <div className="space-y-1 flex-1">
-                                        <div className="flex items-center justify-between">
-                                            <h4 className="text-[13px] font-semibold text-emerald-700 uppercase tracking-widest flex items-center gap-2">
-                                                ✅ Payment Up to Date
-                                            </h4>
-                                            <span className="px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-semibold uppercase rounded">Confirmed</span>
-                                        </div>
-                                        <p className="text-sm text-slate-700 leading-relaxed">
-                                            All your payments are successfully completed. Your stall booking is <span className="font-medium text-emerald-700 underline underline-offset-4 decoration-emerald-200">Fully Confirmed</span> for IHWE 2026.
-                                        </p>
-                                        <div className="flex flex-wrap items-center gap-3 mt-1">
-                                            <span className="flex items-center text-[13px] font-medium text-emerald-800 bg-emerald-100/50 rounded-sm">
-                                                👉 You can now proceed with exhibitor activities, including dashboard updates, buyer connections, and event participation planning.
-                                            </span>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
-                        );
-                    }
-
-                    return null;
-                })()}
-            </div>
-        </motion.div>
         </div>
     );
 }

@@ -187,7 +187,7 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
     const ifscCode = bank.ifsccode || bank.ifscCode || settings?.ifscCode || '-';
     const bankBranch = bank.bankbranch || bank.branch || settings?.bankBranch || '-';
 
-    const th: CSSProperties = { border: '1px solid #0d1f3c', background: '#0d1f3c', color: '#fff', padding: '3px 2px', fontSize: 10, lineHeight: 1.1, fontWeight: 700, textAlign: 'center', textTransform: 'uppercase' };
+    const th: CSSProperties = { border: '1px solid #0d1f3c', background: '#0d1f3c', color: '#fff', padding: '3px 2px', fontSize: 10, lineHeight: 1.1, fontWeight: 700, textAlign: 'center', textTransform: 'uppercase', whiteSpace: 'nowrap' };
     const td: CSSProperties = { border: '1px solid #ccc', padding: '6px', fontSize: 11, lineHeight: 1.2, verticalAlign: 'top' };
     const topTh = { ...th };
     const topTd = { ...td, padding: '4px 7px' };
@@ -361,7 +361,7 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
                             <td style={{ ...td, textAlign: 'center' }}>{fmtNum(item.qty)}</td>
                             <td style={{ ...td, textAlign: 'center', whiteSpace: 'nowrap' }}>{formatSize(item.area || item.stall_area)}</td>
                             <td style={{ ...td, textAlign: 'center', whiteSpace: 'nowrap' }}>{formatArea(item.size || item.stall_size)}</td>
-                            <td style={{ ...td, textAlign: 'center' }}>Nos.</td>
+                            <td style={{ ...td, textAlign: 'center' }}>Nos</td>
                             <td style={{ ...td, textAlign: 'right' }}>{fmtNum(item.rate || 0)}</td>
                             <td style={{ ...td, textAlign: 'center' }}>{Math.round(discPct)}%</td>
                             <td style={{ ...td, textAlign: 'right', fontWeight: 700 }}>{fmtNum(taxable)}</td>
@@ -542,8 +542,8 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
                 </tbody>
             </table>
 
-            <div className="avoid-break" style={{ position: 'relative', height: 62, overflow: 'hidden', border: '1px solid #ccc', borderTop: 'none' }}>
-                <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 34, background: '#0d1f3c', zIndex: 0 }} />
+            <div className="avoid-break" style={{ position: 'relative', height: 52, overflow: 'hidden', border: '1px solid #ccc', borderTop: 'none' }}>
+                <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 24, background: '#0d1f3c', zIndex: 0 }} />
 
                 <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, fontSize: 11, fontWeight: 500, color: '#0d1f3c', zIndex: 2 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -556,7 +556,7 @@ export default function ChallanPrintTemplate({ challan, company, settings, bankD
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Globe size={12} /> {settings?.contactWebsite || 'www.namogangewellness.com'}</div>
                 </div>
 
-                <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 10.5, zIndex: 2 }}>
+                <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 24, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 10, fontWeight: 500, zIndex: 2 }}>
                     <span>This is a computer generated document and does not require a physical signature.</span>
                 </div>
             </div>

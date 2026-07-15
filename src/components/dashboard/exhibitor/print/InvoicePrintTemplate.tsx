@@ -350,7 +350,7 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                         { label: 'Discount', width: '8%' },
                         { label: 'Total', width: '10%' },
                     ].map(h => (
-                        <th key={h.label} style={{ border: '1px solid #0d1f3c', padding: '3px 2px', textAlign: 'center', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold', width: h.width, textTransform: h.label === 'S.No.' ? 'none' : 'uppercase' }}>{h.label}</th>
+                        <th key={h.label} style={{ border: '1px solid #0d1f3c', padding: '3px 2px', textAlign: 'center', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold', width: h.width, whiteSpace: 'nowrap' }}>{h.label}</th>
                     ))}
                 </tr>
             </thead>
@@ -374,7 +374,7 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{item?.qty}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center', whiteSpace: 'nowrap' }}>{formatSize(item?.area || item?.stall_area)}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center', whiteSpace: 'nowrap' }}>{formatArea(item?.size || item?.stall_size)}</td>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>Nos.</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>Nos</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(item?.rate)}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{Math.round(discPct)}%</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(item.taxableValue)}</td>
@@ -577,11 +577,12 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                             <div style={{ textAlign: 'center', fontStyle: 'italic', color: '#888', fontSize: 10 }}>Authorized Signatory.</div>
                         </td>
                     </tr>
-                    </tbody>
-                </table>
-                <div style={{ position: 'relative', height: 46, overflow: 'hidden', borderTop: '1px solid #ccc' }}>
-                    {/* navy background — banner area only, bottom-anchored */}
-                    <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 18, background: '#0d1f3c', zIndex: 0 }} />
+                </tbody>
+            </table>
+
+            <div className="avoid-break" style={{ position: 'relative', height: 62, overflow: 'hidden', border: '1px solid #ccc', borderTop: 'none' }}>
+                {/* navy background — banner area only, bottom-anchored */}
+                <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 34, background: '#0d1f3c', zIndex: 0 }} />
 
                     {/* contact row */}
                     <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, fontSize: 11, fontWeight: 500, color: '#0d1f3c', zIndex: 2 }}>
@@ -595,10 +596,9 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Globe size={12} /> {settings?.contactWebsite || 'www.namogangewellness.com'}</div>
                     </div>
 
-                    {/* banner text */}
-                    <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 9, zIndex: 2 }}>
-                        <span>This is a computer generated document and does not require a physical signature.</span>
-                    </div>
+                {/* banner text */}
+                <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 34, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: 10.5, zIndex: 2 }}>
+                    <span>This is a computer generated document and does not require a physical signature.</span>
                 </div>
             </div>
         </>

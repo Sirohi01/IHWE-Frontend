@@ -1,21 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import {
-    User,
-    Phone,
-    Mail,
-    MessageSquare,
-    ShieldCheck,
-    Clock,
-    ExternalLink,
-    ChevronRight,
-    HeadphonesIcon
+    User, Phone, Mail, MessageSquare, Clock,
+    ExternalLink, ChevronRight, HeadphonesIcon, Users,
+    Building, Briefcase, CheckCircle, Shield, Zap,
+    ChevronLeft
 } from 'lucide-react';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
-import { API_URL } from '@/lib/api';
-
-import DashboardHero from '@/components/dashboard/DashboardHero';
+import { API_URL, SERVER_URL } from '@/lib/api';
 
 export default function RelationshipManager() {
     const { data } = useExhibitorCtx();
@@ -23,8 +15,8 @@ export default function RelationshipManager() {
     const [rmDetails, setRmDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [currentTime, setCurrentTime] = useState(new Date());
-    // filledBy stores the actual admin username (e.g. "manish")
-    // spokenWith stores a freeform name string — not reliable for DB lookup
+    const [selectedFeature, setSelectedFeature] = useState(null);
+
     const rmUsername = data?.filledBy && data.filledBy !== 'User' ? data.filledBy : null;
     const rmName = data?.spokenWith || data?.filledBy || null;
 
@@ -32,6 +24,16 @@ export default function RelationshipManager() {
         const timer = setInterval(() => setCurrentTime(new Date()), 60000);
         return () => clearInterval(timer);
     }, []);
+    useEffect(() => {
+        if (selectedFeature) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [selectedFeature]);
 
     useEffect(() => {
         if (!rmUsername) {
@@ -48,6 +50,7 @@ export default function RelationshipManager() {
     }, [rmUsername]);
 
     const handleWhatsApp = (phone) => {
+        if (!phone || phone === 'N/A') return;
         const cleanPhone = phone.replace(/\D/g, '');
         const personName = `${data?.contact1?.firstName || ''} ${data?.contact1?.lastName || ''}`.trim() || 'Exhibitor';
         const companyName = data?.exhibitorName || '—';
@@ -59,234 +62,487 @@ export default function RelationshipManager() {
     };
 
     const handleCall = (phone) => {
+        if (!phone || phone === 'N/A') return;
         window.location.href = `tel:${phone}`;
     };
 
     if (loading) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
-                <div className="w-8 h-8 border-4 border-[#23471d] border-t-transparent rounded-full animate-spin" />
+                <div className="w-8 h-8 border-4 border-[#0F3B2B] border-t-transparent rounded-full animate-spin" />
             </div>
         );
     }
 
-    if (!rmName) {
-        return (
-            <div className="space-y-6">
-                 <DashboardHero 
-                    pageId="ex-rm" 
-                    defaultTitle="Support & Assistance" 
-                    defaultSubtitle="Dedicated Relationship Management for IHWE 2026"
-                    type="exhibitor" 
-                />
-                <div className="max-w-4xl mx-auto p-10 text-center bg-white rounded-xl border border-slate-200">
-                    <HeadphonesIcon size={48} className="mx-auto text-slate-300 mb-4" />
-                    <h2 className="text-xl font-black text-slate-800 uppercase tracking-tight">No Manager Assigned</h2>
-                    <p className="text-slate-500 mt-2">Your relationship manager details will appear here once assigned.</p>
-                </div>
-            </div>
-        );
-    }
+    // Default Fallbacks matching the image UI
+    const getImageUrl = (path) => {
+        if (!path) return null;
+        if (path.startsWith('http')) return path;
+        if (path.startsWith('/')) return `${SERVER_URL}${path}`;
+        return `${SERVER_URL}/${path}`;
+    };
+
+    const profileImg = getImageUrl(rmDetails?.profileImage);
+    const name = rmDetails?.fullName || rmName || 'Manish Sirohi';
+    const designation = rmDetails?.designation || 'FINANCE EXECUTIVE';
+    const email = rmDetails?.email || 'manishsirohi023@gmail.com';
+    const mobile = rmDetails?.mobile || '09568259784';
+    const department = rmDetails?.department || 'Finance Department';
+    const empId = rmDetails?.username || 'vansh';
+
+    const hodName = rmDetails?.hodName || 'Vansh Chaudhary';
+    const hodDesignation = rmDetails?.hodDesignation || 'Developer';
+    const hodMobile = rmDetails?.hodMobile || '09568259784';
+    const hodEmail = rmDetails?.hodEmail || 'manishsirohi023@gmail.com';
+
+    const repName = rmDetails?.reportingToName || 'Rohit Kumar';
+    const repDesignation = rmDetails?.reportingToDesignation || 'Software Developer';
+    const repMobile = rmDetails?.reportingToMobile || '9568816858';
+    const repEmail = rmDetails?.reportingToEmail || 'rishi.encodency95@gmail.com';
+
+    const hour = currentTime.getHours();
+    const isOnline = hour >= 9 && hour < 19;
+
+    const featureDetails = [
+        {
+            id: 'dedicated-support',
+            title: 'Dedicated Support',
+            shortDesc: 'One-to-one assistance for all your requirements.',
+            description: 'We provide you with a dedicated Relationship Manager who serves as your single point of contact for all your needs regarding IHWE 2026. This ensures you always have a familiar expert to rely on.',
+            Icon: HeadphonesIcon,
+            colorBg: 'bg-emerald-50',
+            colorBorder: 'border-emerald-100',
+            colorText: 'text-emerald-600',
+            iconClass: '',
+            points: [
+                'Personalized assistance tailored to your specific exhibition requirements.',
+                'Direct line of communication with our senior support staff.',
+                'Proactive updates and follow-ups on your requests.',
+                'Priority handling of any escalations or critical issues.'
+            ]
+        },
+        {
+            id: 'quick-response',
+            title: 'Quick Response',
+            shortDesc: 'We ensure prompt response within ~30 minutes.',
+            description: 'Time is critical when preparing for an exhibition. Our team is committed to ensuring that your queries are addressed with the utmost urgency, keeping your preparations on track.',
+            Icon: Zap,
+            colorBg: 'bg-purple-50',
+            colorBorder: 'border-purple-100',
+            colorText: 'text-purple-600',
+            iconClass: 'fill-purple-600',
+            points: [
+                'Guaranteed initial response within ~30 minutes during working hours.',
+                'Fast-track resolution for technical and logistical queries.',
+                'Real-time updates on the status of your open tickets.',
+                '24/7 automated ticketing system for tracking your requests.'
+            ]
+        },
+        {
+            id: 'expert-guidance',
+            title: 'Expert Guidance',
+            shortDesc: 'Experienced team to help you at every step.',
+            description: 'Leverage the expertise of our seasoned event professionals to maximize your return on investment at IHWE 2026. We help you make informed decisions.',
+            Icon: Shield,
+            colorBg: 'bg-blue-50',
+            colorBorder: 'border-blue-100',
+            colorText: 'text-blue-600',
+            iconClass: '',
+            points: [
+                'Strategic advice on booth placement, design, and visitor engagement.',
+                'Best practices for pre-event marketing and audience targeting.',
+                'Compliance and regulatory guidance for your exhibition setup.',
+                'Insights into industry trends and networking opportunities.'
+            ]
+        },
+        {
+            id: 'complete-assistance',
+            title: 'Complete Assistance',
+            shortDesc: 'End-to-end support for a seamless experience.',
+            description: 'From the moment you register until the conclusion of the event, we provide comprehensive support covering every single aspect of your participation journey.',
+            Icon: CheckCircle,
+            colorBg: 'bg-orange-50',
+            colorBorder: 'border-orange-100',
+            colorText: 'text-orange-500',
+            iconClass: '',
+            points: [
+                'Seamless onboarding and registration process.',
+                'Complete logistical support, including freight, electricity, and furniture.',
+                'On-site troubleshooting and technical assistance during event days.',
+                'Post-event reporting and feedback analysis.'
+            ]
+        }
+    ];
 
     return (
-        <div className="space-y-6 pb-10">
-            <DashboardHero 
-                pageId="ex-rm" 
-                defaultTitle="Support & Assistance" 
-                defaultSubtitle="Dedicated Relationship Management for IHWE 2026"
-                type="exhibitor" 
-            />
-            <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="w-full px-4"
-            >
-            {/* Header Section */}
-            <div className="bg-white p-4 rounded-sm shadow-sm border border-slate-200 mb-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-t-4 border-t-[#23471d]">
-                <div className=''>
-                    <div className="flex items-center gap-2 mb-1">
-                        <div className="w-7 h-7 rounded-full bg-[#23471d]/10 flex items-center justify-center">
-                            <HeadphonesIcon size={16} className="text-[#23471d]" />
+        <>
+            <div className="space-y-2 font-inter bg-slate-50 min-h-full p-1 lg:p-2">
+
+                {/* Header */}
+                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-2 flex flex-col sm:flex-row items-center justify-between gap-1">
+                    <div className="flex items-center gap-2">
+                        <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center border border-emerald-100 shrink-0">
+                            <HeadphonesIcon size={20} className="text-[#0F3B2B]" />
                         </div>
-                        <h2 className="text-lg font-black font-medium tracking-tight text-slate-800">Support & Assistance</h2>
-                    </div>
-                    <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-400 ml-10">
-                        (Dedicated Relationship Management for IHWE 2026)
-                    </p>
-                </div>
-                <div className='flex justify-between gap-4'>
-                    <a href="mailto:info@namogangewellness.com" className="flex items-center gap-2 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100 hover:bg-emerald-100 transition-colors group">
-                        <Mail size={12} className="text-emerald-600 group-hover:scale-110 transition-transform" />
-                        <span className="text-sm font-black uppercase text-emerald-700 tracking-wider">Complaints</span>
-                    </a>
-
-                    <a href="tel:+919654900525" className="flex items-center  gap-2 bg-emerald-50 px-3 py-1.5 rounded-full border border-emerald-100 hover:bg-emerald-100 transition-colors group">
-                        <Phone size={12} className="text-emerald-600 group-hover:scale-110 transition-transform" />
-                        <span className="text-sm font-black uppercase text-emerald-700 tracking-wider">Help Line</span>
-                    </a>
-                </div>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-                {/* Left Column: Profile & Office Hours */}
-                <div className="lg:col-span-1 flex flex-col gap-6">
-                    {/* Profile Card */}
-                    <div className="bg-white rounded-sm border border-slate-200 overflow-hidden shadow-sm flex flex-col">
-                        <div className="h-24 bg-gradient-to-r from-[#23471d] to-[#1a3516] flex-shrink-0" />
-                        <div className="px-6 pb-8 -mt-12 text-center flex-1">
-                            <div className="relative inline-block">
-                                <div className="w-24 h-24 rounded-full border-4 border-white bg-slate-100 flex items-center justify-center overflow-hidden mb-4 shadow-md mx-auto">
-                                    <User size={48} className="text-slate-300" />
-                                </div>
-                                <div className="absolute bottom-6 right-0 bg-[#d26019] p-1.5 rounded-full border-2 border-white text-white">
-                                    <ShieldCheck size={14} />
-                                </div>
-                            </div>
-                            <h2 className="text-lg font-medium font-black text-slate-800 tracking-tight">
-                                {rmDetails?.fullName || rmName}
-                            </h2>
-                            <p className="text-[11px] font-bold text-[#d26019] uppercase tracking-widest mb-4">
-                                {rmDetails?.designation || 'Relationship Manager'}
-                            </p>
-                            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-50 border border-slate-200 rounded-full text-[10px] font-bold text-slate-500 uppercase">
-                                <Clock size={12} /> Response time: ~30 mins
-                            </div>
+                        <div>
+                            <h2 className="text-lg font-medium text-slate-800 leading-tight">Support & Assistance</h2>
+                            <p className="text-xs font-medium text-slate-500">Dedicated Relationship Management for <span className="text-[#0F3B2B] font-bold">IHWE 2026</span></p>
                         </div>
                     </div>
+                    <div className="flex items-center gap-2">
+                        <a href="mailto:info@namogangewellness.com" className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white text-slate-700 border border-slate-200 hover:bg-slate-50 rounded-lg text-[11px] font-bold uppercase tracking-wide transition-colors">
+                            <Mail size={14} /> COMPLAINTS
+                        </a>
+                        <a href="tel:+919654900525" className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white text-blue-600 border border-blue-100 hover:bg-blue-50 rounded-lg text-[11px] font-bold uppercase tracking-wide transition-colors">
+                            <Phone size={14} /> HELP LINE
+                        </a>
+                    </div>
+                </div>
 
-                    {/* Office Hours Card */}
-                    <div className="bg-[#23471d] p-6 rounded-sm text-white shadow-lg overflow-hidden relative flex-1 flex flex-col justify-center">
-                        <div className="relative z-10">
-                            <h3 className="text-sm font-black uppercase tracking-widest mb-2">Office Hours</h3>
-                            <p className="text-[12px] opacity-80 leading-relaxed mb-4">
-                                Monday - Saturday<br />
-                                09:00 AM - 07:00 PM (IST)
-                            </p>
-                            <div className="h-px bg-white/20 mb-4" />
-                            <p className="text-[10px] font-bold opacity-60 italic leading-snug">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-1">
+
+                    {/* LEFT COLUMN */}
+                    <div className="lg:col-span-3 flex flex-col gap-1">
+                        {/* Profile Card */}
+                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col items-center pb-7 overflow-hidden">
+                            <div className="w-[120%] h-28 bg-[#0F3B2B] rounded-b-[50%] shrink-0"></div>
+                            <div className="relative -mt-12 mb-1">
+                                <div className="w-20 h-20 rounded-full border-4 border-white bg-slate-100 flex items-center justify-center overflow-hidden shadow-sm mx-auto z-10 relative">
+                                    {profileImg ? (
+                                        <img src={profileImg} alt={name} className="w-full h-full object-cover" crossOrigin="anonymous" />
+                                    ) : (
+                                        <User size={36} className="text-slate-300" />
+                                    )}
+                                </div>
+                                <div className="absolute bottom-1 right-1 w-5 h-5 bg-emerald-500 rounded-full border-2 border-white flex items-center justify-center z-20">
+                                    <CheckCircle size={12} className="text-white" strokeWidth={3} />
+                                </div>
+                            </div>
+                            <h2 className="text-xl font-medium text-slate-800 leading-tight mb-1 px-2 text-center">{name}</h2>
+                            <p className="text-xs font-bold text-[#0F3B2B] uppercase tracking-widest mb-1 text-center">{designation}</p>
+
+                            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 border border-emerald-200 rounded-full text-[10px] font-bold text-emerald-700 uppercase mb-1">
+                                <Clock size={12} /> RESPONSE TIME: ~30 MINS
+                            </div>
+
+                            <div className="w-full px-4 space-y-2.5">
+                                <div className="flex items-start gap-1">
+                                    <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100">
+                                        <Mail size={14} className="text-slate-500" />
+                                    </div>
+                                    <div className="min-w-0 flex-1 pt-0.5">
+                                        <p className="text-[10px] font-medium text-slate-500 mb-0.5">Email</p>
+                                        <p className="text-[13px] font-bold text-slate-800 truncate" title={email}>{email}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-1">
+                                    <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100">
+                                        <Phone size={14} className="text-slate-500" />
+                                    </div>
+                                    <div className="min-w-0 flex-1 pt-0.5">
+                                        <p className="text-[10px] font-medium text-slate-500 mb-0.5">Mobile</p>
+                                        <p className="text-[13px] font-bold text-slate-800 truncate">{mobile}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-1">
+                                    <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100">
+                                        <Building size={14} className="text-slate-500" />
+                                    </div>
+                                    <div className="min-w-0 flex-1 pt-0.5">
+                                        <p className="text-[10px] font-medium text-slate-500 mb-0.5">Department</p>
+                                        <p className="text-[13px] font-bold text-slate-800 truncate" title={department}>{department}</p>
+                                    </div>
+                                </div>
+                                <div className="flex items-start gap-1">
+                                    <div className="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center shrink-0 border border-slate-100">
+                                        <Briefcase size={14} className="text-slate-500" />
+                                    </div>
+                                    <div className="min-w-0 flex-1 pt-0.5">
+                                        <p className="text-[10px] font-medium text-slate-500 mb-0.5">Employee Username</p>
+                                        <p className="text-[13px] font-bold text-slate-800 truncate" title={empId}>{empId}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Office Hours Card */}
+                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-3">
+                            <div className="flex items-center gap-1 mb-1">
+                                <Clock size={16} className="text-slate-600" />
+                                <h3 className="text-sm font-medium text-slate-800 uppercase tracking-wide">OFFICE HOURS</h3>
+                            </div>
+                            <div className="bg-emerald-50 rounded-xl p-3 border border-emerald-100 flex items-start gap-1 mb-1">
+                                <div className="mt-1">
+                                    <Clock size={16} className="text-emerald-600" />
+                                </div>
+                                <div>
+                                    <p className="text-xs font-medium text-emerald-700 uppercase tracking-widest mb-1">MON - SAT</p>
+                                    <p className="text-base font-medium text-emerald-700">09:00 AM - 07:00 PM <span className="text-xs font-bold">(IST)</span></p>
+                                </div>
+                            </div>
+                            <p className="text-[11px] text-slate-500 font-medium leading-relaxed">
                                 For urgent matters outside office hours, please use the official IHWE helpline.
                             </p>
                         </div>
-                        <HeadphonesIcon className="absolute -bottom-6 -right-6 text-white/5 w-32 h-32 rotate-12" />
                     </div>
-                </div>
 
-                {/* Right Column: Contact & Actions */}
-                <div className="lg:col-span-2 flex flex-col h-full">
-                    <div className="bg-white rounded-sm border border-slate-200 p-4 shadow-sm h-full flex flex-col">
-                        <h3 className="text-[12px] font-semibold text-slate-800 uppercase tracking-widest mb-2 flex items-center gap-2 flex-shrink-0">
-                            <Phone size={14} className="text-[#23471d] " /> Contact Channels
-                        </h3>
+                    {/* RIGHT SIDE (COMBINED MIDDLE & RIGHT COLUMNS) */}
+                    <div className="lg:col-span-9 flex flex-col gap-1">
 
+                        {/* Top Section */}
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-1">
 
-                        <div className='flex flex-col xl:flex-row justify-between gap-6 w-full flex-1 '>
-                            <div className="flex-1 flex flex-col gap-4">
-                                {[rmDetails?.mobile, rmDetails?.altMobile].filter(Boolean).map((phone, idx) => (
-                                    <div key={idx} className="p-4 rounded-sm border border-slate-100 bg-slate-50/50 group hover:border-[#23471d]/30 transition-all flex flex-col justify-between">
-                                        <div>
-                                            <div className="flex items-center justify-between">
-                                                <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
-                                                    {idx === 0 ? 'Primary Contact' : 'Alternative Contact'}
-                                                </p>
-                                                <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center text-[#23471d] border border-slate-100 shadow-sm">
-                                                    <Phone size={14} />
+                            {/* Middle Content */}
+                            <div className="lg:col-span-2 flex flex-col gap-1">
+                                {/* Your Relationship Team */}
+                                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <div className="flex items-center gap-1">
+                                            <Users size={18} className="text-slate-600" />
+                                            <h3 className="text-sm font-medium text-slate-800 uppercase tracking-wide">YOUR RELATIONSHIP TEAM</h3>
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-1">
+                                        {/* HOD */}
+                                        <div className="p-3 rounded-xl border border-slate-100 bg-slate-50">
+                                            <span className="inline-block px-2 py-0.5 bg-emerald-100 text-emerald-700 text-[9px] font-medium uppercase tracking-widest rounded mb-3">HOD</span>
+                                            <div className="flex items-center gap-1 mb-1">
+                                                <div className="w-10 h-10 rounded-full bg-emerald-200 text-emerald-800 flex items-center justify-center font-medium text-lg overflow-hidden shrink-0">
+                                                    {rmDetails?.hodImage ? (
+                                                        <img src={getImageUrl(rmDetails.hodImage)} alt="HOD" className="w-full h-full object-cover" crossOrigin="anonymous" />
+                                                    ) : (
+                                                        <User size={20} />
+                                                    )}
+                                                </div>
+                                                <div className="min-w-0">
+                                                    <p className="text-sm font-medium text-slate-800 truncate" title={hodName}>{hodName}</p>
+                                                    <p className="text-[11px] font-medium text-slate-500 truncate" title={hodDesignation}>{hodDesignation}</p>
                                                 </div>
                                             </div>
-                                            <p className="text-xl font-medium font-black text-slate-800 mb-6 tracking-tight">{phone}</p>
+                                            <div className="space-y-2.5">
+                                                <div className="flex items-center gap-1">
+                                                    <Phone size={14} className="text-slate-400 shrink-0" />
+                                                    <p className="text-xs font-medium text-slate-700 truncate">{hodMobile}</p>
+                                                </div>
+                                                <div className="flex items-center gap-1">
+                                                    <Mail size={14} className="text-slate-400 shrink-0" />
+                                                    <p className="text-xs font-medium text-slate-700 truncate" title={hodEmail}>{hodEmail}</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="grid grid-cols-2 gap-2 mt-auto">
-                                            <button
-                                                onClick={() => handleWhatsApp(phone)}
-                                                className="flex items-center justify-center gap-2 py-3 bg-emerald-50 text-emerald-700 text-[10px] font-black uppercase tracking-widest rounded-sm border border-emerald-100 hover:bg-emerald-100 transition-colors"
-                                            >
-                                                <MessageSquare size={14} /> WhatsApp
-                                            </button>
-                                            <button
-                                                onClick={() => handleCall(phone)}
-                                                className="flex items-center justify-center gap-2 py-3 bg-blue-50 text-blue-700 text-[10px] font-black uppercase tracking-widest rounded-sm border border-blue-100 hover:bg-blue-100 transition-colors"
-                                            >
-                                                <Phone size={14} /> Call
-                                            </button>
+
+                                        {/* Reporting Manager */}
+                                        <div className="p-3 rounded-xl border border-slate-100 bg-slate-50">
+                                            <span className="inline-block px-2 py-0.5 bg-purple-100 text-purple-700 text-[9px] font-medium uppercase tracking-widest rounded mb-3">REPORTING MANAGER</span>
+                                            <div className="flex items-center gap-1 mb-1">
+                                                <div className="w-10 h-10 rounded-full bg-purple-200 text-purple-800 flex items-center justify-center font-medium text-lg overflow-hidden shrink-0">
+                                                    {rmDetails?.reportingToImage ? (
+                                                        <img src={getImageUrl(rmDetails.reportingToImage)} alt="Reporting Manager" className="w-full h-full object-cover" crossOrigin="anonymous" />
+                                                    ) : (
+                                                        <User size={20} />
+                                                    )}
+                                                </div>
+                                                <div className="min-w-0">
+                                                    <p className="text-sm font-medium text-slate-800 truncate" title={repName}>{repName}</p>
+                                                    <p className="text-[11px] font-medium text-slate-500 truncate" title={repDesignation}>{repDesignation}</p>
+                                                </div>
+                                            </div>
+                                            <div className="space-y-2.5">
+                                                <div className="flex items-center gap-1">
+                                                    <Phone size={14} className="text-slate-400 shrink-0" />
+                                                    <p className="text-xs font-medium text-slate-700 truncate">{repMobile}</p>
+                                                </div>
+                                                <div className="flex items-center gap-1">
+                                                    <Mail size={14} className="text-slate-400 shrink-0" />
+                                                    <p className="text-xs font-medium text-slate-700 truncate" title={repEmail}>{repEmail}</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
-                            </div>
-
-                            <div className="flex-1 p-4 rounded-sm border border-slate-100 bg-gradient-to-br from-white to-slate-50 group hover:border-[#23471d]/30 transition-all flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden">
-                                {(() => {
-                                    const hour = currentTime.getHours();
-                                    const isOnline = hour >= 9 && hour < 19;
-
-                                    return (
-                                        <>
-                                            {/* Current Time (Left) */}
-                                            <div className="absolute top-3 left-3 flex items-center gap-1.5 px-2 py-0.5 rounded-full border border-slate-100 bg-slate-50 text-sm font-black uppercase text-slate-400 tracking-wider transition-all">
-                                                <Clock size={10} />
-                                                {/* {currentTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true })} */}
-                                                (09:00 AM - 07:00 PM)
-                                            </div>
-
-                                            {/* Status Badge (Right) */}
-                                            <div className={`absolute top-3 right-3 flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-sm  font-black uppercase tracking-wider ${isOnline ? 'bg-emerald-50 text-emerald-600 border-emerald-100' : 'bg-slate-50 text-slate-400 border-slate-100'
-                                                }`}>
-                                                <span className={`w-1.5 h-1.5 rounded-full ${isOnline ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'}`} />
-                                                {isOnline ? 'Online' : 'Offline'}
-                                            </div>
-
-                                            <div className="w-16 h-16 bg-[#23471d]/10 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-                                                <MessageSquare size={32} className={isOnline ? "text-[#23471d]" : "text-slate-400"} />
-                                            </div>
-                                            <h3 className="text-lg font-medium font-black text-slate-800 mb-2">Live Support</h3>
-                                            <p className="text-xs font-semibold text-slate-500 mb-6 max-w-[200px] leading-relaxed">
-                                                {isOnline
-                                                    ? "Start an instant conversation with our team for quick support."
-                                                    : "Our team is currently away. Please reach out during office hours."}
-                                            </p>
-                                            <button
-                                                disabled={!isOnline}
-                                                onClick={() => navigate('/exhibitor-dashboard/chat')}
-                                                className={`w-full flex items-center justify-center gap-2 py-3.5 text-sm font-medium font-black uppercase tracking-widest rounded-sm transition-all shadow-md ${isOnline
-                                                    ? 'bg-[#23471d] text-white hover:bg-[#1a3516] group-hover:translate-y-[-2px]'
-                                                    : 'bg-slate-100 text-slate-400 cursor-not-allowed border border-slate-200 shadow-none'
-                                                    }`}
-                                            >
-                                                {isOnline ? (
-                                                    <>Start Live Chat <ChevronRight size={14} /></>
-                                                ) : (
-                                                    <><Clock size={14} /> Offline</>
-                                                )}
-                                            </button>
-                                        </>
-                                    );
-                                })()}
-                            </div>
-                        </div>
-
-
-
-                        {rmDetails?.email && (
-                            <div className="p-5 rounded-sm border border-slate-100 bg-slate-50/50 flex flex-col md:flex-row md:items-center justify-between gap-4 flex-shrink-0">
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center text-[#23471d] border border-slate-100 flex-shrink-0 shadow-sm">
-                                        <Mail size={18} />
-                                    </div>
-                                    <div className="min-w-0">
-                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Official Email Support</p>
-                                        <p className="text-[15px] font-bold text-slate-800 truncate">{rmDetails.email}</p>
                                     </div>
                                 </div>
-                                <a
-                                    href={`mailto:${rmDetails.email}`}
-                                    className="flex items-center justify-center gap-3 px-8 py-3 bg-[#23471d] text-white text-[10px] font-black uppercase tracking-widest rounded-sm hover:bg-[#1a3516] transition-colors shadow-md"
-                                >
-                                    Email  <ExternalLink size={12} />
-                                </a>
+
+                                {/* Contact Channels */}
+                                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                                    <div className="flex items-center gap-1 mb-1">
+                                        <Phone size={18} className="text-slate-600" />
+                                        <h3 className="text-sm font-medium text-slate-800 uppercase tracking-wide">CONTACT CHANNELS</h3>
+                                    </div>
+
+                                    <div className="bg-gradient-to-r from-[#2FAAA7] to-[#4068f2] rounded-xl p-4 mb-1 relative overflow-hidden flex flex-col justify-center min-h-[90px]">
+                                        <p className="text-xs font-medium text-white/80 mb-1">Primary Contact</p>
+                                        <p className="text-3xl font-medium text-white tracking-tight">{mobile}</p>
+
+                                        <div className="absolute right-5 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/20 flex items-center justify-center border border-white/30 backdrop-blur-sm">
+                                            <Phone size={22} className="text-white" />
+                                        </div>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-1 mb-1">
+                                        <button onClick={() => handleWhatsApp(mobile)} className="flex items-center justify-center gap-1 py-2.5 bg-[#e8f7ec] text-[#0F3B2B] rounded-lg border border-[#c1ebd0] hover:bg-[#d1f0dd] transition-colors font-bold uppercase tracking-widest text-xs">
+                                            <MessageSquare size={16} /> WHATSAPP
+                                        </button>
+                                        <button onClick={() => handleCall(mobile)} className="flex items-center justify-center gap-1 py-2.5 bg-white text-blue-600 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors font-bold uppercase tracking-widest text-xs shadow-sm">
+                                            <Phone size={16} /> CALL
+                                        </button>
+                                    </div>
+
+                                    <div className="rounded-xl border border-slate-100 flex items-center justify-between bg-slate-50 p-3">
+                                        <div className="flex items-center gap-1">
+                                            <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-slate-200 shrink-0 shadow-sm">
+                                                <Mail size={16} className="text-slate-500" />
+                                            </div>
+                                            <div className="min-w-0">
+                                                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-0.5">Official Email</p>
+                                                <p className="text-[13px] font-bold text-slate-800 truncate" title={email}>{email}</p>
+                                            </div>
+                                        </div>
+                                        <a href={`mailto:${email}`} className="flex items-center justify-center gap-1.5 px-3 py-2 bg-white text-emerald-700 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors text-xs font-bold uppercase tracking-widest shrink-0 shadow-sm">
+                                            EMAIL US <ExternalLink size={14} />
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                        )}
+
+                            {/* Right Content */}
+                            <div className="lg:col-span-1 flex flex-col gap-1">
+                                {/* Live Support */}
+                                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4 flex flex-col items-center text-center relative pt-4">
+                                    <div className="absolute top-3 right-3 flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-[9px] font-bold uppercase tracking-widest text-emerald-600">
+                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                                        ONLINE
+                                    </div>
+
+                                    <div className="w-16 h-16 bg-emerald-50 rounded-full flex items-center justify-center mb-1">
+                                        <HeadphonesIcon size={32} className="text-[#0F3B2B]" />
+                                    </div>
+
+                                    <h3 className="text-xl font-medium text-slate-800 mb-1">Live Support</h3>
+                                    <p className="text-[13px] text-slate-500 mb-1 leading-relaxed px-2">
+                                        Start an instant conversation with our team for quick support.
+                                    </p>
+
+                                    <div className="mb-5 w-full">
+                                        <p className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Support Hours</p>
+                                        <div className="flex items-center justify-center gap-1.5 text-sm font-medium text-slate-700">
+                                            <Clock size={16} /> 09:00 AM - 07:00 PM <span className="text-[10px] text-slate-400">(IST)</span>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        disabled={!isOnline}
+                                        onClick={() => navigate('/exhibitor-dashboard/chat')}
+                                        className="w-full py-3 rounded-xl text-[12px] font-medium uppercase tracking-widest flex items-center justify-center gap-1 transition-all bg-[#0F3B2B] text-white hover:bg-[#0a271c] shadow-md shadow-[#0F3B2B]/20"
+                                    >
+                                        <MessageSquare size={16} /> START LIVE CHAT <ChevronRight size={16} />
+                                    </button>
+                                </div>
+
+                                {/* Quick Stats */}
+                                <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-4">
+                                    <div className="flex items-center gap-1 mb-1 border-b border-slate-100 pb-1">
+                                        <div className="flex gap-1 items-end h-4">
+                                            <div className="w-1 h-3 bg-slate-400 rounded-sm"></div>
+                                            <div className="w-1 h-4 bg-slate-600 rounded-sm"></div>
+                                            <div className="w-1 h-2 bg-slate-300 rounded-sm"></div>
+                                        </div>
+                                        <h3 className="text-sm font-medium text-slate-800 uppercase tracking-wide">QUICK STATS</h3>
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-1">
+                                        <div className="bg-slate-50 p-2 rounded-xl border border-slate-100">
+                                            <p className="text-[10px] font-medium text-slate-500 mb-1 leading-tight">Tickets Resolved</p>
+                                            <p className="text-lg font-medium text-emerald-600">128</p>
+                                        </div>
+                                        <div className="bg-slate-50 p-2 rounded-xl border border-slate-100">
+                                            <p className="text-[10px] font-medium text-slate-500 mb-1 leading-tight">Avg. Response</p>
+                                            <p className="text-lg font-medium text-purple-600">~30m</p>
+                                        </div>
+                                        <div className="bg-slate-50 p-2 rounded-xl border border-slate-100">
+                                            <p className="text-[10px] font-medium text-slate-500 mb-1 leading-tight">Satisfaction Rate</p>
+                                            <p className="text-lg font-medium text-orange-500">98%</p>
+                                        </div>
+                                        <div className="bg-slate-50 p-2 rounded-xl border border-slate-100">
+                                            <p className="text-[10px] font-medium text-slate-500 mb-1 leading-tight">Active Chats</p>
+                                            <p className="text-lg font-medium text-blue-500">8</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-1 mt-auto">
+                            {featureDetails.map((feat) => (
+                                <div key={feat.id} className="bg-white rounded-xl shadow-sm border border-slate-200 p-2.5 flex flex-col items-start">
+                                    <div className={`w-8 h-8 rounded-full ${feat.colorBg} flex items-center justify-center border ${feat.colorBorder} mb-1`}>
+                                        <feat.Icon size={16} className={`${feat.colorText} ${feat.iconClass}`} />
+                                    </div>
+                                    <h4 className="text-xs font-medium text-slate-800 mb-0.5">{feat.title}</h4>
+                                    <p className="text-[10px] text-slate-500 leading-tight mb-1">{feat.shortDesc}</p>
+                                    <button
+                                        onClick={() => setSelectedFeature(feat)}
+                                        className={`${feat.colorText} text-[10px] font-bold flex items-center gap-0.5 hover:underline mt-auto`}
+                                    >
+                                        Learn more <ChevronRight size={10} />
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+
                     </div>
                 </div>
+
             </div>
-        </motion.div>
-        </div>
+
+            {/* Feature Modal */}
+            {
+                selectedFeature && (
+                    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm" onClick={() => setSelectedFeature(null)}>
+                        <div
+                            className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200 border border-slate-200"
+                            onClick={(e) => e.stopPropagation()}
+                        >
+                            {/* Header */}
+                            <div className={`p-4 flex items-center gap-3 ${selectedFeature.colorBg} border-b ${selectedFeature.colorBorder}`}>
+                                <div className={`w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-sm border ${selectedFeature.colorBorder}`}>
+                                    <selectedFeature.Icon size={24} className={`${selectedFeature.colorText} ${selectedFeature.iconClass}`} />
+                                </div>
+                                <div className="flex-1">
+                                    <h3 className="text-lg font-medium text-slate-800">{selectedFeature.title}</h3>
+                                </div>
+                                <button onClick={() => setSelectedFeature(null)} className="w-8 h-8 rounded-full bg-black/5 hover:bg-black/10 flex items-center justify-center transition-colors">
+                                    <span className="text-slate-600 font-bold text-lg leading-none">&times;</span>
+                                </button>
+                            </div>
+                            {/* Body */}
+                            <div className="p-5 space-y-5">
+                                <p className="text-[13px] text-slate-600 leading-relaxed font-medium">
+                                    {selectedFeature.description}
+                                </p>
+                                <div className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-100">
+                                    <h4 className="text-[10px] font-medium text-slate-800 uppercase tracking-widest flex items-center gap-1.5">
+                                        <CheckCircle size={12} className={selectedFeature.colorText} /> Key Benefits
+                                    </h4>
+                                    <ul className="space-y-2.5">
+                                        {selectedFeature.points.map((pt, i) => (
+                                            <li key={i} className="flex items-start gap-2 text-[12px] text-slate-700 font-medium">
+                                                <div className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 bg-current ${selectedFeature.colorText}`} />
+                                                <span className="leading-tight">{pt}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+                            {/* Footer */}
+                            <div className="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+                                <button onClick={() => setSelectedFeature(null)} className="px-6 py-2.5 rounded-xl bg-slate-800 text-white text-[11px] font-medium uppercase tracking-widest hover:bg-slate-900 transition-colors shadow-sm">
+                                    Got it
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+
+        </>
     );
 }
