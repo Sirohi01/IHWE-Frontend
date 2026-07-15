@@ -52,7 +52,7 @@ export default function SupportAssistance() {
                             <h3 className="text-[16px] font-bold text-[#1e293b] mb-3">How can we help you?</h3>
                             <div className="grid grid-cols-2 md:grid-cols-6 gap-2 lg:gap-3">
                                 {/* Live Chat */}
-                                <div className="bg-white rounded-xl py-3 px-2 lg:py-3 lg:px-3 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                                <div className="bg-emerald-50/50 rounded-xl py-3 px-2 lg:py-3 lg:px-3 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
                                     <div className="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center mb-3">
                                         <MessageSquare size={20} className="text-emerald-600 fill-emerald-600" />
                                     </div>
@@ -61,7 +61,7 @@ export default function SupportAssistance() {
                                     <ChevronRight size={14} className="text-slate-400 mt-auto" />
                                 </div>
                                 {/* Raise a Ticket */}
-                                <div className="bg-white rounded-xl py-3 px-2 lg:py-3 lg:px-3 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                                <div className="bg-blue-50/50 rounded-xl py-3 px-2 lg:py-3 lg:px-3 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
                                     <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3">
                                         <Ticket size={20} className="text-blue-500" />
                                     </div>
@@ -70,7 +70,7 @@ export default function SupportAssistance() {
                                     <ChevronRight size={14} className="text-slate-400 mt-auto" />
                                 </div>
                                 {/* FAQs */}
-                                <div className="bg-white rounded-xl py-3 px-2 lg:py-3 lg:px-3 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                                <div className="bg-purple-50/50 rounded-xl py-3 px-2 lg:py-3 lg:px-3 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
                                     <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center mb-3">
                                         <HelpCircle size={20} className="text-purple-500" />
                                     </div>
@@ -79,7 +79,7 @@ export default function SupportAssistance() {
                                     <ChevronRight size={14} className="text-slate-400 mt-auto" />
                                 </div>
                                 {/* Guides & Help */}
-                                <div className="bg-white rounded-xl py-3 px-2 lg:py-3 lg:px-3 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                                <div className="bg-orange-50/50 rounded-xl py-3 px-2 lg:py-3 lg:px-3 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
                                     <div className="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center mb-3">
                                         <BookOpen size={20} className="text-orange-500" />
                                     </div>
@@ -88,7 +88,7 @@ export default function SupportAssistance() {
                                     <ChevronRight size={14} className="text-slate-400 mt-auto" />
                                 </div>
                                 {/* Downloads */}
-                                <div className="bg-white rounded-xl py-3 px-2 lg:py-3 lg:px-3 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                                <div className="bg-teal-50/50 rounded-xl py-3 px-2 lg:py-3 lg:px-3 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
                                     <div className="w-12 h-12 rounded-full bg-teal-50 flex items-center justify-center mb-3">
                                         <Download size={20} className="text-teal-500" />
                                     </div>
@@ -97,7 +97,7 @@ export default function SupportAssistance() {
                                     <ChevronRight size={14} className="text-slate-400 mt-auto" />
                                 </div>
                                 {/* Call Support */}
-                                <div className="bg-white rounded-xl py-3 px-2 lg:py-3 lg:px-3 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                                <div className="bg-red-50/50 rounded-xl py-3 px-2 lg:py-3 lg:px-3 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
                                     <div className="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center mb-3">
                                         <PhoneCall size={20} className="text-red-500" />
                                     </div>
