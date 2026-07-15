@@ -9,6 +9,7 @@ export const TAB_ROUTES: Record<string, string> = {
     bsm: '/exhibitor-dashboard/bsm',
     calendar: '/exhibitor-dashboard/calendar',
     chat: '/exhibitor-dashboard/chat',
+    support: '/exhibitor-dashboard/support',
     feedback: '/exhibitor-dashboard/feedback',
     msme: '/exhibitor-dashboard/msme',
     psm_claim: '/exhibitor-dashboard/psm-claim',
