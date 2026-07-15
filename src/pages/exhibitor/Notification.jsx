@@ -477,6 +477,7 @@ import {
 } from 'lucide-react';
 import { API_URL } from '@/lib/api';
 import { toast } from 'sonner';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import mmImage from '../../assets/mm.png';
 
@@ -1003,9 +1004,7 @@ export default function Notification() {
                             <ChevronRight size={15} strokeWidth={2.2} />
                         </a>
                     </div>
-                    <div className="bg-[#0f4d22] p-2.5 flex items-center justify-center gap-2 text-white text-[11px] font-bold cursor-pointer hover:bg-[#14532d] transition-colors">
-                        Contact Support <ChevronRight size={12} />
-                    </div>
+
                 </div>
 
             </div>
