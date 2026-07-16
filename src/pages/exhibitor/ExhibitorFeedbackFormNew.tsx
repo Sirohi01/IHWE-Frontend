@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
+import { IoStar } from "react-icons/io5";
 import {
     Star,
     MessageCircle,
@@ -96,12 +97,12 @@ const StarRatingLarge = ({ value, onChange, label, sublabels }: { value: number,
                     onClick={() => onChange(star)}
                     className="transition-transform hover:scale-110"
                 >
-                    <Star
-                        size={25}
-                        fill={star <= value ? "#f5a623" : "none"}
-                        className={star <= value ? "text-[#f5a623]" : "text-slate-600"}
-                        strokeWidth={1.5}
-                    />
+                <IoStar
+    size={25}
+    fill={star <= value ? "#f5a623" : "#e2e8f0"}
+    color={star <= value ? "#f5a623" : "#475569"}
+    strokeWidth={1.5}
+/>
                 </button>
             ))}
         </div>
@@ -225,6 +226,8 @@ export default function ExhibitorFeedbackFormNew() {
         whatsappNumber: "8076750278",
         whatsappMessage: "hiji kya haal h "
     });
+
+    const DRAFT_KEY = 'exhibitor_feedback_draft';
 
     const [form, setForm] = useState({
         // Basic details (unchanged, kept for API compatibility)
@@ -358,14 +361,21 @@ export default function ExhibitorFeedbackFormNew() {
                 setFeedbackRecord(result.data);
 
                 if (result.data.status === 'submitted') {
-                setSubmittedFeedback(result.data);
-    localStorage.setItem('feedback_submitted', 'true');
-    const savedData = result.data.responses && Object.keys(result.data.responses).length
-        ? result.data.responses
-        : result.data;
-    // Draft ko bhi merge karo TOP me — taaki naye fields jo submitted record me nahi hain,
-    // wo draft se aa jayen, aur purane submitted fields DB se override rahen
-    setForm(prev => ({ ...prev, ...localDraft, ...savedData }));
+                    setSubmittedFeedback(result.data);
+                    localStorage.setItem('feedback_submitted', 'true');
+                    const savedData = result.data.responses && Object.keys(result.data.responses).length
+                        ? result.data.responses
+                        : result.data;
+                    const mergedData = { ...savedData };
+                    if (localDraft) {
+                        Object.entries(localDraft).forEach(([key, value]) => {
+                            const shouldPreserveDraft = value !== undefined && value !== null && !(typeof value === 'string' && value === '');
+                            if (shouldPreserveDraft) {
+                                mergedData[key] = value;
+                            }
+                        });
+                    }
+                    setForm(prev => ({ ...prev, ...mergedData }));
                 } else {
                     // Not submitted yet — prefer local draft if one exists
                     setSubmittedFeedback(null);
@@ -422,7 +432,11 @@ export default function ExhibitorFeedbackFormNew() {
             });
             const data = await res.json();
             if (data.success) {
-                setForm(prev => ({ ...prev, [key]: data.url }));
+                setForm(prev => {
+                    const updated = { ...prev, [key]: data.url };
+                    localStorage.setItem(DRAFT_KEY, JSON.stringify(updated));
+                    return updated;
+                });
                 Swal.fire({ icon: 'success', title: 'Uploaded', text: 'File uploaded successfully', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
             } else {
                 throw new Error(data.message || 'Failed to upload');
@@ -708,7 +722,7 @@ export default function ExhibitorFeedbackFormNew() {
                             </div>
                             <span className="text-[10px] font-semibold  whitespace-nowrap">{progress}% Completed</span>
                         </div>
-                        <div className="flex items-center gap-2.5 shrink-0">
+                        <div className="flex items-end justify-end gap-2.5 shrink-0 flex-1">
                             <button type="button" onClick={handleSaveDraft} className="h-6 px-4 bg-white border border-slate-300 hover:bg-slate-50  rounded-lg flex items-center gap-2 transition-all font-semibold text-[10px]">
                                 <Save size={14} /> Save Draft
                             </button>
@@ -733,7 +747,7 @@ export default function ExhibitorFeedbackFormNew() {
                                 xmlns="http://www.w3.org/2000/svg"
                             ><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" /><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" /><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" /><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" /></svg>
                             <div className="flex gap-0.5 px-4 gap-2 flex-1">
-                                {[1, 2, 3, 4, 5].map(s => <Star key={s} size={25} fill="#f5a623" className="text-[#f5a623]" />)}
+                                {[1, 2, 3, 4, 5].map(s => <IoStar key={s} size={25} fill="#f5a623" className="text-[#f5a623]" />)}
                             </div>
                         </div>
                         <a href="https://g.page/r/CWvrp1X7bjTDEBM/review" target="_blank" rel="noopener noreferrer" className="mt-2 h-6 w-full bg-[#23471d] hover:bg-[#1a3516] text-white text-[10px] font-semibold rounded-lg flex items-center justify-center gap-2 transition-all">
