@@ -48,7 +48,7 @@ const NAV_ITEMS: NavItem[] = [
     { id: "payments", label: "Make Payment", icon: CreditCard },
     ...(import.meta.env.DEV ? [{ id: "epromotion", label: "E-Promotion", icon: Megaphone }] : []),
     { id: "support", label: "Support & Assistance", icon: Headphones },
-    { id: "feedback", label: "Feedback", icon: MessageSquare },
+    { id: "exhibitor_feedback", label: "Exhibitor Feedback", icon: MessageSquare },
     { id: "chat", label: "Customer Care", icon: MessageSquare },
 ];
 

@@ -104,7 +104,7 @@ const Undertaking = lazy(() => import("./pages/psmClaim/Undertaking"));
 const PreReceipt = lazy(() => import("./pages/psmClaim/PreReceipt"));
 const PsmReports = lazy(() => import("./pages/psmClaim/PsmReports"));
 const PsmReportsTable = lazy(() => import("./pages/psmClaim/PsmReportsTable"));
-const ExhibitorFeedbackForm = lazy(() => import("./pages/exhibitor/ExhibitorFeedbackForm"));
+const ExhibitorFeedbackFormNew = lazy(() => import("./pages/exhibitor/ExhibitorFeedbackFormNew"));
 const BuyerFeedbackForm = lazy(() => import("./pages/buyer/dashboard/BuyerFeedbackForm"));
 const BuyerLanding = lazy(() => import("./pages/BuyerLanding"));
 const VisitorScan = lazy(() => import("./pages/VisitorScan"));
@@ -300,7 +300,7 @@ const App = () => {
                     <Route path="notification" element={<Notification />} />
                     <Route path="support" element={<SupportAssistance />} />
                     <Route path="relationship-manager" element={<RelationshipManager />} />
-                    <Route path="feedback" element={<ExhibitorFeedbackForm />} />
+                    <Route path="exhibitor-feedback" element={<ExhibitorFeedbackFormNew />} />
                     <Route path="ex-profile" element={<ExProfile />} />
                     <Route path="ex-profile1" element={<Overview />} />
                     <Route path="my-event" element={<MyEvent />} />
