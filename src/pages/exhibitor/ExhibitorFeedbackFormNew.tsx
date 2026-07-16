@@ -97,12 +97,12 @@ const StarRatingLarge = ({ value, onChange, label, sublabels }: { value: number,
                     onClick={() => onChange(star)}
                     className="transition-transform hover:scale-110"
                 >
-                    <IoStar
-                        size={25}
-                        fill={star <= value ? "#f5a623" : "none"}
-                        className={star <= value ? "text-[#f5a623]" : "text-slate-600"}
-                        strokeWidth={1.5}
-                    />
+                <IoStar
+    size={25}
+    fill={star <= value ? "#f5a623" : "#e2e8f0"}
+    color={star <= value ? "#f5a623" : "#475569"}
+    strokeWidth={1.5}
+/>
                 </button>
             ))}
         </div>
