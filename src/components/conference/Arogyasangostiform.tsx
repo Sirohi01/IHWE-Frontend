@@ -207,9 +207,12 @@ export default function ArogyaSanghostiForm() {
                 body: formData,
             });
 
-            const data = await response.json();
+            const contentType = response.headers.get("content-type") || "";
+            const data = contentType.includes("application/json")
+                ? await response.json()
+                : { success: false, message: await response.text() };
 
-            if (data.success) {
+            if (response.ok && data.success) {
                 toast.success(data.message || "Speaker application submitted successfully!");
 
                 setForm({
@@ -237,10 +240,10 @@ export default function ArogyaSanghostiForm() {
                 });
                 setFiles({ speakerPhoto: null, companyLogo: null, presentation: null });
             } else {
-                toast.error(data.message || "Failed to submit application");
+                toast.error(data.message || `Failed to submit application (${response.status})`);
             }
         } catch (error: any) {
-            toast.error("Network error. Please try again.");
+            toast.error(error?.message || "Network error. Please try again.");
         } finally {
             setIsSubmitting(false);
         }

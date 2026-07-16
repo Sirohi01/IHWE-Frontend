@@ -538,6 +538,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                     </tr>
                 </tbody>
             </table>
+            </div>
 
             <div className="avoid-break" style={{ position: 'relative', height: 62, overflow: 'hidden', border: '1px solid #ccc', borderTop: 'none' }}>
                 <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, height: 34, background: '#0d1f3c', zIndex: 0 }} />
