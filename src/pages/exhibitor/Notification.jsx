@@ -482,6 +482,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import mmImage from '../../assets/mm.png';
 import ccImage from '../../assets/cc.png';
 import hhImage from '../../assets/hh.png';
+import b1Image from '../../assets/b1.png';
+import b2Image from '../../assets/b2.png';
+import b3Image from '../../assets/b3.png';
+import b4Image from '../../assets/b4.png';
 
 const typeConfig = {
     payment_success: { icon: <Mail size={14} />, bg: 'bg-emerald-50', text: 'text-emerald-600', badge: 'text-emerald-600 bg-emerald-50', badgeText: 'New', dot: 'bg-emerald-500' },
@@ -663,14 +667,12 @@ export default function Notification() {
                 </div>
 
                 {/* 4 Stat Cards */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6 relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2.5 mb-6 relative z-10">
                     {/* Total Notifications */}
-                    <div className="group cursor-pointer relative bg-gradient-to-br from-white to-emerald-50 p-3.5 border border-slate-200 rounded-2xl transition-all duration-500 shadow-[rgba(0,0,0,0.05)_0px_1px_2px_0px] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:-translate-y-1 overflow-hidden">
+                    <div className="group cursor-pointer relative bg-white py-3 px-3.5 border border-slate-200 rounded-xl transition-all duration-500 shadow-[rgba(0,0,0,0.05)_0px_1px_2px_0px] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:-translate-y-1 overflow-hidden">
                         <div className="relative z-10">
-                            <div className="flex items-center gap-3 mb-3">
-                                <div className="w-9 h-9 bg-emerald-100 rounded-full flex items-center justify-center shrink-0">
-                                    <Bell size={18} className="text-emerald-600" strokeWidth={2.5} />
-                                </div>
+                            <div className="flex items-center gap-3 mb-1.5">
+                                <img src={b1Image} alt="Total Notifications" className="w-10 h-10 shrink-0 object-contain" />
                                 <div className="flex flex-col">
                                     <span style={{ fontSize: '8.5px', fontWeight: 800, color: '#000000ff', lineHeight: 1.2, marginBottom: '4px', display: 'block', fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap' }}>
                                         TOTAL NOTIFICATIONS
@@ -683,16 +685,17 @@ export default function Notification() {
                             <div style={{ fontSize: '10px', fontWeight: 700, color: '#059669', textAlign: 'center', fontFamily: 'Inter, sans-serif' }}>
                                 All time
                             </div>
+                            <div className="mt-2.5 w-full h-[3px] bg-slate-100 rounded-full overflow-hidden flex">
+                                <div className="h-full bg-emerald-500 w-[40%] rounded-full"></div>
+                            </div>
                         </div>
                     </div>
 
                     {/* Unread Messages */}
-                    <div className="group cursor-pointer relative bg-gradient-to-br from-white to-blue-50 p-3.5 border border-slate-200 rounded-2xl transition-all duration-500 shadow-[rgba(0,0,0,0.05)_0px_1px_2px_0px] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:-translate-y-1 overflow-hidden">
+                    <div className="group cursor-pointer relative bg-white py-3 px-3.5 border border-slate-200 rounded-xl transition-all duration-500 shadow-[rgba(0,0,0,0.05)_0px_1px_2px_0px] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:-translate-y-1 overflow-hidden">
                         <div className="relative z-10">
-                            <div className="flex items-center gap-3 mb-3">
-                                <div className="w-9 h-9 bg-blue-100 rounded-full flex items-center justify-center shrink-0">
-                                    <Mail size={18} className="text-blue-600" strokeWidth={2.5} />
-                                </div>
+                            <div className="flex items-center gap-3 mb-1.5">
+                                <img src={b2Image} alt="Unread Messages" className="w-10 h-10 shrink-0 object-contain" />
                                 <div className="flex flex-col">
                                     <span style={{ fontSize: '8.5px', fontWeight: 800, color: '#000000ff', lineHeight: 1.2, marginBottom: '4px', display: 'block', fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap' }}>
                                         UNREAD MESSAGES
@@ -705,16 +708,17 @@ export default function Notification() {
                             <div style={{ fontSize: '10px', fontWeight: 700, color: '#2563eb', textAlign: 'center', fontFamily: 'Inter, sans-serif' }}>
                                 New messages
                             </div>
+                            <div className="mt-2.5 w-full h-[3px] bg-slate-100 rounded-full overflow-hidden flex">
+                                <div className="h-full bg-blue-500 w-[20%] rounded-full"></div>
+                            </div>
                         </div>
                     </div>
 
                     {/* Important */}
-                    <div className="group cursor-pointer relative bg-gradient-to-br from-white to-orange-50 p-3.5 border border-slate-200 rounded-2xl transition-all duration-500 shadow-[rgba(0,0,0,0.05)_0px_1px_2px_0px] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:-translate-y-1 overflow-hidden">
+                    <div className="group cursor-pointer relative bg-white py-3 px-3.5 border border-slate-200 rounded-xl transition-all duration-500 shadow-[rgba(0,0,0,0.05)_0px_1px_2px_0px] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:-translate-y-1 overflow-hidden">
                         <div className="relative z-10">
-                            <div className="flex items-center gap-3 mb-3">
-                                <div className="w-9 h-9 bg-orange-100 rounded-full flex items-center justify-center shrink-0">
-                                    <Megaphone size={18} className="text-orange-600" strokeWidth={2.5} />
-                                </div>
+                            <div className="flex items-center gap-3 mb-1.5">
+                                <img src={b3Image} alt="Important" className="w-10 h-10 shrink-0 object-contain" />
                                 <div className="flex flex-col">
                                     <span style={{ fontSize: '8.5px', fontWeight: 800, color: '#000000ff', lineHeight: 1.2, marginBottom: '4px', display: 'block', fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap' }}>
                                         IMPORTANT
@@ -727,16 +731,17 @@ export default function Notification() {
                             <div style={{ fontSize: '10px', fontWeight: 700, color: '#ea580c', textAlign: 'center', fontFamily: 'Inter, sans-serif' }}>
                                 Requires attention
                             </div>
+                            <div className="mt-2.5 w-full h-[3px] bg-slate-100 rounded-full overflow-hidden flex">
+                                <div className="h-full bg-orange-500 w-[15%] rounded-full"></div>
+                            </div>
                         </div>
                     </div>
 
                     {/* Updates */}
-                    <div className="group cursor-pointer relative bg-gradient-to-br from-white to-purple-50 p-3.5 border border-slate-200 rounded-2xl transition-all duration-500 shadow-[rgba(0,0,0,0.05)_0px_1px_2px_0px] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:-translate-y-1 overflow-hidden">
+                    <div className="group cursor-pointer relative bg-white py-3 px-3.5 border border-slate-200 rounded-xl transition-all duration-500 shadow-[rgba(0,0,0,0.05)_0px_1px_2px_0px] hover:shadow-[0_8px_20px_rgba(0,0,0,0.1)] hover:-translate-y-1 overflow-hidden">
                         <div className="relative z-10">
-                            <div className="flex items-center gap-3 mb-3">
-                                <div className="w-9 h-9 bg-purple-100 rounded-full flex items-center justify-center shrink-0">
-                                    <Info size={18} className="text-purple-600" strokeWidth={2.5} />
-                                </div>
+                            <div className="flex items-center gap-3 mb-1.5">
+                                <img src={b4Image} alt="Updates" className="w-10 h-10 shrink-0 object-contain" />
                                 <div className="flex flex-col">
                                     <span style={{ fontSize: '8.5px', fontWeight: 800, color: '#000000ff', lineHeight: 1.2, marginBottom: '4px', display: 'block', fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap' }}>
                                         UPDATES
@@ -749,6 +754,9 @@ export default function Notification() {
                             <div style={{ fontSize: '10px', fontWeight: 700, color: '#9333ea', textAlign: 'center', fontFamily: 'Inter, sans-serif' }}>
                                 General updates
                             </div>
+                            <div className="mt-2.5 w-full h-[3px] bg-slate-100 rounded-full overflow-hidden flex">
+                                <div className="h-full bg-purple-500 w-[25%] rounded-full"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -758,7 +766,7 @@ export default function Notification() {
                     <div className="bg-white border border-slate-200 rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col">
                         
                         {/* List Header */}
-                        <div className="px-4 py-2 bg-slate-100 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <div className="px-3 py-1.5 bg-white border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                             <h2 className="text-[12px] font-bold text-slate-800 tracking-tight">All Notifications</h2>
 
                             <div className="flex items-center gap-2">
