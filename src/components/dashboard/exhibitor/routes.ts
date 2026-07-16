@@ -12,6 +12,7 @@ export const TAB_ROUTES: Record<string, string> = {
     support: '/exhibitor-dashboard/support',
     exhibitor_feedback: '/exhibitor-dashboard/exhibitor-feedback',
     msme: '/exhibitor-dashboard/msme',
+    msme_pms_reimbursement_center:"/exhibitor-dashboard/msme-pms-reimbursement-center",
     psm_claim: '/exhibitor-dashboard/psm-claim',
     annexure_d: '/exhibitor-dashboard/psm-claim/reports/annexure-d',
     'stall-management': '/exhibitor-dashboard/stall-information',

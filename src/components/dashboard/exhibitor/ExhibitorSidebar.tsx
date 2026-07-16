@@ -50,6 +50,10 @@ const NAV_ITEMS: NavItem[] = [
     { id: "support", label: "Support & Assistance", icon: Headphones },
     { id: "exhibitor_feedback", label: "Exhibitor Feedback", icon: MessageSquare },
     { id: "chat", label: "Customer Care", icon: MessageSquare },
+      {
+        id:"msme_pms_reimbursement_center", label:"MSME PMS Reimbu...",
+        icon:MessageSquare
+    }
 ];
 
 const PSM_REPORT_IDS = [
@@ -79,6 +83,7 @@ const MSME_ITEMS: MsmeItem[] = [
             },
         ],
     },
+  
 ];
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────

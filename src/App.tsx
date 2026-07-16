@@ -147,6 +147,7 @@ const NominationFormPage = lazy(() => import("./pages/awards/NominationFormPage"
 const DelegateRegistration = lazy(() => import("@/pages/delegate/DelegateRegistration"));
 const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"));
 import { SERVER_URL } from "./lib/api";
+import MSMEDashboard from "./pages/MSME_PMS_ReimbursementCenter";
 const ProductServices = lazy(() => import("./pages/exhibitor/ProductServices"));
 const StallInformation = lazy(() => import("./pages/exhibitor/StallInformation"));
 const MyEvent = lazy(() => import("./pages/exhibitor/MyEvent"));
@@ -268,6 +269,8 @@ const App = () => {
                   <Route path="/buyer-login" element={<BuyerLogin />} />
                   <Route path="/delegates-login" element={<DelegatesLogin />} />
                   <Route path="/exhibitor-dashboard" element={<ExhibitorDashboard />}>
+                  <Route path="/exhibitor-dashboard/msme-pms-reimbursement-center" element={<MSMEDashboard />} />
+
                     <Route index element={<ExhibitorDashboardHome />} />
                     <Route path="profile" element={<ExhibitorProfilePage />} />
                     <Route path="add-team-members" element={<AddTeamMembers />} />
@@ -332,6 +335,7 @@ const App = () => {
                     <Route path="accessories" element={<ExhibitorAccessoriesPage />} />
                   </Route>
                   <Route path="/visitor" element={<VisitorScan />} />
+                  
                   <Route path="/buyer-scan" element={<BuyerScan />} />
                   <Route path="/buyer-dashboard" element={<BuyerDashboard />}>
                     <Route index element={<BuyerDashboardHome />} />
