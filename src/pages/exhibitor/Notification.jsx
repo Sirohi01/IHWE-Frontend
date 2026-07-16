@@ -12,6 +12,8 @@ import { API_URL } from '@/lib/api';
 import { toast } from 'sonner';
 
 import mmImage from '../../assets/mm.png';
+import ccImage from '../../assets/cc.png';
+import hhImage from '../../assets/hh.png';
 
 const typeConfig = {
     payment_success: { icon: <Mail size={14} />, bg: 'bg-emerald-50', text: 'text-emerald-600', badge: 'text-emerald-600 bg-emerald-50', badgeText: 'New', dot: 'bg-emerald-500' },
@@ -189,11 +191,11 @@ export default function Notification() {
                                     <Bell size={18} className="text-emerald-600" strokeWidth={2.5} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', lineHeight: 1, marginBottom: '4px', display: 'block', fontFamily: 'Inter, sans-serif' }}>
-                                        {totalCount}
-                                    </span>
-                                    <span style={{ fontSize: '8.5px', fontWeight: 800, color: '#334155', lineHeight: 1.2, display: 'block', fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap' }}>
+                                    <span style={{ fontSize: '8.5px', fontWeight: 800, color: '#000000ff', lineHeight: 1.2, marginBottom: '4px', display: 'block', fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap' }}>
                                         TOTAL NOTIFICATIONS
+                                    </span>
+                                    <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', lineHeight: 1, display: 'block', fontFamily: 'Inter, sans-serif' }}>
+                                        {totalCount}
                                     </span>
                                 </div>
                             </div>
@@ -211,11 +213,11 @@ export default function Notification() {
                                     <Mail size={18} className="text-blue-600" strokeWidth={2.5} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', lineHeight: 1, marginBottom: '4px', display: 'block', fontFamily: 'Inter, sans-serif' }}>
-                                        {unreadCount}
-                                    </span>
-                                    <span style={{ fontSize: '8.5px', fontWeight: 800, color: '#334155', lineHeight: 1.2, display: 'block', fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap' }}>
+                                    <span style={{ fontSize: '8.5px', fontWeight: 800, color: '#000000ff', lineHeight: 1.2, marginBottom: '4px', display: 'block', fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap' }}>
                                         UNREAD MESSAGES
+                                    </span>
+                                    <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', lineHeight: 1, display: 'block', fontFamily: 'Inter, sans-serif' }}>
+                                        {unreadCount}
                                     </span>
                                 </div>
                             </div>
@@ -233,11 +235,11 @@ export default function Notification() {
                                     <Megaphone size={18} className="text-orange-600" strokeWidth={2.5} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', lineHeight: 1, marginBottom: '4px', display: 'block', fontFamily: 'Inter, sans-serif' }}>
-                                        {importantCount}
-                                    </span>
-                                    <span style={{ fontSize: '8.5px', fontWeight: 800, color: '#334155', lineHeight: 1.2, display: 'block', fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap' }}>
+                                    <span style={{ fontSize: '8.5px', fontWeight: 800, color: '#000000ff', lineHeight: 1.2, marginBottom: '4px', display: 'block', fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap' }}>
                                         IMPORTANT
+                                    </span>
+                                    <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', lineHeight: 1, display: 'block', fontFamily: 'Inter, sans-serif' }}>
+                                        {importantCount}
                                     </span>
                                 </div>
                             </div>
@@ -255,11 +257,11 @@ export default function Notification() {
                                     <Info size={18} className="text-purple-600" strokeWidth={2.5} />
                                 </div>
                                 <div className="flex flex-col">
-                                    <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', lineHeight: 1, marginBottom: '4px', display: 'block', fontFamily: 'Inter, sans-serif' }}>
-                                        {updatesCount}
-                                    </span>
-                                    <span style={{ fontSize: '8.5px', fontWeight: 800, color: '#334155', lineHeight: 1.2, display: 'block', fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap' }}>
+                                    <span style={{ fontSize: '8.5px', fontWeight: 800, color: '#000000ff', lineHeight: 1.2, marginBottom: '4px', display: 'block', fontFamily: 'Inter, sans-serif', whiteSpace: 'nowrap' }}>
                                         UPDATES
+                                    </span>
+                                    <span style={{ fontSize: '1.25rem', fontWeight: 800, color: '#0f172a', lineHeight: 1, display: 'block', fontFamily: 'Inter, sans-serif' }}>
+                                        {updatesCount}
                                     </span>
                                 </div>
                             </div>
@@ -272,7 +274,7 @@ export default function Notification() {
 
                 {/* Notifications List Area */}
                 <div className="flex-1 min-w-0">
-                    <div className="bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden flex flex-col">
+                    <div className="bg-white border border-slate-200 rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.02)] overflow-hidden flex flex-col">
                         
                         {/* List Header */}
                         <div className="px-4 py-2 bg-slate-100 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
@@ -314,7 +316,7 @@ export default function Notification() {
                                     <p className="text-sm font-medium text-slate-500">You don't have any notifications matching this filter.</p>
                                 </div>
                             ) : (
-                                <div className="flex flex-col">
+                                <div className="flex flex-col p-3 gap-2.5">
                                     <AnimatePresence initial={false}>
                                         {filteredNotifications.map((n) => {
                                             const cfg = typeConfig[n.type] || typeConfig.general;
@@ -339,7 +341,7 @@ export default function Notification() {
                                                     animate={{ opacity: 1 }}
                                                     exit={{ opacity: 0 }}
                                                     onClick={() => markAsRead(n._id, n.read)}
-                                                    className={`group relative flex items-center justify-between p-2.5 px-4 border-b border-dashed border-slate-200 hover:bg-slate-50/50 transition-colors cursor-pointer ${!n.read ? 'bg-white border-l-[3px] border-l-emerald-500' : 'opacity-90'}`}
+                                                    className={`group relative flex items-center justify-between p-3 px-4 rounded-md border border-solid border-slate-200 shadow-[0_1px_2px_rgba(0,0,0,0.02)] hover:shadow-[0_2px_4px_rgba(0,0,0,0.04)] hover:bg-slate-50 transition-all cursor-pointer ${!n.read ? 'bg-white border-l-[3px] border-l-emerald-500' : 'bg-slate-50/50 opacity-95'}`}
                                                 >
                                                     {/* Left side: Icon + Text */}
                                                     <div className="flex items-start gap-3">
@@ -376,7 +378,7 @@ export default function Notification() {
 
                                     {/* Load More Button */}
                                     {filteredNotifications.length > 0 && (
-                                        <div className="p-4 sm:p-6 flex justify-center">
+                                        <div className="pt-2 pb-1 flex justify-center">
                                             <button className="flex items-center gap-2 px-5 py-1.5 border border-emerald-600 rounded-lg text-[11px] font-bold text-emerald-700 hover:bg-emerald-50 transition-colors bg-white">
                                                 Load More
                                                 <ChevronDown size={14} />
@@ -389,11 +391,9 @@ export default function Notification() {
                     </div>
 
                     {/* Bottom Promo */}
-                    <div className="mt-4 bg-white border border-slate-200 rounded-2xl shadow-sm p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+                    <div className="mt-4 bg-emerald-50/50 border border-emerald-100 rounded-2xl shadow-[0_1px_2px_rgba(0,0,0,0.02)] p-4 flex flex-col md:flex-row items-center justify-between gap-4">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center flex-shrink-0">
-                                <Mail size={16} className="text-emerald-600" />
-                            </div>
+                            <img src={ccImage} alt="cc" className="h-10 w-10 object-contain flex-shrink-0" />
                             <div>
                                 <h3 className="text-[14px] font-bold text-slate-800 mb-0.5">Never miss an important update!</h3>
                                 <p className="text-[11px] font-medium text-slate-700 leading-tight">
@@ -474,19 +474,19 @@ export default function Notification() {
                     <div className="bg-white rounded-2xl p-5" style={{ boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset' }}>
                         <h3 className="text-[12px] font-bold text-slate-800 mb-3">Quick Actions</h3>
                         <div className="grid grid-cols-2 gap-3">
-                            <button onClick={markAllRead} className="bg-[#f0fdf4] p-3 rounded-xl flex flex-col items-center justify-center gap-2 hover:bg-[#dcfce7]/50 transition-colors" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                            <button onClick={markAllRead} className="bg-[#f0fdf4] p-3 rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-[#dcfce7]/50 transition-colors" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
                                 <Mail size={18} className="text-emerald-600" />
                                 <span className="text-[11px] font-bold text-emerald-800 text-center leading-tight">Mark all as read</span>
                             </button>
-                            <button className="bg-[#f0fdfa] p-3 rounded-xl flex flex-col items-center justify-center gap-2 hover:bg-[#ccfbf1]/50 transition-colors" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                            <button className="bg-[#f0fdfa] p-3 rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-[#ccfbf1]/50 transition-colors" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
                                 <CreditCard size={18} className="text-teal-600" />
                                 <span className="text-[11px] font-bold text-teal-800 text-center leading-tight">Check Payments</span>
                             </button>
-                            <button className="bg-[#fdf4ff] p-3 rounded-xl flex flex-col items-center justify-center gap-2 hover:bg-[#fae8ff]/50 transition-colors" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                            <button className="bg-[#fdf4ff] p-3 rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-[#fae8ff]/50 transition-colors" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
                                 <FileText size={18} className="text-purple-600" />
                                 <span className="text-[11px] font-bold text-purple-800 text-center leading-tight">View Invoices</span>
                             </button>
-                            <button className="bg-[#fff7ed] p-3 rounded-xl flex flex-col items-center justify-center gap-2 hover:bg-[#ffedd5]/50 transition-colors" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
+                            <button className="bg-[#fff7ed] p-3 rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-[#ffedd5]/50 transition-colors" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
                                 <Headphones size={18} className="text-orange-500" />
                                 <span className="text-[11px] font-bold text-orange-800 text-center leading-tight">Contact Support</span>
                             </button>
@@ -494,11 +494,9 @@ export default function Notification() {
                     </div>
 
                     {/* Need Help? */}
-                    <div className="bg-[#f0fdf4] rounded-2xl overflow-hidden" style={{ boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px' }}>
+                    <div className="bg-[#f0fdf4] rounded-lg overflow-hidden" style={{ boxShadow: 'rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px' }}>
                         <div className="p-4 flex items-center gap-3">
-                            <div className="w-8 h-8 rounded-full bg-[#14532d] flex items-center justify-center flex-shrink-0 text-white">
-                                <Headphones size={14} />
-                            </div>
+                            <img src={hhImage} alt="Help" className="h-10 w-10 object-contain flex-shrink-0" />
                             <div>
                                 <h3 className="text-[12px] font-bold text-slate-800 mb-0.5">Need Help?</h3>
                                 <p className="text-[10px] font-medium text-slate-500 leading-tight">We're here to support you.</p>
