@@ -123,7 +123,7 @@ export default function MSMEPMSApplication({ data }) {
 
     const stallNo = fieldValue(
         data,
-        ['participation.stall.stallNumber', 'participation.stallNo', 'stallNo'],
+        ['participation.stallFor', 'participation.stall.stallNumber', 'participation.stallNumber', 'stallFor', 'participation.stallNo', 'stallNo'],
         '139'
     );
 
@@ -135,7 +135,7 @@ export default function MSMEPMSApplication({ data }) {
 
     const stallSize = fieldValue(
         data,
-        ['participation.stall.area', 'participation.area', 'stallSize'],
+        ['participation.stallSize', 'participation.stall.area', 'participation.area', 'stallSize'],
         '18 Sqm'
     );
 
@@ -964,10 +964,6 @@ const styles = `
     margin-bottom: 11px;
 }
 
-.pms-event-name .pms-input {
-    height: 45px;
-}
-
 .pms-expense-section .pms-section-title {
     margin-bottom: 13px;
 }
@@ -1506,11 +1502,6 @@ const styles = `
     .pms-input,
     .pms-radio-row {
         height: 29px;
-    }
-
-    .pms-event-name .pms-input {
-        height: 39px;
-        padding-top: 6px;
     }
 
     .pms-expense-section .pms-section-title {
