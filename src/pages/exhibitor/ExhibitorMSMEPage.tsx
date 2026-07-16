@@ -6,11 +6,11 @@ export default function ExhibitorMSMEPage() {
     const { data } = useExhibitorCtx();
     return (
         <div className="space-y-6">
-            <DashboardHero 
-                pageId="ex-msme" 
-                defaultTitle="MSME & PSM Claim" 
+            <DashboardHero
+                pageId="ex-msme"
+                defaultTitle="MSME & PSM Claim"
                 defaultSubtitle="Manage your MSME certification and claim government subsidies"
-                type="exhibitor" 
+                type="exhibitor"
             />
             <ExhibitorMSME data={data} />
         </div>
