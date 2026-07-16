@@ -300,7 +300,7 @@ const App = () => {
                     <Route path="notification" element={<Notification />} />
                     <Route path="support" element={<SupportAssistance />} />
                     <Route path="relationship-manager" element={<RelationshipManager />} />
-                    <Route path="feedback" element={<ExhibitorFeedbackFormNew />} />
+                    <Route path="exhibitor-feedback" element={<ExhibitorFeedbackFormNew />} />
                     <Route path="ex-profile" element={<ExProfile />} />
                     <Route path="ex-profile1" element={<Overview />} />
                     <Route path="my-event" element={<MyEvent />} />

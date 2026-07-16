@@ -26,14 +26,16 @@ import {
     Mail,
     MessagesSquare,
     MessagesSquareIcon,
-    LucideMessagesSquare
+    LucideMessagesSquare,
+    Check
 } from "lucide-react";
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube, FaXTwitter } from "react-icons/fa6";
 import Swal from 'sweetalert2';
 import { cn } from "@/lib/utils";
-import { API_URL } from "@/lib/api";
+import { API_URL, socialMediaApi } from "@/lib/api";
 import { PrintFeedbackReport } from "./PrintFeedbackReport";
-import gift from "@/assets/exhibitor/gift.webp"
+import gift from "@/assets/exhibitor/gift.png"
+import exhibor_feedback from "@/assets/exhibitor/exhibitor_feedback.png"
 // ── Static Reference Data ──────────────────────────────────────────────────
 
 const OVERALL_LABELS = ["Poor", "Average", "Good", "Very Good", "Excellent"];
@@ -86,7 +88,7 @@ const SectionHeader = ({ number, title, subtitle }: { number: number, title: str
 const StarRatingLarge = ({ value, onChange, label, sublabels }: { value: number, onChange: (v: number) => void, label: React.ReactNode, sublabels: string[] }) => (
     <div className="flex flex-col gap-2">
         <p className="text-xs font-semibold  leading-snug min-h-[36px]">{label}</p>
-        <div className="flex gap-1.5 justify-between pr-4">
+        <div className="flex gap-1.5 gap-2 pr-4">
             {[1, 2, 3, 4, 5].map(star => (
                 <button
                     key={star}
@@ -167,7 +169,7 @@ const CheckboxCardRow = ({ label, icon: Icon, checked, onToggle }: { label: stri
             "w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-all",
             checked ? "bg-[#23471d] border-[#23471d]" : "border-slate-300 bg-white group-hover:border-slate-300"
         )}>
-            {checked && <CheckCircle2 size={11} className="text-white" strokeWidth={3} />}
+            {checked && <Check size={11} className="text-white" strokeWidth={3} />}
         </span>
         <Icon size={15} className=" shrink-0" />
         <span className="text-[10px] font-medium ">{label}</span>
@@ -214,6 +216,15 @@ export default function ExhibitorFeedbackFormNew() {
     const [submittedFeedback, setSubmittedFeedback] = useState<any>(null);
     const [feedbackRecord, setFeedbackRecord] = useState<any>(null);
     const [uploading, setUploading] = useState<Record<string, boolean>>({});
+    const [socialLinks, setSocialLinks] = useState({
+        facebook: "https://www.facebook.com/namogangewellness.event",
+        instagram: "https://www.instagram.com/namogangewellness.event",
+        twitter: "https://x.com/namogange_event",
+        linkedin: "https://www.linkedin.com/authwall?trk=bf&trkInfo=AQGQd71l_pPnagAAAZ2kbf2IiqRDmOu1kmpcNKUdIxGeWN9KdSSjmqMhKk7O8txbgGoR7cpo-0TM3sKRTSCAa2ZlTQ2NWn1EShl9NCmyyUAoevgPnCXRyVyZkm5xk1TYfrSpmBM=&original_referer=&sessionRedirect=https%3A%2F%2Fwww.linkedin.com%2Fcompany%2Fnamo-gange-wellness-event",
+        youtube: "https://www.youtube.com/@Namogangewellness",
+        whatsappNumber: "8076750278",
+        whatsappMessage: "hiji kya haal h "
+    });
 
     const [form, setForm] = useState({
         // Basic details (unchanged, kept for API compatibility)
@@ -295,6 +306,30 @@ export default function ExhibitorFeedbackFormNew() {
         }
     }, [ctxData]);
 
+    useEffect(() => {
+        const fetchSocialLinks = async () => {
+            try {
+                const data = await socialMediaApi.get();
+                if (data) {
+                    setSocialLinks(prev => ({
+                        ...prev,
+                        facebook: data.facebook || prev.facebook,
+                        instagram: data.instagram || prev.instagram,
+                        twitter: data.twitter || prev.twitter,
+                        linkedin: data.linkedin || prev.linkedin,
+                        youtube: data.youtube || prev.youtube,
+                        whatsappNumber: data.whatsappNumber || prev.whatsappNumber,
+                        whatsappMessage: data.whatsappMessage || prev.whatsappMessage,
+                    }));
+                }
+            } catch (error) {
+                console.error("Failed to load social links:", error);
+            }
+        };
+
+        fetchSocialLinks();
+    }, []);
+
     const getRegParam = () => {
         const selectedRegId = localStorage.getItem('selectedRegId');
         return selectedRegId ? `?regId=${selectedRegId}` : '';
@@ -302,33 +337,56 @@ export default function ExhibitorFeedbackFormNew() {
 
     const loadExistingFeedback = async () => {
         setIsLoadingFeedback(true);
+
+        // Check localStorage for a locally-saved draft first
+        let localDraft: any = null;
+        try {
+            const stored = localStorage.getItem('exhibitor_feedback_draft');
+            if (stored) localDraft = JSON.parse(stored);
+        } catch {
+            localDraft = null;
+        }
+
         try {
             const token = localStorage.getItem('exhibitorToken');
             const response = await fetch(`${API_URL}/exhibitor-feedback/my${getRegParam()}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const result = await response.json();
+
             if (result.success && result.data) {
                 setFeedbackRecord(result.data);
-                const savedData = result.data.responses && Object.keys(result.data.responses).length
-                    ? result.data.responses
-                    : result.data;
-                if (savedData) {
-                    setForm(prev => ({ ...prev, ...savedData }));
-                }
+
                 if (result.data.status === 'submitted') {
-                    setSubmittedFeedback(result.data);
-                    localStorage.setItem('feedback_submitted', 'true');
+                setSubmittedFeedback(result.data);
+    localStorage.setItem('feedback_submitted', 'true');
+    const savedData = result.data.responses && Object.keys(result.data.responses).length
+        ? result.data.responses
+        : result.data;
+    // Draft ko bhi merge karo TOP me — taaki naye fields jo submitted record me nahi hain,
+    // wo draft se aa jayen, aur purane submitted fields DB se override rahen
+    setForm(prev => ({ ...prev, ...localDraft, ...savedData }));
                 } else {
+                    // Not submitted yet — prefer local draft if one exists
                     setSubmittedFeedback(null);
                     localStorage.removeItem('feedback_submitted');
+                    if (localDraft) {
+                        setForm(prev => ({ ...prev, ...localDraft }));
+                    }
                 }
             } else {
                 setSubmittedFeedback(null);
                 setFeedbackRecord(null);
+                if (localDraft) {
+                    setForm(prev => ({ ...prev, ...localDraft }));
+                }
             }
         } catch (error) {
             console.error('[Feedback] Failed to load feedback', error);
+            // API failed entirely — fall back to whatever draft we have locally
+            if (localDraft) {
+                setForm(prev => ({ ...prev, ...localDraft }));
+            }
         } finally {
             setIsLoadingFeedback(false);
         }
@@ -393,66 +451,15 @@ export default function ExhibitorFeedbackFormNew() {
         }
     };
 
- const handleSaveDraft = async () => {
-        // Instant local save so nothing is lost even if network fails
+    const handleSaveDraft = () => {
         try {
             localStorage.setItem('exhibitor_feedback_draft', JSON.stringify(form));
+            Swal.fire({ icon: 'success', title: 'Draft Saved', text: 'Your progress has been saved on this device.', toast: true, position: 'top-end', showConfirmButton: false, timer: 2000 });
         } catch {
-        }
-
-        try {
-            const token = localStorage.getItem('exhibitorToken');
-            const selectedRegId = localStorage.getItem('selectedRegId') || (ctxData as any)?._id || (ctxData as any)?.registrationId || '';
-            const response = await fetch(`${API_URL}/exhibitor-feedback/save-draft`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json',
-                    Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    ...form,
-                    ...(selectedRegId ? {
-                        regId: selectedRegId,
-                        selectedRegId,
-                        exhibitorId: selectedRegId,
-                        registrationId: selectedRegId
-                    } : {})
-                })
-            });
-
-            let result: any = null;
-            let rawText = '';
-            try {
-                rawText = await response.text();
-                result = JSON.parse(rawText);
-            } catch {
-                result = { success: false, message: `Server returned an invalid response. Raw: ${rawText.substring(0, 100)}` };
-            }
-
-            if (!response.ok || !result?.success) {
-                throw new Error(result?.message || 'Failed to save draft');
-            }
-
-            Swal.fire({
-                icon: 'success',
-                title: 'Draft Saved',
-                text: result?.message || 'Your progress has been saved.',
-                toast: true,
-                position: 'top-end',
-                showConfirmButton: false,
-                timer: 2000
-            });
-        } catch (error: any) {
-            console.error('[Feedback] Draft save failed', error);
-            Swal.fire({
-                icon: 'warning',
-                title: 'Saved Locally Only',
-                text: error?.message || 'Could not sync to server, but your progress is saved on this device.',
-                confirmButtonColor: '#23471d'
-            });
+            Swal.fire({ icon: 'error', title: 'Could Not Save Draft', confirmButtonColor: '#23471d' });
         }
     };
+
     const handleSubmitReferral = (e: React.FormEvent) => {
         e.preventDefault();
         const form2 = e.target as HTMLFormElement;
@@ -545,10 +552,10 @@ export default function ExhibitorFeedbackFormNew() {
             <div className="pt-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
                     <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                        <LucideMessagesSquare size={20} className="text-green-900" />
+                        <img src={exhibor_feedback} className="w-5 h-5 object-cover"/>
                     </div>
                     <div>
-                        <h2 className="text-sm font-semibold ">Exhibitor Feedback</h2>
+                        <h2 className="text-sm font-bold ">Exhibitor Feedback</h2>
                         <p className="text-[10px]  font-medium">Your feedback helps us improve and create a better experience for future editions.</p>
                     </div>
                 </div>
@@ -562,7 +569,7 @@ export default function ExhibitorFeedbackFormNew() {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-2 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-2 items-start">
 
                 {/* Main Column */}
                 <form id="exhibitor-feedback-form" onSubmit={handleSubmit} className="flex flex-col gap-2">
@@ -725,7 +732,7 @@ export default function ExhibitorFeedbackFormNew() {
                                 className="w-8 h-8"
                                 xmlns="http://www.w3.org/2000/svg"
                             ><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" /><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" /><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05" /><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335" /></svg>
-                            <div className="flex gap-0.5 px-4 justify-between flex-1">
+                            <div className="flex gap-0.5 px-4 gap-2 flex-1">
                                 {[1, 2, 3, 4, 5].map(s => <Star key={s} size={25} fill="#f5a623" className="text-[#f5a623]" />)}
                             </div>
                         </div>
@@ -738,12 +745,22 @@ export default function ExhibitorFeedbackFormNew() {
                     <div className="bg-blue-50/70 border border-blue-100 rounded-lg p-2">
                         <h3 className="text-xs font-semibold ">Share Your Experience</h3>
                         <p className="text-[12px]  font-medium mt-0.5">Follow us and tag IHWE 2026 on social media.</p>
-                        <div className="flex items-center gap-2.5 mt-2 justify-between">
-                            <span className="w-6 h-6 rounded-full bg-[#1877F2] text-white flex items-center justify-center"><FaFacebookF size={13} /></span>
-                            <span className="w-6 h-6 rounded-full bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 text-white flex items-center justify-center"><FaInstagram size={14} /></span>
-                            <span className="w-6 h-6 rounded-full bg-[#0A66C2] text-white flex items-center justify-center"><FaLinkedinIn size={13} /></span>
-                            <span className="w-6 h-6 rounded-full bg-[#FF0000] text-white flex items-center justify-center"><FaYoutube size={14} /></span>
-                            <span className="w-6 h-6 rounded-full bg-black text-white flex items-center justify-center"><FaXTwitter size={13} /></span>
+                        <div className="flex items-center gap-2 mt-2">
+                            <a href={socialLinks.facebook} target="_blank" rel="noopener noreferrer" title="Facebook" className="w-8 h-8 rounded-full bg-[#1877F2] text-white flex items-center justify-center transition-transform hover:scale-110">
+                                <FaFacebookF size={13} />
+                            </a>
+                            <a href={socialLinks.instagram} target="_blank" rel="noopener noreferrer" title="Instagram" className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-400 via-pink-500 to-purple-600 text-white flex items-center justify-center transition-transform hover:scale-110">
+                                <FaInstagram size={14} />
+                            </a>
+                            <a href={socialLinks.linkedin} target="_blank" rel="noopener noreferrer" title="LinkedIn" className="w-8 h-8 rounded-full bg-[#0A66C2] text-white flex items-center justify-center transition-transform hover:scale-110">
+                                <FaLinkedinIn size={13} />
+                            </a>
+                            <a href={socialLinks.youtube} target="_blank" rel="noopener noreferrer" title="YouTube" className="w-8 h-8 rounded-full bg-[#FF0000] text-white flex items-center justify-center transition-transform hover:scale-110">
+                                <FaYoutube size={14} />
+                            </a>
+                            <a href={socialLinks.twitter} target="_blank" rel="noopener noreferrer" title="X / Twitter" className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center transition-transform hover:scale-110">
+                                <FaXTwitter size={13} />
+                            </a>
                         </div>
                         <p className="text-[11px]  font-medium mt-2">Use these hashtags when you post</p>
                         <div className="flex flex-wrap gap-1.5 mt-1.5">
@@ -751,13 +768,17 @@ export default function ExhibitorFeedbackFormNew() {
                                 <span key={tag} className="bg-blue-100 text-blue-700 text-[11px] font-semibold px-2 py-1 rounded-md">{tag}</span>
                             ))}
                         </div>
-                        <button type="button" className="mt-2 h-6 w-full border border-blue-600 hover:bg-slate-50 text-blue-600 text-[10px] font-semibold rounded-lg flex items-center justify-center gap-2 transition-all">
-                            <Upload size={14} /> Share Event Photos
+                        <button
+                            type="button"
+                            onClick={() => window.open(`https://wa.me/${socialLinks.whatsappNumber.replace(/\D/g, "")}?text=${encodeURIComponent(socialLinks.whatsappMessage)}`, "_blank")}
+                            className="mt-2 h-6 w-full border border-blue-600 hover:bg-slate-50 text-blue-600 text-[10px] font-semibold rounded-lg flex items-center justify-center gap-2 transition-all"
+                        >
+                            <Upload size={14} /> Chat with us on WhatsApp
                         </button>
                     </div>
 
                     {/* Referral */}
-                    <div className="border border-slate-300 rounded-lg p-2 relative overflow-hidden">
+                    <div className="border border-slate-300 rounded-lg p-2 relative overflow-hidden bg-violet-50">
                         <Gift size={72} className="absolute -right-3 -bottom-3 text-white/10 rotate-12" />
                         <h3 className="text-[12px] font-bold relative text-violet-900">Refer &amp; Earn 10% Referral Bonus!</h3>
                         <p className="text-[10px]  font-medium mt-0.5 relative w-[85%]">Know a company interested in exhibiting? Refer them and earn rewards.</p>
