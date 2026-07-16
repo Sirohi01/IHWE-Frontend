@@ -434,7 +434,7 @@ const DOC_TYPE_SLUGS = {
 };
 
 const PAYMENT_ROUTE = '/exhibitor-dashboard/payment';
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 3;
 const DUE_SOON_DAYS = 15;
 
 const FALLBACK_MANAGER_AVATAR = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(`
@@ -936,7 +936,7 @@ export default function PaymentReminders() {
                 <header className="pr-header">
                     <div className="pr-title-wrap">
                         <div className="pr-title-icon">
-                            <Bell size={22} strokeWidth={2} />
+                            <Bell size={25} strokeWidth={1.9} />
                         </div>
                         <div className="pr-title-copy">
                             <h1>Payment Reminders</h1>
@@ -1426,12 +1426,12 @@ const styles = `
     border-bottom: 1px solid #edf1f4;
 }
 
-.pr-title-wrap { min-width: 0; display: flex; align-items: center; gap: 13px; }
+.pr-title-wrap { min-width: 0; display: flex; align-items: center; gap: 17px; }
 .pr-title-icon {
-    width: 44px; height: 44px; flex: 0 0 44px;
+    width: 46px; height: 46px; flex: 0 0 46px;
     display: grid; place-items: center;
     border-radius: 50%;
-    color: #09a65b; background: #eafaf2;
+    color: #11a967; background: #e9fbf1;
 }
 .pr-title-copy { min-width: 0; }
 .pr-title-copy h1 { margin: 0; font-size: 18px; line-height: 1.1; font-weight: 800; letter-spacing: -.02em; }

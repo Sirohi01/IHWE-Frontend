@@ -131,6 +131,7 @@ const AnnexureD = lazy(() => import("@/pages/psmClaim/AnnexureD"));
 const ParticipantsFeedback = lazy(() => import("@/pages/psmClaim/ParticipantsFeedback"));
 const MandateForm = lazy(() => import("@/pages/psmClaim/MandateForm"));
 const PaymentReminders = lazy(() => import("@/pages/exhibitor/PaymentReminders"));
+const MSMEPMSApplicationPage = lazy(() => import("@/pages/exhibitor/MSMEPMSApplicationPage"));
 const Notification = lazy(() => import("@/pages/exhibitor/Notification"));
 const SupportAssistance = lazy(() => import("@/pages/exhibitor/SupportAssistance"));
 const RelationshipManager = lazy(() => import("@/pages/exhibitor/RelationshipManager"));
@@ -284,6 +285,7 @@ const App = () => {
                     <Route path="calendar" element={<ExhibitorCalendarPage />} />
                     <Route path="chat" element={<ExhibitorChatPage />} />
                     <Route path="msme" element={<ExhibitorMSMEPage />} />
+                    <Route path="msme/application" element={<MSMEPMSApplicationPage />} />
                     <Route path="epromotion" element={<ExhibitorEPromotion />} />
                     <Route path="product" element={<ProductServices />} />
                     <Route path="stall-information" element={<StallInformation />} />
@@ -300,6 +302,7 @@ const App = () => {
                     <Route path="participants-feedback" element={<ParticipantsFeedback />} />
                     <Route path="mandate-form" element={<MandateForm />} />
                     <Route path="reminders" element={<PaymentReminders />} />
+                    <Route path="msme-pms-application" element={<MSMEPMSApplicationPage />} />
                     <Route path="notification" element={<Notification />} />
                     <Route path="support" element={<SupportAssistance />} />
                     <Route path="relationship-manager" element={<RelationshipManager />} />

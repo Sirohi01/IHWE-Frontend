@@ -5,6 +5,12 @@ import {
     ShieldCheck, Zap, CheckCircle, Target, Mail, User
 } from 'lucide-react';
 import SupportAgentImg from '@/assets/ss.png';
+import cc1Image from '@/assets/cc1.png';
+import cc2Image from '@/assets/cc2.png';
+import cc3Image from '@/assets/cc3.png';
+import cc4Image from '@/assets/cc4.png';
+import cc5Image from '@/assets/cc5.png';
+import cc6Image from '@/assets/cc6.png';
 
 export default function SupportAssistance() {
     return (
@@ -53,54 +59,42 @@ export default function SupportAssistance() {
                             <div className="grid grid-cols-2 md:grid-cols-6 gap-2 lg:gap-3">
                                 {/* Live Chat */}
                                 <div className="bg-white rounded-xl py-2 px-2 lg:py-2 lg:px-2 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
-                                    <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center mb-2">
-                                        <MessageSquare size={16} className="text-emerald-600 fill-emerald-600" />
-                                    </div>
+                                    <img src={cc1Image} alt="Live Chat" className="w-10 h-10 object-contain mb-2" />
                                     <h4 className="text-[12px] lg:text-[13px] font-bold text-slate-800 mb-1">Live Chat</h4>
                                     <p className="text-[9px] lg:text-[10px] font-medium text-slate-500 leading-tight mb-2">Chat with our team instantly</p>
                                     <ChevronRight size={14} className="text-slate-400 mt-auto" />
                                 </div>
                                 {/* Raise a Ticket */}
                                 <div className="bg-white rounded-xl py-2 px-2 lg:py-2 lg:px-2 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
-                                    <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mb-2">
-                                        <Ticket size={16} className="text-blue-500" />
-                                    </div>
+                                    <img src={cc2Image} alt="Raise a Ticket" className="w-10 h-10 object-contain mb-2" />
                                     <h4 className="text-[12px] lg:text-[13px] font-bold text-slate-800 mb-1">Raise a Ticket</h4>
                                     <p className="text-[9px] lg:text-[10px] font-medium text-slate-500 leading-tight mb-2">Report an issue or request support</p>
                                     <ChevronRight size={14} className="text-slate-400 mt-auto" />
                                 </div>
                                 {/* FAQs */}
                                 <div className="bg-white rounded-xl py-2 px-2 lg:py-2 lg:px-2 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
-                                    <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center mb-2">
-                                        <HelpCircle size={16} className="text-purple-500" />
-                                    </div>
+                                    <img src={cc3Image} alt="FAQs" className="w-10 h-10 object-contain mb-2" />
                                     <h4 className="text-[12px] lg:text-[13px] font-bold text-slate-800 mb-1">FAQs</h4>
                                     <p className="text-[9px] lg:text-[10px] font-medium text-slate-500 leading-tight mb-2">Find answers to common questions</p>
                                     <ChevronRight size={14} className="text-slate-400 mt-auto" />
                                 </div>
                                 {/* Guides & Help */}
                                 <div className="bg-white rounded-xl py-2 px-2 lg:py-2 lg:px-2 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
-                                    <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center mb-2">
-                                        <BookOpen size={16} className="text-orange-500" />
-                                    </div>
+                                    <img src={cc4Image} alt="Guides & Help" className="w-10 h-10 object-contain mb-2" />
                                     <h4 className="text-[12px] lg:text-[13px] font-bold text-slate-800 mb-1">Guides & Help</h4>
                                     <p className="text-[9px] lg:text-[10px] font-medium text-slate-500 leading-tight mb-2">Step-by-step guides & tutorials</p>
                                     <ChevronRight size={14} className="text-slate-400 mt-auto" />
                                 </div>
                                 {/* Downloads */}
                                 <div className="bg-white rounded-xl py-2 px-2 lg:py-2 lg:px-2 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
-                                    <div className="w-10 h-10 rounded-full bg-teal-50 flex items-center justify-center mb-2">
-                                        <Download size={16} className="text-teal-500" />
-                                    </div>
+                                    <img src={cc5Image} alt="Downloads" className="w-10 h-10 object-contain mb-2" />
                                     <h4 className="text-[12px] lg:text-[13px] font-bold text-slate-800 mb-1">Downloads</h4>
                                     <p className="text-[9px] lg:text-[10px] font-medium text-slate-500 leading-tight mb-2">Forms, documents & resources</p>
                                     <ChevronRight size={14} className="text-slate-400 mt-auto" />
                                 </div>
                                 {/* Call Support */}
                                 <div className="bg-white rounded-xl py-2 px-2 lg:py-2 lg:px-2 flex flex-col items-center justify-center text-center cursor-pointer hover:shadow-md transition-all" style={{ boxShadow: 'rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px' }}>
-                                    <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center mb-2">
-                                        <PhoneCall size={16} className="text-red-500" />
-                                    </div>
+                                    <img src={cc6Image} alt="Call Support" className="w-10 h-10 object-contain mb-2" />
                                     <h4 className="text-[12px] lg:text-[13px] font-bold text-slate-800 mb-1">Call Support</h4>
                                     <p className="text-[9px] lg:text-[10px] font-medium text-slate-500 leading-tight mb-2">Speak directly to our team</p>
                                     <ChevronRight size={14} className="text-slate-400 mt-auto" />
@@ -353,7 +347,7 @@ export default function SupportAssistance() {
                             </div>
                             <div>
                                 <h4 className="text-[12px] font-bold text-slate-800 mb-1">Dedicated Support</h4>
-                                <p className="text-[10px] font-medium text-slate-500 leading-relaxed">One-to-one assistance for all your requirements.</p>
+                                <p className="text-[10px] font-medium text-slate-500 leading-relaxed">One-to-one assistance <br /> for all your requirements.</p>
                             </div>
                         </div>
                         <div className="flex items-start gap-3">
@@ -362,7 +356,7 @@ export default function SupportAssistance() {
                             </div>
                             <div>
                                 <h4 className="text-[12px] font-bold text-slate-800 mb-1">Quick Response</h4>
-                                <p className="text-[10px] font-medium text-slate-500 leading-relaxed">We ensure prompt response within 30 minutes.</p>
+                                <p className="text-[10px] font-medium text-slate-500 leading-relaxed">We ensure prompt response <br /> within 30 minutes.</p>
                             </div>
                         </div>
                         <div className="flex items-start gap-3">
@@ -371,7 +365,7 @@ export default function SupportAssistance() {
                             </div>
                             <div>
                                 <h4 className="text-[12px] font-bold text-slate-800 mb-1">Expert Guidance</h4>
-                                <p className="text-[10px] font-medium text-slate-500 leading-relaxed">Experienced team to help you at every step.</p>
+                                <p className="text-[10px] font-medium text-slate-500 leading-relaxed">Experienced team to help <br /> you at every step.</p>
                             </div>
                         </div>
                         <div className="flex items-start gap-3">
@@ -380,7 +374,7 @@ export default function SupportAssistance() {
                             </div>
                             <div>
                                 <h4 className="text-[12px] font-bold text-slate-800 mb-1">Complete Assistance</h4>
-                                <p className="text-[10px] font-medium text-slate-500 leading-relaxed">End-to-end support for a seamless experience.</p>
+                                <p className="text-[10px] font-medium text-slate-500 leading-relaxed">End-to-end support for a <br /> seamless experience.</p>
                             </div>
                         </div>
                     </div>
