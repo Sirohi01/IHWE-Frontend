@@ -595,7 +595,7 @@ export default function PaymentReminders() {
         const fetchManager = async () => {
             try {
                 const response = await fetch(
-                    `${API_URL}/admin/by-username?username=${encodeURIComponent(rmUsername)}`,
+                    `${API_URL}/admin/by-username/${encodeURIComponent(rmUsername)}`,
                     {
                         headers: { Authorization: `Bearer ${token}` },
                         signal: controller.signal,
@@ -785,10 +785,13 @@ export default function PaymentReminders() {
         'Velruma Pvt. Ltd.';
 
     const stallNo =
+        formatStallNo(data?.participation?.stallFor) ||
         formatStallNo(data?.participation?.stall?.stallNumber) ||
-        formatStallNo(data?.participation?.stallNo) ||
-        formatStallNo(data?.stallNo) ||
         formatStallNo(data?.participation?.stallNumber) ||
+        formatStallNo(overview?.companyInfo?.stallNo) ||
+        formatStallNo(data?.stallFor) ||
+        formatStallNo(data?.stallNo) ||
+        formatStallNo(data?.participation?.stallNo) ||
         'TBA';
 
     const rawManagerImage =
@@ -1435,9 +1438,9 @@ const styles = `
 .pr-title-copy p { margin: 5px 0 0; font-size: 10px; font-weight: 500; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
 .pr-company-card {
-    width: 228px; height: 50px; flex: 0 0 228px;
+    width: fit-content; max-width: min(360px, 42vw); min-height: 50px; flex: 0 1 auto;
     display: flex; align-items: center; gap: 10px;
-    padding: 0 12px;
+    padding: 7px 12px;
     color: var(--navy); background: #fff;
     border: 1px solid var(--line); border-radius: 9px;
     box-shadow: 0 2px 8px rgba(22, 43, 70, .04);
@@ -1450,7 +1453,7 @@ const styles = `
     font-size: 12px; font-weight: 900;
 }
 .pr-company-copy { min-width: 0; flex: 1; display: flex; flex-direction: column; align-items: flex-start; }
-.pr-company-copy strong { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11px; }
+.pr-company-copy strong { max-width: 100%; font-size: 11px; line-height: 1.15; white-space: normal; overflow-wrap: anywhere; text-align: left; }
 .pr-company-copy small { margin-top: 2px; font-size: 9px; color: var(--muted); font-weight: 600; }
 
 .pr-shell {
@@ -1918,7 +1921,7 @@ const styles = `
 @media (max-width: 760px) {
     .pr-page { --row-height: 132px; }
     .pr-header { height: auto; min-height: 70px; padding: 10px 14px; align-items: flex-start; }
-    .pr-company-card { width: 190px; flex-basis: 190px; }
+    .pr-company-card { max-width: 100%; }
     .pr-shell { padding: 10px 12px; }
     .pr-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .pr-left { min-height: 1000px; grid-template-rows: 173px auto 620px 160px; }
