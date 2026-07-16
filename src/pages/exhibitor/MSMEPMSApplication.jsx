@@ -579,7 +579,7 @@ const styles = `
     color: var(--pms-navy);
     font-size: 24px;
     line-height: 1.08;
-    font-weight: 800;
+    font-weight: 600;
     letter-spacing: -0.35px;
 }
 
