@@ -75,14 +75,14 @@ function InfoField({ label, value, required, type = 'text', options = [], onChan
     );
 }
 
-function Section({ icon, letter, title, note, children, className = '' }) {
+function Section({ icon, letter, title, note, children, className = '', titleColor = '#087536' }) {
     return (
         <section className={`min-w-0 overflow-hidden rounded-xl border border-[#dbe4ef] bg-white px-3 py-1.5 shadow-[0_2px_8px_rgba(9,32,74,0.025)] ${className}`}>
-            <div className="mb-1.5 flex items-center gap-2 text-[#087536]">
-                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md border border-[#d9eee2] bg-[#eff9f3] text-[#087536]">
+            <div className="mb-1.5 flex items-center gap-2" style={{ color: titleColor }}>
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md border border-[#d9eee2] bg-[#eff9f3]" style={{ color: titleColor }}>
                     {icon}
                 </span>
-                <strong className="whitespace-nowrap text-[13px] font-semibold text-[#087536]">{letter}. {title}</strong>
+                <strong className="whitespace-nowrap text-[13px] font-semibold" style={{ color: titleColor }}>{letter}. {title}</strong>
                 {note && <small className="-ml-1 whitespace-nowrap text-[9px] font-medium  self-center mt-0.5 text-blue-600">{note}</small>}
             </div>
             {children}
@@ -185,12 +185,13 @@ function UploadCard({ title, required, hint, status }) {
 
 function InfoBanner({ children }) {
     return (
-        <div className="mt-1.5 flex items-center gap-2 rounded-md border border-[#d8e1ec] bg-[#f6f9fc] px-3 py-1.5 text-[9.5px] font-medium text-[#31446c]">
-            <Info size={14} strokeWidth={2.2} className="shrink-0 text-[#6b82ac]" />
+        <div className="mt-1.5 flex items-center gap-2 rounded-md border border-[#d8e1ec] bg-[#f6f9fc] px-3 py-1.5 text-[9.5px] font-medium text-blue-600">
+            <Info size={14} strokeWidth={2.2} className="shrink-0 text-blue-600" />
             {children}
         </div>
     );
 }
+
 
 function ProgressRing({ percent }) {
     const radius = 30;
@@ -345,7 +346,7 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
                         </div>
 
                         <div className="grid grid-cols-1 items-stretch gap-2 lg:grid-cols-[1.55fr_1fr]">
-                            <Section letter="C" title="Mandatory Bank Documents" icon={<FileText size={17} strokeWidth={1.8} />}>
+                            <Section letter="C" title="Mandatory Bank Documents" icon={<FileText size={17} strokeWidth={1.8} />} titleColor="#5924c6">
                                 <p className="mb-1.5 text-[11px] font-semibold text-[#061743]">Please upload the following bank documents.</p>
 
                                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
@@ -355,7 +356,7 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
                                 <InfoBanner>Ensure that the account number and IFSC code are clearly visible in the uploaded documents.</InfoBanner>
                             </Section>
 
-                            <Section letter="D" title="IHWE Payment Details" note="(Auto Filled)" icon={<Receipt size={17} strokeWidth={1.8} />}>
+                            <Section letter="D" title="IHWE Payment Details" note="(Auto Filled)" icon={<Receipt size={17} strokeWidth={1.8} />} titleColor="#5924c6">
                                 <PaymentRow label="Event" value="9th International Health & Wellness Expo 2026" />
                                 <PaymentRow label="Stall No." value="139" />
                                 <PaymentRow label="Hall" value="Hall 9" />
@@ -507,7 +508,7 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
                             <span>pms.support@ihwe.com</span>
                         </a>
 
-                        <button type="button" className="mt-1.5 h-[34px] w-full rounded-md border border-[#cdd6e5] bg-white text-[10px] font-semibold text-[#061743]">
+                        <button type="button" className="mt-1.5 h-[34px] w-full rounded-md border border-[#5924c6] bg-white text-[10px] font-semibold text-[#5924c6]">
                             Send Email
                         </button>
                     </section>
