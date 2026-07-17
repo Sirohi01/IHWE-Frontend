@@ -18,6 +18,7 @@ import {
     ShieldCheck,
     Upload,
 } from 'lucide-react';
+import { useRef } from 'react';
 import { FaWhatsapp } from 'react-icons/fa6';
 const safe = (value, fallback = '—') => {
     if (value === null || value === undefined || value === '') return fallback;
@@ -152,8 +153,22 @@ function PaymentRow({ label, value, badge }) {
     );
 }
 
-function UploadCard({ title, required, hint, status }) {
+
+function UploadCard({ title, required, hint, status, onFileSelect }) {
     const isPending = status === 'Pending';
+    const fileInputRef = useRef(null);
+
+    const handleButtonClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files?.[0];
+        if (file && onFileSelect) {
+            onFileSelect(file);
+        }
+    };
+
     return (
         <div className="flex min-w-0 flex-col gap-1.5 rounded-lg border border-[#e9eef4] bg-[#fbfcfe] p-2">
             <div>
@@ -169,7 +184,18 @@ function UploadCard({ title, required, hint, status }) {
                     <Upload size={18} strokeWidth={1.8} />
                 </span>
                 <p className="text-[9px] font-medium leading-[1.3] text-[#6b7ea3]">Drag &amp; drop file here<br />or</p>
-                <button type="button" className="rounded-md border border-[#cfe4d8] bg-[#eff9f3] px-3 py-1 text-[9px] font-semibold text-[#087536]">
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*,.pdf"
+                    onChange={handleFileChange}
+                    className="hidden"
+                />
+                <button
+                    type="button"
+                    onClick={handleButtonClick}
+                    className="rounded-md border border-[#cfe4d8] bg-[#eff9f3] px-3 py-1 text-[9px] font-semibold text-[#087536]"
+                >
                     Upload File
                 </button>
             </div>
