@@ -149,6 +149,8 @@ const DelegateRegistration = lazy(() => import("@/pages/delegate/DelegateRegistr
 const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"));
 import { SERVER_URL } from "./lib/api";
 import MSMEDashboard from "./pages/MSME_PMS_ReimbursementCenter";
+import MSMEPMSBankDetailsPage from "./pages/exhibitor/MSMEPMSBankDetailsPage";
+import MSMEPMSDocumentsUploadPage from "./pages/exhibitor/MSMEPMSDocumentsUploadPage";
 const ProductServices = lazy(() => import("./pages/exhibitor/ProductServices"));
 const StallInformation = lazy(() => import("./pages/exhibitor/StallInformation"));
 const MyEvent = lazy(() => import("./pages/exhibitor/MyEvent"));
@@ -286,6 +288,9 @@ const App = () => {
                     <Route path="chat" element={<ExhibitorChatPage />} />
                     <Route path="msme" element={<ExhibitorMSMEPage />} />
                     <Route path="msme/application" element={<MSMEPMSApplicationPage />} />
+                    <Route path="msme/bank-details" element={<MSMEPMSBankDetailsPage />} />
+                    <Route path="msme/documents-upload" element={<MSMEPMSDocumentsUploadPage />} />
+
                     <Route path="epromotion" element={<ExhibitorEPromotion />} />
                     <Route path="product" element={<ProductServices />} />
                     <Route path="stall-information" element={<StallInformation />} />

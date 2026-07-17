@@ -1,0 +1,530 @@
+import {
+    AlertCircle,
+    ArrowLeft,
+    ArrowRight,
+    Check,
+    CheckCircle2,
+    ChevronDown,
+    FileText,
+    Headphones,
+    Info,
+    Landmark,
+    Mail,
+    MessageCircle,
+    Phone,
+    Receipt,
+    Save,
+    ShieldCheck,
+    Upload,
+} from 'lucide-react';
+import { FaWhatsapp } from 'react-icons/fa6';
+const safe = (value, fallback = '—') => {
+    if (value === null || value === undefined || value === '') return fallback;
+    return value;
+};
+
+const fieldValue = (data, paths, fallback) => {
+    for (const path of paths) {
+        const value = path.split('.').reduce((obj, key) => obj?.[key], data);
+        if (value !== null && value !== undefined && value !== '') return value;
+    }
+    return fallback;
+};
+
+const STEPS = [
+    { number: 1, label: 'Applicant Details', status: 'done' },
+    { number: 2, label: 'Bank Details', status: 'active' },
+    { number: 3, label: 'Documents Upload', status: 'pending' },
+    { number: 4, label: 'Review', status: 'pending' },
+    { number: 5, label: 'Submit', status: 'pending' },
+];
+
+function InfoField({ label, value, required, type = 'text', options = [], onChange, className = '' }) {
+    return (
+        <label className={`flex min-w-0 flex-col gap-1.5 ${className}`}>
+            <span className="whitespace-nowrap text-[10px] font-semibold text-[#061743]">
+                {label}
+                {required && <b className="ml-0.5 text-[10px] font-extrabold text-[#e62f28]">*</b>}
+            </span>
+
+            <div className="relative h-[33px] min-w-0">
+                {type === 'select' ? (
+                    <>
+                        <select
+                            className="h-[30px] w-full min-w-0 appearance-none rounded-md border border-[#d8e1ec] bg-white px-2.5 pr-7 text-[10px] font-semibold text-[#061743] shadow-[inset_0_1px_1px_rgba(6,23,67,0.01)] outline-none focus:border-[#087536] focus:ring-[3px] focus:ring-[#087536]/10"
+                            value={value ?? ''}
+                            onChange={(event) => onChange?.(event.target.value)}
+                        >
+                            {options.map(option => (
+                                <option key={option} value={option}>{option}</option>
+                            ))}
+                        </select>
+                        <ChevronDown className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 text-[#061743]" size={13} strokeWidth={1.8} />
+                    </>
+                ) : (
+                    <input
+                        className="h-[30px] w-full min-w-0 rounded-md border border-[#d8e1ec] bg-white px-2.5 text-[10px] font-semibold text-[#061743] shadow-[inset_0_1px_1px_rgba(6,23,67,0.01)] outline-none focus:border-[#087536] focus:ring-[3px] focus:ring-[#087536]/10"
+                        value={value ?? ''}
+                        onChange={(event) => onChange?.(event.target.value)}
+                        title={String(value ?? '')}
+                    />
+                )}
+            </div>
+        </label>
+    );
+}
+
+function Section({ icon, letter, title, note, children, className = '' }) {
+    return (
+        <section className={`min-w-0 overflow-hidden rounded-xl border border-[#dbe4ef] bg-white px-3 py-2 shadow-[0_2px_8px_rgba(9,32,74,0.025)] ${className}`}>
+            <div className="mb-2 flex items-center gap-2 text-[#087536]">
+                <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md border border-[#d9eee2] bg-[#eff9f3] text-[#087536]">
+                    {icon}
+                </span>
+                <strong className="whitespace-nowrap text-[13px] font-extrabold text-[#087536]">{letter}. {title}</strong>
+                {note && <small className="-ml-1 whitespace-nowrap text-[9px] font-medium  self-center mt-1 text-blue-600">{note}</small>}
+            </div>
+            {children}
+        </section>
+    );
+}
+
+function StepNode({ step }) {
+    const isDone = step.status === 'done';
+    const isActive = step.status === 'active';
+
+    return (
+        <div className="relative z-10 flex flex-col items-center gap-2">
+            <span
+                className={`grid h-[26px] w-[26px] place-items-center rounded-full border-[3px] border-white text-[9px] font-extrabold ${
+                    isDone || isActive
+                        ? 'bg-[#087536] text-white shadow-[0_4px_10px_rgba(8,117,54,0.18)]'
+                        : 'bg-[#e7ebf3] text-[#061743] shadow-[0_0_0_1px_rgba(219,228,239,0.15)]'
+                }`}
+            >
+                {isDone ? <Check size={10} strokeWidth={3} /> : step.number}
+            </span>
+            <small className={`${isDone ? 'text-[#087536]' : 'text-[#8090ad]'} whitespace-nowrap text-[9px] font-bold text-[#061743]`}>{step.label}</small>
+            <small
+                className={`text-[9px] font-semibold ${
+                    isActive ? 'text-[#f25a1d]' : isDone ? 'text-[#087536]' : 'text-[#8090ad]'
+                }`}
+            >
+                {isDone ? 'Completed' : isActive ? 'In Progress' : 'Pending'}
+            </small>
+        </div>
+    );
+}
+
+function SummaryRow({ label, value }) {
+    return (
+        <div className="flex items-center justify-between gap-2 border-b border-[#e9eef4] py-2 last:border-b-0">
+            <span className="text-[9.5px] font-bold text-[#31446c]">{label}</span>
+            <strong className="max-w-[130px] overflow-hidden text-ellipsis whitespace-nowrap text-right text-[9.5px] font-semibold text-[#061743]">{value}</strong>
+        </div>
+    );
+}
+
+function VerifyRow({ label }) {
+    return (
+        <div className="flex items-center justify-between gap-2.5 border-b border-[#e9eef4] py-2 text-[10.5px] font-semibold first:pt-0.5">
+            <span>{label}</span>
+            <span className="inline-flex items-center gap-1 whitespace-nowrap text-[10px] font-bold text-[#087536]">
+                <div className='w-3 h-3 bg-[#087536] text-white rounded-full flex items-center justify-center font-bold'>
+
+                <Check size={10} strokeWidth={2.4} />
+                </div>
+                Verified
+            </span>
+        </div>
+    );
+}
+
+function PaymentRow({ label, value, badge }) {
+    return (
+        <div className="flex items-center justify-between gap-2.5 border-b border-[#e9eef4] py-1.5 text-[10px] last:border-b-0">
+            <span className="font-semibold text-[#31446c]">{label}</span>
+            {badge ? (
+                <strong className="rounded bg-[#eff9f3] px-2 py-1 text-[9px] font-bold text-[#087536]">{value}</strong>
+            ) : (
+                <strong className="text-right font-bold text-[#061743]">{value}</strong>
+            )}
+        </div>
+    );
+}
+
+function UploadCard({ title, required, hint, status }) {
+    const isPending = status === 'Pending';
+    return (
+        <div className="flex min-w-0 flex-col gap-2 rounded-lg border border-[#e9eef4] bg-[#fbfcfe] p-3">
+            <div>
+                <strong className="block text-[9px] font-bold text-[#061743]">
+                    {title}
+                    {required && <b className="ml-0.5 text-[#e62f28]">*</b>}
+                </strong>
+                <small className="mt-0.5 block text-[8.5px] font-medium text-[#5a6c92]">{hint}</small>
+            </div>
+
+            <div className="flex flex-col items-center gap-1.5 rounded-md border-[1.5px] border-dashed border-[#c7d3e3] bg-white px-2 py-2 text-center">
+                <span className="grid place-items-center text-[#6b7ea3]">
+                    <Upload size={18} strokeWidth={1.8} />
+                </span>
+                <p className="text-[9px] font-medium leading-[1.4] text-[#6b7ea3]">Drag &amp; drop file here<br />or</p>
+                <button type="button" className="rounded-md border border-[#cfe4d8] bg-[#eff9f3] px-3 py-1 text-[9px] font-bold text-[#087536]">
+                    Upload File
+                </button>
+            </div>
+
+            <span className={`text-[9px] font-bold ${isPending ? 'text-[#e62f28]' : 'text-[#6b7ea3]'}`}>
+                Status: {status}
+            </span>
+        </div>
+    );
+}
+
+function InfoBanner({ children }) {
+    return (
+        <div className="mt-3 flex items-center gap-2 rounded-md border border-[#d8e1ec] bg-[#f6f9fc] px-3 py-2 text-[9.5px] font-medium text-[#31446c]">
+            <Info size={14} strokeWidth={2.2} className="shrink-0 text-[#6b82ac]" />
+            {children}
+        </div>
+    );
+}
+
+function ProgressRing({ percent }) {
+    const radius = 30;
+    const circumference = 2 * Math.PI * radius;
+    const offset = circumference - (percent / 100) * circumference;
+
+    return (
+        <svg width="72" height="72" viewBox="0 0 72 72">
+            <circle cx="36" cy="36" r={radius} className="fill-none stroke-[#e7ebf3]" strokeWidth={6} />
+            <circle
+                cx="36" cy="36" r={radius}
+                className="fill-none stroke-[#087536] transition-[stroke-dashoffset] duration-300"
+                strokeWidth={6}
+                strokeLinecap="round"
+                strokeDasharray={circumference}
+                strokeDashoffset={offset}
+                transform="rotate(-90 36 36)"
+            />
+            <text x="36" y="34" textAnchor="middle" className="fill-[#087536] text-[13px] font-extrabold">{percent}%</text>
+            <text x="36" y="46" textAnchor="middle" className="fill-[#6b7ea3] text-[6px] font-semibold uppercase">Completed</text>
+        </svg>
+    );
+}
+
+export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
+    const companyName = fieldValue(data, ['exhibitorName', 'companyName', 'organizationName'], 'Velruma Pvt. Ltd.');
+    const msmeCategory = safe(data?.msme?.msmeCategory, 'Micro');
+    const udyamNumber = safe(data?.msme?.udyamRegNo, 'UP09D0012345');
+    const gstNumber = safe(data?.gstNo || data?.gstNumber, '09AAACV1234A1Z5');
+
+    const form = {
+        accountHolderName: safe(data?.bank?.accountHolderName, 'Velruma Pvt. Ltd.'),
+        bankName: safe(data?.bank?.bankName, 'HDFC Bank Ltd'),
+        branchName: safe(data?.bank?.branchName, 'Noida Sector 62'),
+        accountNumber: safe(data?.bank?.accountNumber, '50200012345678'),
+        confirmAccountNumber: safe(data?.bank?.accountNumber, '50200012345678'),
+        ifscCode: safe(data?.bank?.ifscCode, 'HDFC0001234'),
+        micrCode: safe(data?.bank?.micrCode, '110240039'),
+        accountType: safe(data?.bank?.accountType, 'Current Account'),
+    };
+
+    const bankTopFields = [
+        { name: 'accountHolderName', label: 'Account Holder Name', required: true },
+        { name: 'bankName', label: 'Bank Name', required: true, type: 'select', options: ['HDFC Bank Ltd', 'ICICI Bank', 'State Bank of India', 'Axis Bank', 'Punjab National Bank', 'Kotak Mahindra Bank'] },
+        { name: 'branchName', label: 'Branch Name', required: true },
+        { name: 'accountNumber', label: 'Account Number', required: true },
+    ];
+
+    const bankBottomFields = [
+        { name: 'confirmAccountNumber', label: 'Confirm Account Number', required: true },
+        { name: 'ifscCode', label: 'IFSC Code', required: true },
+        { name: 'micrCode', label: 'MICR Code (Optional)', required: false },
+    ];
+
+    const documents = [
+        { title: 'Cancelled Cheque', required: true, hint: 'Upload clear image / PDF', status: 'Pending' },
+        { title: 'Bank Statement (Last 6 Months)', required: true, hint: 'Upload PDF only', status: 'Pending' },
+        { title: 'Bank Passbook First Page', required: false, hint: '(Optional) Upload clear image / PDF', status: 'Optional' },
+    ];
+
+  const claimColumns = [
+    { label: 'Stall Charges', amount: '1,18,944' },
+    { label: 'Hotel Stay', amount: '18,000' },
+    { label: 'Travel', amount: '8,500' },
+    { label: 'Courier', amount: '1,200' },
+    { label: 'Marketing', amount: '5,000' },
+    {
+        label: 'Total Claimed',
+        amount: '1,51,644',
+        highlight: true,
+        amountHighlight: true,
+    },
+];
+
+    return (
+        <div className="w-full min-h-[calc(100dvh-58px)] bg-white p-5 pt-[13px] pb-6 font-sans text-[#061743] antialiased">
+            <header className="mb-1 flex flex-wrap items-start justify-between gap-4">
+                <div>
+                    <h1 className="m-0 text-[21px] font-semibold tracking-[-0.35px] text-[#061743] leading-[22.68px]">MSME PMS Application</h1>
+                    <p className="text-[13px] font-bold text-[#061743]">
+                        <b className="font-extrabold text-[#087536]">Step 2 of 5</b> — Bank Details &amp; Reimbursement Account
+                    </p>
+                </div>
+
+                <div className="grid w-fit grid-cols-2 gap-3.5">
+                    <div className="h-[55px] rounded-lg border border-[#dbe4ef] bg-white px-4 pb-2 pt-2 shadow-sm">
+                        <span className="block text-[10px] font-medium text-[#31436b]">Application ID</span>
+                        <strong className="mt-1.5 block whitespace-nowrap text-xs font-extrabold text-[#061743]">
+                            {safe(data?.applicationId, 'PMS-IHWE-2026-00139')}
+                        </strong>
+                    </div>
+                    <div className="h-[55px] rounded-lg border border-[#dbe4ef] bg-white px-4 pb-2 pt-2.5 shadow-sm">
+                        <span className="block text-[10px] font-medium text-[#31436b]">Status</span>
+                        <strong className="mt-1.5 block whitespace-nowrap text-xs font-extrabold text-[#f25a1d]">Draft</strong>
+                    </div>
+                </div>
+            </header>
+
+            <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-[minmax(0,1fr)_278px]">
+                <div className="flex min-w-0 flex-col gap-4">
+                    <div className="relative grid grid-cols-5 items-start pt-1">
+                        <div className="absolute left-[5px] right-[5px] top-[18px] z-0 h-0.5 rounded-full bg-[#dce3ed]">
+                            <span className="block h-full w-2/5 rounded-full bg-[#087536]" />
+                        </div>
+                        {STEPS.map(step => <StepNode key={step.number} step={step} />)}
+                    </div>
+
+                    <main className="flex flex-col gap-3.5">
+                        <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-[1.55fr_1fr]">
+                            <Section letter="A" title="Reimbursement Bank Details" icon={<Landmark size={17} strokeWidth={1.8} />}>
+                                <p className="mb-3 text-[11px] font-bold text-[#061743]">Bank Account Information</p>
+
+                                <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+                                    {bankTopFields.map(field => (
+                                        <InfoField key={field.name} label={field.label} value={form[field.name]} required={field.required} type={field.type} options={field.options} />
+                                    ))}
+                                </div>
+
+                                <div className="mt-3.5 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                                    {bankBottomFields.map(field => (
+                                        <InfoField key={field.name} label={field.label} value={form[field.name]} required={field.required} />
+                                    ))}
+
+                                    <div className="flex min-w-0 flex-col gap-1.5">
+                                        <span className="text-[10px] font-semibold text-[#061743]">Account Type <b className="ml-0.5 text-[10px] font-extrabold text-[#e62f28]">*</b></span>
+                                        <div className="flex h-[33px] flex-col justify-center gap-1.5">
+                                            {['Current Account', 'Savings Account'].map(type => (
+                                                <label key={type} className="relative flex cursor-pointer items-center gap-1.5 text-[10.5px] font-medium text-[#061743]">
+                                                    <input type="radio" name="accountType" value={type} checked={form.accountType === type} readOnly className="pointer-events-none absolute opacity-0" />
+                                                    <i className={`inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border-[1.4px] bg-white ${form.accountType === type ? 'border-4 border-[#087536]' : 'border-[#8090ad]'}`} />
+                                                    {type}
+                                                </label>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </Section>
+
+                            <Section letter="B" title="Payment Verification" icon={<ShieldCheck size={17} strokeWidth={1.8} />}>
+                                <VerifyRow label="Bank Account Holder Name Match" />
+                                <VerifyRow label="GST Registered Name Match" />
+                                <VerifyRow label="Udyam Registered Name Match" />
+
+                                <div className="mt-3 flex items-center gap-2 rounded-md border border-[#cdeadb] bg-[#f1fbf5] p-2.5 text-[#087536]">
+                                    <CheckCircle2 size={24} strokeWidth={2.2} className="mt-0.5 shrink-0" />
+                                    <div>
+                                        <strong className="block text-[10.5px] font-extrabold">All details match successfully.</strong>
+                                        <p className="text-[9.5px] font-medium text-[#2f5f47]">You can proceed to upload documents.</p>
+                                    </div>
+                                </div>
+                            </Section>
+                        </div>
+
+                        <div className="grid grid-cols-1 items-stretch gap-4 lg:grid-cols-[1.55fr_1fr]">
+                            <Section letter="C" title="Mandatory Bank Documents" icon={<FileText size={17} strokeWidth={1.8} />}>
+                                <p className="mb-3 text-[11px] font-bold text-[#061743]">Please upload the following bank documents.</p>
+
+                                <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-3">
+                                    {documents.map(doc => <UploadCard key={doc.title} {...doc} />)}
+                                </div>
+
+                                <InfoBanner>Ensure that the account number and IFSC code are clearly visible in the uploaded documents.</InfoBanner>
+                            </Section>
+
+                            <Section letter="D" title="IHWE Payment Details" note="(Auto Filled)" icon={<Receipt size={17} strokeWidth={1.8} />}>
+                                <PaymentRow label="Event" value="9th International Health & Wellness Expo 2026" />
+                                <PaymentRow label="Stall No." value="139" />
+                                <PaymentRow label="Hall" value="Hall 9" />
+                                <PaymentRow label="Stall Size" value="18 Sqm" />
+                                <PaymentRow label="Invoice Value" value="₹ 2,27,183" />
+                                <PaymentRow label="Amount Paid" value="₹ 2,27,183" />
+                                <PaymentRow label="Payment Status" value="Fully Paid" badge />
+                                <PaymentRow label="Payment Date" value="03 Jul 2026" />
+                            </Section>
+                        </div>
+
+                        <Section letter="E" title="Reimbursement Claim Calculation" note="(Indicative)" icon={<Landmark size={17} strokeWidth={1.8} />}>
+                            <div className="flex flex-col items-stretch gap-3.5 sm:flex-row rounded-lg">
+                             <table className="w-full min-w-0 flex-1 border-collapse rounded-lg">
+    <thead>
+        <tr>
+            <th className="whitespace-nowrap border border-[#e9eef4] bg-[#f6f9fc] p-2.5 text-left text-[9.5px] font-bold text-[#061743]">
+                Particular
+            </th>
+
+            {claimColumns.map(col => (
+                <th
+                    key={col.label}
+                    className={`whitespace-nowrap border border-[#e9eef4] bg-[#f6f9fc] p-2.5 text-left text-[9.5px] font-bold text-[#061743]`}
+                >
+                    {col.label}
+                </th>
+            ))}
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td className="whitespace-nowrap border border-[#e9eef4] p-2.5 text-[9.5px] font-semibold text-[#061743]">
+                Amount (₹)
+            </td>
+
+            {claimColumns.map(col => (
+                <td
+                    key={col.label}
+                    className={`whitespace-nowrap border border-[#e9eef4] p-2.5 ${
+                        col.amountHighlight
+                            ? 'font-semibold text-sm text-[#087536]'
+                            : 'text-[9.5px] font-semibold text-[#061743]'
+                    }`}
+                >
+                    {col.amount}
+                </td>
+            ))}
+        </tr>
+    </tbody>
+</table>
+
+                                <div className="flex flex-col items-center justify-center gap-1.5 rounded-md border border-[#cdeadb] bg-[#f1fbf5] p-2.5 text-center sm:w-[168px] sm:flex-none">
+                                    <span className="text-[9px] font-bold text-[#2f5f47]">Indicative Eligible Claim</span>
+                                    <strong className="text-lg font-semibold text-[#087536]">₹1,50,000*</strong>
+                                </div>
+                            </div>
+
+                            <InfoBanner>* Maximum benefit is subject to scheme rules, eligibility and final approval by the concerned authority.</InfoBanner>
+                        </Section>
+
+                <footer className="grid grid-cols-1 items-center gap-3.5 rounded-lg border border-[#dbe4ef] bg-white p-2 sm:grid-cols-[120px_minmax(0,1fr)_190px]">
+    <button
+        type="button"
+        onClick={() => onBack?.()}
+        className="flex h-7 items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white text-[10px] font-bold text-[#061743]"
+    >
+        <ArrowLeft size={15} strokeWidth={2} />
+        Back
+    </button>
+
+   <button
+    type="button"
+    className="mx-auto flex h-7 w-fit items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white px-4 text-[10px] font-bold text-[#061743]"
+>
+    <Save size={15} strokeWidth={2} />
+    Save Draft
+</button>
+
+    <button
+        type="button"
+        onClick={() => onContinue?.()}
+        className="flex h-7 items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#0b7137] to-[#087536] text-[10px] font-bold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)]"
+    >
+        Save &amp; Continue
+        <ArrowRight size={18} strokeWidth={2} />
+    </button>
+</footer>
+                    </main>
+                </div>
+
+                <aside className="flex min-w-0 flex-col gap-3.5">
+                    <section className="min-w-0 overflow-hidden rounded-xl border border-[#dbe4ef] bg-white px-3 py-2">
+                        <h2 className="mb-3 flex items-center gap-2 text-[13px] font-extrabold text-[#087536]">
+                            <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md border border-[#d9eee2] bg-[#eff9f3] text-[#087536]">
+                                <ShieldCheck size={18} strokeWidth={1.8} />
+                            </span>
+                            Application Summary
+                        </h2>
+                        <SummaryRow label="Company Name" value={companyName} />
+                        <SummaryRow label="MSME Category" value={msmeCategory} />
+                        <SummaryRow label="Udyam Number" value={udyamNumber} />
+                        <SummaryRow label="GST Number" value={gstNumber} />
+                        <SummaryRow label="IHWE Booking" value="Confirmed" />
+                        <SummaryRow label="Payment Status" value="Fully Paid" />
+
+                        <div className="mt-3 flex items-center gap-3 border-t border-[#e9eef4] pt-3.5">
+                            <ProgressRing percent={40} />
+                            <div>
+                                <strong className="block text-[10.5px] font-extrabold text-[#061743]">Application Progress</strong>
+                                <p className="mt-1 text-[9px] font-medium text-[#31446c]">Keep going! You're doing great.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section className="min-w-0 overflow-hidden rounded-xl border border-[#dbe4ef] bg-white px-3 py-2">
+                        <h2 className="mb-3 flex items-center gap-2 text-[13px] font-extrabold text-[#5924c6]">
+                            <Headphones size={19} strokeWidth={1.8} />
+                            PMS Coordinator
+                        </h2>
+
+                        <div className="mb-2 flex items-center gap-3">
+                            <div className="relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-full bg-[#eef2f7] text-xs font-extrabold text-[#061743]">
+                                <span>RS</span>
+                                <img
+                                    src={safe(data?.pmsCoordinator?.photo, 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rohit&backgroundColor=eef2f7')}
+                                    alt="Rohit Sharma"
+                                    className="absolute inset-0 h-full w-full object-cover"
+                                    onError={(event) => { event.currentTarget.style.display = 'none'; }}
+                                />
+                            </div>
+                            <div>
+                                <strong className="block text-xs font-extrabold text-[#061743]">Rohit Sharma</strong>
+                                <span className="mt-1.5 block text-[9px] font-medium text-[#31446c]">PMS Scheme Coordinator</span>
+                            </div>
+                        </div>
+
+                        <a href="tel:+919654900525" className="mt-1.5 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-bold text-[#061743] no-underline">
+                            <Phone size={15} strokeWidth={1.9} className="shrink-0 text-[#5924c6]" />
+                            <span>+91 96549 00525</span>
+                        </a>
+                        <a href="https://wa.me/919654900525" target="_blank" rel="noreferrer" className="mt-1.5 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-bold text-[#061743] no-underline">
+                            <FaWhatsapp size={15} strokeWidth={1.9} className="shrink-0 text-[#089a50]" />
+                            <span>WhatsApp Chat</span>
+                        </a>
+                        <a href="mailto:pms.support@ihwe.com" className="mt-1.5 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-bold text-[#061743] no-underline">
+                            <Mail size={15} strokeWidth={1.9} className="shrink-0 text-[#5924c6]" />
+                            <span>pms.support@ihwe.com</span>
+                        </a>
+
+                        <button type="button" className="mt-2.5 h-[34px] w-full rounded-md border border-[#cdd6e5] bg-white text-[10px] font-bold text-[#061743]">
+                            Send Email
+                        </button>
+                    </section>
+
+                    <section className="min-w-0 overflow-hidden rounded-xl border border-[#f1d9ad] bg-[#fffaf1] px-3 py-2">
+                        <h2 className="mb-3 flex items-center gap-2 text-[13px] font-extrabold text-[#f28c00]">
+                            <AlertCircle size={18} strokeWidth={1.9} />
+                            Important Note
+                        </h2>
+                        <ul className="list-disc space-y-0.5 pl-4 text-[9.5px] font-medium leading-relaxed text-[#31446c]">
+                            <li>Bank account must belong to the applicant company.</li>
+                            <li>Name mismatch may delay reimbursement.</li>
+                            <li>All documents must be clear and readable.</li>
+                            <li>Reimbursement is subject to scheme guidelines.</li>
+                        </ul>
+                    </section>
+                </aside>
+            </div>
+        </div>
+    );
+}
