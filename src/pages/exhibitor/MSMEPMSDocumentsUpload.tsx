@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import {
     AlertCircle,
     ArrowLeft,
@@ -68,18 +68,6 @@ const AUTO_DOCUMENTS = [
     { title: 'Organizer Declaration' },
 ];
 
-type SectionProps = {
-  icon: React.ReactNode;
-  letter: string;
-  title: string;
-  note?: React.ReactNode;
-  className?: string;
-  headerRight?: React.ReactNode;
-  children: React.ReactNode;
-};
-
-import type { ReactNode } from 'react';
-
 interface SectionProps {
     icon: ReactNode;
     letter: string;
@@ -120,19 +108,17 @@ function StepNode({ step }) {
     return (
         <div className="relative z-10 flex flex-col items-center gap-1">
             <span
-                className={`grid h-[26px] w-[26px] place-items-center rounded-full border-[3px] border-white text-[9px] font-semibold ${
-                    isDone || isActive
+                className={`grid h-[26px] w-[26px] place-items-center rounded-full border-[3px] border-white text-[9px] font-semibold ${isDone || isActive
                         ? 'bg-[#087536] text-white shadow-[0_4px_10px_rgba(8,117,54,0.18)]'
                         : 'bg-[#e7ebf3] text-[#061743] shadow-[0_0_0_1px_rgba(219,228,239,0.15)]'
-                }`}
+                    }`}
             >
                 {isDone ? <Check size={10} strokeWidth={3} /> : step.number}
             </span>
             <small className={`${isDone ? 'text-[#087536]' : 'text-[#8090ad]'} whitespace-nowrap text-[9px] font-semibold`}>{step.label}</small>
             <small
-                className={`text-[9px] font-semibold ${
-                    isActive ? 'text-[#f25a1d]' : isDone ? 'text-[#087536]' : 'text-[#8090ad]'
-                }`}
+                className={`text-[9px] font-semibold ${isActive ? 'text-[#f25a1d]' : isDone ? 'text-[#087536]' : 'text-[#8090ad]'
+                    }`}
             >
                 {isDone ? 'Completed' : isActive ? 'In Progress' : 'Pending'}
             </small>
@@ -152,11 +138,10 @@ function SummaryRow({ label, value }) {
 function StatusBadge({ status }) {
     const isUploaded = status === 'Uploaded';
     return (
-        <span className={`inline-flex w-[72px] items-center justify-center gap-1 whitespace-nowrap rounded px-1.5 py-0.5 text-[9px] font-semibold border ${
-            isUploaded 
-                ? 'text-[#087536] bg-[#eafbf1] border-[#b7ecd0]' 
+        <span className={`inline-flex w-[72px] items-center justify-center gap-1 whitespace-nowrap rounded px-1.5 py-0.5 text-[9px] font-semibold border ${isUploaded
+                ? 'text-[#087536] bg-[#eafbf1] border-[#b7ecd0]'
                 : 'text-[#e07a12] bg-[#fef6ec] border-[#fbdfb0]'
-        }`}>
+            }`}>
             {isUploaded ? (
                 <span className="grid h-3 w-3 place-items-center rounded-full bg-[#087536] text-white">
                     <Check size={7} strokeWidth={3} />
@@ -196,23 +181,23 @@ function DocumentRow({ index, doc, onUpload }) {
                 )}
             </td>
             <td className="min-w-[130px] p-1.5 text-[9.5px] font-semibold">
-                {isUploaded?(
+                {isUploaded ? (
                     <div className='flex items-center gap-4 whitespace-nowrap'>
-                      <span className="">({doc.size})</span>
+                        <span className="">({doc.size})</span>
                         <Eye size={16} strokeWidth={2} className="shrink-0" />
                     </div>
-                ):''}
+                ) : ''}
             </td>
             <td className="whitespace-nowrap p-1.5 text-right">
-  {isUploaded ? (
-    <button type="button" className="h-[20px] w-[64px] rounded-md border border-[#b7ecd0] text-center text-[9px] font-semibold text-[#087536]">
-        View
-    </button>
-) : (
-    <button type="button" onClick={() => onUpload(doc.id)} className="h-[20px] w-[64px] rounded-md border border-[#5924c6] text-center text-[9px] font-semibold text-[#5924c6]">
-        Upload
-    </button>
-)}
+                {isUploaded ? (
+                    <button type="button" className="h-[20px] w-[64px] rounded-md border border-[#b7ecd0] text-center text-[9px] font-semibold text-[#087536]">
+                        View
+                    </button>
+                ) : (
+                    <button type="button" onClick={() => onUpload(doc.id)} className="h-[20px] w-[64px] rounded-md border border-[#5924c6] text-center text-[9px] font-semibold text-[#5924c6]">
+                        Upload
+                    </button>
+                )}
             </td>
         </tr>
     );
@@ -291,7 +276,7 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
 
     return (
         <div className="w-full min-h-[calc(100dvh-58px)] bg-white p-3 px-3 lg:px-6 pt-2 pb-3 font-sans text-[#061743] antialiased">
-            <header className="mb-1 flex flex-wrap items-start justify-between gap-3">
+            <header className="mb-1 flex flex-wrap items-start justify-between gap-3 xl:pr-[300px]">
                 <div>
                     <h1 className="m-0 text-[21px] font-semibold tracking-[-0.35px] text-[#061743] leading-[22.68px]">MSME PMS Application</h1>
                     <p className="text-[13px] font-semibold text-[#061743]">
@@ -299,18 +284,18 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
                     </p>
                 </div>
 
-             <div className="grid w-fit grid-cols-2 gap-2">
-    <div className="h-[55px] w-fit rounded-lg border border-[#dbe4ef] bg-blue-50 px-3 pb-2 pt-2 shadow-sm">
-        <span className="block text-[10px] font-medium text-[#31436b]">Application ID</span>
-        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#061743]">
-            {safe(data?.applicationId, 'PMS-IHWE-2026-00139')}
-        </strong>
-    </div>
-    <div className="h-[55px] w-fit rounded-lg border border-orange-100 bg-orange-50 px-3 pb-2 pt-2 shadow-sm pr-5">
-        <span className="block text-[10px] font-medium text-[#31436b]">Status</span>
-        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#f25a1d]">Draft</strong>
-    </div>
-</div>
+                <div className="flex gap-2">
+                    <div className="h-[55px] w-fit rounded-lg border border-[#dbe4ef] bg-blue-50 px-3 pb-2 pt-2 shadow-sm">
+                        <span className="block text-[10px] font-medium text-[#31436b]">Application ID</span>
+                        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#061743]">
+                            {safe(data?.applicationId, 'PMS-IHWE-2026-00139')}
+                        </strong>
+                    </div>
+                    <div className="h-[55px] w-fit rounded-lg border border-orange-100 bg-orange-50 px-3 pb-2 pt-2 shadow-sm pr-5">
+                        <span className="block text-[10px] font-medium text-[#31436b]">Status</span>
+                        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#f25a1d]">Draft</strong>
+                    </div>
+                </div>
             </header>
 
             <div className="grid grid-cols-1 items-start gap-2 xl:grid-cols-[minmax(0,1fr)_278px]">
@@ -329,54 +314,54 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
                             icon={<User size={17} strokeWidth={1.8} />}
                             headerRight={
                                 <div className="flex items-center justify-between gap-3">
-    {/* LEFT CONTENT */}
-    <div className="flex flex-col gap-0.5">
-        <span className="whitespace-nowrap text-[9px] font-semibold leading-tight text-[#263d70]">
-            Documents Completed
-        </span>
+                                    {/* LEFT CONTENT */}
+                                    <div className="flex flex-col gap-0.5">
+                                        <span className="whitespace-nowrap text-[9px] font-semibold leading-tight text-[#263d70]">
+                                            Documents Completed
+                                        </span>
 
-        <div className="flex items-baseline gap-1">
-            <b className="text-[20px] font-semibold leading-none text-[#087536]">
-                {uploadedCount} / {totalCount}
-            </b>
+                                        <div className="flex items-baseline gap-1">
+                                            <b className="text-[20px] font-semibold leading-none text-[#087536]">
+                                                {uploadedCount} / {totalCount}
+                                            </b>
 
-            <span className="text-[9px] font-medium text-[#8090ad]">
-                ({percentComplete}% Complete)
-            </span>
-        </div>
-    </div>
+                                            <span className="text-[9px] font-medium text-[#8090ad]">
+                                                ({percentComplete}% Complete)
+                                            </span>
+                                        </div>
+                                    </div>
 
-    {/* PROGRESS BAR */}
-    <span className="h-1.5 w-40 overflow-hidden rounded-full bg-[#e1e5ed]">
-        <span
-            className="block h-full rounded-full bg-[#087536] transition-[width] duration-300"
-            style={{ width: `${percentComplete}%` }}
-        />
-    </span>
-</div>
+                                    {/* PROGRESS BAR */}
+                                    <span className="h-1.5 w-40 overflow-hidden rounded-full bg-[#e1e5ed]">
+                                        <span
+                                            className="block h-full rounded-full bg-[#087536] transition-[width] duration-300"
+                                            style={{ width: `${percentComplete}%` }}
+                                        />
+                                    </span>
+                                </div>
                             }
                         >
                             <p className="mb-1.5 text-[9.5px] font-medium text-[#5a6c92]">Please upload clear and valid documents to proceed with verification.</p>
 
                             <div className="overflow-x-auto rounded-lg border border-[#e9eef4]">
-                           <table className="w-full min-w-[720px] border-collapse">
-    <thead>
-        <tr className="bg-[#f6f9fc]">
-            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">#</th>
-            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">Document Name</th>
-            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">Description</th>
-            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">Status</th>
-            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">File / Preview</th>
-            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]"></th>
-            <th className="whitespace-nowrap px-1.5 py-1 text-right text-[9.5px] font-semibold text-[#061743]">Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {documents.map((doc, index) => (
-            <DocumentRow key={doc.id} index={index} doc={doc} onUpload={handleUpload} />
-        ))}
-    </tbody>
-</table>
+                                <table className="w-full min-w-[720px] border-collapse">
+                                    <thead>
+                                        <tr className="bg-[#f6f9fc]">
+                                            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">#</th>
+                                            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">Document Name</th>
+                                            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">Description</th>
+                                            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">Status</th>
+                                            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">File / Preview</th>
+                                            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]"></th>
+                                            <th className="whitespace-nowrap px-1.5 py-1 text-right text-[9.5px] font-semibold text-[#061743]">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {documents.map((doc, index) => (
+                                            <DocumentRow key={doc.id} index={index} doc={doc} onUpload={handleUpload} />
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
 
                             <InfoBanner>All documents must be clear, readable and in PDF / JPG / PNG format. Maximum file size allowed: 5MB per file.</InfoBanner>
@@ -414,9 +399,8 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
                                 type="button"
                                 onClick={() => allUploaded && onContinue?.()}
                                 disabled={!allUploaded}
-                                className={`flex h-7 items-center justify-center gap-2 rounded-md text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)] ${
-                                    allUploaded ? 'bg-gradient-to-r from-[#0b7137] to-[#087536]' : 'cursor-not-allowed bg-gradient-to-r from-[#0b7137]/50 to-[#087536]/50'
-                                }`}
+                                className={`flex h-7 items-center justify-center gap-2 rounded-md text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)] ${allUploaded ? 'bg-gradient-to-r from-[#0b7137] to-[#087536]' : 'cursor-not-allowed bg-gradient-to-r from-[#0b7137]/50 to-[#087536]/50'
+                                    }`}
                             >
                                 Save &amp; Continue
                                 <ArrowRight size={18} strokeWidth={2} />
