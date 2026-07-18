@@ -1,8 +1,63 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import SectionContainer from '../layout/SectionContainer';
 import Marquee from 'react-fast-marquee';
+import axios from 'axios';
+import { API_URL, SERVER_URL } from '../../lib/api';
 
 const LogoShowcase = () => {
+  const [knowledgePartners, setKnowledgePartners] = useState<any[]>([
+    { logo: "/aa3.png", name: "Knowledge Partner 1" },
+    { logo: "/knowledge2.png", name: "Knowledge Partner 2" },
+    { logo: "/knowledge3.png", name: "Knowledge Partner 3" }
+  ]);
+  const [healthcarePartners, setHealthcarePartners] = useState<any[]>([
+    { logo: "/health1.png", name: "Healthcare Partner 1" },
+    { logo: "/applog.jpeg", name: "Healthcare Partner 2" },
+    { logo: "/forlog.png", name: "Healthcare Partner 3" }
+  ]);
+  const [supportingAssociations, setSupportingAssociations] = useState<any[]>([
+    { logo: "/aa2.png", name: "Supporting Association 3" },
+    { logo: "/health.png", name: "Healthcare Partner" },
+    { logo: "/Supporting.png", name: "Supporting Association 1" },
+    { logo: "/Supporting Association (2).webp", name: "Supporting Association 2" }
+  ]);
+
+  useEffect(() => {
+    const fetchPartners = async () => {
+      try {
+        const response = await axios.get(`${API_URL}/partners`);
+        if (response.data.success) {
+          const groups = response.data.data;
+          
+          const getPartnersBySubheading = (sub: string) => {
+             const group = groups.find((g: any) => g.subheading && g.subheading.toLowerCase().includes(sub));
+             return group && group.partners && group.partners.length > 0 ? group.partners : null;
+          };
+
+          const kp = getPartnersBySubheading('knowledge');
+          const hp = getPartnersBySubheading('healthcare');
+          const sa = getPartnersBySubheading('supporting');
+
+          if (kp) setKnowledgePartners(kp);
+          if (hp) setHealthcarePartners(hp);
+          if (sa) setSupportingAssociations(sa);
+        }
+      } catch (error) {
+        console.error('Error fetching partners for LogoShowcase:', error);
+      }
+    };
+    fetchPartners();
+  }, []);
+
+  const getImageUrl = (partner: any) => {
+      const path = partner.logo;
+      if (!path) return `https://placehold.co/100x60/ffffff/888?text=${encodeURIComponent(partner.name || 'Logo')}`;
+      if (path.startsWith('http')) return path;
+      if (path.startsWith('/uploads/')) return `${SERVER_URL}${path}`;
+      if (path.startsWith('uploads/')) return `${SERVER_URL}/${path}`;
+      return path; // Fallback for public images starting with /
+  };
+
   return (
     <section className="bg-white pt-4 pb-6 relative z-10" style={{ fontFamily: "'Inter', sans-serif" }}>
       <SectionContainer>
@@ -17,18 +72,15 @@ const LogoShowcase = () => {
             </h3>
             <div className="w-full overflow-hidden">
               <Marquee speed={30} direction="right" gradient={false} pauseOnHover={true}>
-                {[
-                  { src: "/aa3.png", alt: "Knowledge Partner 1" },
-                  { src: "/knowledge2.png", alt: "Knowledge Partner 2" },
-                  { src: "/knowledge3.png", alt: "Knowledge Partner 3" }
-                ].map((logo, idx) => (
+                {knowledgePartners.map((partner, idx) => (
                   <div key={idx} className="mx-6 md:mx-8 lg:mx-10 transition-transform duration-300 hover:-translate-y-1 flex items-center justify-center">
-                    <img loading="lazy" decoding="async" src={logo.src} 
-                      alt={logo.alt} 
+                    <img loading="lazy" decoding="async" src={getImageUrl(partner)} 
+                      alt={partner.name || partner.imageAlt || 'Knowledge Partner'} 
+                      title={partner.name || partner.imageAlt || 'Knowledge Partner'}
                       className="h-12 md:h-14 lg:h-16 w-auto max-w-[100px] md:max-w-[120px] lg:max-w-[140px] object-contain transition-all duration-300"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src =
-                          `https://placehold.co/100x60/ffffff/888?text=${encodeURIComponent(logo.alt)}`;
+                          `https://placehold.co/100x60/ffffff/888?text=${encodeURIComponent(partner.name || 'Logo')}`;
                       }}
                     />
                   </div>
@@ -44,18 +96,15 @@ const LogoShowcase = () => {
             </h3>
             <div className="w-full overflow-hidden">
               <Marquee speed={30} direction="right" gradient={false} pauseOnHover={true}>
-                {[
-                  { src: "/health1.png", alt: "Healthcare Partner 1" },
-                  { src: "/applog.jpeg", alt: "Healthcare Partner 2" },
-                  { src: "/forlog.png", alt: "Healthcare Partner 3" }
-                ].map((logo, idx) => (
+                {healthcarePartners.map((partner, idx) => (
                   <div key={idx} className="mx-6 md:mx-8 lg:mx-10 transition-transform duration-300 hover:-translate-y-1 flex items-center justify-center">
-                    <img loading="lazy" decoding="async" src={logo.src} 
-                      alt={logo.alt} 
+                    <img loading="lazy" decoding="async" src={getImageUrl(partner)} 
+                      alt={partner.name || partner.imageAlt || 'Healthcare Partner'} 
+                      title={partner.name || partner.imageAlt || 'Healthcare Partner'}
                       className="h-12 md:h-14 lg:h-16 w-auto max-w-[100px] md:max-w-[120px] lg:max-w-[140px] object-contain transition-all duration-300"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src =
-                          `https://placehold.co/100x60/ffffff/888?text=${encodeURIComponent(logo.alt)}`;
+                          `https://placehold.co/100x60/ffffff/888?text=${encodeURIComponent(partner.name || 'Logo')}`;
                       }}
                     />
                   </div>
@@ -71,19 +120,15 @@ const LogoShowcase = () => {
             </h3>
             <div className="w-full overflow-hidden">
               <Marquee speed={30} direction="right" gradient={false} pauseOnHover={true}>
-                {[
-                  { src: "/aa2.png", alt: "Supporting Association 3" },
-                  { src: "/health.png", alt: "Healthcare Partner" },
-                  { src: "/Supporting.png", alt: "Supporting Association 1" },
-                  { src: "/Supporting%20Association%20(2).webp", alt: "Supporting Association 2" }
-                ].map((logo, idx) => (
+                {supportingAssociations.map((partner, idx) => (
                   <div key={idx} className="mx-6 md:mx-8 lg:mx-10 transition-transform duration-300 hover:-translate-y-1 flex items-center justify-center">
-                    <img loading="lazy" decoding="async" src={logo.src} 
-                      alt={logo.alt} 
+                    <img loading="lazy" decoding="async" src={getImageUrl(partner)} 
+                      alt={partner.name || partner.imageAlt || 'Supporting Association'} 
+                      title={partner.name || partner.imageAlt || 'Supporting Association'}
                       className="h-12 md:h-14 lg:h-16 w-auto max-w-[100px] md:max-w-[120px] lg:max-w-[140px] object-contain transition-all duration-300"
                       onError={(e) => {
                         (e.target as HTMLImageElement).src =
-                          `https://placehold.co/100x60/ffffff/888?text=${encodeURIComponent(logo.alt)}`;
+                          `https://placehold.co/100x60/ffffff/888?text=${encodeURIComponent(partner.name || 'Logo')}`;
                       }}
                     />
                   </div>
