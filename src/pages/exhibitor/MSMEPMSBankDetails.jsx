@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { useRef } from 'react';
 import { FaWhatsapp } from 'react-icons/fa6';
+import { useNavigate } from 'react-router-dom';
 const safe = (value, fallback = '—') => {
     if (value === null || value === undefined || value === '') return fallback;
     return value;
@@ -241,6 +242,7 @@ function ProgressRing({ percent }) {
 }
 
 export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
+     const navigate = useNavigate();
     const companyName = fieldValue(data, ['exhibitorName', 'companyName', 'organizationName'], 'Velruma Pvt. Ltd.');
     const msmeCategory = safe(data?.msme?.msmeCategory, 'Micro');
     const udyamNumber = safe(data?.msme?.udyamRegNo, 'UP09D0012345');
@@ -445,7 +447,7 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
                         <footer className="grid grid-cols-1 items-center gap-2 rounded-lg border border-[#dbe4ef] bg-white p-1.5 sm:grid-cols-[120px_minmax(0,1fr)_190px]">
                             <button
                                 type="button"
-                                onClick={() => onBack?.()}
+                                onClick={() => navigate("/exhibitor-dashboard/msme/application")}
                                 className="flex h-7 items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white text-[10px] font-semibold text-[#061743]"
                             >
                                 <ArrowLeft size={15} strokeWidth={2} />
@@ -462,7 +464,8 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
 
                             <button
                                 type="button"
-                                onClick={() => onContinue?.()}
+                                onClick={() => navigate("/exhibitor-dashboard/msme/documents-upload")}
+                                
                                 className="flex h-7 items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#0b7137] to-[#087536] text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)]"
                             >
                                 Save &amp; Continue

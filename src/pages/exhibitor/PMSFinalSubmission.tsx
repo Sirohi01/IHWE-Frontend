@@ -20,7 +20,7 @@ import {
     UserCheck,
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa6';
-
+import { useNavigate } from "react-router-dom";
 const safe = (value, fallback = '—') => {
     if (value === null || value === undefined || value === '') return fallback;
     return value;
@@ -325,7 +325,7 @@ export default function PMSFinalSubmission({ data, onBack, onSaveDraft, onSubmit
         setAgreed(next);
         onDeclarationChange?.(next);
     };
-
+const navigate = useNavigate()
     return (
         <div className="w-full min-h-[calc(100dvh-58px)] bg-white p-3 px-3 lg:px-6 pt-2 pb-3 font-sans text-[#061743] antialiased">
             <header className="mb-1 flex flex-wrap items-start justify-between gap-3">
@@ -451,7 +451,7 @@ export default function PMSFinalSubmission({ data, onBack, onSaveDraft, onSubmit
                         <footer className="grid grid-cols-1 items-center gap-2 rounded-lg border border-[#dbe4ef] bg-white p-1.5 sm:grid-cols-[120px_minmax(0,1fr)_190px]">
                             <button
                                 type="button"
-                                onClick={() => onBack?.()}
+                                onClick={() => navigate('/exhibitor-dashboard/msme/application-review')}
                                 className="flex h-7 items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white text-[10px] font-semibold text-[#061743]"
                             >
                                 <ArrowLeft size={15} strokeWidth={2} />

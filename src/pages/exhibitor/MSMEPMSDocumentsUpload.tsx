@@ -21,6 +21,7 @@ import {
     UploadCloud,
     User,
 } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
 import { FaWhatsapp } from 'react-icons/fa6';
 
 const safe = (value, fallback = '—') => {
@@ -267,7 +268,7 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
     const pendingCount = totalCount - uploadedCount;
     const percentComplete = Math.round((uploadedCount / totalCount) * 100);
     const allUploaded = pendingCount === 0;
-
+  const navigate = useNavigate();
     const handleUpload = (id) => {
         setDocuments(prev => prev.map(doc => (
             doc.id === id
@@ -382,7 +383,7 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
                         <footer className="grid grid-cols-1 items-center gap-2 rounded-lg border border-[#dbe4ef] bg-white p-1.5 sm:grid-cols-[120px_minmax(0,1fr)_190px]">
                             <button
                                 type="button"
-                                onClick={() => onBack?.()}
+                                onClick={() => navigate("/exhibitor-dashboard/msme/bank-details")}
                                 className="flex h-7 items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white text-[10px] font-semibold text-[#061743]"
                             >
                                 <ArrowLeft size={15} strokeWidth={2} />
@@ -399,7 +400,7 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
 
                             <button
                                 type="button"
-                                onClick={() => allUploaded && onContinue?.()}
+                                onClick={() => navigate("/exhibitor-dashboard/msme/pms-approved")}
                                 disabled={!allUploaded}
                                 className={`flex h-7 items-center justify-center gap-2 rounded-md text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)] ${allUploaded ? 'bg-gradient-to-r from-[#0b7137] to-[#087536]' : 'cursor-not-allowed bg-gradient-to-r from-[#0b7137]/50 to-[#087536]/50'
                                     }`}
