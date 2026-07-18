@@ -307,14 +307,14 @@ function ProgressRing({ percent }) {
     );
 }
 
-export default function PMSFinalSubmission({ data, onBack, onSaveDraft, onSubmit, onDeclarationChange }) {
+export default function PMSFinalSubmission({ data, onBack, onSaveDraft, onSubmit, onDeclarationChange, saving }) {
     const [agreed, setAgreed] = useState<boolean>(data?.declarationAgreed !== false);
 
-    const companyName = safe(data?.exhibitorName || data?.companyName, 'Velruma Pvt. Ltd.');
-    const msmeCategory = safe(data?.msme?.msmeCategory, 'Micro');
-    const udyamNumber = safe(data?.msme?.udyamRegNo, 'UP09D0012345');
-    const gstNumber = safe(data?.gstNo || data?.gstNumber, '09AAACV1234A1Z5');
-    const applicationId = safe(data?.applicationId, 'PMS-IHWE-2026-00139');
+    const companyName = safe(data?.exhibitorName || data?.companyName);
+    const msmeCategory = safe(data?.msme?.msmeCategory);
+    const udyamNumber = safe(data?.msme?.udyamRegNo);
+    const gstNumber = safe(data?.gstNo || data?.gstNumber);
+    const applicationId = safe(data?.applicationId);
     const progressPercent: number = Number(safe(data?.progressPercent, 100)) || 100;
 
     const activeIndex = STEPS.findIndex(step => step.status === 'active');
@@ -343,7 +343,7 @@ const navigate = useNavigate()
                     </div>
                     <div className="h-[55px] w-fit rounded-lg border border-orange-100 bg-orange-50 px-3 pb-2 pt-2 shadow-sm pr-5">
                         <span className="block text-[10px] font-medium text-[#31436b]">Status</span>
-                        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#f25a1d]">Draft</strong>
+                        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#f25a1d]">{safe(data?.status, 'Draft')}</strong>
                     </div>
                 </div>
             </header>
@@ -451,7 +451,7 @@ const navigate = useNavigate()
                         <footer className="grid grid-cols-1 items-center gap-2 rounded-lg border border-[#dbe4ef] bg-white p-1.5 sm:grid-cols-[120px_minmax(0,1fr)_190px]">
                             <button
                                 type="button"
-                                onClick={() => navigate('/exhibitor-dashboard/msme/application-review')}
+                                onClick={() => onBack?.()}
                                 className="flex h-7 items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white text-[10px] font-semibold text-[#061743]"
                             >
                                 <ArrowLeft size={15} strokeWidth={2} />
@@ -460,7 +460,8 @@ const navigate = useNavigate()
 
                             <button
                                 type="button"
-                                onClick={() => onSaveDraft?.()}
+                                disabled={saving}
+                                onClick={() => onSaveDraft?.(agreed)}
                                 className="mx-auto flex h-7 w-fit items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white px-4 text-[10px] font-semibold text-[#061743]"
                             >
                                 <Save size={15} strokeWidth={2} />
@@ -469,13 +470,13 @@ const navigate = useNavigate()
 
                             <button
                                 type="button"
-                                disabled={!agreed}
-                                onClick={() => onSubmit?.()}
+                                disabled={!agreed || saving || Boolean(data?.submittedAt)}
+                                onClick={() => onSubmit?.(agreed)}
                                 className={`flex h-7 items-center justify-center gap-2 rounded-md text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)] ${
                                     agreed ? 'bg-gradient-to-r from-[#0b7137] to-[#087536]' : 'cursor-not-allowed bg-[#a9c9b6]'
                                 }`}
                             >
-                                Submit Application
+                                {data?.submittedAt ? 'Application Submitted' : saving ? 'Submitting...' : 'Submit Application'}
                                 <Send size={14} strokeWidth={2} />
                             </button>
                         </footer>
@@ -488,8 +489,8 @@ const navigate = useNavigate()
                         <SummaryRow label="MSME Category" value={msmeCategory} />
                         <SummaryRow label="Udyam Number" value={udyamNumber} />
                         <SummaryRow label="GST Number" value={gstNumber} />
-                        <SummaryRow label="Booking Status" value="Confirmed" />
-                        <SummaryRow label="Payment Status" value="Fully Paid" />
+                        <SummaryRow label="Booking Status" value={safe(data?.event?.bookingStatus || data?.bookingStatus)} />
+                        <SummaryRow label="Payment Status" value={safe(data?.event?.paymentStatus || data?.paymentStatus)} />
                     </Panel>
 
                     <section className="min-w-0 overflow-hidden rounded-xl border border-[#dbe4ef] bg-white px-3 py-1.5">
@@ -506,36 +507,36 @@ const navigate = useNavigate()
                     <section className="min-w-0 overflow-hidden rounded-xl border border-[#dbe4ef] bg-white px-3 py-1.5">
                         <h2 className="mb-1.5 flex items-center gap-2 text-[13px] font-semibold text-[#5924c6]">
                             <HelpCircle size={16} strokeWidth={1.9} />
-                            PMS Help Desk
+                            Relationship Manager
                         </h2>
 
                         <div className="mb-1.5 flex items-center gap-2">
                             <div className="relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-full bg-[#eef2f7] text-xs font-semibold text-[#061743]">
                                 <span>RS</span>
                                 <img
-                                    src={safe(data?.pmsCoordinator?.photo, 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rohit&backgroundColor=eef2f7')}
-                                    alt="Rohit Sharma"
+                                    src={data?.pmsCoordinator?.photo || undefined}
+                                    alt={safe(data?.pmsCoordinator?.name, 'PMS Coordinator')}
                                     className="absolute inset-0 h-full w-full object-cover"
                                     onError={(event) => { event.currentTarget.style.display = 'none'; }}
                                 />
                             </div>
                             <div>
-                                <strong className="block text-xs font-semibold text-[#061743]">Rohit Sharma</strong>
-                                <span className="mt-1 block text-[9px] font-medium text-[#31446c]">PMS Scheme Coordinator</span>
+                                <strong className="block text-xs font-semibold text-[#061743]">{safe(data?.pmsCoordinator?.name)}</strong>
+                                <span className="mt-1 block text-[9px] font-medium text-[#31446c]">{safe(data?.pmsCoordinator?.designation)}</span>
                             </div>
                         </div>
 
-                        <a href="tel:+919654900525" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
+                        <a href={data?.pmsCoordinator?.phone ? `tel:${data.pmsCoordinator.phone}` : undefined} className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
                             <Phone size={15} strokeWidth={1.9} className="shrink-0 text-[#5924c6]" />
-                            <span>+91 96549 00525</span>
+                            <span>{safe(data?.pmsCoordinator?.phone)}</span>
                         </a>
-                        <a href="https://wa.me/919654900525" target="_blank" rel="noreferrer" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
+                        <a href={data?.pmsCoordinator?.whatsapp ? `https://wa.me/${String(data.pmsCoordinator.whatsapp).replace(/\D/g, '')}` : undefined} target="_blank" rel="noreferrer" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
                             <FaWhatsapp size={15} strokeWidth={1.9} className="shrink-0 text-[#089a50]" />
                             <span>WhatsApp Support</span>
                         </a>
-                        <a href="mailto:pms.support@ihwe.com" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
+                        <a href={data?.pmsCoordinator?.email ? `mailto:${data.pmsCoordinator.email}` : undefined} className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
                             <Mail size={15} strokeWidth={1.9} className="shrink-0 text-[#5924c6]" />
-                            <span>pms.support@ihwe.com</span>
+                            <span>{safe(data?.pmsCoordinator?.email)}</span>
                         </a>
 
                         <div className="mt-1.5 flex items-center gap-2.5 rounded-md bg-[#f5f1fd] px-2 py-1 text-[9px] font-semibold text-[#5924c6]">

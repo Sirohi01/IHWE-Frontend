@@ -45,26 +45,26 @@ const STEPS = [
 ];
 
 const UPLOADED_DOCUMENTS = [
-    { id: 'udyam', name: 'Udyam Registration Certificate', file: 'udyam_cert.pdf', status: 'Uploaded' },
-    { id: 'gst', name: 'GST Certificate', file: 'gst_certificate.pdf', status: 'Uploaded' },
-    { id: 'pan', name: 'PAN Card', file: 'pan_card.pdf', status: 'Uploaded' },
-    { id: 'aadhaar', name: 'Aadhaar Card', file: 'aadhar_card.pdf', status: 'Uploaded' },
-    { id: 'cheque', name: 'Cancelled Cheque', file: 'cancelled_cheque.pdf', status: 'Uploaded' },
-    { id: 'statement', name: 'Bank Statement (Last 6 Months)', file: 'bank_statement.pdf', status: 'Pending' },
-    { id: 'hotelInvoice', name: 'Hotel Invoice(s)', file: 'hotel_invoice.pdf', status: 'Pending' },
-    { id: 'hotelPayment', name: 'Hotel Payment Proof', file: 'hotel_payment.pdf', status: 'Pending' },
-    { id: 'travelExpense', name: 'Travel Expense Proof', file: 'travel_expense.pdf', status: 'Pending' },
-    { id: 'travelInvoice', name: 'Travel Invoice', file: 'travel_invoice.pdf', status: 'Pending' },
-    { id: 'courier', name: 'Courier / Logistics Invoice', file: 'courier_invoice.pdf', status: 'Pending' },
-    { id: 'marketing', name: 'Marketing / Printing Invoice', file: 'marketing_invoice.pdf', status: 'Pending' },
+    { id: 'udyam', name: 'Udyam Registration Certificate' },
+    { id: 'gst', name: 'GST Certificate' },
+    { id: 'pan', name: 'PAN Card' },
+    { id: 'aadhaar', name: 'Aadhaar Card' },
+    { id: 'cheque', name: 'Cancelled Cheque' },
+    { id: 'statement', name: 'Bank Statement (Last 6 Months)' },
+    { id: 'hotelInvoice', name: 'Hotel Invoice(s)' },
+    { id: 'hotelPayment', name: 'Hotel Payment Proof' },
+    { id: 'travelExpense', name: 'Travel Expense Proof' },
+    { id: 'travelInvoice', name: 'Travel Invoice' },
+    { id: 'courier', name: 'Courier / Logistics Invoice' },
+    { id: 'marketing', name: 'Marketing / Printing Invoice' },
 ];
 
 const CLAIM_ITEMS = [
-    { id: 'stall', label: 'Stall Charges', amount: 118944 },
-    { id: 'hotel', label: 'Hotel Stay', amount: 18000 },
-    { id: 'travel', label: 'Travel', amount: 8500 },
-    { id: 'courier', label: 'Courier', amount: 1200 },
-    { id: 'marketing', label: 'Marketing', amount: 5000 },
+    { id: 'stallCharges', label: 'Stall Charges' },
+    { id: 'hotelStay', label: 'Hotel Stay' },
+    { id: 'travel', label: 'Travel' },
+    { id: 'courier', label: 'Courier' },
+    { id: 'marketing', label: 'Marketing' },
 ];
 
 interface SectionProps {
@@ -247,22 +247,25 @@ function ProgressRing({ percent }) {
     );
 }
 
-export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue }) {
+export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue, saving }) {
       const navigate = useNavigate();
-    const companyName = fieldValue(data, ['exhibitorName', 'companyName', 'organizationName'], 'Velruma Pvt. Ltd.');
-    const msmeCategory = safe(data?.msme?.msmeCategory, 'Micro');
-    const udyamNumber = safe(data?.msme?.udyamRegNo, 'UP09D0012345');
-    const gstNumber = safe(data?.gstNo || data?.gstNumber, '09AAACV1234A1Z5');
-    const panNumber = safe(data?.panNumber, 'AAACV1234A');
+    const companyName = fieldValue(data, ['exhibitorName', 'companyName', 'organizationName'], '—');
+    const msmeCategory = safe(data?.msme?.msmeCategory);
+    const udyamNumber = safe(data?.msme?.udyamRegNo);
+    const gstNumber = safe(data?.gstNo || data?.gstNumber);
+    const panNumber = safe(data?.panNo || data?.panNumber);
 
-    const [documents] = useState(UPLOADED_DOCUMENTS);
+    const [documents] = useState(() => UPLOADED_DOCUMENTS.map(doc => {
+        const uploaded = data?.documents?.find(item => item.documentType === doc.id);
+        return uploaded ? { ...doc, file: uploaded.filename, status: 'Uploaded' } : { ...doc, file: null, status: 'Pending' };
+    }));
     const uploadedCount = documents.filter(doc => doc.status === 'Uploaded').length;
     const totalCount = documents.length;
 
     const activeIndex = STEPS.findIndex(step => step.status === 'active');
     const progressWidth = `${((activeIndex + 0.5) / (STEPS.length - 1)) * 100}%`;
 
-    const totalClaimed = CLAIM_ITEMS.reduce((sum, item) => sum + item.amount, 0);
+    const totalClaimed = data?.claim?.totalClaimed;
 
     return (
         <div className="w-full min-h-[calc(100dvh-58px)] bg-white p-3 px-3 lg:px-6 pt-2 pb-3 font-sans text-[#061743] antialiased">
@@ -278,12 +281,12 @@ export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue }) 
                     <div className="h-[55px] w-fit rounded-lg border border-[#dbe4ef] bg-blue-50 px-3 pb-2 pt-2 shadow-sm">
                         <span className="block text-[10px] font-medium text-[#31436b]">Application ID</span>
                         <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#061743]">
-                            {safe(data?.applicationId, 'PMS-IHWE-2026-00139')}
+                            {safe(data?.applicationId)}
                         </strong>
                     </div>
                     <div className="h-[55px] w-fit rounded-lg border border-orange-100 bg-orange-50 px-3 pb-2 pt-2 shadow-sm pr-5">
                         <span className="block text-[10px] font-medium text-[#31436b]">Status</span>
-                        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#f25a1d]">Draft</strong>
+                        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#f25a1d]">{safe(data?.status)}</strong>
                     </div>
                 </div>
             </header>
@@ -314,12 +317,12 @@ export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue }) 
                                         <DetailRow label="PAN Number" value={panNumber} />
                                     </div>
                                     <div>
-                                        <DetailRow label="Type of Organization" value={safe(data?.orgType, 'Private Limited Company')} />
-                                        <DetailRow label="Year of Establishment" value={safe(data?.yearOfEstablishment, '2021')} />
-                                        <DetailRow label="Contact Person" value={safe(data?.contactPerson, 'Manish Sirohi')} />
-                                        <DetailRow label="Designation" value={safe(data?.designation, 'Director')} />
-                                        <DetailRow label="Mobile Number" value={safe(data?.mobileNumber, '+91 95682 59784')} />
-                                        <DetailRow label="Email ID" value={safe(data?.email, 'manishsirohi23@gmail.com')} />
+                                        <DetailRow label="Type of Organization" value={safe(data?.organizationType || data?.orgType)} />
+                                        <DetailRow label="Year of Establishment" value={safe(data?.yearOfEstablishment)} />
+                                        <DetailRow label="Contact Person" value={safe(data?.contactName || data?.contactPerson)} />
+                                        <DetailRow label="Designation" value={safe(data?.designation)} />
+                                        <DetailRow label="Mobile Number" value={safe(data?.mobileNumber)} />
+                                        <DetailRow label="Email ID" value={safe(data?.emailId || data?.email)} />
                                     </div>
                                 </div>
                             </Section>
@@ -333,13 +336,13 @@ export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue }) 
                                 <div className="grid grid-cols-1 gap-x-3 sm:grid-cols-2">
                                     <div>
                                         <DetailRow label="Account Holder Name" value={safe(data?.bank?.accountHolder, companyName)} />
-                                        <DetailRow label="Bank Name" value={safe(data?.bank?.bankName, 'HDFC Bank Ltd.')} />
-                                        <DetailRow label="Branch" value={safe(data?.bank?.branch, 'Noida Sector 62')} />
-                                        <DetailRow label="Account Number" value={safe(data?.bank?.accountNumber, '5020012345678')} />
+                                        <DetailRow label="Bank Name" value={safe(data?.bank?.bankName)} />
+                                        <DetailRow label="Branch" value={safe(data?.bank?.branch)} />
+                                        <DetailRow label="Account Number" value={safe(data?.bank?.accountNumber)} />
                                     </div>
                                     <div>
-                                        <DetailRow label="IFSC Code" value={safe(data?.bank?.ifsc, 'HDFC0001234')} />
-                                        <DetailRow label="Account Type" value={safe(data?.bank?.accountType, 'Current Account')} />
+                                        <DetailRow label="IFSC Code" value={safe(data?.bank?.ifsc)} />
+                                        <DetailRow label="Account Type" value={safe(data?.bank?.accountType)} />
                                         <DetailRowVerified label="Cancelled Cheque" value="Uploaded" />
                                         <DetailRowVerified label="Bank Statement (Last 6 Months)" value="Uploaded" />
                                     </div>
@@ -372,13 +375,13 @@ export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue }) 
                             icon={<Calendar size={17} strokeWidth={1.8} />}
                         >
                             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
-                                <FieldColumn label="Event Name" value={safe(data?.event?.name, '9th International Health & Wellness Expo 2026')} />
-                                <FieldColumn label="Stall Number" value={safe(data?.event?.stallNumber, '139')} />
-                                <FieldColumn label="Hall Number" value={safe(data?.event?.hallNumber, 'Hall 9')} />
-                                <FieldColumn label="Stall Size" value={safe(data?.event?.stallSize, '18 Sqm')} />
-                                <FieldColumn label="Participation Type" value={safe(data?.event?.participationType, 'Shell Space')} />
-                                <FieldColumn label="Booking Status" valueNode={<StatusPill label={safe(data?.event?.bookingStatus, 'Confirmed')} />} />
-                                <FieldColumn label="Payment Status" valueNode={<StatusPill label={safe(data?.event?.paymentStatus, 'Fully Paid')} />} />
+                                <FieldColumn label="Event Name" value={safe(data?.event?.name || data?.eventName)} />
+                                <FieldColumn label="Stall Number" value={safe(data?.event?.stallNumber || data?.stallNo)} />
+                                <FieldColumn label="Hall Number" value={safe(data?.event?.hallNumber || data?.hallNo)} />
+                                <FieldColumn label="Stall Size" value={safe(data?.event?.stallSize || data?.stallSize)} />
+                                <FieldColumn label="Participation Type" value={safe(data?.event?.participationType || data?.participationType)} />
+                                <FieldColumn label="Booking Status" valueNode={<StatusPill label={safe(data?.event?.bookingStatus || data?.bookingStatus)} />} />
+                                <FieldColumn label="Payment Status" valueNode={<StatusPill label={safe(data?.event?.paymentStatus || data?.paymentStatus)} />} />
                             </div>
                         </Section>
 
@@ -390,13 +393,13 @@ export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue }) 
                             <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                                 <div className="grid flex-1 grid-cols-3 gap-3 sm:grid-cols-6">
                                     {CLAIM_ITEMS.map(item => (
-                                        <FieldColumn key={item.id} label={item.label} value={`₹${item.amount.toLocaleString('en-IN')}`} />
+                                        <FieldColumn key={item.id} label={item.label} value={data?.claim?.[item.id] != null ? `₹${Number(data.claim[item.id]).toLocaleString('en-IN')}` : '—'} />
                                     ))}
-                                    <FieldColumn label="Total Claimed" value={`₹${totalClaimed.toLocaleString('en-IN')}`} />
+                                    <FieldColumn label="Total Claimed" value={totalClaimed != null ? `₹${Number(totalClaimed).toLocaleString('en-IN')}` : '—'} />
                                 </div>
                                 <div className="flex w-full shrink-0 flex-col items-center justify-center gap-0.5 rounded-lg border border-[#b7ecd0] bg-[#eafbf1] px-4 py-1.5 sm:w-[190px]">
                                     <span className="text-[9px] font-semibold text-[#087536]">Indicative Eligible Claim</span>
-                                    <strong className="text-[15px] font-semibold text-[#087536]">₹1,50,000*</strong>
+                                    <strong className="text-[15px] font-semibold text-[#087536]">{data?.claim?.eligibleAmount != null ? `₹${Number(data.claim.eligibleAmount).toLocaleString('en-IN')}` : '—'}</strong>
                                 </div>
                             </div>
                             <div className="mt-1.5 flex items-start gap-1.5 text-[9px] font-medium text-[#5a6c92]">
@@ -425,7 +428,8 @@ export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue }) 
 
                             <button
                                 type="button"
-                                onClick={() => navigate("/exhibitor-dashboard/msme/pms-approved")}
+                                disabled={saving}
+                                onClick={() => onContinue?.()}
                                 className="flex h-7 items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#0b7137] to-[#087536] text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)]"
                             >
                                 Continue to Submit
@@ -447,8 +451,8 @@ export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue }) 
                         <SummaryRow label="MSME Category" value={msmeCategory} />
                         <SummaryRow label="Udyam Number" value={udyamNumber} />
                         <SummaryRow label="GST Number" value={gstNumber} />
-                        <SummaryRow label="Booking Status" value="Confirmed" />
-                        <SummaryRow label="Payment Status" value="Fully Paid" />
+                        <SummaryRow label="Booking Status" value={safe(data?.event?.bookingStatus || data?.bookingStatus)} />
+                        <SummaryRow label="Payment Status" value={safe(data?.event?.paymentStatus || data?.paymentStatus)} />
                     </section>
 
                     <section className="min-w-0 overflow-hidden rounded-xl border border-[#dbe4ef] bg-white px-3 py-1.5">
@@ -465,36 +469,36 @@ export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue }) 
                     <section className="min-w-0 overflow-hidden rounded-xl border border-[#dbe4ef] bg-white px-3 py-1.5">
                         <h2 className="mb-1.5 flex items-center gap-2 text-[13px] font-semibold text-[#5924c6]">
                             <Headphones size={19} strokeWidth={1.8} />
-                            PMS Coordinator
+                            Relationship Manager
                         </h2>
 
                         <div className="mb-1.5 flex items-center gap-2">
                             <div className="relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-full bg-[#eef2f7] text-xs font-semibold text-[#061743]">
                                 <span>RS</span>
                                 <img
-                                    src={safe(data?.pmsCoordinator?.photo, 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rohit&backgroundColor=eef2f7')}
-                                    alt="Rohit Sharma"
+                                    src={data?.pmsCoordinator?.photo || undefined}
+                                    alt={safe(data?.pmsCoordinator?.name, 'PMS Coordinator')}
                                     className="absolute inset-0 h-full w-full object-cover"
                                     onError={(event) => { event.currentTarget.style.display = 'none'; }}
                                 />
                             </div>
                             <div>
-                                <strong className="block text-xs font-semibold text-[#061743]">Rohit Sharma</strong>
-                                <span className="mt-1 block text-[9px] font-medium text-[#31446c]">PMS Scheme Coordinator</span>
+                                <strong className="block text-xs font-semibold text-[#061743]">{safe(data?.pmsCoordinator?.name)}</strong>
+                                <span className="mt-1 block text-[9px] font-medium text-[#31446c]">{safe(data?.pmsCoordinator?.designation)}</span>
                             </div>
                         </div>
 
-                        <a href="tel:+919654900525" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
+                        <a href={data?.pmsCoordinator?.phone ? `tel:${data.pmsCoordinator.phone}` : undefined} className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
                             <Phone size={15} strokeWidth={1.9} className="shrink-0 text-[#5924c6]" />
-                            <span>+91 96549 00525</span>
+                            <span>{safe(data?.pmsCoordinator?.phone)}</span>
                         </a>
-                        <a href="https://wa.me/919654900525" target="_blank" rel="noreferrer" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
+                        <a href={data?.pmsCoordinator?.whatsapp ? `https://wa.me/${String(data.pmsCoordinator.whatsapp).replace(/\D/g, '')}` : undefined} target="_blank" rel="noreferrer" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
                             <FaWhatsapp size={15} strokeWidth={1.9} className="shrink-0 text-[#089a50]" />
                             <span>WhatsApp Support</span>
                         </a>
-                        <a href="mailto:pms.support@ihwe.com" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
+                        <a href={data?.pmsCoordinator?.email ? `mailto:${data.pmsCoordinator.email}` : undefined} className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
                             <Mail size={15} strokeWidth={1.9} className="shrink-0 text-[#5924c6]" />
-                            <span>pms.support@ihwe.com</span>
+                            <span>{safe(data?.pmsCoordinator?.email)}</span>
                         </a>
                     </section>
 
