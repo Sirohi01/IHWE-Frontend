@@ -20,7 +20,7 @@ import {
     UserCheck,
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa6';
-
+import { useNavigate } from "react-router-dom";
 const safe = (value, fallback = '—') => {
     if (value === null || value === undefined || value === '') return fallback;
     return value;
@@ -57,43 +57,133 @@ const NEXT_STEPS = [
 ];
 
 const CONFETTI_PIECES = [
-    { tx: -50, ty: -42, rotate: 45, width: 5, height: 2.5, color: '#4c9aab', delay: 0 },
-    { tx: 8, ty: -60, rotate: -45, width: 6, height: 2.5, color: '#f59e0b', delay: 80 },
-    { tx: 58, ty: -36, rotate: 45, width: 5, height: 2.5, color: '#f59e0b', delay: 160 },
-    { tx: -64, ty: 8, rotate: 45, width: 6, height: 2.5, color: '#ef4444', delay: 240 },
-    { tx: 68, ty: 10, rotate: -45, width: 4, height: 4, color: '#f97316', delay: 40 },
-    { tx: -42, ty: 56, rotate: 45, width: 5, height: 2.5, color: '#4c9aab', delay: 200 },
-    { tx: 40, ty: 64, rotate: -45, width: 5, height: 2.5, color: '#ec4899', delay: 120 },
-    { tx: -14, ty: 72, rotate: 20, width: 4, height: 4, color: '#5924c6', delay: 280 },
+    // LEFT 20%
+    {
+        startX: '-42vw',
+        midX: '-38vw',
+        endX: '-34vw',
+        rotate: 45,
+        width: 5,
+        height: 2.5,
+        color: '#4c9aab',
+        delay: 0,
+    },
+    {
+        startX: '-35vw',
+        midX: '-32vw',
+        endX: '-28vw',
+        rotate: -45,
+        width: 6,
+        height: 2.5,
+        color: '#f59e0b',
+        delay: 100,
+    },
+    {
+        startX: '-28vw',
+        midX: '-25vw',
+        endX: '-22vw',
+        rotate: 70,
+        width: 5,
+        height: 3,
+        color: '#ef4444',
+        delay: 180,
+    },
+
+    // RIGHT 20%
+    {
+        startX: '42vw',
+        midX: '38vw',
+        endX: '34vw',
+        rotate: -45,
+        width: 5,
+        height: 2.5,
+        color: '#f59e0b',
+        delay: 60,
+    },
+    {
+        startX: '35vw',
+        midX: '32vw',
+        endX: '28vw',
+        rotate: 45,
+        width: 4,
+        height: 4,
+        color: '#f97316',
+        delay: 140,
+    },
+    {
+        startX: '28vw',
+        midX: '25vw',
+        endX: '22vw',
+        rotate: -70,
+        width: 5,
+        height: 2.5,
+        color: '#ec4899',
+        delay: 220,
+    },
 ];
 
 function ConfettiDots() {
     return (
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
             <style>{`
-                @keyframes pmsConfettiPop {
-                    0% { transform: translate(-50%, -50%) translate(0, 0) scale(0) rotate(0deg); opacity: 0; }
-                    55% { opacity: 1; }
-                    100% { transform: translate(-50%, -50%) translate(var(--tx), var(--ty)) scale(1) rotate(var(--r)); opacity: 1; }
-                }
+             @keyframes pmsConfettiDrop {
+    0% {
+        transform: translate(var(--start-x), -40px) rotate(0deg) scale(0.4);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    50% {
+        transform: translate(var(--mid-x), 20px) rotate(var(--r2)) scale(1);
+        opacity: 1;
+    }
+
+    80% {
+        transform: translate(var(--end-x), 65px) rotate(var(--r3)) scale(0.8);
+        opacity: 0.7;
+    }
+
+    100% {
+        transform: translate(var(--end-x), 100px) rotate(var(--r4)) scale(0.1);
+        opacity: 0;
+    }
+}
+
                 @media (prefers-reduced-motion: reduce) {
-                    .pms-confetti-piece { animation: none !important; opacity: 1 !important; }
+                    .pms-confetti-piece {
+                        animation: none !important;
+                        opacity: 0 !important;
+                    }
                 }
             `}</style>
+
             {CONFETTI_PIECES.map((piece, index) => (
                 <span
                     key={index}
                     className="pms-confetti-piece absolute left-1/2 top-1/2"
                     style={{
                         // @ts-ignore
-                        '--tx': `${piece.tx}px`,
-                        '--ty': `${piece.ty}px`,
-                        '--r': `${piece.rotate}deg`,
+                        '--start-x': `${piece.startX}px`,
+                        '--mid-x': `${piece.midX}px`,
+                        '--end-x': `${piece.endX}px`,
+                        '--r1': `${piece.rotate}deg`,
+                        '--r2': `${piece.rotate + 90}deg`,
+                        '--r3': `${piece.rotate + 180}deg`,
+                        '--r4': `${piece.rotate + 360}deg`,
                         width: piece.width,
                         height: piece.height,
                         backgroundColor: piece.color,
                         borderRadius: 1,
-                        animation: `pmsConfettiPop 0.9s cubic-bezier(0.16,1,0.3,1) ${piece.delay}ms both`,
+                        animation: `
+                            pmsConfettiDrop
+                            1.5s
+                            cubic-bezier(0.22, 1, 0.36, 1)
+                            ${piece.delay}ms
+                            both
+                        `,
                     }}
                 />
             ))}
@@ -156,7 +246,7 @@ function ChecklistRow({ item }) {
     const Icon = item.icon;
     return (
         <div className="flex items-center gap-2 rounded-lg border border-[#e9eef4] px-2 py-1.5">
-            <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md text-[#087536]">
+            <span className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-emerald-50 text-[#087536]">
                 <Icon size={14} strokeWidth={1.9} />
             </span>
             <strong className="flex-1 text-[9.5px] font-semibold text-[#061743]">{item.title}</strong>
@@ -235,7 +325,7 @@ export default function PMSFinalSubmission({ data, onBack, onSaveDraft, onSubmit
         setAgreed(next);
         onDeclarationChange?.(next);
     };
-
+const navigate = useNavigate()
     return (
         <div className="w-full min-h-[calc(100dvh-58px)] bg-white p-3 px-3 lg:px-6 pt-2 pb-3 font-sans text-[#061743] antialiased">
             <header className="mb-1 flex flex-wrap items-start justify-between gap-3">
@@ -269,20 +359,27 @@ export default function PMSFinalSubmission({ data, onBack, onSaveDraft, onSubmit
 
                     <main className="flex flex-col gap-2">
                         <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.1fr]">
-                            <section className="relative flex flex-col items-center justify-center overflow-hidden border border-[#dbe4ef] bg-gradient-to-b from-[#eef9f2] to-white px-3 py-3 text-center">
-                                <div className="relative">
-                                    <ConfettiDots />
-                                    <span className="relative z-10 grid h-12 w-12 place-items-center rounded-full bg-[#087536] shadow-[0_6px_14px_rgba(8,117,54,0.25)]">
-                                        <Check size={24} strokeWidth={2.4} className="text-white" />
-                                    </span>
-                                </div>
-                                <h3 className="mt-2 text-[13px] font-semibold text-[#087536]">You are almost there!</h3>
-                                <p className="mt-1 max-w-[220px] text-[9.5px] font-semibold leading-[1.6] text-[#061743]">
-                                    Please review the declaration and submit your application for verification.
-                                </p>
-                            </section>
+                          <section className="relative flex flex-col items-center justify-center overflow-hidden border border-[#dbe4ef] bg-gradient-to-b from-[#eef9f2] to-white px-3 py-3 text-center">
+    
+    {/* Full width confetti area */}
+    <ConfettiDots />
 
-                            <Panel title="Submission Checklist" noRounded={true}>
+    <div className="relative z-10">
+        <span className="grid h-16 w-16 place-items-center rounded-full bg-[#087536] border-[6px] border-emerald-100">
+            <Check size={30} strokeWidth={2.4} className="text-white" />
+        </span>
+    </div>
+
+    <h3 className="relative z-10 mt-2 text-[13px] font-semibold text-[#087536]">
+        You are almost there!
+    </h3>
+
+    <p className="relative z-10 mt-1 max-w-[220px] text-[9.5px] font-semibold leading-[1.6] text-[#061743]">
+        Please review the declaration and submit your application for verification.
+    </p>
+</section>
+
+                            <Panel title="Submission Checklist" noRounded={true} className='md:pl-8'>
                                 <div className="flex flex-col gap-1.5">
                                     {CHECKLIST.map((item) => (
                                         <ChecklistRow key={item.title} item={item} />
@@ -295,7 +392,7 @@ export default function PMSFinalSubmission({ data, onBack, onSaveDraft, onSubmit
     <div className="mb-1.5 flex min-w-[200px] flex-wrap items-start justify-between gap-2 md:mb-0">
         <div className="flex items-start gap-2 text-[#061743]">
             <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md border border-[#d9eee2] bg-[#eff9f3] text-[#087536]">
-                <FileText size={14} strokeWidth={1.9} />
+                <FileText size={24} strokeWidth={1.9} />
             </span>
 
             <strong className="whitespace-nowrap text-[13px] font-bold text-[#087536]">
@@ -309,9 +406,9 @@ export default function PMSFinalSubmission({ data, onBack, onSaveDraft, onSubmit
             {DECLARATIONS.map((point) => (
                 <li
                     key={point}
-                    className="flex items-start gap-1.5 text-[9.5px] font-medium leading-[1.55] text-[#31446c]"
+                    className="flex items-start gap-1.5 text-[9.5px] font-medium text-[#31446c] leading-6"
                 >
-                    <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-[#5a6c92]" />
+                    <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-[#5a6c92]" />
                     {point}
                 </li>
             ))}
@@ -320,7 +417,7 @@ export default function PMSFinalSubmission({ data, onBack, onSaveDraft, onSubmit
         <button
             type="button"
             onClick={toggleAgree}
-            className="mt-2 flex items-center gap-2 text-[9.5px] font-semibold text-[#061743]"
+            className="mt-4 flex items-center gap-2 text-[9.5px] font-semibold text-[#061743]"
         >
             <span
                 className={`grid h-4 w-4 shrink-0 place-items-center rounded ${
@@ -354,7 +451,7 @@ export default function PMSFinalSubmission({ data, onBack, onSaveDraft, onSubmit
                         <footer className="grid grid-cols-1 items-center gap-2 rounded-lg border border-[#dbe4ef] bg-white p-1.5 sm:grid-cols-[120px_minmax(0,1fr)_190px]">
                             <button
                                 type="button"
-                                onClick={() => onBack?.()}
+                                onClick={() => navigate('/exhibitor-dashboard/msme/application-review')}
                                 className="flex h-7 items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white text-[10px] font-semibold text-[#061743]"
                             >
                                 <ArrowLeft size={15} strokeWidth={2} />

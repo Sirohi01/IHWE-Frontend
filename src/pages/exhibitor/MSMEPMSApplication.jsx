@@ -26,7 +26,7 @@ import {
     UserRound,
     WalletCards,
 } from 'lucide-react';
-
+import { useNavigate } from "react-router-dom";
 const cx = (...classes) => classes.filter(Boolean).join(' ');
 
 const safe = (value, fallback = '—') => {
@@ -363,7 +363,7 @@ export default function MSMEPMSApplication({ data }) {
         '[&_.pms-control]:border-[#d0e9da] [&_.pms-control]:bg-[#f2faf5]',
         '[&_.pms-control]:font-bold [&_.pms-control]:text-[#087536]'
     );
-
+  const navigate = useNavigate();
     return (
         <div className={"box-border w-full h-[calc(100dvh-58px)] min-h-0 max-h-[calc(100dvh-58px)] overflow-hidden bg-white px-6 pt-5 pb-[18px] text-[#061743] [font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe_UI,sans-serif] antialiased [text-rendering:geometricPrecision] [&_*]:box-border [@media(max-height:1100px)_and_(min-width:1181px)]:px-5 [@media(max-height:1100px)_and_(min-width:1181px)]:pt-[13px] [@media(max-height:1100px)_and_(min-width:1181px)]:pb-[10px] [@media(max-width:1365px)_and_(min-width:1181px)]:px-[18px] max-[1180px]:h-auto max-[1180px]:min-h-[calc(100dvh-58px)] max-[1180px]:overflow-auto max-[1180px]:p-[18px]"}>
             <header className={"flex h-[61px] items-start justify-between gap-[22px] [@media(max-height:1100px)_and_(min-width:1181px)]:h-[52px] max-[1180px]:mb-[18px] max-[1180px]:h-auto max-[820px]:block"}>
@@ -612,6 +612,7 @@ export default function MSMEPMSApplication({ data }) {
                                     'relative border-0 bg-[linear-gradient(90deg,#0b7137_0%,#087536_100%)] text-white',
                                     'shadow-[0_4px_9px_rgba(8,117,54,0.18)]'
                                 )}
+                                onClick={()=> useNavigate('/exhibitor-dashboard/msme/bank-details')}
                             >
                                 Save &amp; Continue
                                 <ArrowRight className="absolute right-[13px] m-0" size={18} strokeWidth={2} />

@@ -292,7 +292,7 @@ const App = () => {
                     <Route path="msme/application" element={<MSMEPMSApplicationPage />} />
                     <Route path="msme/bank-details" element={<MSMEPMSBankDetailsPage />} />
                     <Route path="msme/documents-upload" element={<MSMEPMSDocumentsUploadPage />} />
-  <Route path="msme/claim-status-approved" element={<PMSReimbursementApprovedPage />} />
+  <Route path="msme/pms-approved" element={<PMSReimbursementApprovedPage />} />
     <Route path="msme/application-review" element={<MSMEApplicationReviewPage />} />
                     <Route path="epromotion" element={<ExhibitorEPromotion />} />
                     <Route path="product" element={<ProductServices />} />

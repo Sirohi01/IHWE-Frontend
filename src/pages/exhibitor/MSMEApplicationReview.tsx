@@ -22,7 +22,7 @@ import {
 } from 'lucide-react';
 import { FaWhatsapp } from 'react-icons/fa6';
 import type { ReactNode } from 'react';
-
+import { useNavigate } from "react-router-dom";
 const safe = (value, fallback = '—') => {
     if (value === null || value === undefined || value === '') return fallback;
     return value;
@@ -172,15 +172,13 @@ function DetailRowVerified({ label, value }: { label: string; value: ReactNode }
 function StatusChip({ status }) {
     const isUploaded = status === 'Uploaded';
     return (
-        <span className={`inline-flex w-fit items-center gap-1 whitespace-nowrap rounded px-1.5 py-0.5 text-[9px] font-semibold border ${
+        <span className={`inline-flex items-center justify-center text-center gap-1 w-16 whitespace-nowrap rounded px-1.5 py-0.5 text-[9px] font-semibold border ${
             isUploaded
                 ? 'text-[#087536] bg-[#eafbf1] border-[#b7ecd0]'
                 : 'text-[#e07a12] bg-[#fef6ec] border-[#fbdfb0]'
         }`}>
             {isUploaded ? (
-                <span className="grid h-3 w-3 place-items-center rounded-full bg-[#087536] text-white">
-                    <Check size={7} strokeWidth={3} />
-                </span>
+              ''
             ) : (
                 <Hourglass size={11} strokeWidth={2.2} className="text-[#e07a12]" />
             )}
@@ -190,11 +188,12 @@ function StatusChip({ status }) {
 }
 
 function DocumentCard({ doc }) {
+    const isUploaded = doc.status === 'Uploaded'
     return (
         <div className="flex min-w-0 flex-col gap-2 rounded-lg border border-[#e9eef4] bg-[#fbfcfe] p-1.5">
             <div className="flex items-start gap-1.5">
                 <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md border border-[#e0e7f0] bg-white text-[#6b82ac]">
-                    <FileText size={13} strokeWidth={2} />
+                    <FileText size={13} strokeWidth={2} color={isUploaded?"#087536":"#e07a12"}  />
                 </span>
                 <div className="min-w-0">
                     <strong className="block text-[9px] font-semibold leading-snug text-[#061743]">{doc.name}</strong>
@@ -249,6 +248,7 @@ function ProgressRing({ percent }) {
 }
 
 export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue }) {
+      const navigate = useNavigate();
     const companyName = fieldValue(data, ['exhibitorName', 'companyName', 'organizationName'], 'Velruma Pvt. Ltd.');
     const msmeCategory = safe(data?.msme?.msmeCategory, 'Micro');
     const udyamNumber = safe(data?.msme?.udyamRegNo, 'UP09D0012345');
@@ -408,7 +408,7 @@ export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue }) 
                         <footer className="grid grid-cols-1 items-center gap-2 rounded-lg border border-[#dbe4ef] bg-white p-1.5 sm:grid-cols-[120px_minmax(0,1fr)_190px]">
                             <button
                                 type="button"
-                                onClick={() => onBack?.()}
+                                onClick={() => navigate('/exhibitor-dashboard/msme/documents-upload')}
                                 className="flex h-7 items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white text-[10px] font-semibold text-[#061743]"
                             >
                                 <ArrowLeft size={15} strokeWidth={2} />
@@ -425,7 +425,7 @@ export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue }) 
 
                             <button
                                 type="button"
-                                onClick={() => onContinue?.()}
+                                onClick={() => navigate("/exhibitor-dashboard/msme/pms-approved")}
                                 className="flex h-7 items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#0b7137] to-[#087536] text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)]"
                             >
                                 Continue to Submit
