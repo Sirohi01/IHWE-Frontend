@@ -18,6 +18,7 @@ import {
     ShieldCheck,
     Upload,
 } from 'lucide-react';
+import { useRef } from 'react';
 import { FaWhatsapp } from 'react-icons/fa6';
 const safe = (value, fallback = '—') => {
     if (value === null || value === undefined || value === '') return fallback;
@@ -97,19 +98,17 @@ function StepNode({ step }) {
     return (
         <div className="relative z-10 flex flex-col items-center gap-1">
             <span
-                className={`grid h-[26px] w-[26px] place-items-center rounded-full border-[3px] border-white text-[9px] font-semibold ${
-                    isDone || isActive
+                className={`grid h-[26px] w-[26px] place-items-center rounded-full border-[3px] border-white text-[9px] font-semibold ${isDone || isActive
                         ? 'bg-[#087536] text-white shadow-[0_4px_10px_rgba(8,117,54,0.18)]'
                         : 'bg-[#e7ebf3] text-[#061743] shadow-[0_0_0_1px_rgba(219,228,239,0.15)]'
-                }`}
+                    }`}
             >
                 {isDone ? <Check size={10} strokeWidth={3} /> : step.number}
             </span>
             <small className={`${isDone ? 'text-[#087536]' : 'text-[#8090ad]'} whitespace-nowrap text-[9px] font-semibold text-[#061743]`}>{step.label}</small>
             <small
-                className={`text-[9px] font-semibold ${
-                    isActive ? 'text-[#f25a1d]' : isDone ? 'text-[#087536]' : 'text-[#8090ad]'
-                }`}
+                className={`text-[9px] font-semibold ${isActive ? 'text-[#f25a1d]' : isDone ? 'text-[#087536]' : 'text-[#8090ad]'
+                    }`}
             >
                 {isDone ? 'Completed' : isActive ? 'In Progress' : 'Pending'}
             </small>
@@ -133,7 +132,7 @@ function VerifyRow({ label }) {
             <span className="inline-flex items-center gap-1 whitespace-nowrap text-[10px] font-semibold text-[#087536]">
                 <div className='w-3 h-3 bg-[#087536] text-white rounded-full flex items-center justify-center font-semibold'>
 
-                <Check size={10} strokeWidth={2.4} />
+                    <Check size={10} strokeWidth={2.4} />
                 </div>
                 Verified
             </span>
@@ -154,8 +153,22 @@ function PaymentRow({ label, value, badge }) {
     );
 }
 
-function UploadCard({ title, required, hint, status }) {
+
+function UploadCard({ title, required, hint, status, onFileSelect }) {
     const isPending = status === 'Pending';
+    const fileInputRef = useRef(null);
+
+    const handleButtonClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files?.[0];
+        if (file && onFileSelect) {
+            onFileSelect(file);
+        }
+    };
+
     return (
         <div className="flex min-w-0 flex-col gap-1.5 rounded-lg border border-[#e9eef4] bg-[#fbfcfe] p-2">
             <div>
@@ -171,7 +184,18 @@ function UploadCard({ title, required, hint, status }) {
                     <Upload size={18} strokeWidth={1.8} />
                 </span>
                 <p className="text-[9px] font-medium leading-[1.3] text-[#6b7ea3]">Drag &amp; drop file here<br />or</p>
-                <button type="button" className="rounded-md border border-[#cfe4d8] bg-[#eff9f3] px-3 py-1 text-[9px] font-semibold text-[#087536]">
+                <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*,.pdf"
+                    onChange={handleFileChange}
+                    className="hidden"
+                />
+                <button
+                    type="button"
+                    onClick={handleButtonClick}
+                    className="rounded-md border border-[#cfe4d8] bg-[#eff9f3] px-3 py-1 text-[9px] font-semibold text-[#087536]"
+                >
                     Upload File
                 </button>
             </div>
@@ -252,23 +276,23 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
         { title: 'Bank Passbook First Page', required: false, hint: <>(Optional) <br /> Upload clear image / PDF</>, status: 'Optional' },
     ];
 
-  const claimColumns = [
-    { label: 'Stall Charges', amount: '1,18,944' },
-    { label: 'Hotel Stay', amount: '18,000' },
-    { label: 'Travel', amount: '8,500' },
-    { label: 'Courier', amount: '1,200' },
-    { label: 'Marketing', amount: '5,000' },
-    {
-        label: 'Total Claimed',
-        amount: '1,51,644',
-        highlight: true,
-        amountHighlight: true,
-    },
-];
+    const claimColumns = [
+        { label: 'Stall Charges', amount: '1,18,944' },
+        { label: 'Hotel Stay', amount: '18,000' },
+        { label: 'Travel', amount: '8,500' },
+        { label: 'Courier', amount: '1,200' },
+        { label: 'Marketing', amount: '5,000' },
+        {
+            label: 'Total Claimed',
+            amount: '1,51,644',
+            highlight: true,
+            amountHighlight: true,
+        },
+    ];
 
     return (
         <div className="w-full min-h-[calc(100dvh-58px)] bg-white p-3 pt-2 pb-3 px-3 lg:px-6 font-sans text-[#061743] antialiased">
-            <header className="mb-1 flex flex-wrap items-start justify-between gap-3">
+            <header className="mb-1 flex flex-wrap items-start justify-between gap-3 xl:pr-[300px]">
                 <div>
                     <h1 className="m-0 text-[21px] font-semibold tracking-[-0.35px] text-[#061743] leading-[22.68px]">MSME PMS Application</h1>
                     <p className="text-[13px] font-semibold text-[#061743]">
@@ -276,18 +300,18 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
                     </p>
                 </div>
 
-                            <div className="grid w-fit grid-cols-2 gap-2">
-    <div className="h-[55px] w-fit rounded-lg border border-[#dbe4ef] bg-blue-50 px-3 pb-2 pt-2 shadow-sm">
-        <span className="block text-[10px] font-medium text-[#31436b]">Application ID</span>
-        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#061743]">
-            {safe(data?.applicationId, 'PMS-IHWE-2026-00139')}
-        </strong>
-    </div>
-    <div className="h-[55px] w-fit rounded-lg border border-orange-100 bg-orange-50 px-3 pb-2 pt-2 shadow-sm pr-5">
-        <span className="block text-[10px] font-medium text-[#31436b]">Status</span>
-        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#f25a1d]">Draft</strong>
-    </div>
-</div>
+                <div className="flex gap-2">
+                    <div className="h-[55px] w-fit rounded-lg border border-[#dbe4ef] bg-blue-50 px-3 pb-2 pt-2 shadow-sm">
+                        <span className="block text-[10px] font-medium text-[#31436b]">Application ID</span>
+                        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#061743]">
+                            {safe(data?.applicationId, 'PMS-IHWE-2026-00139')}
+                        </strong>
+                    </div>
+                    <div className="h-[55px] w-fit rounded-lg border border-orange-100 bg-orange-50 px-3 pb-2 pt-2 shadow-sm pr-5">
+                        <span className="block text-[10px] font-medium text-[#31436b]">Status</span>
+                        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#f25a1d]">Draft</strong>
+                    </div>
+                </div>
             </header>
 
             <div className="grid grid-cols-1 items-start gap-2 xl:grid-cols-[minmax(0,1fr)_278px]">
@@ -370,45 +394,44 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
 
                         <Section letter="E" title="Reimbursement Claim Calculation" note="(Indicative)" icon={<Landmark size={17} strokeWidth={1.8} />}>
                             <div className="flex flex-col items-stretch gap-2 sm:flex-row rounded-lg">
-                             <table className="w-full min-w-0 flex-1 border-collapse rounded-lg">
-    <thead>
-        <tr>
-            <th className="whitespace-nowrap border border-[#e9eef4] bg-[#f6f9fc] p-1.5 text-left text-[9.5px] font-semibold text-[#061743]">
-                Particular
-            </th>
+                                <table className="w-full min-w-0 flex-1 border-collapse rounded-lg">
+                                    <thead>
+                                        <tr>
+                                            <th className="whitespace-nowrap border border-[#e9eef4] bg-[#f6f9fc] p-1.5 text-left text-[9.5px] font-semibold text-[#061743]">
+                                                Particular
+                                            </th>
 
-            {claimColumns.map(col => (
-                <th
-                    key={col.label}
-                    className={`whitespace-nowrap border border-[#e9eef4] bg-[#f6f9fc] p-1.5 text-left text-[9.5px] font-semibold text-[#061743]`}
-                >
-                    {col.label}
-                </th>
-            ))}
-        </tr>
-    </thead>
+                                            {claimColumns.map(col => (
+                                                <th
+                                                    key={col.label}
+                                                    className={`whitespace-nowrap border border-[#e9eef4] bg-[#f6f9fc] p-1.5 text-left text-[9.5px] font-semibold text-[#061743]`}
+                                                >
+                                                    {col.label}
+                                                </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
 
-    <tbody>
-        <tr>
-            <td className="whitespace-nowrap border border-[#e9eef4] p-1.5 text-[9.5px] font-semibold text-[#061743]">
-                Amount (₹)
-            </td>
+                                    <tbody>
+                                        <tr>
+                                            <td className="whitespace-nowrap border border-[#e9eef4] p-1.5 text-[9.5px] font-semibold text-[#061743]">
+                                                Amount (₹)
+                                            </td>
 
-            {claimColumns.map(col => (
-                <td
-                    key={col.label}
-                    className={`whitespace-nowrap border border-[#e9eef4] p-1.5 ${
-                        col.amountHighlight
-                            ? 'font-semibold text-sm text-[#087536]'
-                            : 'text-[9.5px] font-semibold text-[#061743]'
-                    }`}
-                >
-                    {col.amount}
-                </td>
-            ))}
-        </tr>
-    </tbody>
-</table>
+                                            {claimColumns.map(col => (
+                                                <td
+                                                    key={col.label}
+                                                    className={`whitespace-nowrap border border-[#e9eef4] p-1.5 ${col.amountHighlight
+                                                            ? 'font-semibold text-sm text-[#087536]'
+                                                            : 'text-[9.5px] font-semibold text-[#061743]'
+                                                        }`}
+                                                >
+                                                    {col.amount}
+                                                </td>
+                                            ))}
+                                        </tr>
+                                    </tbody>
+                                </table>
 
                                 <div className="flex flex-col items-center justify-center gap-1 rounded-md border border-[#cdeadb] bg-[#f1fbf5] p-1.5 text-center sm:w-[168px] sm:flex-none">
                                     <span className="text-[9px] font-semibold text-[#2f5f47]">Indicative Eligible Claim</span>
@@ -419,33 +442,33 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
                             <InfoBanner>* Maximum benefit is subject to scheme rules, eligibility and final approval by the concerned authority.</InfoBanner>
                         </Section>
 
-                <footer className="grid grid-cols-1 items-center gap-2 rounded-lg border border-[#dbe4ef] bg-white p-1.5 sm:grid-cols-[120px_minmax(0,1fr)_190px]">
-    <button
-        type="button"
-        onClick={() => onBack?.()}
-        className="flex h-7 items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white text-[10px] font-semibold text-[#061743]"
-    >
-        <ArrowLeft size={15} strokeWidth={2} />
-        Back
-    </button>
+                        <footer className="grid grid-cols-1 items-center gap-2 rounded-lg border border-[#dbe4ef] bg-white p-1.5 sm:grid-cols-[120px_minmax(0,1fr)_190px]">
+                            <button
+                                type="button"
+                                onClick={() => onBack?.()}
+                                className="flex h-7 items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white text-[10px] font-semibold text-[#061743]"
+                            >
+                                <ArrowLeft size={15} strokeWidth={2} />
+                                Back
+                            </button>
 
-   <button
-    type="button"
-    className="mx-auto flex h-7 w-fit items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white px-4 text-[10px] font-semibold text-[#061743]"
->
-    <Save size={15} strokeWidth={2} />
-    Save Draft
-</button>
+                            <button
+                                type="button"
+                                className="mx-auto flex h-7 w-fit items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white px-4 text-[10px] font-semibold text-[#061743]"
+                            >
+                                <Save size={15} strokeWidth={2} />
+                                Save Draft
+                            </button>
 
-    <button
-        type="button"
-        onClick={() => onContinue?.()}
-        className="flex h-7 items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#0b7137] to-[#087536] text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)]"
-    >
-        Save &amp; Continue
-        <ArrowRight size={18} strokeWidth={2} />
-    </button>
-</footer>
+                            <button
+                                type="button"
+                                onClick={() => onContinue?.()}
+                                className="flex h-7 items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#0b7137] to-[#087536] text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)]"
+                            >
+                                Save &amp; Continue
+                                <ArrowRight size={18} strokeWidth={2} />
+                            </button>
+                        </footer>
                     </main>
                 </div>
 
