@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { ReactNode, useState } from 'react';
 import {
     AlertCircle,
     ArrowLeft,
@@ -68,17 +68,7 @@ const AUTO_DOCUMENTS = [
     { title: 'Organizer Declaration' },
 ];
 
-type SectionProps = {
-  icon: React.ReactNode;
-  letter: string;
-  title: string;
-  note?: React.ReactNode;
-  className?: string;
-  headerRight?: React.ReactNode;
-  children: React.ReactNode;
-};
 
-import type { ReactNode } from 'react';
 
 interface SectionProps {
     icon: ReactNode;
