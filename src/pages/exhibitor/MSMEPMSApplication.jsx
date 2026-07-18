@@ -612,7 +612,7 @@ export default function MSMEPMSApplication({ data }) {
                                     'relative border-0 bg-[linear-gradient(90deg,#0b7137_0%,#087536_100%)] text-white',
                                     'shadow-[0_4px_9px_rgba(8,117,54,0.18)]'
                                 )}
-                                onClick={()=> useNavigate('/exhibitor-dashboard/msme/bank-details')}
+                                onClick={()=> navigate('/exhibitor-dashboard/msme/bank-details')}
                             >
                                 Save &amp; Continue
                                 <ArrowRight className="absolute right-[13px] m-0" size={18} strokeWidth={2} />
