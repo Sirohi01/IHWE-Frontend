@@ -33,6 +33,8 @@ export default function ExhibitorNavbar({ logo, data, sidebarOpen, setSidebarOpe
     const getPageName = (pathname: string) => {
         if (pathname === '/exhibitor-dashboard' || pathname === '/exhibitor-dashboard/') return 'Dashboard';
         if (pathname === '/exhibitor-dashboard/msme/application') return 'MSME PMS Scheme';
+        if (pathname === '/exhibitor-dashboard/msme/pms-claim-status') return 'MSME PMS Claim Status';
+        if (pathname === '/exhibitor-dashboard/msme/pms-claim-status-approved') return 'PMS Reimbursement Approved';
         const pathSegments = pathname.split('/').filter(Boolean);
         const lastSegment = pathSegments[pathSegments.length - 1];
         if (!lastSegment || lastSegment === 'exhibitor-dashboard') return 'Dashboard';

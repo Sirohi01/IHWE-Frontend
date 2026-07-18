@@ -132,6 +132,8 @@ const ParticipantsFeedback = lazy(() => import("@/pages/psmClaim/ParticipantsFee
 const MandateForm = lazy(() => import("@/pages/psmClaim/MandateForm"));
 const PaymentReminders = lazy(() => import("@/pages/exhibitor/PaymentReminders"));
 const MSMEPMSApplicationPage = lazy(() => import("@/pages/exhibitor/MSMEPMSApplicationPage"));
+const MSMEPMSClaimStatusPage = lazy(() => import("@/pages/exhibitor/MSMEPMSClaimStatusPage"));
+const MSMEPMSClaimApprovedPage = lazy(() => import("@/pages/exhibitor/MSMEPMSClaimApprovedPage"));
 const Notification = lazy(() => import("@/pages/exhibitor/Notification"));
 const SupportAssistance = lazy(() => import("@/pages/exhibitor/SupportAssistance"));
 const RelationshipManager = lazy(() => import("@/pages/exhibitor/RelationshipManager"));
@@ -288,6 +290,8 @@ const App = () => {
                     <Route path="chat" element={<ExhibitorChatPage />} />
                     <Route path="msme" element={<ExhibitorMSMEPage />} />
                     <Route path="msme/application" element={<MSMEPMSApplicationPage />} />
+                    <Route path="msme/pms-claim-status" element={<MSMEPMSClaimStatusPage />} />
+                    <Route path="msme/pms-claim-status-approved" element={<MSMEPMSClaimApprovedPage />} />
                     <Route path="msme/bank-details" element={<MSMEPMSBankDetailsPage />} />
                     <Route path="msme/documents-upload" element={<MSMEPMSDocumentsUploadPage />} />
 

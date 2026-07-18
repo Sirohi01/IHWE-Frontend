@@ -65,6 +65,8 @@ const PSM_REPORT_IDS = [
 const MSME_ITEMS: MsmeItem[] = [
     { id: "msme", label: "Udyam Details" },
     { id: "msme-pms-application", label: "PMS Application" },
+    { id: "msme-pms-claim-status", label: "Claim Status" },
+    { id: "msme-pms-claim-approved", label: "Claim Approved" },
     {
         id: "psm_claim", label: "PSM Claim", isDropdown: true,
         subItems: [
