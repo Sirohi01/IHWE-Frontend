@@ -138,6 +138,7 @@ const BRANDS: Brand[] = [
   { name: "Herbalife", sub: "", color: "#e8000d", logo: logo8 },
   { name: "nveda", sub: "", color: "#2d7a2d", logo: logo9 },
   { name: "MORE", sub: "", color: "#555", logo: logo10 },
+  { name: "SHETH", sub: "", color: "#000", logo: "/sheth.jpeg" },
 ];
 
 // Animated counter — counts up when section scrolls into view
