@@ -56,98 +56,66 @@ const NEXT_STEPS = [
     { icon: IndianRupee, title: 'Reimbursement', desc: 'Eligible amount will be released to your bank account' },
 ];
 
-const CONFETTI_PIECES = [
-    // LEFT 20%
-    {
-        startX: '-42vw',
-        midX: '-38vw',
-        endX: '-34vw',
-        rotate: 45,
-        width: 5,
-        height: 2.5,
-        color: '#4c9aab',
-        delay: 0,
-    },
-    {
-        startX: '-35vw',
-        midX: '-32vw',
-        endX: '-28vw',
-        rotate: -45,
-        width: 6,
-        height: 2.5,
-        color: '#f59e0b',
-        delay: 100,
-    },
-    {
-        startX: '-28vw',
-        midX: '-25vw',
-        endX: '-22vw',
-        rotate: 70,
-        width: 5,
-        height: 3,
-        color: '#ef4444',
-        delay: 180,
-    },
+type ConfettiPiece = {
+    top: number;
+    side: 'left' | 'right';
+    offset: number;
+    drift: number;
+    rotate: number;
+    width: number;
+    height: number;
+    color: string;
+    delay: number;
+};
 
-    // RIGHT 20%
-    {
-        startX: '42vw',
-        midX: '38vw',
-        endX: '34vw',
-        rotate: -45,
-        width: 5,
-        height: 2.5,
-        color: '#f59e0b',
-        delay: 60,
-    },
-    {
-        startX: '35vw',
-        midX: '32vw',
-        endX: '28vw',
-        rotate: 45,
-        width: 4,
-        height: 4,
-        color: '#f97316',
-        delay: 140,
-    },
-    {
-        startX: '28vw',
-        midX: '25vw',
-        endX: '22vw',
-        rotate: -70,
-        width: 5,
-        height: 2.5,
-        color: '#ec4899',
-        delay: 220,
-    },
+const CONFETTI_PIECES: ConfettiPiece[] = [
+    // LEFT side
+    { top: 4, side: 'left', offset: 4, drift: -6, rotate: 45, width: 10, height: 5, color: '#4c9aab', delay: 0 },
+    { top: 10, side: 'left', offset: 12, drift: 8, rotate: -45, width: 12, height: 5, color: '#f59e0b', delay: 150 },
+    { top: 6, side: 'left', offset: 20, drift: -5, rotate: 70, width: 10, height: 6, color: '#ef4444', delay: 0 },
+    { top: 16, side: 'left', offset: 6, drift: 7, rotate: 30, width: 8, height: 8, color: '#22c55e', delay: 150 },
+    { top: 2, side: 'left', offset: 28, drift: -8, rotate: -30, width: 10, height: 5, color: '#8b5cf6', delay: 0 },
+    { top: 20, side: 'left', offset: 18, drift: 6, rotate: 60, width: 12, height: 6, color: '#4c9aab', delay: 150 },
+    { top: 8, side: 'left', offset: 34, drift: -7, rotate: -60, width: 10, height: 5, color: '#f97316', delay: 0 },
+    { top: 24, side: 'left', offset: 10, drift: 5, rotate: 45, width: 8, height: 8, color: '#ec4899', delay: 150 },
+    { top: 14, side: 'left', offset: 26, drift: -6, rotate: -45, width: 10, height: 5, color: '#f59e0b', delay: 0 },
+    { top: 28, side: 'left', offset: 32, drift: 8, rotate: 20, width: 10, height: 6, color: '#ef4444', delay: 150 },
+
+    // RIGHT side (same delay as corresponding left index → both sides stay in sync)
+    { top: 4, side: 'right', offset: 4, drift: 6, rotate: -45, width: 10, height: 5, color: '#f59e0b', delay: 0 },
+    { top: 10, side: 'right', offset: 12, drift: -8, rotate: 45, width: 8, height: 8, color: '#f97316', delay: 150 },
+    { top: 6, side: 'right', offset: 20, drift: 5, rotate: -70, width: 10, height: 5, color: '#ec4899', delay: 0 },
+    { top: 16, side: 'right', offset: 6, drift: -7, rotate: -30, width: 8, height: 8, color: '#22c55e', delay: 150 },
+    { top: 2, side: 'right', offset: 28, drift: 8, rotate: 30, width: 10, height: 5, color: '#8b5cf6', delay: 0 },
+    { top: 20, side: 'right', offset: 18, drift: -6, rotate: -60, width: 12, height: 6, color: '#4c9aab', delay: 150 },
+    { top: 8, side: 'right', offset: 34, drift: 7, rotate: 60, width: 10, height: 5, color: '#f97316', delay: 0 },
+    { top: 24, side: 'right', offset: 10, drift: -5, rotate: -45, width: 8, height: 8, color: '#ec4899', delay: 150 },
+    { top: 14, side: 'right', offset: 26, drift: 6, rotate: 45, width: 10, height: 5, color: '#f59e0b', delay: 0 },
+    { top: 28, side: 'right', offset: 32, drift: -8, rotate: -20, width: 10, height: 6, color: '#ef4444', delay: 150 },
 ];
-
 function ConfettiDots() {
     return (
-        <div className="pointer-events-none absolute inset-0" aria-hidden="true">
+        <div
+            className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+            aria-hidden="true"
+        >
             <style>{`
-             @keyframes pmsConfettiDrop {
+  @keyframes pmsConfettiDrop {
     0% {
-        transform: translate(var(--start-x), -40px) rotate(0deg) scale(0.4);
+        transform: translate(0, -10px) rotate(0deg) scale(0.7);
         opacity: 0;
     }
 
-    15% {
+    10% {
         opacity: 1;
     }
 
-    50% {
-        transform: translate(var(--mid-x), 20px) rotate(var(--r2)) scale(1);
+    85% {
         opacity: 1;
-    }
-
-    80% {
-        transform: translate(var(--end-x), 65px) rotate(var(--r3)) scale(0.8);
-        opacity: 0.7;
     }
 
     100% {
-        transform: translate(var(--end-x), 100px) rotate(var(--r4)) scale(0.1);
+        transform: translate(var(--drift), 300px) rotate(var(--r2)) scale(0.85);
         opacity: 0;
     }
 }
@@ -163,41 +131,35 @@ function ConfettiDots() {
             {CONFETTI_PIECES.map((piece, index) => (
                 <span
                     key={index}
-                    className="pms-confetti-piece absolute left-1/2 top-1/2"
+                    className="pms-confetti-piece absolute"
                     style={{
+                        top: `${piece.top}%`,
+                        [piece.side]: `${piece.offset}%`,
+
                         // @ts-ignore
-                        '--start-x': `${piece.startX}px`,
-                        '--mid-x': `${piece.midX}px`,
-                        '--end-x': `${piece.endX}px`,
-                        '--r1': `${piece.rotate}deg`,
+                        '--drift': `${piece.drift}px`,
                         '--r2': `${piece.rotate + 90}deg`,
-                        '--r3': `${piece.rotate + 180}deg`,
-                        '--r4': `${piece.rotate + 360}deg`,
+                        '--r3': `${piece.rotate + 270}deg`,
+
                         width: piece.width,
                         height: piece.height,
                         backgroundColor: piece.color,
                         borderRadius: 1,
-                        animation: `
-                            pmsConfettiDrop
-                            1.5s
-                            cubic-bezier(0.22, 1, 0.36, 1)
-                            ${piece.delay}ms
-                            both
-                        `,
+
+            animation: `pmsConfettiDrop 2.8s linear ${(index % 10) * 180}ms 1 both`,
                     }}
                 />
             ))}
         </div>
     );
 }
-
 function Panel({ icon, title, headerRight, className = '', children, noRounded = false }: { icon?: ReactNode; title?: string; headerRight?: ReactNode; className?: string; children?: ReactNode; noRounded?: boolean }) {
     return (
         <section className={`min-w-0 overflow-hidden {!noRounded &&'rounded-xl'} border border-[#dbe4ef] bg-white px-3 py-1.5 shadow-[0_2px_8px_rgba(9,32,74,0.025)] ${className}`}>
             {title && (
                 <div className="mb-1.5 flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2 text-[#061743]">
-                        {icon&&<span className="grid h-6 w-6 shrink-0 place-items-center rounded-md border border-[#d9eee2] bg-[#eff9f3] text-[#087536]">
+                        {icon && <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md border border-[#d9eee2] bg-[#eff9f3] text-[#087536]">
                             {icon}
                         </span>}
                         <strong className="whitespace-nowrap text-[13px] font-bold text-[#087536]">{title}</strong>
@@ -226,11 +188,10 @@ function StepNode({ step }) {
     return (
         <div className="relative z-10 flex flex-col items-center gap-1">
             <span
-                className={`grid h-[26px] w-[26px] place-items-center rounded-full border-[3px] border-white text-[9px] font-semibold ${
-                    isDone || isActive
-                        ? 'bg-[#087536] text-white shadow-[0_4px_10px_rgba(8,117,54,0.18)]'
-                        : 'bg-[#e7ebf3] text-[#061743] shadow-[0_0_0_1px_rgba(219,228,239,0.15)]'
-                }`}
+                className={`grid h-[26px] w-[26px] place-items-center rounded-full border-[3px] border-white text-[9px] font-semibold ${isDone || isActive
+                    ? 'bg-[#087536] text-white shadow-[0_4px_10px_rgba(8,117,54,0.18)]'
+                    : 'bg-[#e7ebf3] text-[#061743] shadow-[0_0_0_1px_rgba(219,228,239,0.15)]'
+                    }`}
             >
                 {isDone ? <Check size={10} strokeWidth={3} /> : step.id}
             </span>
@@ -253,7 +214,7 @@ function ChecklistRow({ item }) {
             <span className="flex items-center gap-1 rounded px-1.5 py-0.5 text-[9px] font-semibold text-[#087536]">
                 <div className='w-[15px] h-[15px] p-1 flex items-center justify-center bg-[#087536] rounded-full'>
 
-                <Check size={10} strokeWidth={2.4} className='text-white' />
+                    <Check size={10} strokeWidth={2.4} className='text-white' />
                 </div>
                 Completed
             </span>
@@ -325,10 +286,10 @@ export default function PMSFinalSubmission({ data, onBack, onSaveDraft, onSubmit
         setAgreed(next);
         onDeclarationChange?.(next);
     };
-const navigate = useNavigate()
+    const navigate = useNavigate()
     return (
         <div className="w-full min-h-[calc(100dvh-58px)] bg-white p-3 px-3 lg:px-6 pt-2 pb-3 font-sans text-[#061743] antialiased">
-            <header className="mb-1 flex flex-wrap items-start justify-between gap-3">
+            <header className="mb-1 flex flex-wrap items-start justify-between gap-3  xl:pr-[300px]">
                 <div>
                     <h1 className="m-0 text-[21px] font-semibold tracking-[-0.35px] text-[#061743] leading-[22.68px]">MSME PMS Application</h1>
                     <p className="text-[13px] font-semibold text-[#061743]">
@@ -336,7 +297,7 @@ const navigate = useNavigate()
                     </p>
                 </div>
 
-                <div className="grid w-fit grid-cols-2 gap-2">
+                <div className="flex gap-2">
                     <div className="h-[55px] w-fit rounded-lg border border-[#dbe4ef] bg-blue-50 px-3 pb-2 pt-2 shadow-sm">
                         <span className="block text-[10px] font-medium text-[#31436b]">Application ID</span>
                         <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#061743]">{applicationId}</strong>
@@ -359,27 +320,27 @@ const navigate = useNavigate()
 
                     <main className="flex flex-col gap-2">
                         <div className="grid grid-cols-1 sm:grid-cols-[1fr_1.1fr]">
-                          <section className="relative flex flex-col items-center justify-center overflow-hidden border border-[#dbe4ef] bg-gradient-to-b from-[#eef9f2] to-white px-3 py-3 text-center">
-    
-    {/* Full width confetti area */}
-    <ConfettiDots />
+                            <section className="relative flex flex-col items-center justify-center overflow-hidden border border-[#dbe4ef] bg-[#eef9f2]  px-3 text-center py-4">
 
-    <div className="relative z-10">
-        <span className="grid h-16 w-16 place-items-center rounded-full bg-[#087536] border-[6px] border-emerald-100">
-            <Check size={30} strokeWidth={2.4} className="text-white" />
-        </span>
-    </div>
+                                {/* Full width confetti area */}
+                                <ConfettiDots />
 
-    <h3 className="relative z-10 mt-2 text-[13px] font-semibold text-[#087536]">
-        You are almost there!
-    </h3>
+                                <div className="relative z-10">
+                                    <span className="grid h-16 w-16 place-items-center rounded-full bg-[#087536] border-[6px] border-emerald-100">
+                                        <Check size={30} strokeWidth={2.4} className="text-white" />
+                                    </span>
+                                </div>
 
-    <p className="relative z-10 mt-1 max-w-[220px] text-[9.5px] font-semibold leading-[1.6] text-[#061743]">
-        Please review the declaration and submit your application for verification.
-    </p>
-</section>
+                                <h3 className="relative z-10 mt-2 text-base font-semibold text-[#087536]">
+                                    You are almost there!
+                                </h3>
 
-                            <Panel title="Submission Checklist" noRounded={true} className='md:pl-8'>
+                                <p className="relative z-10 mt-1 max-w-[300px] text-xs font-semibold leading-[1.6] text-[#1e4197]">
+                                    Please review the declaration and submit your application for verification.
+                                </p>
+                            </section>
+
+                            <Panel title="Submission Checklist" noRounded={true} className='md:pl-8 py-2'>
                                 <div className="flex flex-col gap-1.5">
                                     {CHECKLIST.map((item) => (
                                         <ChecklistRow key={item.title} item={item} />
@@ -388,53 +349,52 @@ const navigate = useNavigate()
                             </Panel>
                         </div>
 
-<div className="flex flex-col items-start md:flex-row min-w-0 overflow-hidden rounded-xl border border-[#dbe4ef] bg-white px-3 py-1.5 shadow-[0_2px_8px_rgba(9,32,74,0.025)]">
-    <div className="mb-1.5 flex min-w-[200px] flex-wrap items-start justify-between gap-2 md:mb-0">
-        <div className="flex items-start gap-2 text-[#061743]">
-            <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md border border-[#d9eee2] bg-[#eff9f3] text-[#087536]">
-                <FileText size={24} strokeWidth={1.9} />
-            </span>
+                        <div className="flex flex-col items-start md:flex-row min-w-0 overflow-hidden rounded-xl border border-[#dbe4ef] bg-white px-3 py-1.5 shadow-[0_2px_8px_rgba(9,32,74,0.025)]">
+                            <div className="mb-1.5 flex min-w-[200px] flex-wrap items-start justify-between gap-2 md:mb-0">
+                                <div className="flex items-start gap-2 text-[#061743]">
+                                    <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md border border-[#d9eee2] bg-[#eff9f3] text-[#087536]">
+                                        <FileText size={24} strokeWidth={1.9} />
+                                    </span>
 
-            <strong className="whitespace-nowrap text-[13px] font-bold text-[#087536]">
-                Declaration
-            </strong>
-        </div>
-    </div>
+                                    <strong className="whitespace-nowrap text-[13px] font-bold text-[#087536]">
+                                        Declaration
+                                    </strong>
+                                </div>
+                            </div>
 
-    <div className="self-start">
-        <ul className="space-y-1">
-            {DECLARATIONS.map((point) => (
-                <li
-                    key={point}
-                    className="flex items-start gap-1.5 text-[9.5px] font-medium text-[#31446c] leading-6"
-                >
-                    <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-[#5a6c92]" />
-                    {point}
-                </li>
-            ))}
-        </ul>
+                            <div className="self-start">
+                                <ul className="space-y-1">
+                                    {DECLARATIONS.map((point) => (
+                                        <li
+                                            key={point}
+                                            className="flex items-start gap-1.5 text-[9.5px] font-medium text-[#31446c] leading-6"
+                                        >
+                                            <span className="mt-2.5 h-1 w-1 shrink-0 rounded-full bg-[#5a6c92]" />
+                                            {point}
+                                        </li>
+                                    ))}
+                                </ul>
 
-        <button
-            type="button"
-            onClick={toggleAgree}
-            className="mt-4 flex items-center gap-2 text-[9.5px] font-semibold text-[#061743]"
-        >
-            <span
-                className={`grid h-4 w-4 shrink-0 place-items-center rounded ${
-                    agreed
-                        ? "bg-[#087536]"
-                        : "border border-[#c2cbdb] bg-white"
-                }`}
-            >
-                {agreed && (
-                    <Check size={12} strokeWidth={3} className="text-white" />
-                )}
-            </span>
+                                <button
+                                    type="button"
+                                    onClick={toggleAgree}
+                                    className="mt-4 flex items-center gap-2 text-[9.5px] font-semibold text-[#061743]"
+                                >
+                                    <span
+                                        className={`grid h-4 w-4 shrink-0 place-items-center rounded ${agreed
+                                            ? "bg-[#087536]"
+                                            : "border border-[#c2cbdb] bg-white"
+                                            }`}
+                                    >
+                                        {agreed && (
+                                            <Check size={12} strokeWidth={3} className="text-white" />
+                                        )}
+                                    </span>
 
-            I agree to the above declaration.
-        </button>
-    </div>
-</div>
+                                    I agree to the above declaration.
+                                </button>
+                            </div>
+                        </div>
                         <Panel title="What happens next?">
                             <div className="overflow-x-auto pb-0.5 pt-2">
                                 <div className="flex min-w-[620px] items-start justify-between">
@@ -472,9 +432,8 @@ const navigate = useNavigate()
                                 type="button"
                                 disabled={!agreed || saving || Boolean(data?.submittedAt)}
                                 onClick={() => onSubmit?.(agreed)}
-                                className={`flex h-7 items-center justify-center gap-2 rounded-md text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)] ${
-                                    agreed ? 'bg-gradient-to-r from-[#0b7137] to-[#087536]' : 'cursor-not-allowed bg-[#a9c9b6]'
-                                }`}
+                                className={`flex h-7 items-center justify-center gap-2 rounded-md text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)] ${agreed ? 'bg-gradient-to-r from-[#0b7137] to-[#087536]' : 'cursor-not-allowed bg-[#a9c9b6]'
+                                    }`}
                             >
                                 {data?.submittedAt ? 'Application Submitted' : saving ? 'Submitting...' : 'Submit Application'}
                                 <Send size={14} strokeWidth={2} />
@@ -543,7 +502,7 @@ const navigate = useNavigate()
                             <ShieldAlert size={15} strokeWidth={2} className="shrink-0" />
                             <span className='text-[#061743]'>
 
-                            Support Hours:<br/> Mon - Sat | 09:00 AM - 07:00 PM (IST)
+                                Support Hours:<br /> Mon - Sat | 09:00 AM - 07:00 PM (IST)
                             </span>
                         </div>
                     </section>

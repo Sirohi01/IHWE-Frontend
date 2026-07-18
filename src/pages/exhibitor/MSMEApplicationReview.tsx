@@ -269,7 +269,7 @@ export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue, sa
 
     return (
         <div className="w-full min-h-[calc(100dvh-58px)] bg-white p-3 px-3 lg:px-6 pt-2 pb-3 font-sans text-[#061743] antialiased">
-            <header className="mb-1 flex flex-wrap items-start justify-between gap-3">
+            <header className="mb-1 flex flex-wrap items-start justify-between gap-3  xl:pr-[300px]">
                 <div>
                     <h1 className="m-0 text-[21px] font-semibold tracking-[-0.35px] text-[#061743] leading-[22.68px]">MSME PMS Application</h1>
                     <p className="text-[13px] font-semibold text-[#061743]">
@@ -277,7 +277,7 @@ export default function MSMEPMSReviewConfirmation({ data, onBack, onContinue, sa
                     </p>
                 </div>
 
-                <div className="grid w-fit grid-cols-2 gap-2">
+                <div className="flex gap-2">
                     <div className="h-[55px] w-fit rounded-lg border border-[#dbe4ef] bg-blue-50 px-3 pb-2 pt-2 shadow-sm">
                         <span className="block text-[10px] font-medium text-[#31436b]">Application ID</span>
                         <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#061743]">
