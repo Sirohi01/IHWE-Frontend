@@ -87,7 +87,7 @@ function Section({ icon, letter, title, note, description, headerRight, classNam
                         {icon}
                     </span>
                     <strong className="whitespace-nowrap text-[13px] font-semibold text-[#087536]">{letter}. {title}</strong>
-                    {note && <small className="-ml-1 whitespace-nowrap text-[9px] font-medium self-center mt-0.5 text-[#5a6c92]">{note}</small>}
+                    {note && <small className="-ml-1 whitespace-nowrap text-[9px] font-medium self-center mt-0.5 text-[#4a75e4]">{note}</small>}
                 </div>
                 {headerRight}
             </div>
@@ -150,7 +150,7 @@ function EditButton({ onClick }: { onClick?: () => void }) {
 
 function DetailRow({ label, value }: { label: string; value: ReactNode }) {
     return (
-        <div className="flex items-start gap-1 py-[3px] text-[9.5px]">
+        <div className="flex items-start gap-1 py-[3px] text-[9px]">
             <span className="w-[132px] shrink-0 font-medium text-[#5a6c92]">{label}</span>
             <span className="font-medium text-[#5a6c92]">:</span>
             <strong className="min-w-0 break-words font-semibold text-[#061743]">{value}</strong>
@@ -210,8 +210,8 @@ function DocumentCard({ doc }) {
 function FieldColumn({ label, value, valueNode }: { label: string; value?: ReactNode; valueNode?: ReactNode }) {
     return (
         <div className="flex min-w-0 flex-col gap-1">
-            <span className="whitespace-nowrap text-[9px] font-semibold text-[#5a6c92]">{label}</span>
-            {valueNode ?? <strong className="whitespace-nowrap text-[9.5px] font-semibold text-[#061743]">{value}</strong>}
+            <span className="text-[9px] font-semibold text-[#5a6c92] ">{label}</span>
+            {valueNode ?? <strong className="text-[9.5px] font-semibold text-[#061743] max-w-[120px]">{value}</strong>}
         </div>
     );
 }
