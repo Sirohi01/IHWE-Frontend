@@ -68,6 +68,8 @@ const AUTO_DOCUMENTS = [
     { title: 'Organizer Declaration' },
 ];
 
+
+
 interface SectionProps {
     icon: ReactNode;
     letter: string;
