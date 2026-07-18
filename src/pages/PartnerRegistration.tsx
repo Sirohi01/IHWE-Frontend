@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { partnerRegistrationApi, otpApi } from "@/lib/api";
+import { partnerRegistrationApi, otpApi, crmApi } from "@/lib/api";
 import { motion } from "framer-motion";
 
 import {
@@ -51,35 +51,7 @@ const DOC_FIELDS = [
     { key: "visitingCard", label: "Visiting Card" },
 ];
 
-const LOCATION_DATA: Record<string, { states: string[]; cities: Record<string, string[]> }> = {
-    "India": {
-        states: ["Delhi", "Maharashtra", "Karnataka", "Tamil Nadu", "West Bengal"],
-        cities: {
-            "Delhi": ["New Delhi", "North Delhi", "South Delhi"],
-            "Maharashtra": ["Mumbai", "Pune", "Nagpur", "Thane"],
-            "Karnataka": ["Bangalore", "Mysore", "Hubli", "Mangalore"],
-            "Tamil Nadu": ["Chennai", "Coimbatore", "Madurai"],
-            "West Bengal": ["Kolkata", "Howrah", "Durgapur"]
-        }
-    },
-    "United Arab Emirates": {
-        states: ["Dubai", "Abu Dhabi", "Sharjah", "Ajman"],
-        cities: {
-            "Dubai": ["Dubai City", "Marina", "Deira"],
-            "Abu Dhabi": ["Abu Dhabi City", "Al Ain", "Yas Island"],
-            "Sharjah": ["Sharjah City", "Khor Fakkan"],
-            "Ajman": ["Ajman City"]
-        }
-    },
-    "Singapore": {
-        states: ["Central Region", "East Region", "North Region"],
-        cities: {
-            "Central Region": ["Singapore City", "Bukit Merah"],
-            "East Region": ["Tampines", "Pasir Ris"],
-            "North Region": ["Woodlands", "Yishun"]
-        }
-    }
-};
+// LOCATION_DATA replaced with crmApi dynamic fetching
 
 const inputCls = "rounded-[4px] border-slate-300 h-9 focus:border-[#0b1a3a] focus:ring-[#0b1a3a]/10 transition-all text-[13px] bg-white placeholder:text-slate-400 placeholder:text-[13px] text-slate-900 font-medium shadow-none outline-none px-2.5 py-0 w-full";
 const labelCls = "text-[12px] font-black text-[#003399] mb-0.5 block";
@@ -120,9 +92,70 @@ const PartnerRegistration = () => {
     const [form, setForm] = useState(initialForm);
     const [errors, setErrors] = useState<Record<string, string>>({});
     const [loading, setLoading] = useState(false);
-    const countries = Object.keys(LOCATION_DATA);
-    const states = form.country ? LOCATION_DATA[form.country]?.states || [] : [];
-    const cities = form.state && form.country ? LOCATION_DATA[form.country]?.cities[form.state] || [] : [];
+    
+    // Dynamic Location State
+    const [countries, setCountries] = useState<any[]>([]);
+    const [states, setStates] = useState<any[]>([]);
+    const [cities, setCities] = useState<any[]>([]);
+    const [loadingLocations, setLoadingLocations] = useState({ countries: true, states: false, cities: false });
+
+    useEffect(() => {
+        const fetchCountries = async () => {
+            try {
+                const data = await crmApi.getCountries();
+                setCountries(data || []);
+            } catch (err) {
+                console.error("Error fetching countries:", err);
+            } finally {
+                setLoadingLocations(prev => ({ ...prev, countries: false }));
+            }
+        };
+        fetchCountries();
+    }, []);
+
+    useEffect(() => {
+        const fetchStates = async () => {
+            if (!form.country) {
+                setStates([]);
+                return;
+            }
+            const selectedCountry = countries.find(c => c.name === form.country);
+            if (selectedCountry) {
+                setLoadingLocations(prev => ({ ...prev, states: true }));
+                try {
+                    const data = await crmApi.getStates(selectedCountry.countryCode);
+                    setStates(data || []);
+                } catch (err) {
+                    console.error("Error fetching states:", err);
+                } finally {
+                    setLoadingLocations(prev => ({ ...prev, states: false }));
+                }
+            }
+        };
+        fetchStates();
+    }, [form.country, countries]);
+
+    useEffect(() => {
+        const fetchCities = async () => {
+            if (!form.state) {
+                setCities([]);
+                return;
+            }
+            const selectedState = states.find(s => s.name === form.state);
+            if (selectedState) {
+                setLoadingLocations(prev => ({ ...prev, cities: true }));
+                try {
+                    const data = await crmApi.getCities(selectedState.stateCode);
+                    setCities(data || []);
+                } catch (err) {
+                    console.error("Error fetching cities:", err);
+                } finally {
+                    setLoadingLocations(prev => ({ ...prev, cities: false }));
+                }
+            }
+        };
+        fetchCities();
+    }, [form.state, states]);
 
     const [searchParams] = useSearchParams();
     const referrerType = searchParams.get("type");
@@ -775,24 +808,24 @@ const PartnerRegistration = () => {
                                                 <div>
                                                     <Label className={labelCls}>Country <span className="text-red-500">*</span></Label>
                                                     <Select value={form.country} onValueChange={v => { set("country", v); set("state", ""); set("city", ""); }}>
-                                                        <SelectTrigger className={inputCls}><SelectValue placeholder="Select country" /></SelectTrigger>
-                                                        <SelectContent className="max-h-[250px]">{countries.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+                                                        <SelectTrigger className={inputCls}><SelectValue placeholder={loadingLocations.countries ? "Loading..." : "Select country"} /></SelectTrigger>
+                                                        <SelectContent className="max-h-[250px]">{countries.map(c => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}</SelectContent>
                                                     </Select>
                                                     {errors.country && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.country}</span>}
                                                 </div>
                                                 <div>
                                                     <Label className={labelCls}>State <span className="text-red-500">*</span></Label>
                                                     <Select disabled={!form.country} value={form.state} onValueChange={v => { set("state", v); set("city", ""); }}>
-                                                        <SelectTrigger className={inputCls}><SelectValue placeholder="Select state" /></SelectTrigger>
-                                                        <SelectContent className="max-h-[250px]">{states.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+                                                        <SelectTrigger className={inputCls}><SelectValue placeholder={loadingLocations.states ? "Loading..." : "Select state"} /></SelectTrigger>
+                                                        <SelectContent className="max-h-[250px]">{states.map(s => <SelectItem key={s.name} value={s.name}>{s.name}</SelectItem>)}</SelectContent>
                                                     </Select>
                                                     {errors.state && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.state}</span>}
                                                 </div>
                                                 <div>
                                                     <Label className={labelCls}>City <span className="text-red-500">*</span></Label>
                                                     <Select disabled={!form.state} value={form.city} onValueChange={v => set("city", v)}>
-                                                        <SelectTrigger className={inputCls}><SelectValue placeholder="Enter city" /></SelectTrigger>
-                                                        <SelectContent className="max-h-[250px]">{cities.map(c => <SelectItem key={c} value={c}>{c}</SelectItem>)}</SelectContent>
+                                                        <SelectTrigger className={inputCls}><SelectValue placeholder={loadingLocations.cities ? "Loading..." : "Select city"} /></SelectTrigger>
+                                                        <SelectContent className="max-h-[250px]">{cities.map(c => <SelectItem key={c.name} value={c.name}>{c.name}</SelectItem>)}</SelectContent>
                                                     </Select>
                                                     {errors.city && <span className="text-red-500 text-[10px] font-bold mt-1 block">{errors.city}</span>}
                                                 </div>
