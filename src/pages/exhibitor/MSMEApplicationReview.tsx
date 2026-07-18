@@ -172,15 +172,13 @@ function DetailRowVerified({ label, value }: { label: string; value: ReactNode }
 function StatusChip({ status }) {
     const isUploaded = status === 'Uploaded';
     return (
-        <span className={`inline-flex w-fit items-center gap-1 whitespace-nowrap rounded px-1.5 py-0.5 text-[9px] font-semibold border ${
+        <span className={`inline-flex items-center justify-center text-center gap-1 w-16 whitespace-nowrap rounded px-1.5 py-0.5 text-[9px] font-semibold border ${
             isUploaded
                 ? 'text-[#087536] bg-[#eafbf1] border-[#b7ecd0]'
                 : 'text-[#e07a12] bg-[#fef6ec] border-[#fbdfb0]'
         }`}>
             {isUploaded ? (
-                <span className="grid h-3 w-3 place-items-center rounded-full bg-[#087536] text-white">
-                    <Check size={7} strokeWidth={3} />
-                </span>
+              ''
             ) : (
                 <Hourglass size={11} strokeWidth={2.2} className="text-[#e07a12]" />
             )}
@@ -190,11 +188,12 @@ function StatusChip({ status }) {
 }
 
 function DocumentCard({ doc }) {
+    const isUploaded = doc.status === 'Uploaded'
     return (
         <div className="flex min-w-0 flex-col gap-2 rounded-lg border border-[#e9eef4] bg-[#fbfcfe] p-1.5">
             <div className="flex items-start gap-1.5">
                 <span className="grid h-6 w-6 shrink-0 place-items-center rounded-md border border-[#e0e7f0] bg-white text-[#6b82ac]">
-                    <FileText size={13} strokeWidth={2} />
+                    <FileText size={13} strokeWidth={2} color={isUploaded?"#087536":"#e07a12"}  />
                 </span>
                 <div className="min-w-0">
                     <strong className="block text-[9px] font-semibold leading-snug text-[#061743]">{doc.name}</strong>
