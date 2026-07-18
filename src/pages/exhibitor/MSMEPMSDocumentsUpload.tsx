@@ -401,7 +401,7 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
                             <button
                                 type="button"
                                 onClick={() => navigate("/exhibitor-dashboard/msme/pms-approved")}
-                                disabled={!allUploaded}
+                                // disabled={!allUploaded}
                                 className={`flex h-7 items-center justify-center gap-2 rounded-md text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)] ${allUploaded ? 'bg-gradient-to-r from-[#0b7137] to-[#087536]' : 'cursor-not-allowed bg-gradient-to-r from-[#0b7137]/50 to-[#087536]/50'
                                     }`}
                             >
