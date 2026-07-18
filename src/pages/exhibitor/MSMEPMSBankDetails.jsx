@@ -18,7 +18,7 @@ import {
     ShieldCheck,
     Upload,
 } from 'lucide-react';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { FaWhatsapp } from 'react-icons/fa6';
 import { useNavigate } from 'react-router-dom';
 const safe = (value, fallback = '—') => {
@@ -126,16 +126,16 @@ function SummaryRow({ label, value }) {
     );
 }
 
-function VerifyRow({ label }) {
+function VerifyRow({ label, verified }) {
     return (
         <div className="flex items-center justify-between gap-2.5 border-b border-[#e9eef4] py-1 text-[10.5px] font-semibold first:pt-0.5">
             <span>{label}</span>
-            <span className="inline-flex items-center gap-1 whitespace-nowrap text-[10px] font-semibold text-[#087536]">
-                <div className='w-3 h-3 bg-[#087536] text-white rounded-full flex items-center justify-center font-semibold'>
+            <span className={`inline-flex items-center gap-1 whitespace-nowrap text-[10px] font-semibold ${verified ? 'text-[#087536]' : 'text-amber-600'}`}>
+                <div className={`w-3 h-3 text-white rounded-full flex items-center justify-center font-semibold ${verified ? 'bg-[#087536]' : 'bg-amber-500'}`}>
 
                     <Check size={10} strokeWidth={2.4} />
                 </div>
-                Verified
+                {verified ? 'Verified' : 'Pending'}
             </span>
         </div>
     );
@@ -241,27 +241,33 @@ function ProgressRing({ percent }) {
     );
 }
 
-export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
+export default function MSMEPMSBankDetails({ data, onBack, onContinue, onSaveDraft, onUpload, saving }) {
      const navigate = useNavigate();
-    const companyName = fieldValue(data, ['exhibitorName', 'companyName', 'organizationName'], 'Velruma Pvt. Ltd.');
-    const msmeCategory = safe(data?.msme?.msmeCategory, 'Micro');
-    const udyamNumber = safe(data?.msme?.udyamRegNo, 'UP09D0012345');
-    const gstNumber = safe(data?.gstNo || data?.gstNumber, '09AAACV1234A1Z5');
+    const companyName = fieldValue(data, ['exhibitorName', 'companyName', 'organizationName'], '—');
+    const msmeCategory = safe(data?.msme?.msmeCategory);
+    const udyamNumber = safe(data?.msme?.udyamRegNo);
+    const gstNumber = safe(data?.gstNo || data?.gstNumber);
 
-    const form = {
-        accountHolderName: safe(data?.bank?.accountHolderName, 'Velruma Pvt. Ltd.'),
-        bankName: safe(data?.bank?.bankName, 'HDFC Bank Ltd'),
-        branchName: safe(data?.bank?.branchName, 'Noida Sector 62'),
-        accountNumber: safe(data?.bank?.accountNumber, '50200012345678'),
-        confirmAccountNumber: safe(data?.bank?.accountNumber, '50200012345678'),
-        ifscCode: safe(data?.bank?.ifscCode, 'HDFC0001234'),
-        micrCode: safe(data?.bank?.micrCode, '110240039'),
-        accountType: safe(data?.bank?.accountType, 'Current Account'),
-    };
+    const [form, setForm] = useState(() => ({
+        accountHolderName: safe(data?.bank?.accountHolderName, ''),
+        bankName: safe(data?.bank?.bankName, ''),
+        branchName: safe(data?.bank?.branchName, ''),
+        accountNumber: safe(data?.bank?.accountNumber, ''),
+        confirmAccountNumber: safe(data?.bank?.accountNumber, ''),
+        ifscCode: safe(data?.bank?.ifscCode, ''),
+        micrCode: safe(data?.bank?.micrCode, ''),
+        accountType: safe(data?.bank?.accountType, ''),
+    }));
+    const setField = (name, value) => setForm(prev => ({ ...prev, [name]: value }));
+    const normalized = value => String(value || '').replace(/[^a-z0-9]/gi, '').toLowerCase();
+    const accountHolderMatches = Boolean(form.accountHolderName && companyName !== '—' && normalized(form.accountHolderName) === normalized(companyName));
+    const gstVerified = Boolean(gstNumber !== '—' && ['approved', 'verified'].includes(String(data?.kycStatus || data?.verificationStatus || '').toLowerCase()));
+    const udyamVerified = Boolean(udyamNumber !== '—' && String(data?.verificationStatus || '').toLowerCase() === 'verified');
+    const formatDate = value => value ? new Intl.DateTimeFormat('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(value)) : '—';
 
     const bankTopFields = [
         { name: 'accountHolderName', label: 'Account Holder Name', required: true },
-        { name: 'bankName', label: 'Bank Name', required: true, type: 'select', options: ['HDFC Bank Ltd', 'ICICI Bank', 'State Bank of India', 'Axis Bank', 'Punjab National Bank', 'Kotak Mahindra Bank'] },
+        { name: 'bankName', label: 'Bank Name', required: true },
         { name: 'branchName', label: 'Branch Name', required: true },
         { name: 'accountNumber', label: 'Account Number', required: true },
     ];
@@ -273,20 +279,20 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
     ];
 
     const documents = [
-        { title: 'Cancelled Cheque', required: true, hint: 'Upload clear image / PDF', status: 'Pending' },
-        { title: 'Bank Statement (Last 6 Months)', required: true, hint: 'Upload PDF only', status: 'Pending' },
-        { title: 'Bank Passbook First Page', required: false, hint: <>(Optional) <br /> Upload clear image / PDF</>, status: 'Optional' },
-    ];
+        { documentType: 'cheque', title: 'Cancelled Cheque', required: true, hint: 'Upload clear image / PDF' },
+        { documentType: 'statement', title: 'Bank Statement (Last 6 Months)', required: true, hint: 'Upload PDF only' },
+        { documentType: 'passbook', title: 'Bank Passbook First Page', required: false, hint: <>(Optional) <br /> Upload clear image / PDF</> },
+    ].map(doc => ({ ...doc, status: data?.documents?.some(item => item.documentType === doc.documentType) ? 'Uploaded' : (doc.required ? 'Pending' : 'Optional'), onFileSelect: file => onUpload?.(doc.documentType, file) }));
 
     const claimColumns = [
-        { label: 'Stall Charges', amount: '1,18,944' },
-        { label: 'Hotel Stay', amount: '18,000' },
-        { label: 'Travel', amount: '8,500' },
-        { label: 'Courier', amount: '1,200' },
-        { label: 'Marketing', amount: '5,000' },
+        { label: 'Stall Charges', amount: data?.claim?.stallCharges != null ? Number(data.claim.stallCharges).toLocaleString('en-IN') : '—' },
+        { label: 'Hotel Stay', amount: data?.claim?.hotelStay != null ? Number(data.claim.hotelStay).toLocaleString('en-IN') : '—' },
+        { label: 'Travel', amount: data?.claim?.travel != null ? Number(data.claim.travel).toLocaleString('en-IN') : '—' },
+        { label: 'Courier', amount: data?.claim?.courier != null ? Number(data.claim.courier).toLocaleString('en-IN') : '—' },
+        { label: 'Marketing', amount: data?.claim?.marketing != null ? Number(data.claim.marketing).toLocaleString('en-IN') : '—' },
         {
             label: 'Total Claimed',
-            amount: '1,51,644',
+            amount: data?.claim?.totalClaimed != null ? Number(data.claim.totalClaimed).toLocaleString('en-IN') : '—',
             highlight: true,
             amountHighlight: true,
         },
@@ -306,12 +312,12 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
                     <div className="h-[55px] w-fit rounded-lg border border-[#dbe4ef] bg-blue-50 px-3 pb-2 pt-2 shadow-sm">
                         <span className="block text-[10px] font-medium text-[#31436b]">Application ID</span>
                         <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#061743]">
-                            {safe(data?.applicationId, 'PMS-IHWE-2026-00139')}
+                            {safe(data?.applicationId)}
                         </strong>
                     </div>
                     <div className="h-[55px] w-fit rounded-lg border border-orange-100 bg-orange-50 px-3 pb-2 pt-2 shadow-sm pr-5">
                         <span className="block text-[10px] font-medium text-[#31436b]">Status</span>
-                        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#f25a1d]">Draft</strong>
+                        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#f25a1d]">{safe(data?.status)}</strong>
                     </div>
                 </div>
             </header>
@@ -332,22 +338,37 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
 
                                 <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
                                     {bankTopFields.map(field => (
-                                        <InfoField key={field.name} label={field.label} value={form[field.name]} required={field.required} type={field.type} options={field.options} />
+                                        <InfoField key={field.name} label={field.label} value={form[field.name]} required={field.required} type={field.type} options={field.options} onChange={(value) => setField(field.name, value)} />
                                     ))}
                                 </div>
 
                                 <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
                                     {bankBottomFields.map(field => (
-                                        <InfoField key={field.name} label={field.label} value={form[field.name]} required={field.required} />
+                                        <InfoField key={field.name} label={field.label} value={form[field.name]} required={field.required} onChange={(value) => setField(field.name, value)} />
                                     ))}
 
                                     <div className="flex min-w-0 flex-col gap-1">
                                         <span className="text-[10px] font-semibold text-[#061743]">Account Type <b className="ml-0.5 text-[10px] font-semibold text-[#e62f28]">*</b></span>
                                         <div className="flex h-[33px] flex-col justify-center gap-1">
                                             {['Current Account', 'Savings Account'].map(type => (
-                                                <label key={type} className="relative flex cursor-pointer items-center gap-1.5 text-[10.5px] font-medium text-[#061743]">
-                                                    <input type="radio" name="accountType" value={type} checked={form.accountType === type} readOnly className="pointer-events-none absolute opacity-0" />
-                                                    <i className={`inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border-[1.4px] bg-white ${form.accountType === type ? 'border-4 border-[#087536]' : 'border-[#8090ad]'}`} />
+                                                <label
+                                                    key={type}
+                                                    className="relative flex cursor-pointer select-none items-center gap-1.5 text-[10.5px] font-medium text-[#061743]"
+                                                    onClick={() => setField('accountType', type)}
+                                                    onKeyDown={(event) => {
+                                                        if (event.key === 'Enter' || event.key === ' ') {
+                                                            event.preventDefault();
+                                                            setField('accountType', type);
+                                                        }
+                                                    }}
+                                                    role="radio"
+                                                    aria-checked={form.accountType === type}
+                                                    tabIndex={0}
+                                                >
+                                                    <input type="radio" name="accountType" value={type} checked={form.accountType === type} onChange={() => setField('accountType', type)} className="pointer-events-none absolute h-px w-px opacity-0" />
+                                                    <span className={`inline-flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border bg-white ${form.accountType === type ? 'border-[#087536]' : 'border-[#8090ad]'}`}>
+                                                        {form.accountType === type && <span className="h-2 w-2 rounded-full bg-[#087536]" />}
+                                                    </span>
                                                     {type}
                                                 </label>
                                             ))}
@@ -357,15 +378,15 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
                             </Section>
 
                             <Section letter="B" title="Payment Verification" icon={<ShieldCheck size={17} strokeWidth={1.8} />}>
-                                <VerifyRow label="Bank Account Holder Name Match" />
-                                <VerifyRow label="GST Registered Name Match" />
-                                <VerifyRow label="Udyam Registered Name Match" />
+                                <VerifyRow label="Bank Account Holder Name Match" verified={accountHolderMatches} />
+                                <VerifyRow label="GST Registration Verification" verified={gstVerified} />
+                                <VerifyRow label="Udyam Registration Verification" verified={udyamVerified} />
 
                                 <div className="mt-1.5 flex items-center gap-2 rounded-md border border-[#cdeadb] bg-[#f1fbf5] p-2 text-[#087536]">
                                     <CheckCircle2 size={24} strokeWidth={2.2} className="mt-0.5 shrink-0" />
                                     <div>
-                                        <strong className="block text-[10.5px] font-semibold">All details match successfully.</strong>
-                                        <p className="text-[9.5px] font-medium text-[#2f5f47]">You can proceed to upload documents.</p>
+                                        <strong className="block text-[10.5px] font-semibold">{accountHolderMatches && gstVerified && udyamVerified ? 'All available details are verified.' : 'Some verifications are pending.'}</strong>
+                                        <p className="text-[9.5px] font-medium text-[#2f5f47]">Verification is based on your saved exhibitor records.</p>
                                     </div>
                                 </div>
                             </Section>
@@ -383,14 +404,14 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
                             </Section>
 
                             <Section letter="D" title="IHWE Payment Details" note="(Auto Filled)" icon={<Receipt size={17} strokeWidth={1.8} />} titleColor="#5924c6">
-                                <PaymentRow label="Event" value="9th International Health & Wellness Expo 2026" />
-                                <PaymentRow label="Stall No." value="139" />
-                                <PaymentRow label="Hall" value="Hall 9" />
-                                <PaymentRow label="Stall Size" value="18 Sqm" />
-                                <PaymentRow label="Invoice Value" value="₹ 2,27,183" />
-                                <PaymentRow label="Amount Paid" value="₹ 2,27,183" />
-                                <PaymentRow label="Payment Status" value="Fully Paid" badge />
-                                <PaymentRow label="Payment Date" value="03 Jul 2026" />
+                                <PaymentRow label="Event" value={safe(data?.event?.name || data?.eventName)} />
+                                <PaymentRow label="Stall No." value={safe(data?.event?.stallNumber || data?.stallNo)} />
+                                <PaymentRow label="Hall" value={safe(data?.event?.hallNumber || data?.hallNo)} />
+                                <PaymentRow label="Stall Size" value={safe(data?.event?.stallSize || data?.stallSize)} />
+                                <PaymentRow label="Invoice Value" value={data?.payment?.invoiceValue != null ? `₹ ${Number(data.payment.invoiceValue).toLocaleString('en-IN')}` : '—'} />
+                                <PaymentRow label="Amount Paid" value={data?.payment?.amountPaid != null ? `₹ ${Number(data.payment.amountPaid).toLocaleString('en-IN')}` : '—'} />
+                                <PaymentRow label="Payment Status" value={safe(data?.event?.paymentStatus || data?.paymentStatus)} badge />
+                                <PaymentRow label="Payment Date" value={formatDate(data?.payment?.paymentDate)} />
                             </Section>
                         </div>
 
@@ -437,7 +458,7 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
 
                                 <div className="flex flex-col items-center justify-center gap-1 rounded-md border border-[#cdeadb] bg-[#f1fbf5] p-1.5 text-center sm:w-[168px] sm:flex-none">
                                     <span className="text-[9px] font-semibold text-[#2f5f47]">Indicative Eligible Claim</span>
-                                    <strong className="text-lg font-semibold text-[#087536]">₹1,50,000*</strong>
+                                    <strong className="text-lg font-semibold text-[#087536]">{data?.claim?.eligibleAmount != null ? `₹${Number(data.claim.eligibleAmount).toLocaleString('en-IN')}` : '—'}</strong>
                                 </div>
                             </div>
 
@@ -456,6 +477,8 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
 
                             <button
                                 type="button"
+                                disabled={saving}
+                                onClick={() => onSaveDraft?.(form)}
                                 className="mx-auto flex h-7 w-fit items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white px-4 text-[10px] font-semibold text-[#061743]"
                             >
                                 <Save size={15} strokeWidth={2} />
@@ -464,7 +487,8 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
 
                             <button
                                 type="button"
-                                onClick={() => navigate("/exhibitor-dashboard/msme/documents-upload")}
+                                disabled={saving}
+                                onClick={() => onContinue?.(form)}
                                 
                                 className="flex h-7 items-center justify-center gap-2 rounded-md bg-gradient-to-r from-[#0b7137] to-[#087536] text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)]"
                             >
@@ -487,8 +511,8 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
                         <SummaryRow label="MSME Category" value={msmeCategory} />
                         <SummaryRow label="Udyam Number" value={udyamNumber} />
                         <SummaryRow label="GST Number" value={gstNumber} />
-                        <SummaryRow label="IHWE Booking" value="Confirmed" />
-                        <SummaryRow label="Payment Status" value="Fully Paid" />
+                        <SummaryRow label="IHWE Booking" value={safe(data?.event?.bookingStatus || data?.bookingStatus)} />
+                        <SummaryRow label="Payment Status" value={safe(data?.event?.paymentStatus || data?.paymentStatus)} />
 
                         <div className="mt-1.5 flex items-center gap-3 border-t border-[#e9eef4] pt-2">
                             <ProgressRing percent={40} />
@@ -502,36 +526,36 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue }) {
                     <section className="min-w-0 overflow-hidden rounded-xl border border-[#dbe4ef] bg-white px-3 py-1.5">
                         <h2 className="mb-1.5 flex items-center gap-2 text-[13px] font-semibold text-[#5924c6]">
                             <Headphones size={19} strokeWidth={1.8} />
-                            PMS Coordinator
+                            Relationship Manager
                         </h2>
 
                         <div className="mb-1.5 flex items-center gap-3">
                             <div className="relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-full bg-[#eef2f7] text-xs font-semibold text-[#061743]">
                                 <span>RS</span>
                                 <img
-                                    src={safe(data?.pmsCoordinator?.photo, 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rohit&backgroundColor=eef2f7')}
-                                    alt="Rohit Sharma"
+                                    src={data?.pmsCoordinator?.photo || undefined}
+                                    alt={safe(data?.pmsCoordinator?.name, 'PMS Coordinator')}
                                     className="absolute inset-0 h-full w-full object-cover"
                                     onError={(event) => { event.currentTarget.style.display = 'none'; }}
                                 />
                             </div>
                             <div>
-                                <strong className="block text-xs font-semibold text-[#061743]">Rohit Sharma</strong>
-                                <span className="mt-1 block text-[9px] font-medium text-[#31446c]">PMS Scheme Coordinator</span>
+                                <strong className="block text-xs font-semibold text-[#061743]">{safe(data?.pmsCoordinator?.name)}</strong>
+                                <span className="mt-1 block text-[9px] font-medium text-[#31446c]">{safe(data?.pmsCoordinator?.designation)}</span>
                             </div>
                         </div>
 
-                        <a href="tel:+919654900525" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
+                        <a href={data?.pmsCoordinator?.phone ? `tel:${data.pmsCoordinator.phone}` : undefined} className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
                             <Phone size={15} strokeWidth={1.9} className="shrink-0 text-[#5924c6]" />
-                            <span>+91 96549 00525</span>
+                            <span>{safe(data?.pmsCoordinator?.phone)}</span>
                         </a>
-                        <a href="https://wa.me/919654900525" target="_blank" rel="noreferrer" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
+                        <a href={data?.pmsCoordinator?.whatsapp ? `https://wa.me/${String(data.pmsCoordinator.whatsapp).replace(/\D/g, '')}` : undefined} target="_blank" rel="noreferrer" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
                             <FaWhatsapp size={15} strokeWidth={1.9} className="shrink-0 text-[#089a50]" />
                             <span>WhatsApp Chat</span>
                         </a>
-                        <a href="mailto:pms.support@ihwe.com" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
+                        <a href={data?.pmsCoordinator?.email ? `mailto:${data.pmsCoordinator.email}` : undefined} className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
                             <Mail size={15} strokeWidth={1.9} className="shrink-0 text-[#5924c6]" />
-                            <span>pms.support@ihwe.com</span>
+                            <span>{safe(data?.pmsCoordinator?.email)}</span>
                         </a>
 
                         <button type="button" className="mt-1.5 h-[34px] w-full rounded-md border border-[#5924c6] bg-white text-[10px] font-semibold text-[#5924c6]">

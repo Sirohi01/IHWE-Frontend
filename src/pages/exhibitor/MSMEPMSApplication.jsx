@@ -256,60 +256,60 @@ function ExpenseCard({ icon, title, note, selected, onClick }) {
     );
 }
 
-export default function MSMEPMSApplication({ data }) {
+export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, saving }) {
     const initialCompanyName = fieldValue(
         data,
         ['exhibitorName', 'companyName', 'organizationName'],
-        'Velruma Pvt. Ltd.'
+        ''
     );
 
     const stallNo = fieldValue(
         data,
-        ['participation.stallFor', 'participation.stall.stallNumber', 'participation.stallNumber', 'stallFor', 'participation.stallNo', 'stallNo'],
-        '139'
+        ['event.stallNumber', 'participation.stallFor', 'participation.stall.stallNumber', 'participation.stallNumber', 'stallFor', 'participation.stallNo', 'stallNo'],
+        ''
     );
 
     const hallNo = fieldValue(
         data,
-        ['participation.stall.hallNo', 'participation.hallNo', 'hallNo'],
-        'Hall 9'
+        ['event.hallNumber', 'participation.stall.hallNo', 'participation.hallNo', 'hallNo'],
+        'Hall 8, 9 & 10'
     );
 
     const stallSize = fieldValue(
         data,
-        ['participation.stallSize', 'participation.stall.area', 'participation.area', 'stallSize'],
-        '18 Sqm'
+        ['event.stallSize', 'participation.stallSize', 'participation.stall.area', 'participation.area', 'stallSize'],
+        ''
     );
 
-    const contactName = [data?.contact1?.firstName, data?.contact1?.lastName]
+    const contactName = data?.contactName || [data?.contact1?.firstName, data?.contact1?.lastName]
         .filter(Boolean)
-        .join(' ') || 'Manish Sirohi';
+        .join(' ');
 
     const [form, setForm] = useState(() => ({
         companyName: initialCompanyName,
-        udyamRegNo: safe(data?.msme?.udyamRegNo, 'UP09D0012345'),
-        gstNumber: safe(data?.gstNo || data?.gstNumber, '09AAACV1234A1Z5'),
-        panNumber: safe(data?.panNo || data?.panNumber, 'AAACV1234A'),
-        organizationType: safe(data?.organizationType, 'Private Limited Company'),
-        yearOfEstablishment: safe(data?.yearOfEstablishment, '2021'),
-        msmeCategory: safe(data?.msme?.msmeCategory, 'Micro'),
+        udyamRegNo: safe(data?.msme?.udyamRegNo, ''),
+        gstNumber: safe(data?.gstNo || data?.gstNumber, ''),
+        panNumber: safe(data?.panNo || data?.panNumber, ''),
+        organizationType: safe(data?.organizationType, ''),
+        yearOfEstablishment: safe(data?.yearOfEstablishment, ''),
+        msmeCategory: safe(data?.msme?.msmeCategory, ''),
         contactName,
-        designation: safe(data?.contact1?.designation, 'Director'),
-        mobileNumber: safe(data?.contact1?.mobile, '+91 95682 59784'),
-        alternateNumber: safe(data?.contact1?.alternateNo, '+91 98102 42071'),
-        addressLine1: safe(data?.address, '12/52, Site-II, Loni Road, Industrial Area'),
-        addressLine2: safe(data?.addressLine2, 'Mohan Nagar'),
-        country: safe(data?.country, 'India'),
-        state: safe(data?.state, 'Uttar Pradesh'),
-        city: safe(data?.city, 'Ghaziabad'),
-        pincode: safe(data?.pincode, '201007'),
-        eventName: '9th International Health & Wellness Expo 2026',
+        designation: safe(data?.contact1?.designation || data?.designation, ''),
+        mobileNumber: safe(data?.contact1?.mobile || data?.mobileNumber, ''),
+        alternateNumber: safe(data?.contact1?.alternateNo || data?.alternateNumber, ''),
+        addressLine1: safe(data?.address || data?.addressLine1, ''),
+        addressLine2: safe(data?.addressLine2, ''),
+        country: safe(data?.country, ''),
+        state: safe(data?.state, ''),
+        city: safe(data?.city, ''),
+        pincode: safe(data?.pincode, ''),
+        eventName: safe(data?.event?.name || data?.eventName, ''),
         stallNo,
         hallNo,
         stallSize,
-        participationType: 'Shell Space',
-        bookingStatus: 'Confirmed',
-        paymentStatus: 'Fully Paid',
+        participationType: safe(data?.event?.participationType || data?.participationType, ''),
+        bookingStatus: safe(data?.event?.bookingStatus || data?.bookingStatus, ''),
+        paymentStatus: safe(data?.event?.paymentStatus || data?.paymentStatus, ''),
     }));
     const [selectedExpenses, setSelectedExpenses] = useState(['Stall Charges']);
 
@@ -353,10 +353,7 @@ export default function MSMEPMSApplication({ data }) {
         { name: 'pincode', label: 'Pincode', required: true },
     ];
 
-    const coordinatorImage = safe(
-        data?.pmsCoordinator?.photo,
-        'https://api.dicebear.com/7.x/avataaars/svg?seed=Rohit&backgroundColor=eef2f7'
-    );
+    const coordinatorImage = data?.pmsCoordinator?.photo || '';
 
     const greenFieldClass = cx(
         '[&_.pms-control]:w-fit [&_.pms-control]:min-w-[78px]',
@@ -377,11 +374,11 @@ export default function MSMEPMSApplication({ data }) {
                 <div className={"grid grid-cols-[181px_93px_126px] gap-[14px] [@media(max-height:1100px)_and_(min-width:1181px)]:grid-cols-[174px_92px_118px] [@media(max-height:1100px)_and_(min-width:1181px)]:gap-[10px] max-[820px]:mt-4 max-[820px]:grid-cols-1"}>
                     <div className={"h-[55px] rounded-[7px] border border-[#dbe4ef] bg-white px-4 pt-[10px] pb-2 shadow-[0_1px_2px_rgba(5,23,67,0.02)] [@media(max-height:1100px)_and_(min-width:1181px)]:h-[49px] [@media(max-height:1100px)_and_(min-width:1181px)]:px-[13px] [@media(max-height:1100px)_and_(min-width:1181px)]:pt-2 [@media(max-height:1100px)_and_(min-width:1181px)]:pb-[7px]"}>
                         <span className={"block text-[10px] leading-none font-medium text-[#31436b]"}>Application ID</span>
-                        <strong className={"mt-[7px] block whitespace-nowrap text-[12px] leading-none font-extrabold text-[#061743] [@media(max-height:1100px)_and_(min-width:1181px)]:mt-1.5"}>{safe(data?.applicationId, 'PMS-IHWE-2026-00139')}</strong>
+                        <strong className={"mt-[7px] block whitespace-nowrap text-[12px] leading-none font-extrabold text-[#061743] [@media(max-height:1100px)_and_(min-width:1181px)]:mt-1.5"}>{safe(data?.applicationId)}</strong>
                     </div>
                     <div className={"h-[55px] rounded-[7px] border border-[#dbe4ef] bg-white px-4 pt-[10px] pb-2 shadow-[0_1px_2px_rgba(5,23,67,0.02)] [@media(max-height:1100px)_and_(min-width:1181px)]:h-[49px] [@media(max-height:1100px)_and_(min-width:1181px)]:px-[13px] [@media(max-height:1100px)_and_(min-width:1181px)]:pt-2 [@media(max-height:1100px)_and_(min-width:1181px)]:pb-[7px]"}>
                         <span className={"block text-[10px] leading-none font-medium text-[#31436b]"}>Status</span>
-                        <strong className={cx("mt-[7px] block whitespace-nowrap text-[12px] leading-none font-extrabold text-[#061743] [@media(max-height:1100px)_and_(min-width:1181px)]:mt-1.5", '!text-[#f25a1d]')}>Draft</strong>
+                        <strong className={cx("mt-[7px] block whitespace-nowrap text-[12px] leading-none font-extrabold text-[#061743] [@media(max-height:1100px)_and_(min-width:1181px)]:mt-1.5", '!text-[#f25a1d]')}>{safe(data?.status)}</strong>
                     </div>
                     <div className={"h-[55px] rounded-[7px] border border-[#dbe4ef] bg-white px-4 pt-[10px] pb-2 shadow-[0_1px_2px_rgba(5,23,67,0.02)] [@media(max-height:1100px)_and_(min-width:1181px)]:h-[49px] [@media(max-height:1100px)_and_(min-width:1181px)]:px-[13px] [@media(max-height:1100px)_and_(min-width:1181px)]:pt-2 [@media(max-height:1100px)_and_(min-width:1181px)]:pb-[7px]"}>
                         <span className={"block text-[10px] leading-none font-medium text-[#31436b]"}>Progress</span>
@@ -594,6 +591,8 @@ export default function MSMEPMSApplication({ data }) {
                         <footer className={"grid h-[52px] min-w-0 grid-cols-[141px_minmax(0,1fr)_180px] items-center gap-[14px] rounded-lg border border-[#dbe4ef] bg-white p-[7px_8px] [@media(max-height:1100px)_and_(min-width:1181px)]:h-[46px] [@media(max-height:1100px)_and_(min-width:1181px)]:p-[5px_7px] max-[1180px]:[min-height:auto] max-[820px]:h-auto max-[820px]:grid-cols-1"}>
                             <button
                                 type="button"
+                                disabled={saving}
+                                onClick={() => onSaveDraft?.(form, selectedExpenses)}
                                 className={cx("flex h-[35px] cursor-pointer items-center justify-center gap-[9px] rounded-[5px] font-[inherit] text-[10px] leading-none font-bold [@media(max-height:1100px)_and_(min-width:1181px)]:h-8", 'border border-[#d5deea] bg-white text-[#061743]')}
                             >
                                 <Save size={15} strokeWidth={2} />
@@ -612,7 +611,8 @@ export default function MSMEPMSApplication({ data }) {
                                     'relative border-0 bg-[linear-gradient(90deg,#0b7137_0%,#087536_100%)] text-white',
                                     'shadow-[0_4px_9px_rgba(8,117,54,0.18)]'
                                 )}
-                                onClick={()=> navigate('/exhibitor-dashboard/msme/bank-details')}
+                                disabled={saving}
+                                onClick={() => onContinue?.(form, selectedExpenses)}
                             >
                                 Save &amp; Continue
                                 <ArrowRight className="absolute right-[13px] m-0" size={18} strokeWidth={2} />
@@ -635,10 +635,10 @@ export default function MSMEPMSApplication({ data }) {
                             Application Summary
                         </h2>
                         <SummaryRow label="Company Name" value={companyName} checked={false} navy />
-                        <SummaryRow label="Udyam Registration" value="Verified" />
-                        <SummaryRow label="GST Number" value="Verified" />
-                        <SummaryRow label="IHWE Booking" value="Confirmed" />
-                        <SummaryRow label="Payment Status" value="Fully Paid" />
+                        <SummaryRow label="Udyam Registration" value={data?.msme?.udyamRegNo ? safe(data?.verificationStatus || 'Submitted') : 'Pending'} />
+                        <SummaryRow label="GST Number" value={data?.gstNo ? safe(data?.kycStatus || 'Submitted') : 'Pending'} />
+                        <SummaryRow label="IHWE Booking" value={safe(form.bookingStatus)} />
+                        <SummaryRow label="Payment Status" value={safe(form.paymentStatus)} />
                     </section>
 
                     <section
@@ -653,7 +653,7 @@ export default function MSMEPMSApplication({ data }) {
                             <small className="-ml-[5px] text-[8px] font-medium text-[#31446c]">(Indicative)</small>
                         </h2>
                         <strong className="block text-[28px] leading-none font-extrabold tracking-[0.3px] text-[#087536] [@media(max-height:1100px)_and_(min-width:1181px)]:text-[25px]">
-                            ₹ 1,50,000*
+                            {data?.claim?.eligibleAmount != null ? `₹ ${Number(data.claim.eligibleAmount).toLocaleString('en-IN')}` : '—'}
                         </strong>
                         <p className="mt-3 mb-[14px] text-[9.5px] leading-[1.55] font-medium text-[#31446c] [@media(max-height:1100px)_and_(min-width:1181px)]:mt-2 [@media(max-height:1100px)_and_(min-width:1181px)]:mb-[10px] [@media(max-height:1100px)_and_(min-width:1181px)]:leading-[1.35]">
                             Maximum benefit subject to scheme rules and authority approval.
@@ -674,35 +674,35 @@ export default function MSMEPMSApplication({ data }) {
                         )}
                     >
                         <h2 className="mb-[13px] flex items-center gap-[9px] text-[13px] leading-none font-extrabold text-[#5924c6] [@media(max-height:1100px)_and_(min-width:1181px)]:mb-2">
-                            <Headphones size={19} strokeWidth={1.8} /> PMS Help Desk
+                            <Headphones size={19} strokeWidth={1.8} /> Relationship Manager
                         </h2>
 
                         <div className="mb-[10px] flex items-center gap-3 [@media(max-height:1100px)_and_(min-width:1181px)]:mb-1.5">
                             <div className="relative grid h-12 w-12 flex-none place-items-center overflow-hidden rounded-full bg-[#eef2f7] text-[12px] font-extrabold text-[#061743] [@media(max-height:1100px)_and_(min-width:1181px)]:h-[42px] [@media(max-height:1100px)_and_(min-width:1181px)]:w-[42px]">
-                                <span>RS</span>
-                                <img
+                                <span>{data?.pmsCoordinator?.initials || '—'}</span>
+                                {coordinatorImage && <img
                                     className="absolute inset-0 h-full w-full object-cover"
                                     src={coordinatorImage}
-                                    alt="Rohit Sharma"
+                                    alt={safe(data?.pmsCoordinator?.name, 'PMS Coordinator')}
                                     onError={(event) => { event.currentTarget.style.display = 'none'; }}
-                                />
+                                />}
                             </div>
                             <div>
-                                <strong className="block text-[12px] leading-none font-extrabold text-[#061743]">Rohit Sharma</strong>
-                                <span className="mt-[7px] block text-[9px] leading-none font-medium text-[#31446c]">PMS Scheme Coordinator</span>
+                                <strong className="block text-[12px] leading-none font-extrabold text-[#061743]">{safe(data?.pmsCoordinator?.name)}</strong>
+                                <span className="mt-[7px] block text-[9px] leading-none font-medium text-[#31446c]">{safe(data?.pmsCoordinator?.designation)}</span>
                             </div>
                         </div>
 
                         <a
                             className="mt-[5px] flex h-[31px] w-full min-w-0 items-center gap-[10px] rounded-[5px] border border-[#e0e7f0] bg-white px-[9px] text-[9.5px] leading-none font-bold text-[#061743] no-underline [@media(max-height:1100px)_and_(min-width:1181px)]:mt-1 [@media(max-height:1100px)_and_(min-width:1181px)]:h-[27px]"
-                            href="tel:+919654900525"
+                            href={data?.pmsCoordinator?.phone ? `tel:${data.pmsCoordinator.phone}` : undefined}
                         >
                             <Phone className="flex-none text-[#5924c6]" size={15} strokeWidth={1.9} />
-                            <span>+91 96549 00525</span>
+                            <span>{safe(data?.pmsCoordinator?.phone)}</span>
                         </a>
                         <a
                             className="mt-[5px] flex h-[31px] w-full min-w-0 items-center gap-[10px] rounded-[5px] border border-[#e0e7f0] bg-white px-[9px] text-[9.5px] leading-none font-bold text-[#061743] no-underline [@media(max-height:1100px)_and_(min-width:1181px)]:mt-1 [@media(max-height:1100px)_and_(min-width:1181px)]:h-[27px]"
-                            href="https://wa.me/919654900525"
+                            href={data?.pmsCoordinator?.whatsapp ? `https://wa.me/${String(data.pmsCoordinator.whatsapp).replace(/\D/g, '')}` : undefined}
                             target="_blank"
                             rel="noreferrer"
                         >
@@ -711,10 +711,10 @@ export default function MSMEPMSApplication({ data }) {
                         </a>
                         <a
                             className="mt-[5px] flex h-[31px] w-full min-w-0 items-center gap-[10px] rounded-[5px] border border-[#e0e7f0] bg-white px-[9px] text-[9.5px] leading-none font-bold text-[#061743] no-underline [@media(max-height:1100px)_and_(min-width:1181px)]:mt-1 [@media(max-height:1100px)_and_(min-width:1181px)]:h-[27px]"
-                            href="mailto:pms.support@ihwe.com"
+                            href={data?.pmsCoordinator?.email ? `mailto:${data.pmsCoordinator.email}` : undefined}
                         >
                             <Mail className="flex-none text-[#5924c6]" size={15} strokeWidth={1.9} />
-                            <span>pms.support@ihwe.com</span>
+                            <span>{safe(data?.pmsCoordinator?.email)}</span>
                         </a>
 
                         <div className="mt-[5px] flex h-[42px] w-full min-w-0 items-start gap-[10px] rounded-[5px] border border-[#e0e7f0] bg-white px-[9px] pt-[7px] text-[9.5px] leading-none font-bold text-[#061743] [@media(max-height:1100px)_and_(min-width:1181px)]:mt-1 [@media(max-height:1100px)_and_(min-width:1181px)]:h-9 [@media(max-height:1100px)_and_(min-width:1181px)]:pt-[5px]">

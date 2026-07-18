@@ -157,7 +157,7 @@ function StatusBadge({ status }) {
     );
 }
 
-function DocumentRow({ index, doc, onUpload }) {
+function DocumentRow({ index, doc, onUpload, onDelete }) {
     const isUploaded = doc.status === 'Uploaded';
 
     return (
@@ -193,13 +193,14 @@ function DocumentRow({ index, doc, onUpload }) {
             </td>
             <td className="whitespace-nowrap p-1.5 text-right">
                 {isUploaded ? (
-                    <button type="button" className="h-[20px] w-[64px] rounded-md border border-[#b7ecd0] text-center text-[9px] font-semibold text-[#087536]">
-                        View
+                    <button type="button" onClick={() => onDelete(doc.id)} className="h-[20px] w-[64px] rounded-md border border-red-200 text-center text-[9px] font-semibold text-red-600">
+                        Remove
                     </button>
                 ) : (
-                    <button type="button" onClick={() => onUpload(doc.id)} className="h-[20px] w-[64px] rounded-md border border-[#5924c6] text-center text-[9px] font-semibold text-[#5924c6]">
+                    <label className="inline-flex h-[20px] w-[64px] cursor-pointer items-center justify-center rounded-md border border-[#5924c6] text-center text-[9px] font-semibold text-[#5924c6]">
                         Upload
-                    </button>
+                        <input type="file" accept="application/pdf,image/jpeg,image/png" className="hidden" onChange={(event) => { const file = event.target.files?.[0]; if (file) onUpload(doc.id, file); event.target.value = ''; }} />
+                    </label>
                 )}
             </td>
         </tr>
@@ -255,13 +256,26 @@ function ProgressRing({ percent }) {
     );
 }
 
-export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
-    const companyName = fieldValue(data, ['exhibitorName', 'companyName', 'organizationName'], 'Velruma Pvt. Ltd.');
-    const msmeCategory = safe(data?.msme?.msmeCategory, 'Micro');
-    const udyamNumber = safe(data?.msme?.udyamRegNo, 'UP09D0012345');
-    const gstNumber = safe(data?.gstNo || data?.gstNumber, '09AAACV1234A1Z5');
+export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpload, onDelete, saving }) {
+    const companyName = fieldValue(data, ['exhibitorName', 'companyName', 'organizationName'], '—');
+    const msmeCategory = safe(data?.msme?.msmeCategory);
+    const udyamNumber = safe(data?.msme?.udyamRegNo);
+    const gstNumber = safe(data?.gstNo || data?.gstNumber);
 
-    const [documents, setDocuments] = useState(REQUIRED_DOCUMENTS);
+    const selectedExpenses = new Set(data?.selectedExpenses || ['Stall Charges']);
+    const requiredForApplication = (doc) => {
+        if (['udyam', 'gst', 'pan', 'aadhaar', 'cheque', 'statement'].includes(doc.id)) return true;
+        if (['hotelInvoice', 'hotelPayment'].includes(doc.id)) return selectedExpenses.has('Hotel Stay');
+        if (['travelExpense', 'travelInvoice'].includes(doc.id)) return selectedExpenses.has('Travel');
+        if (doc.id === 'courier') return selectedExpenses.has('Courier');
+        if (doc.id === 'marketing') return selectedExpenses.has('Marketing Material');
+        return false;
+    };
+    const documentDefinitions = REQUIRED_DOCUMENTS.map(doc => ({ ...doc, required: requiredForApplication(doc) }));
+    const [documents, setDocuments] = useState(() => documentDefinitions.map(doc => {
+        const uploaded = data?.documents?.find(item => item.documentType === doc.id);
+        return uploaded ? { ...doc, status: 'Uploaded', file: uploaded.filename, size: uploaded.size ? `${Math.round(uploaded.size / 1024)} KB` : '' } : { ...doc, file: null, size: null, status: 'Pending' };
+    }));
 
     const uploadedCount = documents.filter(doc => doc.status === 'Uploaded').length;
     const totalCount = documents.length;
@@ -269,12 +283,13 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
     const percentComplete = Math.round((uploadedCount / totalCount) * 100);
     const allUploaded = pendingCount === 0;
   const navigate = useNavigate();
-    const handleUpload = (id) => {
-        setDocuments(prev => prev.map(doc => (
-            doc.id === id
-                ? { ...doc, status: 'Uploaded', file: `${doc.id}.pdf`, size: `${Math.floor(120 + Math.random() * 600)} KB` }
-                : doc
-        )));
+    const handleUpload = async (id, file) => {
+        await onUpload?.(id, file);
+        setDocuments(prev => prev.map(doc => doc.id === id ? { ...doc, status: 'Uploaded', file: file.name, size: `${Math.round(file.size / 1024)} KB` } : doc));
+    };
+    const handleDelete = async (id) => {
+        await onDelete?.(id);
+        setDocuments(prev => prev.map(doc => doc.id === id ? { ...doc, status: 'Pending', file: null, size: null } : doc));
     };
 
     return (
@@ -291,12 +306,12 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
                     <div className="h-[55px] w-fit rounded-lg border border-[#dbe4ef] bg-blue-50 px-3 pb-2 pt-2 shadow-sm">
                         <span className="block text-[10px] font-medium text-[#31436b]">Application ID</span>
                         <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#061743]">
-                            {safe(data?.applicationId, 'PMS-IHWE-2026-00139')}
+                            {safe(data?.applicationId)}
                         </strong>
                     </div>
                     <div className="h-[55px] w-fit rounded-lg border border-orange-100 bg-orange-50 px-3 pb-2 pt-2 shadow-sm pr-5">
                         <span className="block text-[10px] font-medium text-[#31436b]">Status</span>
-                        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#f25a1d]">Draft</strong>
+                        <strong className="mt-1 block whitespace-nowrap text-xs font-semibold text-[#f25a1d]">{safe(data?.status, 'Draft')}</strong>
                     </div>
                 </div>
             </header>
@@ -361,13 +376,13 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
                                     </thead>
                                     <tbody>
                                         {documents.map((doc, index) => (
-                                            <DocumentRow key={doc.id} index={index} doc={doc} onUpload={handleUpload} />
+                                            <DocumentRow key={doc.id} index={index} doc={doc} onUpload={handleUpload} onDelete={handleDelete} />
                                         ))}
                                     </tbody>
                                 </table>
                             </div>
 
-                            <InfoBanner>All documents must be clear, readable and in PDF / JPG / PNG format. Maximum file size allowed: 5MB per file.</InfoBanner>
+                            <InfoBanner>All documents must be clear, readable and in PDF / JPG / PNG format. Maximum file size allowed: 10MB per file.</InfoBanner>
                         </Section>
 
                         <Section letter="B" title="IHWE Auto-Generated Documents" note="(No upload required)" icon={<FileCheck2 size={17} strokeWidth={1.8} />}>
@@ -383,6 +398,7 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
                         <footer className="grid grid-cols-1 items-center gap-2 rounded-lg border border-[#dbe4ef] bg-white p-1.5 sm:grid-cols-[120px_minmax(0,1fr)_190px]">
                             <button
                                 type="button"
+                                disabled={saving}
                                 onClick={() => navigate("/exhibitor-dashboard/msme/bank-details")}
                                 className="flex h-7 items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white text-[10px] font-semibold text-[#061743]"
                             >
@@ -400,9 +416,9 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
 
                             <button
                                 type="button"
-                                onClick={() => navigate("/exhibitor-dashboard/msme/pms-approved")}
-                                // disabled={!allUploaded}
-                                className={`flex h-7 items-center justify-center gap-2 rounded-md text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)] ${allUploaded ? 'bg-gradient-to-r from-[#0b7137] to-[#087536]' : 'cursor-not-allowed bg-gradient-to-r from-[#0b7137]/50 to-[#087536]/50'
+                                onClick={() => onContinue?.()}
+                                disabled={saving || !documentDefinitions.filter(doc => doc.required).every(required => documents.some(doc => doc.id === required.id && doc.status === 'Uploaded'))}
+                                className={`flex h-7 items-center justify-center gap-2 rounded-md text-[10px] font-semibold text-white shadow-[0_4px_9px_rgba(8,117,54,0.18)] ${documentDefinitions.filter(doc => doc.required).every(required => documents.some(doc => doc.id === required.id && doc.status === 'Uploaded')) ? 'bg-gradient-to-r from-[#0b7137] to-[#087536]' : 'cursor-not-allowed bg-gradient-to-r from-[#0b7137]/50 to-[#087536]/50'
                                     }`}
                             >
                                 Save &amp; Continue
@@ -424,8 +440,8 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
                         <SummaryRow label="MSME Category" value={msmeCategory} />
                         <SummaryRow label="Udyam Number" value={udyamNumber} />
                         <SummaryRow label="GST Number" value={gstNumber} />
-                        <SummaryRow label="Booking Status" value="Confirmed" />
-                        <SummaryRow label="Payment Status" value="Fully Paid" />
+                        <SummaryRow label="Booking Status" value={safe(data?.event?.bookingStatus || data?.bookingStatus)} />
+                        <SummaryRow label="Payment Status" value={safe(data?.event?.paymentStatus || data?.paymentStatus)} />
                     </section>
 
                     <section className="min-w-0 overflow-hidden rounded-xl border border-[#dbe4ef] bg-white px-3 py-1.5">
@@ -447,36 +463,36 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue }) {
                     <section className="min-w-0 overflow-hidden rounded-xl border border-[#dbe4ef] bg-white px-3 py-1.5">
                         <h2 className="mb-1.5 flex items-center gap-2 text-[13px] font-semibold text-[#5924c6]">
                             <Headphones size={19} strokeWidth={1.8} />
-                            PMS Coordinator
+                            Relationship Manager
                         </h2>
 
                         <div className="mb-1.5 flex items-center gap-2">
                             <div className="relative grid h-12 w-12 shrink-0 place-items-center overflow-hidden rounded-full bg-[#eef2f7] text-xs font-semibold text-[#061743]">
                                 <span>RS</span>
                                 <img
-                                    src={safe(data?.pmsCoordinator?.photo, 'https://api.dicebear.com/7.x/avataaars/svg?seed=Rohit&backgroundColor=eef2f7')}
-                                    alt="Rohit Sharma"
+                                    src={data?.pmsCoordinator?.photo || undefined}
+                                    alt={safe(data?.pmsCoordinator?.name, 'PMS Coordinator')}
                                     className="absolute inset-0 h-full w-full object-cover"
                                     onError={(event) => { event.currentTarget.style.display = 'none'; }}
                                 />
                             </div>
                             <div>
-                                <strong className="block text-xs font-semibold text-[#061743]">Rohit Sharma</strong>
-                                <span className="mt-1 block text-[9px] font-medium text-[#31446c]">PMS Scheme Coordinator</span>
+                                <strong className="block text-xs font-semibold text-[#061743]">{safe(data?.pmsCoordinator?.name)}</strong>
+                                <span className="mt-1 block text-[9px] font-medium text-[#31446c]">{safe(data?.pmsCoordinator?.designation)}</span>
                             </div>
                         </div>
 
-                        <a href="tel:+919654900525" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
+                        <a href={data?.pmsCoordinator?.phone ? `tel:${data.pmsCoordinator.phone}` : undefined} className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
                             <Phone size={15} strokeWidth={1.9} className="shrink-0 text-[#5924c6]" />
-                            <span>+91 96549 00525</span>
+                            <span>{safe(data?.pmsCoordinator?.phone)}</span>
                         </a>
-                        <a href="https://wa.me/919654900525" target="_blank" rel="noreferrer" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
+                        <a href={data?.pmsCoordinator?.whatsapp ? `https://wa.me/${String(data.pmsCoordinator.whatsapp).replace(/\D/g, '')}` : undefined} target="_blank" rel="noreferrer" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
                             <FaWhatsapp size={15} strokeWidth={1.9} className="shrink-0 text-[#089a50]" />
                             <span>WhatsApp Support</span>
                         </a>
-                        <a href="mailto:pms.support@ihwe.com" className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
+                        <a href={data?.pmsCoordinator?.email ? `mailto:${data.pmsCoordinator.email}` : undefined} className="mt-1 flex h-[31px] min-w-0 items-center gap-2.5 rounded-md border border-[#e0e7f0] bg-white px-2.5 text-[9.5px] font-semibold text-[#061743] no-underline">
                             <Mail size={15} strokeWidth={1.9} className="shrink-0 text-[#5924c6]" />
-                            <span>pms.support@ihwe.com</span>
+                            <span>{safe(data?.pmsCoordinator?.email)}</span>
                         </a>
                     </section>
 
