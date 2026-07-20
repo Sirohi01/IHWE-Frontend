@@ -151,9 +151,9 @@ function EditButton({ onClick }: { onClick?: () => void }) {
 function DetailRow({ label, value }: { label: string; value: ReactNode }) {
     return (
         <div className="flex items-start gap-1 py-[3px] text-[9px]">
-            <span className="w-[132px] shrink-0 font-medium text-[#5a6c92]">{label}</span>
+            <span className="flex-1 w-[48%] font-medium text-[#5a6c92]">{label}</span>
             <span className="font-medium text-[#5a6c92]">:</span>
-            <strong className="min-w-0 break-words font-semibold text-[#061743]">{value}</strong>
+            <strong className="flex-1 w-[48%] break-words font-semibold text-[#061743]">{value}</strong>
         </div>
     );
 }
@@ -161,10 +161,13 @@ function DetailRow({ label, value }: { label: string; value: ReactNode }) {
 function DetailRowVerified({ label, value }: { label: string; value: ReactNode }) {
     return (
         <div className="flex items-center gap-1 py-[3px] text-[9.5px]">
-            <span className="w-[132px] shrink-0 font-medium text-[#5a6c92]">{label}</span>
+            <span className="flex-1 w-[48%] font-medium text-[#5a6c92]">{label}</span>
             <span className="font-medium text-[#5a6c92]">:</span>
+            <div className='flex-1 w-[48%] flex gap-1'>
+
             <strong className="font-semibold text-[#087536]">{value}</strong>
             <CheckCircle2 size={12} strokeWidth={2.2} className="text-[#087536]" />
+            </div>
         </div>
     );
 }
