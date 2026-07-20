@@ -6,8 +6,10 @@ const authHeaders = (json = false) => {
   return { ...(json ? { 'Content-Type': 'application/json' } : {}), Authorization: `Bearer ${token || ''}` };
 };
 
-async function request(path: string, options: RequestInit = {}) {
-  const response = await fetch(`${API_URL}/msme-pms-scheme${path}`, options);
+async function request(path: string, options: RequestInit = {}, exhibitorId = '') {
+  const separator = path.includes('?') ? '&' : '?';
+  const selectedQuery = exhibitorId ? `${separator}exhibitorId=${encodeURIComponent(exhibitorId)}` : '';
+  const response = await fetch(`${API_URL}/msme-pms-scheme${path}${selectedQuery}`, options);
   const payload = await response.json().catch(() => ({}));
   if (!response.ok) {
     const detail = payload.fields?.join(', ') || payload.documentTypes?.join(', ') || payload.missingDocuments?.join(', ');
@@ -17,6 +19,7 @@ async function request(path: string, options: RequestInit = {}) {
 }
 
 export function useMsmePmsApplication(exhibitorData: any) {
+  const selectedExhibitorId = String(exhibitorData?._id || '');
   const [application, setApplication] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -26,10 +29,10 @@ export function useMsmePmsApplication(exhibitorData: any) {
   const refresh = useCallback(async () => {
     setLoading(true);
     setError('');
-    try { setApplication(await request('/application/me', { headers: authHeaders() })); }
+    try { setApplication(await request('/application/me', { headers: authHeaders() }, selectedExhibitorId)); }
     catch (err: any) { setError(err.message); }
     finally { setLoading(false); }
-  }, []);
+  }, [selectedExhibitorId]);
 
   useEffect(() => { refresh(); }, [refresh]);
 
@@ -57,18 +60,18 @@ export function useMsmePmsApplication(exhibitorData: any) {
 
   const saveStep = useCallback((step: number, body: any) => run(() => request(`/application/step/${step}`, {
     method: 'PUT', headers: authHeaders(true), body: JSON.stringify(body),
-  })), [run]);
+  }, selectedExhibitorId)), [run, selectedExhibitorId]);
 
   const uploadDocument = useCallback((documentType: string, file: File) => run(() => {
     const form = new FormData(); form.append('file', file);
-    return request(`/application/documents/${documentType}`, { method: 'POST', headers: authHeaders(), body: form });
-  }), [run]);
+    return request(`/application/documents/${documentType}`, { method: 'POST', headers: authHeaders(), body: form }, selectedExhibitorId);
+  }), [run, selectedExhibitorId]);
 
   const deleteDocument = useCallback((documentType: string) => run(() => request(`/application/documents/${documentType}`, {
     method: 'DELETE', headers: authHeaders(),
-  })), [run]);
+  }, selectedExhibitorId)), [run, selectedExhibitorId]);
 
-  const submit = useCallback(() => run(() => request('/application/submit', { method: 'POST', headers: authHeaders(true), body: '{}' })), [run]);
+  const submit = useCallback(() => run(() => request('/application/submit', { method: 'POST', headers: authHeaders(true), body: '{}' }, selectedExhibitorId)), [run, selectedExhibitorId]);
 
   const data = useMemo(() => {
     const participation = exhibitorData?.participation || {};
