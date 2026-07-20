@@ -10,6 +10,7 @@ import {
     Info,
     Landmark,
     Lightbulb,
+    Loader2,
     Mail,
     MessageCircle,
     Phone,
@@ -158,15 +159,28 @@ function PaymentRow({ label, value, badge }) {
 function UploadCard({ title, required, hint, status, onFileSelect }) {
     const isPending = status === 'Pending';
     const fileInputRef = useRef(null);
+    const [loading, setLoading] = useState(false);
 
     const handleButtonClick = () => {
-        fileInputRef.current?.click();
+        if (!loading) {
+            fileInputRef.current?.click();
+        }
     };
 
-    const handleFileChange = (e) => {
+    const handleFileChange = async (e) => {
         const file = e.target.files?.[0];
         if (file && onFileSelect) {
-            onFileSelect(file);
+            setLoading(true);
+            try {
+                await onFileSelect(file);
+            } catch (error) {
+                console.error('Upload failed:', error);
+            } finally {
+                setLoading(false);
+            }
+        }
+        if (e.target) {
+            e.target.value = '';
         }
     };
 
@@ -180,29 +194,38 @@ function UploadCard({ title, required, hint, status, onFileSelect }) {
                 <small className="mt-0.5 block text-[8.5px] font-medium text-[#5a6c92]">{hint}</small>
             </div>
 
-            <div className="flex flex-col items-center gap-1 rounded-md border-[1.5px] border-dashed border-[#c7d3e3] bg-white px-2 py-1.5 text-center">
-                <span className="grid place-items-center text-[#6b7ea3]">
-                    <Upload size={18} strokeWidth={1.8} />
-                </span>
-                <p className="text-[9px] font-medium leading-[1.3] text-[#6b7ea3]">Drag &amp; drop file here<br />or</p>
-                <input
-                    ref={fileInputRef}
-                    type="file"
-                    accept="image/*,.pdf"
-                    onChange={handleFileChange}
-                    className="hidden"
-                />
-                <button
-                    type="button"
-                    onClick={handleButtonClick}
-                    className="rounded-md border border-[#cfe4d8] bg-[#eff9f3] px-3 py-1 text-[9px] font-semibold text-[#087536]"
-                >
-                    Upload File
-                </button>
+            <div className={`flex flex-col items-center justify-center min-h-[90px] gap-1 rounded-md border-[1.5px] border-dashed px-2 py-1.5 text-center transition-colors ${loading ? 'border-[#087536]/30 bg-[#f1fbf5]' : 'border-[#c7d3e3] bg-white'}`}>
+                {loading ? (
+                    <div className="flex flex-col items-center gap-2 py-1">
+                        <Loader2 className="animate-spin text-[#087536]" size={20} strokeWidth={2.5} />
+                        <span className="text-[9px] font-semibold text-[#087536]">Uploading...</span>
+                    </div>
+                ) : (
+                    <>
+                        <span className="grid place-items-center text-[#6b7ea3]">
+                            <Upload size={18} strokeWidth={1.8} />
+                        </span>
+                        <p className="text-[9px] font-medium leading-[1.3] text-[#6b7ea3]">Drag &amp; drop file here<br />or</p>
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*,.pdf"
+                            onChange={handleFileChange}
+                            className="hidden"
+                        />
+                        <button
+                            type="button"
+                            onClick={handleButtonClick}
+                            className="rounded-md border border-[#cfe4d8] bg-[#eff9f3] px-3 py-1 text-[9px] font-semibold text-[#087536]"
+                        >
+                            Upload File
+                        </button>
+                    </>
+                )}
             </div>
 
-            <span className={`text-[9px] font-semibold ${isPending ? 'text-[#e62f28]' : 'text-blue-600'}`}>
-                Status: {status}
+            <span className={`text-[9px] font-semibold ${loading ? 'text-[#087536]' : isPending ? 'text-[#e62f28]' : 'text-blue-600'}`}>
+                Status: {loading ? 'Uploading...' : status}
             </span>
         </div>
     );

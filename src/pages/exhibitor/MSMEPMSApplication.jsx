@@ -84,7 +84,7 @@ function InfoField({ label, value, required, type = 'text', options = [], onChan
                     <>
                         <select
                             className={cx(controlClass, 'cursor-pointer appearance-none pr-7')}
-                            value={value ?? ''}
+                            value={value == null ? '' : String(value)}
                             onChange={(event) => onChange?.(event.target.value)}
                         >
                             {options.map(option => (
@@ -303,8 +303,11 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
         udyamRegNo: safe(data?.msme?.udyamRegNo, ''),
         gstNumber: safe(data?.gstNo || data?.gstNumber, ''),
         panNumber: safe(data?.panNo || data?.panNumber, ''),
-        organizationType: safe(data?.organizationType, ''),
-        yearOfEstablishment: safe(data?.yearOfEstablishment, ''),
+        organizationType: safe(data?.organizationType, 'Private Limited Company'),
+        yearOfEstablishment:
+            data?.yearOfEstablishment != null
+                ? String(data.yearOfEstablishment)
+                : String(new Date().getFullYear()),
         msmeCategory: safe(data?.msme?.msmeCategory, ''),
         contactName,
         designation: safe(data?.designation || data?.contact1?.designation, ''),
@@ -312,17 +315,17 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
         alternateNumber: safe(data?.alternateNumber || data?.contact1?.alternateNo, ''),
         addressLine1: safe(data?.addressLine1 || data?.address, ''),
         addressLine2: safe(data?.addressLine2, ''),
-        country: safe(data?.country, ''),
-        state: safe(data?.state, ''),
+        country: safe(data?.country, 'India'),
+        state: safe(data?.state, 'Uttar Pradesh'),
         city: safe(data?.city, ''),
         pincode: safe(data?.pincode, ''),
         eventName: safe(data?.event?.name || data?.eventName, ''),
         stallNo,
         hallNo,
         stallSize,
-        participationType: safe(data?.event?.participationType || data?.participationType, ''),
-        bookingStatus: safe(data?.event?.bookingStatus || data?.bookingStatus, ''),
-        paymentStatus: safe(data?.event?.paymentStatus || data?.paymentStatus, ''),
+        participationType: safe(data?.event?.participationType || data?.participationType, 'Shell Space'),
+        bookingStatus: safe(data?.event?.bookingStatus || data?.bookingStatus, 'Confirmed'),
+        paymentStatus: safe(data?.event?.paymentStatus || data?.paymentStatus, 'Fully Paid'),
     }));
     const [selectedExpenses, setSelectedExpenses] = useState(() => {
         const saved = Array.isArray(data?.selectedExpenses) ? data.selectedExpenses : [];
@@ -376,8 +379,8 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
         '[&_.pms-control]:border-[#d0e9da] [&_.pms-control]:bg-[#f2faf5]',
         '[&_.pms-control]:font-bold [&_.pms-control]:text-[#087536]'
     );
-const navigate = useNavigate();
-useEffect(() => {
+    const navigate = useNavigate();
+    useEffect(() => {
         if (!data) return;
         setForm(prev => ({
             ...prev,
@@ -385,10 +388,10 @@ useEffect(() => {
             udyamRegNo: safe(data?.msme?.udyamRegNo, prev.udyamRegNo),
             gstNumber: safe(data?.gstNo || data?.gstNumber, prev.gstNumber),
             panNumber: safe(data?.panNo || data?.panNumber, prev.panNumber),
-            organizationType: safe(data?.organizationType, prev.organizationType),
+            organizationType: safe(data?.organizationType, prev.organizationType || 'Private Limited Company'),
             yearOfEstablishment: safe(
                 data?.yearOfEstablishment != null ? String(data.yearOfEstablishment) : null,
-                prev.yearOfEstablishment
+                prev.yearOfEstablishment || '2026'
             ),
             msmeCategory: safe(data?.msme?.msmeCategory, prev.msmeCategory),
             contactName: data?.contactName || [data?.contact1?.firstName, data?.contact1?.lastName].filter(Boolean).join(' ') || prev.contactName,
@@ -397,17 +400,17 @@ useEffect(() => {
             alternateNumber: safe(data?.alternateNumber || data?.contact1?.alternateNo, prev.alternateNumber),
             addressLine1: safe(data?.addressLine1 || data?.address, prev.addressLine1),
             addressLine2: safe(data?.addressLine2, prev.addressLine2),
-            country: safe(data?.country, prev.country),
-            state: safe(data?.state, prev.state),
+            country: safe(data?.country, prev.country || 'India'),
+            state: safe(data?.state, prev.state || 'Uttar Pradesh'),
             city: safe(data?.city, prev.city),
             pincode: safe(data?.pincode, prev.pincode),
             eventName: safe(data?.event?.name || data?.eventName, prev.eventName),
             stallNo: fieldValue(data, ['event.stallNumber', 'participation.stallFor', 'participation.stall.stallNumber', 'participation.stallNumber', 'stallFor', 'participation.stallNo', 'stallNo'], prev.stallNo),
             hallNo: fieldValue(data, ['event.hallNumber', 'participation.stall.hallNo', 'participation.hallNo', 'hallNo'], prev.hallNo),
             stallSize: fieldValue(data, ['event.stallSize', 'participation.stallSize', 'participation.stall.area', 'participation.area', 'stallSize'], prev.stallSize),
-            participationType: safe(data?.event?.participationType || data?.participationType, prev.participationType),
-            bookingStatus: safe(data?.event?.bookingStatus || data?.bookingStatus, prev.bookingStatus),
-            paymentStatus: safe(data?.event?.paymentStatus || data?.paymentStatus, prev.paymentStatus),
+            participationType: safe(data?.event?.participationType || data?.participationType, prev.participationType || 'Shell Space'),
+            bookingStatus: safe(data?.event?.bookingStatus || data?.bookingStatus, prev.bookingStatus || 'Confirmed'),
+            paymentStatus: safe(data?.event?.paymentStatus || data?.paymentStatus, prev.paymentStatus || 'Fully Paid'),
         }));
         setSelectedExpenses(prev => {
             const saved = Array.isArray(data?.selectedExpenses) ? data.selectedExpenses : [];
@@ -415,7 +418,7 @@ useEffect(() => {
         });
     }, [data]);
     return (
-       <div className={"box-border w-full h-[calc(100dvh-58px)] min-h-screen min-h-900 bg-white px-6 pt-5 pb-[18px] text-[#061743] [font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe_UI,sans-serif] antialiased [text-rendering:geometricPrecision] [&_*]:box-border [@media(max-height:1100px)_and_(min-width:1181px)]:px-5 [@media(max-height:1100px)_and_(min-width:1181px)]:pt-[13px] [@media(max-height:1100px)_and_(min-width:1181px)]:pb-[10px] [@media(max-width:1365px)_and_(min-width:1181px)]:px-[18px] max-[1180px]:h-auto max-[1180px]:min-h-[calc(100dvh-58px)] max-[1180px]:overflow-auto max-[1180px]:p-[18px] max-[820px]:px-4 max-[820px]:pt-4 max-[820px]:pb-6"}>
+        <div className="w-full min-h-[calc(100dvh-58px)] bg-white p-3 px-3 lg:px-6 pt-2 pb-3 font-sans text-[#061743] antialiased">
             <header className={"flex h-[61px] items-start justify-between gap-[22px] [@media(max-height:1100px)_and_(min-width:1181px)]:h-[52px] max-[1180px]:mb-[18px] max-[1180px]:h-auto max-[820px]:block max-[820px]:mb-6"}>
                 <div className={"pt-0.5 [@media(max-height:1100px)_and_(min-width:1181px)]:pt-0 max-[820px]:pt-0"}>
                     <h1 className={"m-0 text-[24px] leading-[1.08] font-semibold tracking-[-0.35px] text-[#061743] [@media(max-height:1100px)_and_(min-width:1181px)]:text-[21px] max-[820px]:text-[20px]"}>MSME PMS Application Form</h1>
