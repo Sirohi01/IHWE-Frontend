@@ -304,10 +304,11 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
         gstNumber: safe(data?.gstNo || data?.gstNumber, ''),
         panNumber: safe(data?.panNo || data?.panNumber, ''),
         organizationType: safe(data?.organizationType, 'Private Limited Company'),
-        yearOfEstablishment:
-            data?.yearOfEstablishment != null
-                ? String(data.yearOfEstablishment)
-                : String(new Date().getFullYear()),
+        // FIX: safe() also treats an empty string from the API as "no value",
+        // so it correctly falls back to the current year instead of staying blank.
+        yearOfEstablishment: String(
+            safe(data?.yearOfEstablishment, new Date().getFullYear())
+        ),
         msmeCategory: safe(data?.msme?.msmeCategory, ''),
         contactName,
         designation: safe(data?.designation || data?.contact1?.designation, ''),
@@ -353,7 +354,15 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
         { name: 'gstNumber', label: 'GST Number', required: true },
         { name: 'panNumber', label: 'PAN Number', required: true },
         { name: 'organizationType', label: 'Type of Organization', required: true, type: 'select', options: ['Private Limited Company', 'Proprietorship', 'Partnership', 'LLP', 'Public Limited Company', 'Trust', 'Society'] },
-        { name: 'yearOfEstablishment', label: 'Year of Establishment', required: true, type: 'select', options: Array.from({ length: 77 }, (_, index) => String(2026 - index)) },
+        {
+            name: 'yearOfEstablishment',
+            label: 'Year of Establishment',
+            required: true,
+            type: 'select',
+            // FIX: last 10 years only, generated dynamically from the current year
+            // (previously hardcoded to start at 2026 and go 77 years back).
+            options: Array.from({ length: 10 }, (_, index) => String(new Date().getFullYear() - index)),
+        },
     ];
 
     const personFields = [
@@ -389,9 +398,11 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
             gstNumber: safe(data?.gstNo || data?.gstNumber, prev.gstNumber),
             panNumber: safe(data?.panNo || data?.panNumber, prev.panNumber),
             organizationType: safe(data?.organizationType, prev.organizationType || 'Private Limited Company'),
-            yearOfEstablishment: safe(
-                data?.yearOfEstablishment != null ? String(data.yearOfEstablishment) : null,
-                prev.yearOfEstablishment || '2026'
+            // FIX: same safe() based fallback here too, so an empty-string value coming
+            // in later (e.g. after the API responds) doesn't blank out the field either.
+            // Falls back to the previous value first, then today's year — not a hardcoded '2026'.
+            yearOfEstablishment: String(
+                safe(data?.yearOfEstablishment, prev.yearOfEstablishment || new Date().getFullYear())
             ),
             msmeCategory: safe(data?.msme?.msmeCategory, prev.msmeCategory),
             contactName: data?.contactName || [data?.contact1?.firstName, data?.contact1?.lastName].filter(Boolean).join(' ') || prev.contactName,
