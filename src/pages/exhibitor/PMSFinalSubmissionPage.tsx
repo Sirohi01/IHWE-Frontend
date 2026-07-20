@@ -14,7 +14,7 @@ export default function PMSReimbursementApprovedPage() {
             data={pms.data}
             saving={pms.saving}
             onBack={() => navigate('/exhibitor-dashboard/msme/application-review')}
-            onSaveDraft={(agreed) => pms.saveStep(4, { declarationAgreed: agreed })}
+            onSaveDraft={(agreed) => pms.saveStep(4, { declarationAgreed: agreed, saveAsDraft: true })}
             onSubmit={async (agreed) => { await pms.saveStep(4, { declarationAgreed: agreed }); await pms.submit(); }}
         />
     );
