@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     ArrowRight,
     Building2,
@@ -377,6 +377,43 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
         '[&_.pms-control]:font-bold [&_.pms-control]:text-[#087536]'
     );
 const navigate = useNavigate();
+useEffect(() => {
+        if (!data) return;
+        setForm(prev => ({
+            ...prev,
+            companyName: fieldValue(data, ['companyName', 'exhibitorName', 'organizationName'], prev.companyName),
+            udyamRegNo: safe(data?.msme?.udyamRegNo, prev.udyamRegNo),
+            gstNumber: safe(data?.gstNo || data?.gstNumber, prev.gstNumber),
+            panNumber: safe(data?.panNo || data?.panNumber, prev.panNumber),
+            organizationType: safe(data?.organizationType, prev.organizationType),
+            yearOfEstablishment: safe(
+                data?.yearOfEstablishment != null ? String(data.yearOfEstablishment) : null,
+                prev.yearOfEstablishment
+            ),
+            msmeCategory: safe(data?.msme?.msmeCategory, prev.msmeCategory),
+            contactName: data?.contactName || [data?.contact1?.firstName, data?.contact1?.lastName].filter(Boolean).join(' ') || prev.contactName,
+            designation: safe(data?.designation || data?.contact1?.designation, prev.designation),
+            mobileNumber: safe(data?.mobileNumber || data?.contact1?.mobile, prev.mobileNumber),
+            alternateNumber: safe(data?.alternateNumber || data?.contact1?.alternateNo, prev.alternateNumber),
+            addressLine1: safe(data?.addressLine1 || data?.address, prev.addressLine1),
+            addressLine2: safe(data?.addressLine2, prev.addressLine2),
+            country: safe(data?.country, prev.country),
+            state: safe(data?.state, prev.state),
+            city: safe(data?.city, prev.city),
+            pincode: safe(data?.pincode, prev.pincode),
+            eventName: safe(data?.event?.name || data?.eventName, prev.eventName),
+            stallNo: fieldValue(data, ['event.stallNumber', 'participation.stallFor', 'participation.stall.stallNumber', 'participation.stallNumber', 'stallFor', 'participation.stallNo', 'stallNo'], prev.stallNo),
+            hallNo: fieldValue(data, ['event.hallNumber', 'participation.stall.hallNo', 'participation.hallNo', 'hallNo'], prev.hallNo),
+            stallSize: fieldValue(data, ['event.stallSize', 'participation.stallSize', 'participation.stall.area', 'participation.area', 'stallSize'], prev.stallSize),
+            participationType: safe(data?.event?.participationType || data?.participationType, prev.participationType),
+            bookingStatus: safe(data?.event?.bookingStatus || data?.bookingStatus, prev.bookingStatus),
+            paymentStatus: safe(data?.event?.paymentStatus || data?.paymentStatus, prev.paymentStatus),
+        }));
+        setSelectedExpenses(prev => {
+            const saved = Array.isArray(data?.selectedExpenses) ? data.selectedExpenses : [];
+            return saved.length ? [...new Set(['Stall Charges', ...saved])] : prev;
+        });
+    }, [data]);
     return (
        <div className={"box-border w-full h-[calc(100dvh-58px)] min-h-screen min-h-900 bg-white px-6 pt-5 pb-[18px] text-[#061743] [font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe_UI,sans-serif] antialiased [text-rendering:geometricPrecision] [&_*]:box-border [@media(max-height:1100px)_and_(min-width:1181px)]:px-5 [@media(max-height:1100px)_and_(min-width:1181px)]:pt-[13px] [@media(max-height:1100px)_and_(min-width:1181px)]:pb-[10px] [@media(max-width:1365px)_and_(min-width:1181px)]:px-[18px] max-[1180px]:h-auto max-[1180px]:min-h-[calc(100dvh-58px)] max-[1180px]:overflow-auto max-[1180px]:p-[18px] max-[820px]:px-4 max-[820px]:pt-4 max-[820px]:pb-6"}>
             <header className={"flex h-[61px] items-start justify-between gap-[22px] [@media(max-height:1100px)_and_(min-width:1181px)]:h-[52px] max-[1180px]:mb-[18px] max-[1180px]:h-auto max-[820px]:block max-[820px]:mb-6"}>
