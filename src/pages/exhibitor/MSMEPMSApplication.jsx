@@ -259,7 +259,7 @@ function ExpenseCard({ icon, title, note, selected, onClick }) {
 export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, saving }) {
     const initialCompanyName = fieldValue(
         data,
-        ['exhibitorName', 'companyName', 'organizationName'],
+        ['companyName', 'exhibitorName', 'organizationName'],
         ''
     );
 
@@ -294,10 +294,10 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
         yearOfEstablishment: safe(data?.yearOfEstablishment, ''),
         msmeCategory: safe(data?.msme?.msmeCategory, ''),
         contactName,
-        designation: safe(data?.contact1?.designation || data?.designation, ''),
-        mobileNumber: safe(data?.contact1?.mobile || data?.mobileNumber, ''),
-        alternateNumber: safe(data?.contact1?.alternateNo || data?.alternateNumber, ''),
-        addressLine1: safe(data?.address || data?.addressLine1, ''),
+        designation: safe(data?.designation || data?.contact1?.designation, ''),
+        mobileNumber: safe(data?.mobileNumber || data?.contact1?.mobile, ''),
+        alternateNumber: safe(data?.alternateNumber || data?.contact1?.alternateNo, ''),
+        addressLine1: safe(data?.addressLine1 || data?.address, ''),
         addressLine2: safe(data?.addressLine2, ''),
         country: safe(data?.country, ''),
         state: safe(data?.state, ''),
@@ -311,7 +311,10 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
         bookingStatus: safe(data?.event?.bookingStatus || data?.bookingStatus, ''),
         paymentStatus: safe(data?.event?.paymentStatus || data?.paymentStatus, ''),
     }));
-    const [selectedExpenses, setSelectedExpenses] = useState(['Stall Charges']);
+    const [selectedExpenses, setSelectedExpenses] = useState(() => {
+        const saved = Array.isArray(data?.selectedExpenses) ? data.selectedExpenses : [];
+        return [...new Set(['Stall Charges', ...saved])];
+    });
 
     const setField = (name, value) => {
         setForm(prev => ({ ...prev, [name]: value }));
