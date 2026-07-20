@@ -13,6 +13,7 @@ import {
     Hourglass,
     Info,
     Lightbulb,
+    Loader2,
     Mail,
     MessageCircle,
     Phone,
@@ -157,8 +158,10 @@ function StatusBadge({ status }) {
     );
 }
 
-function DocumentRow({ index, doc, onUpload, onDelete }) {
+function DocumentRow({ index, doc, onUpload, onDelete, uploadingId }) {
     const isUploaded = doc.status === 'Uploaded';
+    const isUploading = uploadingId === doc.id;
+    const isBlocked = uploadingId !== null && uploadingId !== doc.id;
 
     return (
         <tr className="border-b border-[#e9eef4] last:border-b-0">
@@ -172,7 +175,14 @@ function DocumentRow({ index, doc, onUpload, onDelete }) {
             </td>
             <td className="min-w-[150px] p-1.5 text-[9.5px] font-medium text-[#5a6c92]">{doc.description}</td>
             <td className="whitespace-nowrap p-1.5">
-                <StatusBadge status={doc.status} />
+                {isUploading ? (
+                    <span className="inline-flex w-[72px] items-center justify-center gap-1 whitespace-nowrap rounded px-1.5 py-0.5 text-[9px] font-semibold border text-[#2a6bd6] bg-[#eef4fd] border-[#bcd6f7]">
+                        <Loader2 size={10} strokeWidth={2.5} className="animate-spin" />
+                        Uploading
+                    </span>
+                ) : (
+                    <StatusBadge status={doc.status} />
+                )}
             </td>
             <td className="min-w-[130px] p-1.5 text-[9.5px] font-semibold">
                 {isUploaded ? (
@@ -187,19 +197,38 @@ function DocumentRow({ index, doc, onUpload, onDelete }) {
                 {isUploaded ? (
                     <div className='flex items-center gap-4 whitespace-nowrap'>
                         <span className="">({doc.size})</span>
-                        <Eye size={16} strokeWidth={2} className="shrink-0" />
+                        <button
+                            type="button"
+                            onClick={() => doc.url && window.open(doc.url, '_blank', 'noopener,noreferrer')}
+                            disabled={!doc.url}
+                            className="disabled:opacity-40"
+                            title="View document"
+                        >
+                            <Eye size={16} strokeWidth={2} className="shrink-0" />
+                        </button>
                     </div>
                 ) : ''}
             </td>
             <td className="whitespace-nowrap p-1.5 text-right">
                 {isUploaded ? (
-                    <button type="button" onClick={() => onDelete(doc.id)} className="h-[20px] w-[64px] rounded-md border border-red-200 text-center text-[9px] font-semibold text-red-600">
+                    <button
+                        type="button"
+                        onClick={() => onDelete(doc.id)}
+                        disabled={isBlocked || isUploading}
+                        className="h-[20px] w-[64px] rounded-md border border-red-200 text-center text-[9px] font-semibold text-red-600 disabled:opacity-40"
+                    >
                         Remove
                     </button>
                 ) : (
-                    <label className="inline-flex h-[20px] w-[64px] cursor-pointer items-center justify-center rounded-md border border-[#5924c6] text-center text-[9px] font-semibold text-[#5924c6]">
-                        Upload
-                        <input type="file" accept="application/pdf,image/jpeg,image/png" className="hidden" onChange={(event) => { const file = event.target.files?.[0]; if (file) onUpload(doc.id, file); event.target.value = ''; }} />
+                    <label className={`inline-flex h-[20px] w-[64px] items-center justify-center rounded-md border border-[#5924c6] text-center text-[9px] font-semibold text-[#5924c6] ${isBlocked || isUploading ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'}`}>
+                        {isUploading ? <Loader2 size={12} strokeWidth={2.5} className="animate-spin" /> : 'Upload'}
+                        <input
+                            type="file"
+                            accept="application/pdf,image/jpeg,image/png"
+                            className="hidden"
+                            disabled={isBlocked || isUploading}
+                            onChange={(event) => { const file = event.target.files?.[0]; if (file) onUpload(doc.id, file); event.target.value = ''; }}
+                        />
                     </label>
                 )}
             </td>
@@ -274,8 +303,10 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpl
     const documentDefinitions = REQUIRED_DOCUMENTS.map(doc => ({ ...doc, required: requiredForApplication(doc) }));
     const [documents, setDocuments] = useState(() => documentDefinitions.map(doc => {
         const uploaded = data?.documents?.find(item => item.documentType === doc.id);
-        return uploaded ? { ...doc, status: 'Uploaded', file: uploaded.filename, size: uploaded.size ? `${Math.round(uploaded.size / 1024)} KB` : '' } : { ...doc, file: null, size: null, status: 'Pending' };
+        return uploaded ? { ...doc, status: 'Uploaded', file: uploaded.filename, size: uploaded.size ? `${Math.round(uploaded.size / 1024)} KB` : '', url: uploaded.url || null } : { ...doc, file: null, size: null, status: 'Pending', url: null };
     }));
+
+    const [uploadingId, setUploadingId] = useState(null);
 
     const uploadedCount = documents.filter(doc => doc.status === 'Uploaded').length;
     const totalCount = documents.length;
@@ -283,13 +314,20 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpl
     const percentComplete = Math.round((uploadedCount / totalCount) * 100);
     const allUploaded = pendingCount === 0;
   const navigate = useNavigate();
+
     const handleUpload = async (id, file) => {
-        await onUpload?.(id, file);
-        setDocuments(prev => prev.map(doc => doc.id === id ? { ...doc, status: 'Uploaded', file: file.name, size: `${Math.round(file.size / 1024)} KB` } : doc));
+        setUploadingId(id);
+        try {
+            const result = await onUpload?.(id, file);
+            setDocuments(prev => prev.map(doc => doc.id === id ? { ...doc, status: 'Uploaded', file: file.name, size: `${Math.round(file.size / 1024)} KB`, url: result?.url || doc.url } : doc));
+        } finally {
+            setUploadingId(null);
+        }
     };
+
     const handleDelete = async (id) => {
         await onDelete?.(id);
-        setDocuments(prev => prev.map(doc => doc.id === id ? { ...doc, status: 'Pending', file: null, size: null } : doc));
+        setDocuments(prev => prev.map(doc => doc.id === id ? { ...doc, status: 'Pending', file: null, size: null, url: null } : doc));
     };
 
     return (
@@ -332,7 +370,6 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpl
                             icon={<User size={17} strokeWidth={1.8} />}
                             headerRight={
                                 <div className="flex items-center justify-between gap-3">
-                                    {/* LEFT CONTENT */}
                                     <div className="flex flex-col gap-0.5">
                                         <span className="whitespace-nowrap text-[9px] font-semibold leading-tight text-[#263d70]">
                                             Documents Completed
@@ -349,7 +386,6 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpl
                                         </div>
                                     </div>
 
-                                    {/* PROGRESS BAR */}
                                     <span className="h-1.5 w-40 overflow-hidden rounded-full bg-[#e1e5ed]">
                                         <span
                                             className="block h-full rounded-full bg-[#087536] transition-[width] duration-300"
@@ -376,7 +412,7 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpl
                                     </thead>
                                     <tbody>
                                         {documents.map((doc, index) => (
-                                            <DocumentRow key={doc.id} index={index} doc={doc} onUpload={handleUpload} onDelete={handleDelete} />
+                                            <DocumentRow key={doc.id} index={index} doc={doc} onUpload={handleUpload} onDelete={handleDelete} uploadingId={uploadingId} />
                                         ))}
                                     </tbody>
                                 </table>
