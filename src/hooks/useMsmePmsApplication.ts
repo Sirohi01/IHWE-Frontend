@@ -6,6 +6,8 @@ const authHeaders = (json = false) => {
   return { ...(json ? { 'Content-Type': 'application/json' } : {}), Authorization: `Bearer ${token || ''}` };
 };
 
+const isMongoObjectId = (value: any) => /^[a-f\d]{24}$/i.test(String(value || '').trim());
+
 async function request(path: string, options: RequestInit = {}, exhibitorId = '') {
   const separator = path.includes('?') ? '&' : '?';
   const selectedQuery = exhibitorId ? `${separator}exhibitorId=${encodeURIComponent(exhibitorId)}` : '';
@@ -107,7 +109,9 @@ export function useMsmePmsApplication(exhibitorData: any) {
     panNo: application?.applicantDetails?.panNumber || exhibitorData?.panNo,
     event: {
       name: savedApplicant.eventName || exhibitorData?.eventId?.name || exhibitorData?.eventName,
-      stallNumber: savedApplicant.stallNo || participation.stallFor || exhibitorData?.stallDetails?.stallNumber,
+      stallNumber: (!isMongoObjectId(savedApplicant.stallNo) && savedApplicant.stallNo)
+        || participation.stallFor
+        || exhibitorData?.stallDetails?.stallNumber,
       hallNumber: savedApplicant.hallNo || exhibitorData?.stallDetails?.hallNumber || exhibitorData?.hallNo,
       stallSize: savedApplicant.stallSize || participation.stallSize || exhibitorData?.stallDetails?.area,
       participationType: savedApplicant.participationType || participation.stallType || participation.stallCategory,
