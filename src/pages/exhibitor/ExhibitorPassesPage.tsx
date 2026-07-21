@@ -86,6 +86,7 @@ export default function ExhibitorPassesPage() {
         designation: member?.designation || member?.roleAtExhibition || '',
         email: member?.email || '',
         phone: member?.mobile || '',
+        photoUrl: member?.photoUrl || member?.photo || '',
         gender: member?.gender || 'male',
         aadhaarNumber: '',
         isTeamMember: Boolean(member)
@@ -98,6 +99,7 @@ export default function ExhibitorPassesPage() {
         name: member?.name || '',
         email: member?.email || '',
         phone: member?.mobile || '',
+        photoUrl: member?.photoUrl || member?.photo || '',
         isTeamMember: Boolean(member)
     });
 

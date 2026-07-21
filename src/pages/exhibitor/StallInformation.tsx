@@ -134,9 +134,13 @@ export default function StallInformation() {
     const powerService = services.find((s: any) => /electric|power/i.test(s.name || ''));
     const powerAllocation = powerService ? serviceSubText(powerService).replace(/[()]/g, '') : 'TBA';
     const hallNumber = stallParts.hall === 'TBA' ? '8, 9, 10' : stallParts.hall;
-    const stallQrValue = typeof window !== 'undefined'
-        ? `${window.location.origin}/exhibitor-dashboard/stall-information?stall=${encodeURIComponent(stallParts.stall || String(stallNo))}`
-        : String(stallNo);
+    const exhibitorRegistrationId = String(data?.registrationId || '').trim();
+    const exhibitorQrValue = exhibitorRegistrationId
+        ? JSON.stringify({ registrationId: exhibitorRegistrationId })
+        : '';
+    const storedExhibitorQr = typeof data?.qrCode === 'string' && data.qrCode.trim()
+        ? data.qrCode.trim()
+        : '';
 
     const overviewRows = [
         { label: 'Hall Number', value: hallNumber, icon: Map },
@@ -265,10 +269,19 @@ export default function StallInformation() {
                                     <h2 className="text-[14px] md:text-[20px] font-bold text-[#002855] tracking-tight leading-tight">{stallNo}</h2>
                                 </div>
                                 <div className="text-center flex flex-col items-center ml-3 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-100">
-                                    <p className="text-[10px] font-bold text-black mb-1">Stall QR Code</p>
+                                    <p className="text-[10px] font-bold text-black mb-1">Exhibitor Entry QR</p>
                                     <div className="w-24 h-24 bg-white rounded-lg p-2 flex items-center justify-center">
-                                        <QRCode value={stallQrValue} size={80} fgColor="#000000" bgColor="#ffffff" level="M" />
+                                        {storedExhibitorQr ? (
+                                            <img src={storedExhibitorQr} alt="Exhibitor Entry QR Code" className="w-20 h-20 object-contain" />
+                                        ) : exhibitorQrValue ? (
+                                            <QRCode value={exhibitorQrValue} size={80} fgColor="#000000" bgColor="#ffffff" level="M" />
+                                        ) : (
+                                            <div className="text-[8px] leading-tight font-bold text-red-600 text-center px-1">
+                                                Registration ID missing. QR unavailable.
+                                            </div>
+                                        )}
                                     </div>
+                                    {exhibitorRegistrationId && <p className="mt-1 max-w-24 truncate text-[8px] font-semibold text-slate-500">{exhibitorRegistrationId}</p>}
                                 </div>
                             </div>
 
