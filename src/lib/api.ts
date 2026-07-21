@@ -102,7 +102,7 @@ export const aboutApi = {
 
 export const settingsApi = {
     get: async () => {
-        const response = await fetch(`${API_URL}/settings`);
+        const response = await fetch(`${API_URL}/settings?website=9th%20IHWE`);
         const data = await response.json();
         return data.success ? data.data : null;
     }
