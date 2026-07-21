@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Building2, FileText, CreditCard, Calendar, FolderOpen, Megaphone, CalendarDays, UsersRound, MessageSquare, Ticket, ShoppingBag, Package, ArrowRight, Headset, ChevronLeft, ChevronRight } from "lucide-react";
+import { Building2, FileText, CreditCard, Calendar, FolderOpen, Megaphone, CalendarDays, UsersRound, MessageSquare, Ticket, ShoppingBag, Package, ArrowRight, Headset, ChevronLeft, ChevronRight, ClipboardCheck } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
 import { API_URL } from "@/lib/api";
@@ -130,11 +130,12 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
         { id: "exhibitor-pass", label: "Passes & Hospitality", sub: moduleStats.passRequests ? `${moduleStats.approvedPassRequests}/${moduleStats.passRequests} approved` : "No requests yet", icon: Ticket, link: "/exhibitor-dashboard/exhibitor-pass", iconBg: "bg-gradient-to-br from-[#10b981] to-[#059669]" },
         { id: "add-product", label: "My Product/Services", sub: `${moduleStats.products} product${moduleStats.products === 1 ? '' : 's'} listed`, icon: Package, link: "/exhibitor-dashboard/product", iconBg: "bg-gradient-to-br from-[#8b5cf6] to-[#6d28d9]" },
         { id: "document-center", label: "Documentations", sub: data?.msme?.udyamRegNo ? "Udyam details added" : "Upload & manage", icon: FolderOpen, link: "/exhibitor-dashboard/document-center", iconBg: "bg-gradient-to-br from-[#a855f7] to-[#9333ea]" },
-        { id: "pms-document", label: "MSME PMS Documents", sub: data?.msme?.udyamRegNo ? "Udyam details added" : "Upload & manage", icon: FolderOpen, link: "/exhibitor-dashboard/psm-claim/reports", iconBg: "bg-gradient-to-br from-[#a855f7] to-[#9333ea]" },
+        // { id: "pms-document", label: "MSME PMS Documents", sub: data?.msme?.udyamRegNo ? "Udyam details added" : "Upload & manage", icon: FolderOpen, link: "/exhibitor-dashboard/psm-claim/reports", iconBg: "bg-gradient-to-br from-[#a855f7] to-[#9333ea]" },
         ...(import.meta.env.DEV ? [{ id: "buyer-contacts", label: "Buyers Management", sub: `${moduleStats.leads} captured lead${moduleStats.leads === 1 ? '' : 's'}`, icon: UsersRound, link: "/exhibitor-dashboard/buyer-contacts", iconBg: "bg-gradient-to-br from-[#14b8a6] to-[#0d9488]" }] : []),
         { id: "payments", label: "Make Payment", sub: balance > 0 ? `Balance ${data?.participation?.currency || 'INR'} ${balance.toLocaleString('en-IN')}` : "No balance due", icon: CreditCard, link: "/exhibitor-dashboard/payments", iconBg: "bg-gradient-to-br from-[#f97316] to-[#ea6c0a]" },
         ...(import.meta.env.DEV ? [{ id: "epromotion", label: "E-Promotion", sub: `${moduleStats.marketingTemplates} template${moduleStats.marketingTemplates === 1 ? '' : 's'} available`, icon: Megaphone, link: "/exhibitor-dashboard/epromotion", iconBg: "bg-gradient-to-br from-[#ec4899] to-[#db2777]" }] : []),
         { id: "relationship-manager", label: "Relationship Manager", sub: data?.filledByFullName || data?.filledBy || "Your dedicated contact", icon: Headset, link: "/exhibitor-dashboard/relationship-manager", iconBg: "bg-gradient-to-br from-[#059669] to-[#047857]" },
+        { id: "msme-application", label: "MSME Application", sub: "Apply for MSME scheme", icon: ClipboardCheck, link: "/exhibitor-dashboard/msme/application", iconBg: "bg-gradient-to-br from-[#0ea5e9] to-[#0284c7]" },
     ];
 
     return (
