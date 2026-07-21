@@ -78,7 +78,7 @@ export const api = axios.create({
 
 export const heroApi = {
     getAll: async () => {
-        const response = await fetch(`${API_URL}/hero/all`);
+        const response = await fetch(`${API_URL}/hero/all?website=9th%20IHWE`);
         const data = await response.json();
         return data.success ? data.data : [];
     }
