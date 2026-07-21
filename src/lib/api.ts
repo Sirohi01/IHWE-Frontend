@@ -347,28 +347,28 @@ export const globalPlatformApi = {
 };
 export const eventOverviewApi = {
     get: async () => {
-        const response = await fetch(`${API_URL}/event-overview`);
+        const response = await fetch(`${API_URL}/event-overview?project=ihwe`);
         const data = await response.json();
         return data.success ? data.data : null;
     }
 };
 export const aboutOrganizerApi = {
     get: async () => {
-        const response = await fetch(`${API_URL}/about-organizer`);
+        const response = await fetch(`${API_URL}/about-organizer?project=ihwe`);
         const data = await response.json();
         return data.success ? data.data : null;
     }
 };
 export const ourJourneyApi = {
     get: async () => {
-        const response = await fetch(`${API_URL}/our-journey`);
+        const response = await fetch(`${API_URL}/our-journey?project=ihwe`);
         const data = await response.json();
         return data.success ? data.data : null;
     }
 };
 export const visionMissionApi = {
     get: async () => {
-        const response = await fetch(`${API_URL}/vision-mission`);
+        const response = await fetch(`${API_URL}/vision-mission?project=ihwe`);
         const data = await response.json();
         return data.success ? data.data : null;
     }
