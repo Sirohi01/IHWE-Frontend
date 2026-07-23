@@ -285,7 +285,7 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
     const hallNo = fieldValue(
         data,
         ['event.hallNumber', 'participation.stall.hallNo', 'participation.hallNo', 'hallNo'],
-        'Hall 8, 9 & 10'
+        'Hall 12'
     );
 
     const stallSize = fieldValue(

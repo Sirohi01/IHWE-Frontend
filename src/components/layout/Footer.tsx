@@ -401,7 +401,7 @@ const Footer = () => {
                     PRAGATI MAIDAN
                   </p>
                   <p className="text-[10px] text-[#cbd5e1]">
-                    HALL 8, 9 & 10, NEW DELHI, INDIA
+                    HALL 12, NEW DELHI, INDIA
                   </p>
                 </div>
               </div>
@@ -448,17 +448,17 @@ const Footer = () => {
               {exhibitorLinks
                 .filter((l: any) => !(l.label === "MSME PMS Scheme" && settings?.showGovtPmsScheme === false))
                 .map((l: any) => (
-                <Link
-                  key={l.label}
-                  to={l.href}
-                  target={l.newTab ? "_blank" : undefined}
-                  rel={l.newTab ? "noopener noreferrer" : undefined}
-                  className="flex items-center gap-1.5 text-[11.5px] text-slate-300 hover:text-[#F3B71B] transition-colors"
-                >
-                  <ChevronRight className="w-2.5 h-2.5 text-slate-600 shrink-0" />
-                  {l.label}
-                </Link>
-              ))}
+                  <Link
+                    key={l.label}
+                    to={l.href}
+                    target={l.newTab ? "_blank" : undefined}
+                    rel={l.newTab ? "noopener noreferrer" : undefined}
+                    className="flex items-center gap-1.5 text-[11.5px] text-slate-300 hover:text-[#F3B71B] transition-colors"
+                  >
+                    <ChevronRight className="w-2.5 h-2.5 text-slate-600 shrink-0" />
+                    {l.label}
+                  </Link>
+                ))}
             </div>
           </div>
 

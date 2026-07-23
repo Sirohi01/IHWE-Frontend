@@ -180,7 +180,7 @@ const VisitorScan = () => {
 
         <p className="text-center text-[10px] text-gray-400 mt-6 font-medium">
           9th International Health & Wellness Expo 2026<br />
-          Hall 8, 9 & 10 · Pragati Maidan, New Delhi · 21–23 Aug 2026
+          Hall 12 · Pragati Maidan, New Delhi · 21–23 Aug 2026
         </p>
       </div>
     </div>

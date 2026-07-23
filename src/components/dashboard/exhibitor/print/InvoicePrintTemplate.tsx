@@ -60,7 +60,7 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
     const companyName = 'Namo Gange Wellness Pvt. Ltd.';
 
     const PROFORMA_EVENT_NAME = '9th Edition of International Health & Wellness Expo (IHWE Global Edition)';
-    const PROFORMA_PLACE_OF_SUPPLY = 'Hall Nos. 8, 9 & 10, Pragati Maidan, New Delhi - 110001, Bharat';
+    const PROFORMA_PLACE_OF_SUPPLY = 'Hall Nos. 12, Pragati Maidan, New Delhi - 110001, Bharat';
     const PROFORMA_EVENT_STATE = 'Delhi';
     const PROFORMA_PLACE_OF_SUPPLY_WITH_CODE = 'Delhi (07)';
     const PROFORMA_EVENT_GST_NO = '07AAFCN9238F1Z6';
