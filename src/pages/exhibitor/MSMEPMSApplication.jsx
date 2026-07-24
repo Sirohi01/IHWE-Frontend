@@ -270,11 +270,12 @@ function ExpenseCard({ icon, title, note, selected, onClick }) {
 }
 
 export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, saving }) {
-    const initialCompanyName = fieldValue(
+    const rawInitialCompany = fieldValue(
         data,
         ['companyName', 'exhibitorName', 'organizationName'],
         ''
     );
+    const initialCompanyName = rawInitialCompany === 'Draft' || rawInitialCompany === 'draft' ? (data?.exhibitorName || data?.brandName || '') : rawInitialCompany;
 
     const stallNo = fieldValue(
         data,
@@ -294,9 +295,11 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
         ''
     );
 
-    const contactName = data?.contactName || [data?.contact1?.firstName, data?.contact1?.lastName]
+    const primaryTeam = data?.teamMembers?.find(m => m.isPrimary) || data?.teamMembers?.[0] || null;
+
+    const contactName = primaryTeam?.name || [data?.contact1?.firstName, data?.contact1?.lastName]
         .filter(Boolean)
-        .join(' ');
+        .join(' ') || data?.contactName || data?.contactPerson || '';
 
     const [form, setForm] = useState(() => ({
         companyName: initialCompanyName,
@@ -311,16 +314,16 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
         ),
         msmeCategory: safe(data?.msme?.msmeCategory, ''),
         contactName,
-        designation: safe(data?.designation || data?.contact1?.designation, ''),
-        mobileNumber: safe(data?.mobileNumber || data?.contact1?.mobile, ''),
-        alternateNumber: safe(data?.alternateNumber || data?.contact1?.alternateNo, ''),
+        designation: safe(primaryTeam?.designation || data?.contact1?.designation || data?.designation, ''),
+        mobileNumber: safe(primaryTeam?.mobile || data?.contact1?.mobile || data?.mobile || data?.mobileNumber, ''),
+        alternateNumber: safe(data?.contact1?.alternateNo || data?.alternateNumber, ''),
         addressLine1: safe(data?.addressLine1 || data?.address, ''),
         addressLine2: safe(data?.addressLine2, ''),
         country: safe(data?.country, 'India'),
         state: safe(data?.state, 'Uttar Pradesh'),
         city: safe(data?.city, ''),
         pincode: safe(data?.pincode, ''),
-        eventName: safe(data?.event?.name || data?.eventName, ''),
+        eventName: safe(data?.event?.name || data?.participation?.eventName || data?.eventName, ''),
         stallNo,
         hallNo,
         stallSize,
@@ -391,9 +394,13 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
     const navigate = useNavigate();
     useEffect(() => {
         if (!data) return;
-        setForm(prev => ({
+        const primaryTeam = data?.teamMembers?.find(m => m.isPrimary) || data?.teamMembers?.[0] || null;
+        setForm(prev => {
+            const resolvedCompany = data?.companyName || data?.exhibitorName || data?.brandName || prev.companyName || '';
+            const finalCompany = resolvedCompany === 'Draft' || resolvedCompany === 'draft' ? (data?.exhibitorName || data?.brandName || '') : resolvedCompany;
+            return {
             ...prev,
-            companyName: fieldValue(data, ['companyName', 'exhibitorName', 'organizationName'], prev.companyName),
+            companyName: finalCompany,
             udyamRegNo: safe(data?.msme?.udyamRegNo, prev.udyamRegNo),
             gstNumber: safe(data?.gstNo || data?.gstNumber, prev.gstNumber),
             panNumber: safe(data?.panNo || data?.panNumber, prev.panNumber),
@@ -405,10 +412,10 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
                 safe(data?.yearOfEstablishment, prev.yearOfEstablishment || new Date().getFullYear())
             ),
             msmeCategory: safe(data?.msme?.msmeCategory, prev.msmeCategory),
-            contactName: data?.contactName || [data?.contact1?.firstName, data?.contact1?.lastName].filter(Boolean).join(' ') || prev.contactName,
-            designation: safe(data?.designation || data?.contact1?.designation, prev.designation),
-            mobileNumber: safe(data?.mobileNumber || data?.contact1?.mobile, prev.mobileNumber),
-            alternateNumber: safe(data?.alternateNumber || data?.contact1?.alternateNo, prev.alternateNumber),
+            contactName: primaryTeam?.name || [data?.contact1?.firstName, data?.contact1?.lastName].filter(Boolean).join(' ') || data?.contactName || data?.contactPerson || prev.contactName || '',
+            designation: safe(primaryTeam?.designation || data?.contact1?.designation || data?.designation, prev.designation),
+            mobileNumber: safe(primaryTeam?.mobile || data?.contact1?.mobile || data?.mobile || data?.mobileNumber, prev.mobileNumber),
+            alternateNumber: safe(data?.contact1?.alternateNo || data?.alternateNumber, prev.alternateNumber),
             addressLine1: safe(data?.addressLine1 || data?.address, prev.addressLine1),
             addressLine2: safe(data?.addressLine2, prev.addressLine2),
             country: safe(data?.country, prev.country || 'India'),
@@ -422,7 +429,7 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
             participationType: safe(data?.event?.participationType || data?.participationType, prev.participationType || 'Shell Space'),
             bookingStatus: safe(data?.event?.bookingStatus || data?.bookingStatus, prev.bookingStatus || 'Confirmed'),
             paymentStatus: safe(data?.event?.paymentStatus || data?.paymentStatus, prev.paymentStatus || 'Fully Paid'),
-        }));
+        };});
         setSelectedExpenses(prev => {
             const saved = Array.isArray(data?.selectedExpenses) ? data.selectedExpenses : [];
             return saved.length ? [...new Set(['Stall Charges', ...saved])] : prev;

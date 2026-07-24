@@ -123,14 +123,15 @@ export default function OverviewStart() {
                 pincode: data.pincode || "",
                 companyDescription: data.companyDescription || "",
             });
+            const primaryTeam = data.teamMembers?.find((m: any) => m.isPrimary) || data.teamMembers?.[0] || null;
             setContactForm({
                 title: data.contact1?.title || "Mr.",
-                firstName: data.contact1?.firstName || "",
-                lastName: data.contact1?.lastName || "",
-                email: data.contact1?.email || "",
-                designation: data.contact1?.designation || "",
-                mobile: data.contact1?.mobile || "",
-                photoUrl: data.contact1?.photoUrl || "",
+                firstName: primaryTeam?.name?.split(' ')[0] || data.contact1?.firstName || (data.contactPerson ? data.contactPerson.split(' ')[0] : ""),
+                lastName: primaryTeam?.name?.split(' ').slice(1).join(' ') || data.contact1?.lastName || (data.contactPerson ? data.contactPerson.split(' ').slice(1).join(' ') : ""),
+                email: primaryTeam?.email || data.contact1?.email || data.companyEmail || data.email || "",
+                designation: primaryTeam?.designation || data.contact1?.designation || data.designation || "",
+                mobile: primaryTeam?.mobile || data.contact1?.mobile || data.mobile || data.mobileNumber || "",
+                photoUrl: primaryTeam?.photoUrl || data.contact1?.photoUrl || "",
             });
             setCategorySelection(data.productCategories || []);
             setCertificateList(data.certificates || []);
