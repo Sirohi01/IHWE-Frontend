@@ -53,7 +53,18 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
     const totalGstAmount = items.reduce((sum: number, item: any) => sum + (parseFloat(item.tax) || 0), 0);
     const grandTotal = document?.finalAmount || items.reduce((sum: number, item: any) => sum + (parseFloat(item.finalAmount) || 0), 0);
 
-    const c1 = company?.contacts?.[0] || company?.contact1 || {};
+    const primaryTeamMember = company?.teamMembers?.find((member: any) =>
+        member?.isPrimary || /primary contact/i.test(member?.roleAtExhibition || '')
+    );
+    const c1 = primaryTeamMember
+        ? {
+            firstName: primaryTeamMember.name || '',
+            surname: '',
+            mobile: primaryTeamMember.mobile || company?.contact1?.mobile || '',
+            email: primaryTeamMember.email || company?.contact1?.email || '',
+            designation: primaryTeamMember.designation || primaryTeamMember.roleAtExhibition || '',
+        }
+        : company?.contact1 || company?.contacts?.find((contact: any) => contact?.isPrimary) || company?.contacts?.[0] || {};
     const companyName = 'Namo Gange Wellness Pvt. Ltd.';
 
     const PROFORMA_EVENT_NAME = '9th Edition of International Health & Wellness Expo (IHWE Global Edition)';
@@ -65,16 +76,18 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
     const clientCompanyName = document?.company_name || company?.companyName || company?.exhibitorName || '—';
     const titledContactPerson = [c1.title, c1.firstName, c1.surname].filter(Boolean).join(' ');
     const rawClientContactPerson = getFirstCleanValue(
+        titledContactPerson,
+        primaryTeamMember?.name,
         document?.contact_person,
         document?.company_contact_person,
         document?.consignee_person,
-        titledContactPerson,
         company?.contactPerson,
         company?.contact_person
     ) || '—';
     const clientContactPerson = normalizeContactName(rawClientContactPerson, titledContactPerson);
 
     const clientContactNo = getFirstCleanValue(
+        c1.mobile,
         document?.contact_no,
         document?.contact_phone,
         document?.company_contact_no,
@@ -82,16 +95,15 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
         document?.mobile,
         document?.phone,
         document?.consignee_phone,
-        c1.mobile,
         company?.landline,
         company?.mobile
     ) || '—';
 
     const clientEmail = getFirstCleanValue(
+        c1.email,
         document?.company_email,
         document?.contact_email,
         document?.email,
-        c1.email,
         company?.companyEmail,
         company?.email
     ) || '—';
