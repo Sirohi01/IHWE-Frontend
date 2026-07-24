@@ -332,7 +332,8 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
         paymentStatus: safe(data?.event?.paymentStatus || data?.paymentStatus, 'Fully Paid'),
     }));
     const [selectedExpenses, setSelectedExpenses] = useState(() => {
-        const saved = Array.isArray(data?.selectedExpenses) ? data.selectedExpenses : [];
+        let saved = Array.isArray(data?.selectedExpenses) ? data.selectedExpenses : [];
+        saved = saved.map(item => item === 'Logistics' ? 'Logistics / Others' : item);
         return [...new Set(['Stall Charges', ...saved])];
     });
 
@@ -431,7 +432,8 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
             paymentStatus: safe(data?.event?.paymentStatus || data?.paymentStatus, prev.paymentStatus || 'Fully Paid'),
         };});
         setSelectedExpenses(prev => {
-            const saved = Array.isArray(data?.selectedExpenses) ? data.selectedExpenses : [];
+            let saved = Array.isArray(data?.selectedExpenses) ? data.selectedExpenses : [];
+            saved = saved.map(item => item === 'Logistics' ? 'Logistics / Others' : item);
             return saved.length ? [...new Set(['Stall Charges', ...saved])] : prev;
         });
     }, [data]);

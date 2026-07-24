@@ -100,6 +100,10 @@ export function useMsmePmsApplication(exhibitorData: any) {
     return ({
     ...exhibitorData,
     ...application,
+    documents: (application?.documents || []).map((doc: any) => ({
+      ...doc,
+      url: doc.path ? (doc.path.startsWith('http') ? doc.path : `${SERVER_URL}${doc.path.startsWith('/') ? '' : '/'}${doc.path.replace(/\\/g, '/')}`) : null
+    })),
     ...savedApplicant,
     organizationType: savedApplicant.organizationType || exhibitorData?.typeOfBusiness || exhibitorData?.organizationType,
     emailId: savedApplicant.emailId || exhibitorData?.contact1?.email || exhibitorData?.companyEmail,

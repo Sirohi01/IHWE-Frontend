@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useState, useEffect } from 'react';
 import {
     AlertCircle,
     ArrowLeft,
@@ -306,6 +306,14 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpl
         return uploaded ? { ...doc, status: 'Uploaded', file: uploaded.filename, size: uploaded.size ? `${Math.round(uploaded.size / 1024)} KB` : '', url: uploaded.url || null } : { ...doc, file: null, size: null, status: 'Pending', url: null };
     }));
 
+    useEffect(() => {
+        setDocuments(prev => prev.map(doc => {
+            const uploaded = data?.documents?.find(item => item.documentType === doc.id);
+            if (uploaded) return { ...doc, status: 'Uploaded', file: uploaded.filename, size: uploaded.size ? `${Math.round(uploaded.size / 1024)} KB` : '', url: uploaded.url || null };
+            return { ...doc, file: null, size: null, status: 'Pending', url: null };
+        }));
+    }, [data?.documents]);
+
     const [uploadingId, setUploadingId] = useState(null);
 
     const uploadedCount = documents.filter(doc => doc.status === 'Uploaded').length;
@@ -319,7 +327,13 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpl
         setUploadingId(id);
         try {
             const result = await onUpload?.(id, file);
-            setDocuments(prev => prev.map(doc => doc.id === id ? { ...doc, status: 'Uploaded', file: file.name, size: `${Math.round(file.size / 1024)} KB`, url: result?.url || doc.url } : doc));
+            const uploadedDoc = result?.documents?.find(d => d.documentType === id);
+            let docUrl = uploadedDoc?.url || null;
+            if (!docUrl && uploadedDoc?.path) {
+                const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
+                docUrl = uploadedDoc.path.startsWith('http') ? uploadedDoc.path : `${SERVER_URL}${uploadedDoc.path.startsWith('/') ? '' : '/'}${uploadedDoc.path.replace(/\\/g, '/')}`;
+            }
+            setDocuments(prev => prev.map(doc => doc.id === id ? { ...doc, status: 'Uploaded', file: file.name, size: `${Math.round(file.size / 1024)} KB`, url: docUrl || doc.url } : doc));
         } finally {
             setUploadingId(null);
         }
