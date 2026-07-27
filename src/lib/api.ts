@@ -1,4 +1,5 @@
 import { useAuthStore } from "@/stores/authStore";
+import axios from "axios";
 export interface SidebarItemType {
     _id: string;
     label: string;
@@ -71,10 +72,13 @@ export const roleApi = {
 const BASE_API_URL = (import.meta.env.VITE_API_URL || (window.location.hostname === "localhost" ? "http://localhost:5000/api" : "/api")).replace(/\/$/, "");
 export const API_URL = BASE_API_URL.endsWith("/api") ? BASE_API_URL : `${BASE_API_URL}/api`;
 export const SERVER_URL = API_URL.replace(/\/api$/, "") || window.location.origin;
+export const api = axios.create({
+    baseURL: SERVER_URL,
+});
 
 export const heroApi = {
     getAll: async () => {
-        const response = await fetch(`${API_URL}/hero/all`);
+        const response = await fetch(`${API_URL}/hero/all?website=9th%20IHWE`);
         const data = await response.json();
         return data.success ? data.data : [];
     }
@@ -98,7 +102,7 @@ export const aboutApi = {
 
 export const settingsApi = {
     get: async () => {
-        const response = await fetch(`${API_URL}/settings`);
+        const response = await fetch(`${API_URL}/settings?website=9th%20IHWE`);
         const data = await response.json();
         return data.success ? data.data : null;
     }
@@ -136,6 +140,19 @@ export const featuredServicesApi = {
     }
 };
 
+export const serviceDetailApi = {
+    getByCardId: async (cardId: string) => {
+        const response = await fetch(`${API_URL}/service-details/${cardId}`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    },
+    getBySlug: async (slug: string) => {
+        const response = await fetch(`${API_URL}/service-details/slug/${slug}`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
 export const faqApi = {
     get: async () => {
         const response = await fetch(`${API_URL}/faq`);
@@ -147,6 +164,38 @@ export const faqApi = {
 export const glimpseApi = {
     get: async () => {
         const response = await fetch(`${API_URL}/glimpse`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const supportedByApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/supported-by`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const introductionApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/introduction`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const nationalExpoApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/national-expo`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const integratedFormatApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/integrated-format`);
         const data = await response.json();
         return data.success ? data.data : null;
     }
@@ -183,14 +232,21 @@ export const countersApi = {
 };
 
 export const blogApi = {
-    getAll: async () => {
-        const response = await fetch(`${API_URL}/blogs`);
+    getAll: async (params?: { category?: string; search?: string }) => {
+        let url = `${API_URL}/blogs`;
+        if (params) {
+            const query = new URLSearchParams();
+            if (params.category) query.append('category', params.category);
+            if (params.search) query.append('search', params.search);
+            const queryString = query.toString();
+            if (queryString) url += `?${queryString}`;
+        }
+        const response = await fetch(url);
         return await response.json();
     },
     getLatest: async (limit: number = 3) => {
         const response = await fetch(`${API_URL}/blogs`);
         const data = await response.json();
-        // Return in same format but sliced
         if (data.success) {
             data.data = data.data.slice(0, limit);
         }
@@ -199,8 +255,29 @@ export const blogApi = {
     getBySlug: async (slug: string) => {
         const response = await fetch(`${API_URL}/blogs/${slug}`);
         return await response.json();
+    },
+    getExpertInsights: async () => {
+        const response = await fetch(`${API_URL}/blogs/expert-insights`);
+        return await response.json();
+    },
+    getMediaResources: async () => {
+        const response = await fetch(`${API_URL}/blogs/media-resources`);
+        return await response.json();
+    },
+    getSettings: async () => {
+        const response = await fetch(`${API_URL}/blogs/settings`);
+        return await response.json();
+    },
+    subscribe: async (email: string) => {
+        const response = await fetch(`${API_URL}/blogs/subscribe`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ email })
+        });
+        return await response.json();
     }
 };
+
 
 export const seoApi = {
     getByPath: async (path: string) => {
@@ -226,9 +303,65 @@ export const heroBackgroundApi = {
     }
 };
 
+export const partnerComparisonApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/partner-categories`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+export const printingBrandingPartnerApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/printing-branding-partner`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const logisticPartnerApi = {
+    get: async () => {
+        try {
+            const response = await fetch(`${API_URL}/logistic-partner`);
+            const data = await response.json();
+            return data.success ? data.data : null;
+        } catch (error) {
+            console.error("Error fetching logistic partner:", error);
+            return null;
+        }
+    }
+};
+export const hospitalityPartnerApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/hospitality-partner`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
 export const globalPlatformApi = {
     get: async () => {
         const response = await fetch(`${API_URL}/global-platform`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+export const eventOverviewApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/event-overview`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+export const aboutOrganizerApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/about-organizer`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+export const ourJourneyApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/our-journey`);
         const data = await response.json();
         return data.success ? data.data : null;
     }
@@ -306,6 +439,38 @@ export const ePromotionApi = {
     }
 };
 
+export const ePromotionPackagesApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/e-promotion-packages/packages`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
+export const ePromotionAddonsApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/e-promotion-packages/addons`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
+export const ePromotionReachApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/e-promotion-packages/reach`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const ePromotionTestimonialsApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/e-promotion-packages/testimonials`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
 export const stallVendorApi = {
     get: async () => {
         const response = await fetch(`${API_URL}/stall-vendor`);
@@ -315,9 +480,24 @@ export const stallVendorApi = {
 };
 
 export const exhibitorApi = {
-    get: async () => {
-        const response = await fetch(`${API_URL}/exhibitor`);
+    get: async (params?: { category?: string; search?: string; page?: number; limit?: number }) => {
+        let url = `${API_URL}/exhibitor`;
+        const query = new URLSearchParams();
+        if (params) {
+            if (params.category && params.category !== 'ALL') query.append('category', params.category);
+            if (params.search) query.append('search', params.search);
+            if (params.page) query.append('page', params.page.toString());
+            if (params.limit) query.append('limit', params.limit.toString());
+            const queryString = query.toString();
+            if (queryString) url += `?${queryString}`;
+        }
+        const response = await fetch(url, { cache: 'no-store' });
         const data = await response.json();
+
+        // Return full object if pagination metadata is present
+        if (data.success && data.pagination) {
+            return { data: data.data, pagination: data.pagination };
+        }
         return data.success ? data.data : [];
     }
 };
@@ -334,6 +514,39 @@ export const advisoryApi = {
         const response = await fetch(`${API_URL}/advisory-members`);
         const data = await response.json();
         return data.success ? data.data : [];
+    }
+};
+
+export const chairmanMessageApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/chairman-message`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const advisoryNominationApi = {
+    submit: async (payload: any) => {
+        const isFormData = payload instanceof FormData;
+        const response = await fetch(`${API_URL}/advisory-nomination`, {
+            method: 'POST',
+            headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+            body: isFormData ? payload : JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/advisory-nomination`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    },
+    updateStatus: async (id: string, status: string) => {
+        const response = await fetch(`${API_URL}/advisory-nomination/${id}/status`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status })
+        });
+        return await response.json();
     }
 };
 
@@ -417,12 +630,101 @@ export const buyerRegistrationApi = {
     }
 };
 
+export const internationalExhibitorApi = {
+    submit: async (payload: any) => {
+        const isFormData = payload instanceof FormData;
+        const response = await fetch(`${API_URL}/international-exhibitor/register`, {
+            method: 'POST',
+            headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+            body: isFormData ? payload : JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/international-exhibitor`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    },
+    getConfig: async () => {
+        const response = await fetch(`${API_URL}/international-exhibitor/config`);
+        return await response.json();
+    }
+};
+
+export const internationalBuyerApi = {
+    submit: async (payload: any) => {
+        const isFormData = payload instanceof FormData;
+        const response = await fetch(`${API_URL}/international-buyer/register`, {
+            method: 'POST',
+            headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+            body: isFormData ? payload : JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/international-buyer`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    },
+    getConfig: async () => {
+        const response = await fetch(`${API_URL}/international-buyer/config`);
+        return await response.json();
+    },
+    updateConfig: async (payload: any) => {
+        const response = await fetch(`${API_URL}/international-buyer/config`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
+    }
+};
+
+export const sellerRegistrationApi = {
+    submit: async (payload: any) => {
+        const isFormData = payload instanceof FormData;
+        const response = await fetch(`${API_URL}/seller-registration`, {
+            method: 'POST',
+            headers: isFormData ? {} : { 'Content-Type': 'application/json' },
+            body: isFormData ? payload : JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/seller-registration`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    },
+    delete: async (id: string) => {
+        const response = await fetch(`${API_URL}/seller-registration/${id}`, {
+            method: 'DELETE'
+        });
+        return await response.json();
+    },
+    createOrder: async (amount: number) => {
+        const response = await fetch(`${API_URL}/seller-registration/create-order`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ amount })
+        });
+        return await response.json();
+    },
+    verifyPayment: async (regId: string, paymentDetails: any) => {
+        const response = await fetch(`${API_URL}/seller-registration/verify-payment`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ regId, paymentDetails })
+        });
+        return await response.json();
+    }
+};
+
 export const otpApi = {
-    request: async (identifier: string, type: 'email' | 'phone', name?: string) => {
+    request: async (identifier: string, type: 'email' | 'phone', name?: string, source?: string) => {
         const response = await fetch(`${API_URL}/otp/request`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ identifier, type, name })
+            body: JSON.stringify({ identifier, type, name, source })
         });
         return await response.json();
     },
@@ -461,11 +763,11 @@ export const verifyApi = {
         });
         return await response.json();
     },
-    sendPhoneOtp: async (phone: string, profile: string = 'CONTACT') => {
+    sendPhoneOtp: async (phone: string, profile: string = 'CONTACT', name: string = '') => {
         const response = await fetch(`${API_URL}/verify/send-phone-otp`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ phone, profile })
+            body: JSON.stringify({ phone, profile, name: name || null })
         });
         return await response.json();
     },
@@ -598,6 +900,41 @@ export const visitorAuthApi = {
     }
 };
 
+export const expoSupportEnquiryApi = {
+    submit: async (payload: any) => {
+        const response = await fetch(`${API_URL}/expo-support-enquiry`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    getAll: async (token: string) => {
+        const response = await fetch(`${API_URL}/expo-support-enquiry`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        return await response.json();
+    },
+    delete: async (id: string, token: string) => {
+        const response = await fetch(`${API_URL}/expo-support-enquiry/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        return await response.json();
+    },
+    updateStatus: async (id: string, status: string, token: string) => {
+        const response = await fetch(`${API_URL}/expo-support-enquiry/${id}/status`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({ status })
+        });
+        return await response.json();
+    }
+};
+
 export const visitorApi = {
     submitCorporate: async (payload: any) => {
         const response = await fetch(`${API_URL}/corporate-visitors`, {
@@ -614,6 +951,30 @@ export const visitorApi = {
             body: JSON.stringify(payload)
         });
         return await response.json();
+    },
+    submitGroup: async (payload: any) => {
+        const response = await fetch(`${API_URL}/group-visitors`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    submitHealthCamp: async (payload: any) => {
+        const response = await fetch(`${API_URL}/health-camp-visitors`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
+    }
+};
+
+export const conferenceTrackApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/conference-tracks`);
+        const data = await response.json();
+        return data.success ? data.data : null;
     }
 };
 
@@ -622,6 +983,19 @@ export const policyApi = {
         const response = await fetch(`${API_URL}/policies/${page}`);
         const data = await response.json();
         return data.success ? data.data : null;
+    }
+};
+
+export const floatingVideoApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/floating-videos`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    },
+    getSettings: async () => {
+        const response = await fetch(`${API_URL}/floating-videos/settings`);
+        const data = await response.json();
+        return data.success ? data.timer : 7;
     }
 };
 
@@ -661,5 +1035,184 @@ export const brochureLeadApi = {
             body: JSON.stringify(payload)
         });
         return await response.json();
+    }
+};
+
+export const whyParticipateApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/why-participate`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const newTestimonialsApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/new-testimonials`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+
+// ─── Awards Nomination API ───
+export const awardsNominationApi = {
+    submit: async (payload: any) => {
+        const response = await fetch(`${API_URL}/awards-nomination`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
+    },
+    uploadFile: async (file: File) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        const response = await fetch(`${API_URL}/awards-nomination/upload`, {
+            method: 'POST',
+            body: formData
+        });
+        return await response.json();
+    },
+    getAll: async (filters?: { status?: string; awardCategory?: string; search?: string }) => {
+        const params = new URLSearchParams(filters as any);
+        const response = await fetch(`${API_URL}/awards-nomination?${params}`);
+        return await response.json();
+    },
+    getById: async (id: string) => {
+        const response = await fetch(`${API_URL}/awards-nomination/${id}`);
+        return await response.json();
+    },
+    updateStatus: async (id: string, status: string, adminRemarks?: string) => {
+        const response = await fetch(`${API_URL}/awards-nomination/${id}/status`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ status, adminRemarks })
+        });
+        return await response.json();
+    },
+    delete: async (id: string) => {
+        const response = await fetch(`${API_URL}/awards-nomination/${id}`, {
+            method: 'DELETE'
+        });
+        return await response.json();
+    }
+};
+
+// ─── Award Categories API ───
+export const awardCategoryApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/award-categories`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+export const agendaApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/agenda`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
+export const conferenceTestimonialsApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/conference-testimonials`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+export const speakerApi = {
+    get: async (status?: string) => {
+        const url = status ? `${API_URL}/speaker?status=${status}` : `${API_URL}/speaker`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
+export const msmePmsSchemeApi = {
+    submit: async (payload: FormData) => {
+        const response = await fetch(`${API_URL}/msme-pms-scheme/apply`, {
+            method: 'POST',
+            body: payload
+        });
+        return await response.json();
+    },
+    getPageContent: async () => {
+        const response = await fetch(`${API_URL}/msme-pms-scheme/page-content`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const distinguishedSpeakerApi = {
+    getAll: async () => {
+        const response = await fetch(`${API_URL}/distinguished-speakers`);
+        const data = await response.json();
+        return data.success ? data.data : [];
+    }
+};
+
+export const exhibitorTestimonialsApi = {
+    get: async () => {
+        const response = await fetch(`${API_URL}/exhibitor-testimonials`);
+        const data = await response.json();
+        return data.success ? data.data : null;
+    }
+};
+
+export const mediaRegistrationApi = {
+    getPageData: async () => {
+        try {
+            const response = await fetch(`${API_URL}/media-registration/data`);
+            const data = await response.json();
+            return data.success ? data.data : null;
+        } catch (error) {
+            console.error("Error fetching media page data:", error);
+            return null;
+        }
+    },
+    submitEnquiry: async (payload: any) => {
+        try {
+            const response = await fetch(`${API_URL}/media-registration/enquiry`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error("Error submitting media enquiry:", error);
+            return { success: false, message: "Network error" };
+        }
+    }
+};
+
+export const partnerRegistrationApi = {
+    submit: async (payload: FormData) => {
+        try {
+            const response = await fetch(`${API_URL}/partner-registration`, {
+                method: 'POST',
+                body: payload
+            });
+            return await response.json();
+        } catch (error) {
+            console.error("Error submitting partner registration:", error);
+            return { success: false, message: "Network error" };
+        }
+    }
+};
+
+
+export const sponsorComparisonApi = {
+    get: async () => {
+        try {
+            const response = await fetch(`${API_URL}/sponsor-comparison`);
+            const data = await response.json();
+            return data.success ? data.data : null;
+        } catch (error) {
+            console.error("Error fetching sponsor-comparison:", error);
+            return null;
+        }
     }
 };

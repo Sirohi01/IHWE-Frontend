@@ -1,11 +1,14 @@
 import { Link } from "react-router-dom";
-import { Mail, Phone, CalendarDays } from "lucide-react";
-import { motion } from "framer-motion";
+import { Mail, Phone, CalendarDays, ChevronDown, Lock, Users, ShoppingBag, Handshake, Briefcase, Camera, Sparkles } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import { settingsApi } from "@/lib/api";
+import { settingsApi, analyticsApi } from "@/lib/api";
+import { cn } from "@/lib/utils";
 
 const Topbar = () => {
   const [settings, setSettings] = useState<any>(null);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -27,13 +30,46 @@ const Topbar = () => {
   const eventDate = settings?.topbarDate || "15–17 October 2026";
 
   return (
-    <motion.div
-      className="bg-slate-900 border-b border-slate-800 text-slate-300 text-[11px] relative z-50 py-1"
-    >
-      <div className="container mx-auto flex flex-wrap items-center justify-center md:justify-between px-2 md:px-6 py-2 md:py-1 gap-y-2 gap-x-10 text-center md:text-left">
-
+    <>
+      <style>{`
+        @keyframes goldShift {
+          0%   { background-position: 0% 50%; }
+          50%  { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        @keyframes sparkleAnim {
+          0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+          40%  { opacity: 1; transform: scale(1.2) translateY(-2px); }
+          80%  { opacity: 0.6; transform: scale(0.9) translateY(-3px); }
+          100% { opacity: 0; transform: scale(0.5) translateY(-4px); }
+        }
+        .marquee-golden-text {
+          background: linear-gradient(135deg, #f5c842 0%, #ffdd00 35%, #fff176 50%, #ffdd00 65%, #f5c842 100%);
+          background-size: 200% 200%;
+          animation: goldShift 2.5s ease infinite;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          color: transparent;
+          font-weight: 900;
+          text-shadow: 0 0 10px rgba(245, 200, 66, 0.2);
+        }
+        .sparkle-dot {
+          position: relative;
+          display: inline-block;
+          margin: 0 15px;
+          color: #ffdd00;
+          text-shadow: 0 0 10px #ffdd00, 0 0 20px gold;
+          animation: sparkleAnim 1.6s ease-in-out infinite;
+          -webkit-text-fill-color: #ffdd00;
+        }
+      `}</style>
+      <motion.div
+        className="bg-[#002511] border-b border-white/5 text-slate-300 text-[11px] relative z-[150] py-1"
+      >
+      <div className="container mx-auto max-w-[1400px] flex items-center justify-between px-6 py-1.5 flex-nowrap gap-x-4">
         {/* Left Section - Contact Info (Compact on mobile) */}
-        <div className="flex items-center justify-center md:justify-start gap-3 md:gap-6 w-full md:w-auto overflow-hidden">
+        <div className="flex items-center justify-center md:justify-start gap-3 md:gap-3 w-full md:w-auto overflow-hidden flex-shrink-0 pl-1">
           {topbarEmails.slice(0, 1).map((item: any, idx: number) => (
             <a
               key={`email-top-${idx}`}
@@ -88,44 +124,73 @@ const Topbar = () => {
         </div>
 
         {/* Center Section - Scrolling Marquee - Hidden on small screens */}
-        <div className="hidden xl:flex flex-1 overflow-hidden relative h-full items-center px-4">
+        <div className="hidden md:flex flex-1 min-w-0 max-w-[200px] lg:max-w-[340px] xl:max-w-[560px] 2xl:max-w-[720px] overflow-hidden relative h-full items-center justify-center px-4 ml-6">
           <motion.div
-            animate={{ x: ["100%", "-100%"] }}
+            animate={{ x: ["0%", "-50%"] }}
             transition={{
               repeat: Infinity,
-              duration: 30,
-              ease: "linear"
+              duration: 100,
+              ease: "linear",
             }}
-            className="whitespace-nowrap text-white font-semibold uppercase tracking-[0.1em] text-[10px]"
+            className="whitespace-nowrap font-bold uppercase tracking-[0.1em] text-[10px] marquee-golden-text flex items-center"
           >
-            {marqueeText}
+            <div className="flex items-center gap-1">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-center">
+                  <span>{marqueeText}</span>
+                  <span className="sparkle-dot" style={{ margin: '0 10px' }}>✦</span>
+                </div>
+              ))}
+            </div>
+            <div className="flex items-center gap-1">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="flex items-center">
+                  <span>{marqueeText}</span>
+                  <span className="sparkle-dot" style={{ margin: '0 10px' }}>✦</span>
+                </div>
+              ))}
+            </div>
           </motion.div>
         </div>
 
-        {/* Right Section - Event Date + Login Buttons - Moved to Navbar on Mobile */}
-        <div className="hidden lg:flex flex-shrink-0 items-center gap-4">
-          <span className="flex items-center gap-2 font-bold text-slate-200">
-            <CalendarDays className="w-3.5 h-3.5 text-[#d26019]" />
-            <span className="uppercase tracking-wider">{eventDate}</span>
-          </span>
-
-          <div className="flex items-center gap-2">
-            <Link to="/exhibitor-login" className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block">
-              Exhibitor Login
-            </Link>
-            <Link to="/buyer-login" className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block">
-              Buyer Login
-            </Link>
-            <button className="px-3 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105">
-              Delegates Login
-            </button>
-            <button className="px-3 py-1.5 rounded-md bg-[#d26019] hover:bg-[#b05015] text-white transition-all duration-300 font-bold border border-white/40 text-[9px] uppercase tracking-wider whitespace-nowrap shadow-md hover:scale-105">
-              User Login
-            </button>
-          </div>
+        {/* Right Section - Login Buttons */}
+        <div className="hidden md:flex flex-shrink-0 items-center gap-1.5">
+          <Link 
+            to="/exhibitor-login" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block"
+          >
+            Exhibitor Login
+          </Link>
+          <Link 
+            to="/buyer-login" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block"
+          >
+            Buyer Login
+          </Link>
+          <Link 
+            to="/delegates-login" 
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2.5 py-1.5 rounded-md bg-white/5 hover:bg-[#d26019] text-white transition-all duration-300 font-bold border border-white/30 hover:border-[#d26019] text-[9px] uppercase tracking-wider whitespace-nowrap shadow-sm hover:scale-105 inline-block text-center"
+          >
+            Delegates Login
+          </Link>
+          <a
+            href="https://admin.ihwe.in/login"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2.5 py-1.5 rounded-md bg-[#d26019] hover:bg-[#b05015] text-white transition-all duration-300 font-bold border border-white/40 text-[9px] uppercase tracking-wider whitespace-nowrap shadow-md hover:scale-105 inline-block text-center"
+          >
+            User Login
+          </a>
         </div>
       </div>
     </motion.div>
+    </>
   );
 };
 

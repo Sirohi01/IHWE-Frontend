@@ -13,7 +13,8 @@ import {
     Layers,
     Search,
     ChevronRight,
-    MoreHorizontal
+    MoreHorizontal,
+    Instagram
 } from "lucide-react";
 import {
     Pagination,
@@ -27,12 +28,13 @@ import {
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import gallHero from "../assets/gall.jpg";
+
 import { galleryApi, heroBackgroundApi, SERVER_URL } from "@/lib/api";
 
 const Gallery = () => {
     const [filter, setFilter] = useState("photo");
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 8;
+    const itemsPerPage = filter === "press" ? 15 : 8;
     const [activeEvent, setActiveEvent] = useState<string | null>(null);
     const [selectedMedia, setSelectedMedia] = useState<any | null>(null);
     const [mediaItems, setMediaItems] = useState<any[]>([]);
@@ -70,6 +72,27 @@ const Gallery = () => {
         return videoId ? `https://www.youtube.com/embed/${videoId}?autoplay=1` : url;
     };
 
+    const getInstagramEmbedUrl = (url: string) => {
+        let cleanUrl = url.split("?")[0];
+        if (!cleanUrl.endsWith("/")) {
+            cleanUrl += "/";
+        }
+        return `${cleanUrl}embed/`;
+    };
+
+    const getInstagramThumbnail = (url: string) => {
+        if (!url) return null;
+        let shortcode = "";
+        if (url.includes("instagram.com/reel/")) {
+            shortcode = url.split("instagram.com/reel/")[1]?.split("/")[0]?.split("?")[0];
+        } else if (url.includes("instagram.com/p/")) {
+            shortcode = url.split("instagram.com/p/")[1]?.split("/")[0]?.split("?")[0];
+        } else if (url.includes("instagr.am/p/")) {
+            shortcode = url.split("instagr.am/p/")[1]?.split("/")[0]?.split("?")[0];
+        }
+        return shortcode ? `https://www.instagram.com/p/${shortcode}/media/?size=l` : null;
+    };
+
     useEffect(() => {
         const fetchGallery = async () => {
             setIsLoading(true);
@@ -90,7 +113,12 @@ const Gallery = () => {
                     
                     let thumb = item.image ? `${SERVER_URL}${item.image}` : null;
                     if (isVideo && isExternalVideo && !thumb) {
-                        thumb = getYouTubeThumbnail(item.videoUrl);
+                        const isInstagram = item.videoUrl && (item.videoUrl.includes('instagram.com') || item.videoUrl.includes('instagr.am'));
+                        if (isInstagram) {
+                            thumb = getInstagramThumbnail(item.videoUrl);
+                        } else {
+                            thumb = getYouTubeThumbnail(item.videoUrl);
+                        }
                     }
 
                     return {
@@ -137,12 +165,19 @@ const Gallery = () => {
         
         // Include titles from items that match photo category but might not have a formal category object
         mediaItems.forEach(item => {
-            if (item.category === 'photo' && item.title) galleryTitles.add(item.title);
+            if (item.category === 'photo' && item.title && !item.galleryCategoryId) {
+                galleryTitles.add(item.title);
+            }
         });
 
         return Array.from(galleryTitles).map(title => {
-            const items = mediaItems.filter(item => item.title === title && item.category === 'photo');
             const catInfo = categories.find(cat => cat.title === title && (cat.type === 'gallery' || !cat.type));
+            
+            const items = mediaItems.filter(item => {
+                if (item.category !== 'photo') return false;
+                if (item.galleryCategoryId && catInfo) return item.galleryCategoryId === catInfo._id;
+                return item.title === title;
+            });
             
             return {
                 title,
@@ -152,10 +187,53 @@ const Gallery = () => {
                     : (items[0]?.thumbnail || items[0]?.src),
                 count: items.length,
                 date: catInfo?.createdAt || items[0]?.createdAt,
+                order: catInfo?.order ?? 999,
                 type: 'gallery'
             };
-        }).filter(e => e.count > 0 || categories.some(c => c.title === e.title && c.type === 'gallery'))
-          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        }).filter(e => e.count > 0 || categories.some(c => c.title === e.title && (!c.type || c.type === 'gallery')))
+          .sort((a, b) => {
+            if (a.order !== b.order) return a.order - b.order;
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
+    }, [mediaItems, categories]);
+
+    // VIDEO GALLERY EVENT LIST (filter to only categories of type 'video')
+    const videoEventList = useMemo(() => {
+        const videoCats = categories.filter(cat => cat.type === 'video');
+        const videoTitles = new Set(videoCats.map(c => c.title));
+
+        // Include titles from items that match video category
+        mediaItems.forEach(item => {
+            if (item.category === 'video' && item.title && !item.galleryCategoryId) {
+                videoTitles.add(item.title);
+            }
+        });
+
+        return Array.from(videoTitles).map(title => {
+            const catInfo = categories.find(cat => cat.title === title && cat.type === 'video');
+            
+            const items = mediaItems.filter(item => {
+                if (item.category !== 'video') return false;
+                if (item.galleryCategoryId && catInfo) return item.galleryCategoryId === catInfo._id;
+                return item.title === title;
+            });
+            
+            return {
+                title,
+                items,
+                coverImage: catInfo?.coverImage 
+                    ? `${SERVER_URL}${catInfo.coverImage}`
+                    : (items[0]?.thumbnail || items[0]?.src),
+                count: items.length,
+                date: catInfo?.createdAt || items[0]?.createdAt,
+                order: catInfo?.order ?? 999,
+                type: 'video'
+            };
+        }).filter(e => e.count > 0 || categories.some(c => c.title === e.title && c.type === 'video'))
+          .sort((a, b) => {
+            if (a.order !== b.order) return a.order - b.order;
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
     }, [mediaItems, categories]);
 
     // MEDIA GALLERY EVENT LIST (filter to only categories of type 'media')
@@ -165,12 +243,19 @@ const Gallery = () => {
 
         // Include titles from items that match press category
         mediaItems.forEach(item => {
-            if (item.category === 'press' && item.title) mediaTitles.add(item.title);
+            if (item.category === 'press' && item.title && !item.galleryCategoryId) {
+                mediaTitles.add(item.title);
+            }
         });
 
         return Array.from(mediaTitles).map(title => {
-            const items = mediaItems.filter(item => item.title === title && item.category === 'press');
             const catInfo = categories.find(cat => cat.title === title && cat.type === 'media');
+            
+            const items = mediaItems.filter(item => {
+                if (item.category !== 'press') return false;
+                if (item.galleryCategoryId && catInfo) return item.galleryCategoryId === catInfo._id;
+                return item.title === title;
+            });
             
             return {
                 title,
@@ -180,29 +265,36 @@ const Gallery = () => {
                     : (items[0]?.thumbnail || items[0]?.src),
                 count: items.length,
                 date: catInfo?.createdAt || items[0]?.createdAt,
+                order: catInfo?.order ?? 999,
                 type: 'media'
             };
         }).filter(e => e.count > 0 || categories.some(c => c.title === e.title && c.type === 'media'))
-          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+          .sort((a, b) => {
+            if (a.order !== b.order) return a.order - b.order;
+            return new Date(b.date).getTime() - new Date(a.date).getTime();
+          });
     }, [mediaItems, categories]);
 
     const filteredItems = useMemo(() => {
         if (activeEvent) {
-            return mediaItems.filter(item => item.title === activeEvent && (filter === 'all' || item.category === filter));
+            const activeCat = categories.find(c => c.title === activeEvent);
+            return mediaItems.filter(item => {
+                if (filter !== 'all' && item.category !== filter) return false;
+                if (activeCat && item.galleryCategoryId) return item.galleryCategoryId === activeCat._id;
+                return item.title === activeEvent;
+            });
         }
         
         if (filter === "photo") return []; // Grid view handled separately
-        if (filter === "press") return []; // Grid view handled separately
+        if (filter === "press") return mediaItems.filter(item => item.category === "press");
+        if (filter === "video") return []; // Grid view handled separately
         
         return mediaItems.filter(item => item.category === filter);
-    }, [filter, activeEvent, mediaItems]);
+    }, [filter, activeEvent, mediaItems, categories]);
 
     const finalDisplayItems = useMemo(() => {
-        const items = activeEvent 
-            ? mediaItems.filter(item => item.title === activeEvent && (filter === 'all' || item.category === filter))
-            : filteredItems;
-        return items;
-    }, [activeEvent, filter, mediaItems, filteredItems]);
+        return filteredItems;
+    }, [filteredItems]);
 
     const paginatedItems = useMemo(() => {
         const startIndex = (currentPage - 1) * itemsPerPage;
@@ -217,15 +309,14 @@ const Gallery = () => {
 
     return (
         <div className="bg-white min-h-screen">
-            {/* ── HERO SECTION - Standardized 16:4 Sleek Style ── */}
+            {/* ── HERO SECTION - Increased Height ── */}
             <section
-                className="hero-background-standard"
+                className="hero-background-standard !aspect-auto min-h-[320px] md:min-h-[480px]"
                 style={{ 
                     backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : gallHero})`
                 }}
             >
                 <div className="absolute inset-0 bg-black/40" />
-                <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 
                 <div className="container mx-auto px-4 text-center text-white relative z-10" data-aos="fade-up">
                     <p className="text-sm uppercase tracking-[0.4em] mb-4 opacity-80">
@@ -240,8 +331,7 @@ const Gallery = () => {
                 </div>
             </section>
 
-            {/* FILTER SYSTEM */}
-            <section className="pt-4 pb-8 bg-white border-b border-slate-50 sticky top-[70px] z-40 lg:top-[80px]">
+            <section className="pt-4 pb-8 bg-white/95 backdrop-blur-md border-b border-slate-200/60 sticky top-[60px] z-40 shadow-sm transition-all duration-300">
                 <div className="container mx-auto px-4">
                     <div className="flex flex-col items-center">
                         <div className="inline-flex p-1.5 bg-slate-100/50 backdrop-blur-sm rounded-xl mb-4 border border-slate-200/50 flex-wrap justify-center shadow-sm">
@@ -265,7 +355,7 @@ const Gallery = () => {
                                         <motion.div
                                             layoutId="activeFilter"
                                             className="absolute inset-0 bg-[#23471d]"
-                                            transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                                            transition={{ type: "spring" as const, bounce: 0.2, duration: 0.6 }}
                                         />
                                     )}
                                     <span className="relative z-10 flex items-center gap-2">
@@ -295,10 +385,9 @@ const Gallery = () => {
                                     onClick={() => setActiveEvent(event.title)}
                                 >
                                     <div className="relative overflow-hidden rounded-[2px] bg-slate-900 shadow-sm hover:shadow-2xl transition-all duration-700 aspect-[3/2]">
-                                        <img
-                                            src={event.coverImage}
+                                        <img loading="lazy" decoding="async" src={event.coverImage}
                                             alt={event.title}
-                                            className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
+                                            className="w-full h-full object-cover transition-transform [transition-duration:1.2s] ease-out group-hover:scale-105"
                                         />
                                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6 text-white text-left">
                                             <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
@@ -324,10 +413,12 @@ const Gallery = () => {
                         </div>
                     )}
 
-                    {/* MEDIA GALLERY CATEGORY GRID */}
-                    {filter === "press" && !activeEvent && (
+                    {/* MEDIA GALLERY CATEGORY GRID REMOVED - IMAGES SHOWN DIRECTLY */}
+
+                    {/* VIDEO GALLERY CATEGORY GRID */}
+                    {filter === "video" && !activeEvent && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {mediaEventList.map((event) => (
+                            {videoEventList.map((event) => (
                                 <motion.div
                                     key={event.title}
                                     initial={{ opacity: 0, scale: 0.98 }}
@@ -336,15 +427,37 @@ const Gallery = () => {
                                     onClick={() => setActiveEvent(event.title)}
                                 >
                                     <div className="relative overflow-hidden rounded-[2px] bg-slate-900 shadow-sm hover:shadow-2xl transition-all duration-700 aspect-[3/2]">
-                                        <img
-                                            src={event.coverImage}
-                                            alt={event.title}
-                                            className="w-full h-full object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-105"
-                                        />
+                                        {event.coverImage && (event.coverImage.includes('instagram.com') || event.coverImage.includes('instagr.am')) ? (
+                                            <div className="absolute inset-0 w-full h-full pointer-events-none flex items-center justify-center bg-black">
+                                                <iframe 
+                                                    src={getInstagramEmbedUrl(event.coverImage)} 
+                                                    className="w-full h-[220%] border-0 opacity-80"
+                                                    scrolling="no"
+                                                    allowTransparency={true}
+                                                />
+                                                <div className="absolute inset-0 bg-black/10" />
+                                            </div>
+                                        ) : (
+                                            <img loading="lazy" decoding="async" src={event.coverImage}
+                                                alt={event.title}
+                                                className="w-full h-full object-cover transition-transform [transition-duration:1.2s] ease-out group-hover:scale-105"
+                                                onError={(e) => {
+                                                    const target = e.target as HTMLImageElement;
+                                                    const parent = target.parentElement;
+                                                    if (parent) {
+                                                        target.style.display = 'none';
+                                                        const fallbackDiv = document.createElement('div');
+                                                        fallbackDiv.className = "absolute inset-0 bg-gradient-to-tr from-[#f9ce3f] via-[#e1306c] to-[#833ab4] opacity-80 flex items-center justify-center";
+                                                        fallbackDiv.innerHTML = `<svg class="w-10 h-10 text-white opacity-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`;
+                                                        parent.appendChild(fallbackDiv);
+                                                    }
+                                                }}
+                                            />
+                                        )}
                                         <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-all duration-500 flex flex-col justify-end p-6 text-white text-left">
                                             <div className="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
                                                 <div className="flex items-center gap-2 mb-2">
-                                                    <span className="text-[#d26019] text-[9px] font-bold uppercase tracking-widest">Media Coverage</span>
+                                                    <span className="text-[#d26019] text-[9px] font-bold uppercase tracking-widest">Video Collection</span>
                                                     <div className="h-px w-4 bg-white/30" />
                                                 </div>
                                                 <h3 className="text-base font-inter font-bold mb-2 uppercase">{event.title}</h3>
@@ -352,7 +465,7 @@ const Gallery = () => {
                                                     <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white text-[#23471d]">
                                                         <ArrowRight className="w-4 h-4" />
                                                     </div>
-                                                    <span className="text-[9px] font-bold uppercase tracking-widest text-white/80">View {event.count} Photos</span>
+                                                    <span className="text-[9px] font-bold uppercase tracking-widest text-white/80">View {event.count} Videos</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -365,8 +478,8 @@ const Gallery = () => {
                         </div>
                     )}
 
-                    {/* MASONRY LIST (When activeEvent is set OR filter is all/video) */}
-                    {(activeEvent || (filter !== "photo" && filter !== "press")) && (
+                    {/* MASONRY LIST (When activeEvent is set OR filter is "press" OR filter is all/other) */}
+                    {(activeEvent || filter === "press" || (filter !== "photo" && filter !== "press" && filter !== "video")) && (
                         <div>
                             {activeEvent && (
                                 <div className="flex items-center gap-4 mb-10 group cursor-pointer" onClick={() => setActiveEvent(null)}>
@@ -398,9 +511,35 @@ const Gallery = () => {
                                             >
                                                 <div className="overflow-hidden bg-slate-100 flex items-center justify-center">
                                                     {item.type === "video" ? (
-                                                        <div className="relative w-full aspect-[16/9] bg-slate-900 flex items-center justify-center">
-                                                            {item.thumbnail ? (
-                                                                <img src={item.thumbnail} className="absolute inset-0 w-full h-full object-cover opacity-60" />
+                                                        <div className="relative w-full aspect-[16/9] bg-slate-900 flex items-center justify-center overflow-hidden">
+                                                            {item.src && (item.src.includes('instagram.com') || item.src.includes('instagr.am')) && (!item.thumbnail || item.thumbnail.includes('instagram.com')) ? (
+                                                                <div className="absolute inset-0 w-full h-full pointer-events-none flex items-center justify-center bg-black">
+                                                                    <iframe 
+                                                                        src={getInstagramEmbedUrl(item.src)} 
+                                                                        className="w-full h-[220%] border-0 opacity-80"
+                                                                        scrolling="no"
+                                                                        allowTransparency={true}
+                                                                    />
+                                                                    <div className="absolute inset-0 bg-black/10" />
+                                                                </div>
+                                                            ) : item.thumbnail ? (
+                                                                <img loading="lazy" decoding="async" src={item.thumbnail} 
+                                                                    referrerPolicy="no-referrer"
+                                                                    className="absolute inset-0 w-full h-full object-cover opacity-60"
+                                                                    onError={(e) => {
+                                                                        const target = e.target as HTMLImageElement;
+                                                                        const parent = target.parentElement;
+                                                                        if (parent) {
+                                                                            target.style.display = 'none';
+                                                                            const fallbackDiv = document.createElement('div');
+                                                                            fallbackDiv.className = "absolute inset-0 bg-gradient-to-tr from-[#f9ce3f] via-[#e1306c] to-[#833ab4] opacity-80 flex items-center justify-center";
+                                                                            fallbackDiv.innerHTML = `<svg class="w-10 h-10 text-white opacity-90" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>`;
+                                                                            parent.appendChild(fallbackDiv);
+                                                                        }
+                                                                    }}
+                                                                />
+                                                            ) : !item.isExternalVideo && item.src ? (
+                                                                <video src={`${item.src}#t=0.5`} className="absolute inset-0 w-full h-full object-cover opacity-60" preload="metadata" muted playsInline />
                                                             ) : (
                                                                 <Video className="w-10 h-10 text-white/20" />
                                                             )}
@@ -413,7 +552,7 @@ const Gallery = () => {
                                                             src={item.src}
                                                             alt={item.title}
                                                             effect="blur"
-                                                            className="w-full h-auto object-cover transition-transform duration-[1.2s] ease-out group-hover:scale-110"
+                                                            className="w-full h-auto object-cover transition-transform [transition-duration:1.2s] ease-out group-hover:scale-110"
                                                             wrapperClassName="w-full"
                                                         />
                                                     )}
@@ -522,8 +661,18 @@ const Gallery = () => {
                             onClick={(e) => e.stopPropagation()}
                         >
                             {selectedMedia.type === "video" ? (
-                                <div className="aspect-video w-full">
-                                    {selectedMedia.isExternalVideo ? (
+                                <div className={selectedMedia.src && (selectedMedia.src.includes('instagram.com') || selectedMedia.src.includes('instagr.am')) 
+                                    ? "w-full max-w-[400px] h-[580px] bg-black overflow-hidden flex items-center justify-center rounded-lg" 
+                                    : "aspect-video w-full"}>
+                                    {selectedMedia.src && (selectedMedia.src.includes('instagram.com') || selectedMedia.src.includes('instagr.am')) ? (
+                                        <iframe 
+                                            src={getInstagramEmbedUrl(selectedMedia.src)} 
+                                            className="w-full h-full shadow-2xl border-0" 
+                                            scrolling="no" 
+                                            allowTransparency={true}
+                                            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                                        />
+                                    ) : selectedMedia.isExternalVideo ? (
                                         <iframe 
                                             src={getYouTubeEmbedUrl(selectedMedia.src)} 
                                             className="w-full h-full shadow-2xl" 
@@ -535,7 +684,7 @@ const Gallery = () => {
                                     )}
                                 </div>
                             ) : (
-                                <img src={selectedMedia.src} className="max-w-full max-h-[85vh] mx-auto object-contain shadow-2xl" />
+                                <img loading="lazy" decoding="async" src={selectedMedia.src} className="max-w-full max-h-[85vh] mx-auto object-contain shadow-2xl" />
                             )}
                             {selectedMedia.description && (
                                 <div className="mt-4 text-center">

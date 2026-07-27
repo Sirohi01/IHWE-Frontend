@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { socialMediaApi, analyticsApi } from "@/lib/api";
 
 const CallFloat = () => {
-  const [phoneNumber, setPhoneNumber] = useState("+919876543210");
+  const [phoneNumber, setPhoneNumber] = useState("");
 
   useEffect(() => {
     const fetchPhoneNumber = async () => {
@@ -19,6 +19,8 @@ const CallFloat = () => {
     };
     fetchPhoneNumber();
   }, []);
+
+  if (!phoneNumber.trim()) return null;
 
   return (
     <>
@@ -36,8 +38,12 @@ const CallFloat = () => {
         .call-float-btn {
           position: relative;
           z-index: 50;
-          width: 48px;
-          height: 48px;
+          width: 40px;
+          height: 40px;
+          @media (min-width: 1024px) {
+            width: 48px;
+            height: 48px;
+          }
           background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
           border-radius: 50%;
           display: flex;
@@ -89,7 +95,7 @@ const CallFloat = () => {
         <div className="call-ring"></div>
 
         {/* Call Icon */}
-        <Phone className="call-icon" size={20} strokeWidth={2.5} />
+        <Phone className="call-icon w-4 h-4 lg:w-5 lg:h-5" strokeWidth={2.5} />
       </a>
     </>
   );

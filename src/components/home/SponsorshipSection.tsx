@@ -1,0 +1,1074 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { API_URL, socialMediaApi, settingsApi, analyticsApi, SERVER_URL } from '../../lib/api';
+
+import {
+  Trophy, Zap, Users, Mic2, BadgeCheck, UserCheck,
+  Leaf, Monitor, Download, Phone,
+  Globe, ShieldCheck, PieChart, Users2,
+  Calendar, Star, Handshake, HeadphonesIcon,
+  TrendingUp, Award, Megaphone, Infinity, PhoneCall, FileText, Home, Store, CheckCircle
+} from 'lucide-react';
+import { motion, AnimatePresence, useInView, animate } from 'framer-motion';
+
+import bgImage from '../../assets/12345.png';
+import titleSponsorImg from '../../assets/icon111.webp';
+import poweredByImg from '../../assets/icon222.webp';
+import associateSponsorImg from '../../assets/icon333.webp';
+import conferenceSponsorImg from '../../assets/icon444.webp';
+import registrationSponsorImg from '../../assets/icon555.webp';
+import lanyardSponsorImg from '../../assets/icon666.webp';
+import wellnessSponsorImg from '../../assets/icon777.webp';
+import digitalSponsorImg from '../../assets/icon888.webp';
+import leafImg from '../../assets/leave.png';
+import logo1 from '../../logos/logo1.png';
+import logo2 from '../../logos/logo2.png';
+import logo3 from '../../logos/logo3.png';
+import logo4 from '../../logos/logo4.png';
+import logo5 from '../../logos/logo5.png';
+import logo6 from '../../logos/logo6.png';
+import logo7 from '../../logos/logo7.png';
+import logo8 from '../../logos/logo8.png';
+import logo9 from '../../logos/logo9.jpg';
+import logo10 from '../../logos/logo10.webp';
+import SectionContainer from '../layout/SectionContainer';
+
+// ─── Interfaces ───
+interface Opportunity {
+  title: string;
+  desc: string;
+  image?: string;
+  icon?: React.ElementType;
+  color: string;
+  bgColor?: string;
+  badge?: string;
+}
+
+interface WhySponsor {
+  icon: React.ElementType;
+  title: string;
+  bold: string;
+}
+
+interface Brand {
+  name: string;
+  sub: string;
+  color: string;
+  logo?: string;
+}
+
+const SPONSORSHIP_OPPORTUNITIES: Opportunity[] = [
+  {
+    title: "TITLE SPONSOR",
+    desc: "Maximum visibility\n& brand exclusivity",
+    image: titleSponsorImg,
+    color: "#d97706",
+    bgColor: "#fef3c7",
+    badge: "MOST EXCLUSIVE"
+  },
+  {
+    title: "POWERED BY SPONSOR",
+    desc: "Align your brand as the power behind IHWE",
+    image: poweredByImg,
+    color: "#2563eb",
+    bgColor: "#eff6ff",
+  },
+  {
+    title: "ASSOCIATE SPONSOR",
+    desc: "High-impact visibility & brand recognition",
+    image: associateSponsorImg,
+    color: "#16a34a",
+    bgColor: "#f0fdf4",
+  },
+  {
+    title: "CONFERENCE SPONSOR",
+    desc: "Brand association with knowledge sessions",
+    image: conferenceSponsorImg,
+    color: "#7c3aed",
+    bgColor: "#f5f3ff",
+  },
+  {
+    title: "REGISTRATION SPONSOR",
+    desc: "High brand recall at every entry point",
+    image: registrationSponsorImg,
+    color: "#0d9488",
+    bgColor: "#f0fdfa",
+  },
+  {
+    title: "LANYARD / BADGE SPONSOR",
+    desc: "Put your brand around every neck",
+    image: lanyardSponsorImg,
+    color: "#ea580c",
+    bgColor: "#fff7ed",
+  },
+  {
+    title: "WELLNESS ZONE SPONSOR",
+    desc: "Showcase your brand in the wellness experience zone",
+    image: wellnessSponsorImg,
+    color: "#059669",
+    bgColor: "#ecfdf5",
+  },
+  {
+    title: "DIGITAL PROMOTION PARTNER",
+    desc: "Expand your reach across digital platforms",
+    image: digitalSponsorImg,
+    color: "#4f46e5",
+    bgColor: "#eef2ff",
+  }
+];
+
+const WHY_SPONSOR: WhySponsor[] = [
+  { icon: Users2, title: "Showcase your brand to\n10,000+ targeted visitors", bold: "10,000+" },
+  { icon: Megaphone, title: "Multi-channel promotion (digital + on-ground)", bold: "Multi-channel" },
+  { icon: Handshake, title: "Build authority in the health & wellness ecosystem", bold: "health & wellness" },
+  { icon: Star, title: "Premium branding across expo touchpoints", bold: "Premium branding" },
+  { icon: TrendingUp, title: "Direct access to decision-makers & buyers", bold: "decision-makers" },
+  { icon: Globe, title: "Global exposure & networking opportunities", bold: "Global exposure &" },
+];
+
+const BRANDS: Brand[] = [
+  { name: "PATANJALI", sub: "", color: "#e65c00", logo: logo1 },
+  { name: "Dabur", sub: "", color: "#2d7a2d", logo: logo2 },
+  { name: "Himalaya", sub: "", color: "#1a5fa8", logo: logo3 },
+  { name: "Apollo", sub: "", color: "#003087", logo: logo4 },
+  { name: "ZANDU", sub: "", color: "#c8a000", logo: logo5 },
+  { name: "BAIDYANATH", sub: "", color: "#8b1a1a", logo: logo6 },
+  { name: "HEALTHKART", sub: "", color: "#1a1a1a", logo: logo7 },
+  { name: "Herbalife", sub: "", color: "#e8000d", logo: logo8 },
+  { name: "nveda", sub: "", color: "#2d7a2d", logo: logo9 },
+  { name: "MORE", sub: "", color: "#555", logo: logo10 },
+  { name: "SHETH", sub: "", color: "#000", logo: "/sheth.jpeg" },
+];
+
+// Animated counter — counts up when section scrolls into view
+const StatCounter = ({ value }: { value: string }) => {
+  const [displayValue, setDisplayValue] = useState(0);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, margin: '-50px' });
+
+  const numericValue = parseInt(value.replace(/,/g, '')) || 0;
+  const suffix = value.replace(/[0-9,]/g, '');
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(0, numericValue, {
+        duration: 2.5,
+        ease: 'easeOut',
+        onUpdate(v) {
+          setDisplayValue(Math.floor(v));
+        },
+      });
+      return () => controls.stop();
+    }
+  }, [isInView, numericValue]);
+
+  return (
+    <span ref={ref}>
+      {displayValue.toLocaleString()}{suffix}
+    </span>
+  );
+};
+
+const SponsorshipSection = () => {
+  const [formData, setFormData] = useState({
+    fullName: '',
+    companyName: '',
+    email: '',
+    phone: '',
+    category: 'Interested Sponsorship Category*',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  // OTP States
+  const [emailOtp, setEmailOtp] = useState('');
+  const [phoneOtp, setPhoneOtp] = useState('');
+  const [isEmailOtpSent, setIsEmailOtpSent] = useState(false);
+  const [isPhoneOtpSent, setIsPhoneOtpSent] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [isEmailSending, setIsEmailSending] = useState(false);
+  const [isPhoneSending, setIsPhoneSending] = useState(false);
+  const [isEmailVerifying, setIsEmailVerifying] = useState(false);
+  const [isPhoneVerifying, setIsPhoneVerifying] = useState(false);
+
+  // Dynamic Contact Data
+  const [whatsappNumber, setWhatsappNumber] = useState("919654900525");
+  const [whatsappMsg, setWhatsappMsg] = useState("Hello! I am interested in Sponsorship opportunities for IHWE 2026.");
+  const [contactPhone, setContactPhone] = useState("+91 9654900525");
+  const [brochureUrl, setBrochureUrl] = useState("/pdf.pdf");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [socialData, settingsData] = await Promise.all([
+          socialMediaApi.get(),
+          settingsApi.get()
+        ]);
+
+        if (socialData) {
+          if (socialData.whatsappNumber) setWhatsappNumber(socialData.whatsappNumber);
+          if (socialData.whatsappMessage) setWhatsappMsg(socialData.whatsappMessage);
+        }
+
+        if (settingsData) {
+          if (settingsData.phoneNumber) setContactPhone(settingsData.phoneNumber);
+          if (settingsData.downloadBrochurePdf) {
+            setBrochureUrl(`${SERVER_URL}${settingsData.downloadBrochurePdf}`);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching sponsorship contact data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const cleanWhatsAppNumber = whatsappNumber.replace(/\D/g, "");
+  const whatsappUrl = `https://wa.me/${cleanWhatsAppNumber}?text=${encodeURIComponent(whatsappMsg)}`;
+
+  const handleChange = (e: any) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+    // Reset verification if identifier changes
+    if (e.target.name === 'email') {
+      setIsEmailVerified(false);
+      setIsEmailOtpSent(false);
+    }
+    if (e.target.name === 'phone') {
+      setIsPhoneVerified(false);
+      setIsPhoneOtpSent(false);
+    }
+  };
+
+  const requestOtp = async (type: 'email' | 'phone') => {
+    const identifier = type === 'email' ? formData.email : formData.phone;
+    if (!identifier) {
+      toast.warning(`Please enter your ${type} first`);
+      return;
+    }
+
+    if (type === 'email') setIsEmailSending(true);
+    else setIsPhoneSending(true);
+
+    try {
+      const response = await fetch(`${API_URL}/otp/request`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier, type, name: formData.fullName, source: 'SPONSOR' })
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success(`OTP sent to your ${type}`);
+        if (type === 'email') setIsEmailOtpSent(true);
+        else setIsPhoneOtpSent(true);
+      } else {
+        toast.error(data.message || "Failed to send OTP");
+      }
+    } catch (error) {
+      toast.error("Error sending OTP");
+    } finally {
+      if (type === 'email') setIsEmailSending(false);
+      else setIsPhoneSending(false);
+    }
+  };
+
+  const verifyOtp = async (type: 'email' | 'phone') => {
+    const identifier = type === 'email' ? formData.email : formData.phone;
+    const otp = type === 'email' ? emailOtp : phoneOtp;
+
+    if (!otp) {
+      toast.warning("Please enter the OTP");
+      return;
+    }
+
+    if (type === 'email') setIsEmailVerifying(true);
+    else setIsPhoneVerifying(true);
+
+    try {
+      const response = await fetch(`${API_URL}/otp/verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier, otp, type })
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success(`${type === 'email' ? 'Email' : 'WhatsApp'} verified!`);
+        if (type === 'email') setIsEmailVerified(true);
+        else setIsPhoneVerified(true);
+      } else {
+        toast.error(data.message || "Invalid OTP");
+      }
+    } catch (error) {
+      toast.error("Verification failed");
+    } finally {
+      if (type === 'email') setIsEmailVerifying(false);
+      else setIsPhoneVerifying(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Basic Validation
+    if (!formData.fullName || !formData.companyName || !formData.email || !formData.phone) {
+      toast.warning("Please fill all required fields marked with *");
+      return;
+    }
+
+    if (formData.category === 'Interested Sponsorship Category*') {
+      toast.warning("Please select a sponsorship category");
+      return;
+    }
+
+    if (!isEmailVerified || !isPhoneVerified) {
+      toast.warning("Please verify both your email and WhatsApp number");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(`${API_URL}/sponsorship-enquiry`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      const data = await response.json();
+      if (data.success) {
+        setIsSuccess(true);
+        setFormData({
+          fullName: '',
+          companyName: '',
+          email: '',
+          phone: '',
+          category: 'Interested Sponsorship Category*',
+          message: ''
+        });
+        setEmailOtp('');
+        setPhoneOtp('');
+        setIsEmailVerified(false);
+        setIsPhoneVerified(false);
+        setIsEmailOtpSent(false);
+        setIsPhoneOtpSent(false);
+
+        // Reset success state after 4 seconds to show form again
+        setTimeout(() => {
+          setIsSuccess(false);
+        }, 4000);
+      } else {
+        toast.error(data.message || "Failed to submit enquiry");
+      }
+    } catch (error) {
+      console.error("Submission Error:", error);
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+
+    <section className="bg-white overflow-hidden" style={{ fontFamily: "'Inter', sans-serif" }}>
+
+      {/* ══════════════════════════════════════════
+          TOP HERO: LEFT (text) | CENTER (image) | RIGHT (why sponsor)
+      ══════════════════════════════════════════ */}
+      <div className="pt-10 md:pt-16 pb-0 border-b border-slate-100 overflow-hidden" style={{ background: "#f8f7f5" }}>
+        <SectionContainer>
+          <div className="grid grid-cols-1 lg:grid-cols-[1.4fr_1.5fr_1.8fr] gap-x-8 gap-y-4 lg:gap-4 items-start lg:-mb-6">
+
+            {/* ── LEFT: Heading block ── */}
+            <div className="flex flex-col items-start text-left w-full">
+              {/* Badge */}
+              <div
+                className="inline-flex items-center gap-2 border border-[#12321d]/10 rounded-full px-3 py-1.5 md:px-5 md:py-2 mb-3 w-fit shadow-sm text-left"
+                style={{ background: "#e9ece3" }}
+              >
+                <Leaf className="w-3 h-3 md:w-3.5 md:h-3.5 text-[#12321d]" />
+                <span className="text-[#12321d] font-extrabold text-[9px] md:text-[11px] tracking-[0.15em] uppercase whitespace-nowrap">
+                  Sponsorship Opportunities Open
+                </span>
+              </div>
+
+              <h2 className="font-black leading-[1.1] mb-2 text-left" style={{ fontSize: "clamp(32px, 3.5vw, 46px)" }}>
+                <span style={{ color: "#023316" }}>BECOME A</span><br />
+                <span style={{ color: "#78903a" }}>SPONSOR</span>
+              </h2>
+
+              <p className="text-[#242927] font-bold text-[12px] mb-2 leading-snug uppercase tracking-wide text-left">
+                Position Your Brand at the Forefront<br />of the Wellness Industry
+              </p>
+
+              <div className="text-slate-700 text-[12.5px] font-medium leading-relaxed text-left">
+                <span className="block lg:whitespace-nowrap">Partner with International Health & Wellness Expo 2026 and</span>
+                <span className="block lg:whitespace-nowrap">unlock premium visibility, strategic connections and unmatched</span>
+                <span className="block lg:whitespace-nowrap">business opportunities with industry leaders and decision-makers.</span>
+              </div>
+            </div>
+
+            {/* ── CENTER: Expo Image ── */}
+            <div className="relative h-[400px] lg:h-[300px] w-full flex justify-center">
+              <img loading="lazy" decoding="async" src={bgImage}
+                alt="IHWE Expo"
+                className="w-full h-full object-contain object-center relative z-20 scale-[1.2] lg:scale-[1.2] lg:-mt-12 lg:-ml-4 lg:-mb-[160px]"
+              />
+            </div>
+
+            {/* ── RIGHT: Why Sponsor IHWE? ── */}
+            <div className="pl-0 pr-2 pb-0 pt-0">
+              {/* Header */}
+              <div
+                className="rounded-b-xl px-4 py-1 mb-2 text-center w-fit mx-auto"
+                style={{ background: "#022f15" }}
+              >
+                <span className="text-white font-bold text-[14px] md:text-[18px] tracking-[0.1em] md:tracking-[0.2em] uppercase whitespace-nowrap">
+                  WHY SPONSOR IHWE?
+                </span>
+              </div>
+
+              {/* Items */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+                {WHY_SPONSOR.map((item, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center gap-3 py-1 pr-3"
+                    style={{
+                      borderBottom: "1px solid #e5e7eb",
+                    }}
+                  >
+                    <div
+                      className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{ border: "1.5px solid #c5dfa0" }}
+                    >
+                      <item.icon className="w-5 h-5" style={{ color: "#425d0d" }} />
+                    </div>
+                    <p className="text-slate-700 text-[12px] sm:text-[11px] font-medium leading-snug whitespace-pre-line">
+                      {item.title.split(item.bold).map((part, i, arr) =>
+                        i < arr.length - 1 ? (
+                          <React.Fragment key={i}>
+                            {part}<strong className="text-[#d26019]">{item.bold}</strong>
+                          </React.Fragment>
+                        ) : part
+                      )}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </SectionContainer>
+      </div>
+
+      {/* ══════════════════════════════════════════
+          SPONSORSHIP OPPORTUNITIES SECTION
+      ══════════════════════════════════════════ */}
+      <div className="bg-white pt-4 pb-4">
+        <SectionContainer>
+
+          {/* Section Divider Header */}
+          <div className="flex items-center gap-2 md:gap-4 mb-4">
+            <div className="flex-1 h-[1px] bg-slate-200" />
+            <div className="flex items-center gap-2 shrink-0">
+              <Leaf className="w-3 md:w-3.5 h-3 md:h-3.5 text-[#23471d]" />
+              <span className="font-bold text-[11px] md:text-[14px] tracking-[0.15em] md:tracking-[0.25em] uppercase text-center" style={{ color: "#6E1A37" }}>
+                SPONSORSHIP OPPORTUNITIES
+              </span>
+              <Leaf className="w-3 md:w-3.5 h-3 md:h-3.5 text-[#23471d] scale-x-[-1]" />
+            </div>
+            <div className="flex-1 h-[1px] bg-slate-200" />
+          </div>
+
+          {/* Responsive grid cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-3 md:gap-4">
+            {SPONSORSHIP_OPPORTUNITIES.map((opp, idx) => (
+              <div
+                key={idx}
+                className="relative flex flex-col items-center text-center pt-5 pb-4 px-2 rounded-lg border transition-all duration-300 hover:shadow-lg group"
+                style={{
+                  border: idx === 0
+                    ? "1.5px solid #d39725"
+                    : "1.5px solid #e5e7eb",
+                  background: "white",
+                  boxShadow: idx === 0
+                    ? "0 2px 12px rgba(211,151,37,0.12)"
+                    : "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px",
+                }}
+              >
+                {/* MOST EXCLUSIVE badge */}
+                {opp.badge && (
+                  <div
+                    className="absolute -top-px left-1/2 -translate-x-1/2 px-2 py-0.5 rounded-b-lg text-white font-black text-[8px] tracking-wide uppercase whitespace-nowrap"
+                    style={{ background: "#d39725" }}
+                  >
+                    {opp.badge}
+                  </div>
+                )}
+
+                {/* Icon or Image circle */}
+                <div
+                  className="w-14 h-14 flex items-center justify-center mb-3 mt-1 group-hover:scale-110 transition-transform duration-300"
+                  style={{ background: "transparent" }}
+                >
+                  {opp.image ? (
+                    <img loading="lazy" decoding="async" src={opp.image} alt={opp.title} className="w-full h-full object-contain scale-[2.2]" />
+                  ) : opp.icon ? (
+                    <opp.icon
+                      className="w-9 h-9"
+                      style={{ color: "#1a3a00" }}
+                    />
+                  ) : null}
+                </div>
+
+                <h4
+                  className="font-bold text-[11px] tracking-wide uppercase leading-tight mb-1.5"
+                  style={{ color: "#143005", minHeight: 28 }}
+                >
+                  {opp.title}
+                </h4>
+                <p className="text-black text-[9px] leading-relaxed whitespace-pre-line">
+                  {opp.desc}
+                </p>
+              </div>
+            ))}
+          </div>
+        </SectionContainer>
+      </div>
+
+      {/* ══════════════════════════════════════════
+          BOTTOM: Limited Slots Bar + CTA & Form
+      ══════════════════════════════════════════ */}
+      <div className="bg-white pt-2 md:pt-4 pb-16">
+        <SectionContainer>
+
+          {/* 1. Limited Slots Bar - Wrapped in grid for consistent alignment */}
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 lg:gap-2 mb-10 lg:mb-8 mt-2 lg:-mt-5 relative z-20">
+            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-start gap-8 lg:gap-10 pt-1.5 pb-3 lg:pb-2.5 px-6 lg:px-10 rounded-2xl border border-slate-100 w-full shadow-sm" style={{ background: "#f0f1e9" }}>
+              <div className="flex items-center gap-4 lg:gap-3">
+                <div className="w-12 h-12 lg:w-10 lg:h-10 bg-[#022f15] rounded-lg flex items-center justify-center shrink-0">
+                  <Calendar className="w-6 h-6 lg:w-5 lg:h-5 text-white" />
+                </div>
+                <div>
+                  <p className="font-bold text-[14px] lg:text-[13px] text-[#022f15] uppercase tracking-tight">Limited Sponsorship Slots Available</p>
+                  <p className="text-[12px] lg:text-[11px] text-slate-900">Secure your category before it's gone!</p>
+                </div>
+              </div>
+              <div className="hidden lg:block w-[1.5px] h-8 bg-slate-400/60" />
+              <div className="flex items-center gap-4 lg:gap-3">
+                <div className="w-12 h-12 lg:w-10 lg:h-10 bg-[#f0f7e8] rounded-lg flex items-center justify-center border border-[#c5dfa0] shrink-0">
+                  <Star className="w-6 h-6 lg:w-5 lg:h-5 text-[#425d0d]" />
+                </div>
+                <p className="text-[12.5px] lg:text-[11.5px] text-slate-900 font-medium">
+                  Featured sponsors get exclusive<br className="hidden lg:block" /> media coverage & brand promotions.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-4 lg:gap-2 items-start mt-0 lg:-mt-6 relative z-10">
+
+            {/* 2. Dark Green CTA Card */}
+            <div className="bg-[#012011] rounded-2xl lg:rounded-l-2xl lg:rounded-r-none p-5 lg:px-8 lg:py-10 relative overflow-hidden shadow-xl flex flex-col h-fit justify-between">
+              {/* Decorative Leaf Image */}
+              <img loading="lazy" decoding="async" src={leafImg}
+                alt="decorative"
+                className="absolute -bottom-6 -left-10 w-48 h-48 opacity-40 pointer-events-none object-contain"
+              />
+              {/* Decorative Glow */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32 blur-3xl pointer-events-none" />
+
+              <div className="relative z-10">
+                {/* Top Row: Title + Buttons */}
+                <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-8 lg:gap-6 pb-6 lg:pb-5 mb-6 lg:mb-5 relative">
+                  {/* Decorative Border Bottom (Indented from left) */}
+                  <div className="absolute bottom-0 right-0 lg:left-[320px] left-0 h-[1px] bg-white/10" />
+                  <div className="shrink-0 origin-left scale-y-[1.1] lg:scale-y-[1.3] text-center lg:text-left">
+                    <h3 className="text-white font-extrabold text-lg xl:text-xl leading-tight lg:whitespace-nowrap">
+                      ELEVATE YOUR BRAND PRESENCE
+                    </h3>
+                    <h3 className="text-[#c5dfa0] font-extrabold text-lg xl:text-xl leading-tight mt-0.5">
+                      AT IHWE 2026
+                    </h3>
+                  </div>
+
+                  {/* Horizontal Buttons Row */}
+                  <div className="flex flex-wrap lg:flex-nowrap gap-3 lg:gap-2 items-center justify-center lg:justify-start lg:pt-0.5">
+                    <a
+                      href={brochureUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-xl px-4 lg:px-3 py-2.5 lg:py-2 flex items-center gap-3 lg:gap-2.5 transition-all duration-300 group min-w-[140px] lg:min-w-[125px]"
+                    >
+                      <FileText className="w-7 h-7 lg:w-6 lg:h-6 text-white group-hover:scale-110 transition-transform" />
+                      <div className="text-left text-white">
+                        <p className="text-[10px] lg:text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Download</p>
+                        <p className="text-[11px] lg:text-[10px] font-medium uppercase whitespace-nowrap">Brochure</p>
+                      </div>
+                    </a>
+
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => analyticsApi.logClick("Sponsorship WhatsApp")}
+                      className="bg-[#78903a] hover:bg-[#8ba643] text-white rounded-xl px-4 lg:px-3 py-2.5 lg:py-2 flex items-center gap-3 lg:gap-2.5 transition-all duration-300 group min-w-[140px] lg:min-w-[125px]"
+                    >
+                      <Handshake className="w-7 h-7 lg:w-6 lg:h-6 text-white group-hover:scale-110 transition-transform" />
+                      <div className="text-left">
+                        <p className="text-[10px] lg:text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Any</p>
+                        <p className="text-[11px] lg:text-[10px] font-medium uppercase whitespace-nowrap">Query?</p>
+                      </div>
+                    </a>
+
+                    <a
+                      href={`tel:${contactPhone.replace(/\s+/g, '')}`}
+                      className="bg-white/5 hover:bg-white/10 text-white border border-white/10 rounded-xl px-4 lg:px-3 py-2.5 lg:py-2 flex items-center gap-3 lg:gap-2.5 transition-all duration-300 group min-w-[140px] lg:min-w-[125px]"
+                    >
+                      <HeadphonesIcon className="w-7 h-7 lg:w-6 lg:h-6 text-white group-hover:scale-110 transition-transform" />
+                      <div className="text-left text-white">
+                        <p className="text-[10px] lg:text-[9px] font-medium uppercase tracking-widest leading-none mb-1">Talk to</p>
+                        <p className="text-[11px] lg:text-[10px] font-medium uppercase whitespace-nowrap">Our Team</p>
+                      </div>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Bottom Row: Description + Stats */}
+                <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-10">
+                  {/* Description */}
+                  <div className="max-w-xl text-center lg:text-left">
+                    <p className="text-white text-[14px] lg:text-[13px] leading-relaxed">
+                      Reach the right audience, build meaningful connections and grow your business with IHWE.
+                    </p>
+                  </div>
+
+                  {/* Updated Stats Row */}
+                  <div className="grid grid-cols-2 md:flex items-center gap-6 lg:gap-x-5">
+                    <div className="flex items-center gap-3 lg:gap-2">
+                      <Users2 className="w-8 h-8 lg:w-6 lg:h-6 text-[#FFC81E]" />
+                      <div>
+                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none"><StatCounter value="8,000+" /></p>
+                        <p className="text-white text-[9px] lg:text-[8px] font-medium uppercase tracking-widest mt-1">Visitors / Delegates</p>
+                      </div>
+                    </div>
+
+                    <div className="hidden lg:block w-[1px] h-6 bg-white/10" />
+
+                    <div className="flex items-center gap-3 lg:gap-2">
+                      <Store className="w-8 h-8 lg:w-6 lg:h-6 text-[#FFC81E]" />
+                      <div>
+                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none"><StatCounter value="150+" /></p>
+                        <p className="text-white text-[9px] lg:text-[8px] font-medium uppercase tracking-widest mt-1">Exhibitors</p>
+                      </div>
+                    </div>
+
+                    <div className="hidden lg:block w-[1px] h-6 bg-white/10" />
+
+                    <div className="flex items-center gap-3 lg:gap-2">
+                      <Globe className="w-8 h-8 lg:w-6 lg:h-6 text-[#FFC81E]" />
+                      <div>
+                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none"><StatCounter value="1000+" /></p>
+                        <p className="text-white text-[9px] lg:text-[8px] font-medium uppercase tracking-widest mt-1">Global Buyers</p>
+                      </div>
+                    </div>
+
+                    <div className="hidden lg:block w-[1px] h-6 bg-white/10" />
+
+                    <div className="flex items-center gap-3 lg:gap-2">
+                      <Infinity className="w-8 h-8 lg:w-6 lg:h-6 text-[#FFC81E]" />
+                      <div>
+                        <p className="text-[#FFC81E] font-bold text-[16px] lg:text-[14px] leading-none">Unlimited</p>
+                        <p className="text-white text-[9px] lg:text-[8px] font-medium uppercase tracking-widest mt-1">Opportunities</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 3. Interest Form */}
+            <div
+              className="bg-white rounded-2xl p-5 lg:p-4 border border-slate-100 shadow-sm h-fit mt-4 lg:-mt-16"
+              style={{ boxShadow: "rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px" }}
+            >
+              <div className="text-center mb-3">
+                <h4 className="font-black text-[#022f15] text-[13px] uppercase tracking-wide">Interested in Sponsoring?</h4>
+                <div className="w-8 h-0.5 bg-[#78903a] mx-auto mt-1 rounded-full" />
+              </div>
+
+              <AnimatePresence mode="wait">
+                {isSuccess ? (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    className="flex flex-col items-center justify-center py-10 px-4 min-h-[300px] text-center"
+                  >
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", stiffness: 200, delay: 0.2 }}
+                      className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mb-4"
+                    >
+                      <CheckCircle className="w-10 h-10 text-green-600" />
+                    </motion.div>
+
+                    <motion.h4
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="text-[#022f15] font-black text-xl mb-2"
+                    >
+                      Inquiry Received!
+                    </motion.h4>
+
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="text-slate-600 text-sm leading-relaxed"
+                    >
+                      Thank you for your interest. Our team will get back to you shortly with more details.
+                    </motion.p>
+
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.6 }}
+                      className="mt-6 flex items-center gap-2 text-[10px] text-slate-400"
+                    >
+                      <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                      Form will reset automatically...
+                    </motion.div>
+                  </motion.div>
+                ) : (
+                  <motion.form
+                    key="sponsorship-form"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    onSubmit={handleSubmit}
+                    className="space-y-2"
+                  >
+                    <div className="grid grid-cols-2 gap-2.5">
+                      <input
+                        type="text"
+                        name="fullName"
+                        value={formData.fullName}
+                        onChange={handleChange}
+                        placeholder="Full Name*"
+                        className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all"
+                        required
+                      />
+                      <input
+                        type="text"
+                        name="companyName"
+                        value={formData.companyName}
+                        onChange={handleChange}
+                        placeholder="Company Name*"
+                        className="bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all"
+                        required
+                      />
+                    </div>
+                    <div className="grid grid-cols-1 gap-2.5">
+                      <div className="flex flex-col gap-1.5">
+                        <div className="relative">
+                          <input
+                            type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="Email Address*"
+                            className={`w-full bg-[#f8f9fa] border ${isEmailVerified ? 'border-green-500' : 'border-slate-200'} rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all`}
+                            required
+                            disabled={isEmailVerified}
+                          />
+                          {!isEmailVerified && (
+                            <button
+                              type="button"
+                              onClick={() => requestOtp('email')}
+                              disabled={isEmailSending || !formData.email}
+                              className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[8.5px] font-bold bg-[#78903a] text-white px-2.5 py-1.5 rounded-md hover:bg-[#5d702d] disabled:bg-slate-300 disabled:text-slate-500 transition-all shadow-sm active:scale-95"
+                            >
+                              {isEmailSending ? 'Sending...' : isEmailOtpSent ? 'Resend' : 'Send OTP'}
+                            </button>
+                          )}
+                          {isEmailVerified && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <CheckCircle className="w-3.5 h-3.5 text-green-500" />
+                            </div>
+                          )}
+                        </div>
+                        {isEmailOtpSent && !isEmailVerified && (
+                          <div className="flex gap-2 animate-in fade-in slide-in-from-top-1 duration-300">
+                            <input
+                              type="text"
+                              value={emailOtp}
+                              onChange={(e) => setEmailOtp(e.target.value)}
+                              placeholder="Enter Email OTP"
+                              className="flex-1 bg-white border border-[#78903a]/30 rounded-lg px-3 py-1.5 text-[10px] outline-none focus:ring-2 focus:ring-[#78903a]/20"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => verifyOtp('email')}
+                              disabled={isEmailVerifying}
+                              className="bg-[#78903a] text-white px-3 py-1.5 rounded-lg text-[9px] font-bold"
+                            >
+                              {isEmailVerifying ? '...' : 'Verify'}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="flex flex-col gap-1.5">
+                        <div className="relative">
+                          <input
+                            type="tel"
+                            name="phone"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            placeholder="WhatsApp Number*"
+                            className={`w-full bg-[#f8f9fa] border ${isPhoneVerified ? 'border-green-500' : 'border-slate-200'} rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all`}
+                            required
+                            disabled={isPhoneVerified}
+                          />
+                          {!isPhoneVerified && (
+                            <button
+                              type="button"
+                              onClick={() => requestOtp('phone')}
+                              disabled={isPhoneSending || !formData.phone}
+                              className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[8.5px] font-bold bg-[#78903a] text-white px-2.5 py-1.5 rounded-md hover:bg-[#5d702d] disabled:bg-slate-300 disabled:text-slate-500 transition-all shadow-sm active:scale-95"
+                            >
+                              {isPhoneSending ? 'Sending...' : isPhoneOtpSent ? 'Resend' : 'Send OTP'}
+                            </button>
+                          )}
+                          {isPhoneVerified && (
+                            <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                              <CheckCircle className="w-3.5 h-3.5 text-green-500" />
+                            </div>
+                          )}
+                        </div>
+                        {isPhoneOtpSent && !isPhoneVerified && (
+                          <div className="flex gap-2 animate-in fade-in slide-in-from-top-1 duration-300">
+                            <input
+                              type="text"
+                              value={phoneOtp}
+                              onChange={(e) => setPhoneOtp(e.target.value)}
+                              placeholder="Enter WhatsApp OTP"
+                              className="flex-1 bg-white border border-[#78903a]/30 rounded-lg px-3 py-1.5 text-[10px] outline-none focus:ring-2 focus:ring-[#78903a]/20"
+                            />
+                            <button
+                              type="button"
+                              onClick={() => verifyOtp('phone')}
+                              disabled={isPhoneVerifying}
+                              className="bg-[#78903a] text-white px-3 py-1.5 rounded-lg text-[9px] font-bold"
+                            >
+                              {isPhoneVerifying ? '...' : 'Verify'}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="relative">
+                      <select
+                        name="category"
+                        value={formData.category}
+                        onChange={handleChange}
+                        className="w-full bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all appearance-none text-slate-600"
+                        required
+                      >
+                        <option>Interested Sponsorship Category*</option>
+                        <option>Title Sponsor</option>
+                        <option>Powered By Sponsor</option>
+                        <option>Associate Sponsor</option>
+                        <option>Conference Sponsor</option>
+                        <option>Registration Sponsor</option>
+                        <option>Lanyard / Badge Sponsor</option>
+                        <option>Wellness Zone Sponsor</option>
+                        <option>Digital Promotion Partner</option>
+                      </select>
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <div className="border-l-2 border-b-2 border-slate-400 w-1.5 h-1.5 -rotate-45" />
+                      </div>
+                    </div>
+                    <textarea
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      placeholder="Message (Optional)"
+                      rows={1}
+                      className="w-full bg-[#f8f9fa] border border-slate-200 rounded-lg px-3 py-2 text-[11px] placeholder:text-slate-600 outline-none focus:ring-2 focus:ring-[#78903a]/20 focus:border-[#78903a] transition-all"
+                    />
+
+                    <button
+                      type="submit"
+                      disabled={isSubmitting || !isEmailVerified || !isPhoneVerified}
+                      className={`w-full ${(!isEmailVerified || !isPhoneVerified) ? 'bg-slate-400' : 'bg-[#153421] hover:bg-[#022f15]'} text-white font-bold py-2.5 rounded-lg text-[11px] uppercase tracking-widest transition-all duration-300 shadow-lg shadow-green-900/20 active:scale-[0.98] disabled:opacity-50 flex items-center justify-center`}
+                    >
+                      {isSubmitting ? (
+                        <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      ) : (!isEmailVerified || !isPhoneVerified) ? "Verify Email & WhatsApp to Submit" : "Submit Inquiry"}
+                    </button>
+
+                    <p className="flex items-center justify-center gap-2 text-[9px] text-slate-400 mt-2">
+                      <ShieldCheck className="w-3 h-3" />
+                      Your information is safe with us.
+                    </p>
+                  </motion.form>
+                )}
+              </AnimatePresence>
+
+
+            </div>
+
+          </div>
+        </SectionContainer>
+      </div>
+
+      <style>{`
+        @keyframes marqueeScroll {
+          0% { transform: translateX(-50%); }
+          100% { transform: translateX(0); }
+        }
+        @keyframes marqueeScrollReverse {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+        .marquee-wrapper {
+          display: flex;
+          width: max-content;
+          animation: marqueeScroll 40s linear infinite;
+          padding-left: 2rem;
+        }
+        .marquee-wrapper:hover {
+          animation-play-state: paused;
+        }
+        .marquee-wrapper-reverse {
+          display: flex;
+          width: max-content;
+          animation: marqueeScrollReverse 40s linear infinite;
+          padding-left: 2rem;
+        }
+        .marquee-wrapper-reverse:hover {
+          animation-play-state: paused;
+        }
+      `}</style>
+
+
+      {/* ══════════════════════════════════════════
+          TRUSTED BY LEADING BRANDS
+      ══════════════════════════════════════════ */}
+      <div className="bg-white pt-4 pb-4 -mt-10 lg:-mt-16 border-t border-slate-100 relative z-10">
+        <SectionContainer>
+
+          <div className="flex items-center gap-4 mb-10 lg:mb-8">
+            <div className="flex-1 h-[1.5px] bg-slate-300" />
+            <span className="font-bold text-[12px] lg:text-[14px] tracking-[0.15em] lg:tracking-[0.25em] uppercase text-[#012112] text-center">
+              TRUSTED BY LEADING BRANDS
+            </span>
+            <div className="flex-1 h-[1.5px] bg-slate-300" />
+          </div>
+
+          <div className="overflow-hidden relative w-full mt-4">
+            <div
+              className="marquee-wrapper"
+              style={{ animationDuration: `${Math.max(BRANDS.length * 4, 20)}s` }}
+            >
+              {/* Double the brands for seamless loop */}
+              {[...BRANDS, ...BRANDS].map((brand, idx) => (
+                <div key={idx} className="flex items-center">
+                  <div className="flex flex-col items-center gap-0.5 transition-all mx-5 md:mx-8">
+                    {brand.logo ? (
+                      <img loading="lazy" decoding="async" src={brand.logo}
+                        alt={brand.name}
+                        className={`${brand.name === "Dabur" ? "h-12 md:h-20 lg:h-16" : brand.name === "HEALTHKART" ? "h-10 md:h-16 lg:h-14" : "h-9 md:h-14 lg:h-12"} w-auto object-contain transition-all duration-300`}
+                      />
+                    ) : (
+                      <span
+                        className="font-black text-[15px] md:text-[20px] lg:text-[18px] leading-tight"
+                        style={{ color: brand.color, fontFamily: idx % BRANDS.length === 0 ? "serif" : "inherit" }}
+                      >
+                        {brand.name}
+                      </span>
+                    )}
+                    {brand.sub && (
+                      <span className="text-[7px] md:text-[8px] text-slate-500 font-semibold tracking-wide text-center leading-tight max-w-[80px]">
+                        {brand.sub}
+                      </span>
+                    )}
+                  </div>
+                  <div className="w-[1.5px] h-6 bg-slate-300" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </SectionContainer>
+      </div>
+    </section>
+  );
+};
+
+export const UpcomingBrands = () => {
+  const [data, setData] = useState<{ title: string, items: any[] }>({ title: "UPCOMING LEADING BRANDS", items: [] });
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await fetch(`${API_URL}/upcoming-brands`);
+        const result = await response.json();
+        if (result.success && result.data) {
+          setData(result.data);
+        }
+      } catch (error) {
+        console.error("Error fetching upcoming brands:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchBrands();
+  }, []);
+
+  if (loading) return null;
+
+  return (
+    <section className="bg-white pt-4 pb-12 relative z-10" style={{ fontFamily: "'Inter', sans-serif" }}>
+      <SectionContainer>
+        <div className="flex items-center gap-4 mb-10 lg:mb-8 mt-2">
+          <div className="flex-1 h-[1.5px] bg-slate-300" />
+          <span className="font-bold text-[12px] lg:text-[14px] tracking-[0.15em] lg:tracking-[0.25em] uppercase text-[#012112] text-center">
+            {data.title}
+          </span>
+          <div className="flex-1 h-[1.5px] bg-slate-300" />
+        </div>
+
+        {data.items && data.items.length > 0 && (
+          <div className="overflow-hidden relative w-full mt-4">
+            <div
+              className="marquee-wrapper"
+              style={{ animationDuration: `${Math.max(data.items.length * 4, 20)}s` }}
+            >
+              {/* Double the brands for seamless loop */}
+              {[...data.items, ...data.items].map((brand: any, idx: number) => (
+                <div key={`${brand._id}-${idx}`} className="flex items-center">
+                  <div className="flex flex-col items-center gap-0.5 transition-all mx-5 md:mx-8">
+                    <img loading="lazy" decoding="async" src={`${SERVER_URL}${brand.logo}`}
+                      alt={brand.altText || 'Brand Logo'}
+                      className="h-10 md:h-16 w-auto object-contain transition-all duration-300"
+                    />
+                  </div>
+                  <div className="w-[1.5px] h-6 bg-slate-300" />
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </SectionContainer>
+    </section>
+  );
+};
+
+export default SponsorshipSection;

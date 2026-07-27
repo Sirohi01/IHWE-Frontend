@@ -6,6 +6,7 @@ import {
     MapPinned, Clock, Globe, Sparkles, Info
 } from "lucide-react";
 import { heroBackgroundApi, travelAccommodationApi, SERVER_URL } from "@/lib/api";
+
 import heroImgFallback from "../assets/travel.jpg";
 
 const ICONS_MAP: Record<string, any> = {
@@ -57,6 +58,7 @@ const TravelAccommodation = () => {
                     backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : heroImgFallback})`
                 }}
             >
+
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 
@@ -214,8 +216,7 @@ const TravelAccommodation = () => {
                                 className="group bg-white rounded-sm border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500"
                             >
                                 <div className="relative aspect-[16/10] overflow-hidden">
-                                    <img 
-                                        src={hotel.image?.startsWith('http') ? hotel.image : `${SERVER_URL}${hotel.image}`} 
+                                    <img loading="lazy" decoding="async" src={hotel.image?.startsWith('http') ? hotel.image : `${SERVER_URL}${hotel.image}`} 
                                         alt={hotel.alt || hotel.title} 
                                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" 
                                     />
@@ -279,13 +280,13 @@ const TravelAccommodation = () => {
                                         <p className="text-[13px] font-bold text-slate-800 tracking-tight">{data?.contactEmail || "travel@ihwe.com"}</p>
                                     </div>
                                 </a>
-                                <a href={`tel:${data?.contactPhone || "+919876543210"}`} className="flex items-center gap-4 p-4 rounded-sm bg-slate-50 border border-slate-100 hover:border-[#d26019] hover:bg-white hover:shadow-lg transition-all group">
+                                <a href={data?.contactPhone ? `tel:${data.contactPhone}` : '#'} className="flex items-center gap-4 p-4 rounded-sm bg-slate-50 border border-slate-100 hover:border-[#d26019] hover:bg-white hover:shadow-lg transition-all group">
                                     <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-[#d26019] shadow-sm">
                                         <Phone size={16} />
                                     </div>
                                     <div>
                                         <p className="text-[9px] font-bold uppercase text-slate-400 tracking-widest">Call / WhatsApp</p>
-                                        <p className="text-[13px] font-bold text-slate-800 tracking-tight">{data?.contactPhone || "+91-98765-43210"}</p>
+                                        <p className="text-[13px] font-bold text-slate-800 tracking-tight">{data?.contactPhone || "Contact support"}</p>
                                     </div>
                                 </a>
                             </div>

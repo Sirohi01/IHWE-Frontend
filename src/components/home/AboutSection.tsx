@@ -9,11 +9,11 @@ const pathVariants = {
     pathLength: 1,
     opacity: 1,
     transition: {
-      pathLength: { duration: 1.5, ease: "easeInOut", delay: 0.5 },
+      pathLength: { duration: 1.5, ease: "easeInOut" as const, delay: 0.5 },
       opacity: { duration: 0.3, delay: 0.5 },
     },
   },
-} as any;
+};
 
 const AboutSection = () => {
   const [data, setData] = useState<any>(null);
@@ -105,8 +105,7 @@ const AboutSection = () => {
                 transition={{ duration: 0.8 }}
                 className="col-span-7 relative overflow-hidden rounded-3xl border-2 border-[#d26019]/20 shadow-lg group-hover:shadow-2xl transition-all duration-500 aspect-[3/4]"
               >
-                <img 
-                  src={data?.image1 ? `${SERVER_URL}${data.image1}` : ""} 
+                <img loading="lazy" decoding="async" src={data?.image1 ? `${SERVER_URL}${data.image1}` : ""} 
                   alt={data?.image1Alt || "International Expo Conference"} 
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-1000" 
                 />
@@ -124,8 +123,7 @@ const AboutSection = () => {
                   transition={{ duration: 0.8, delay: 0.2 }}
                   className="relative overflow-hidden rounded-2xl border-2 border-[#23471d]/20 shadow-md aspect-square"
                 >
-                  <img 
-                    src={data?.image3 ? `${SERVER_URL}${data.image3}` : ""} 
+                  <img loading="lazy" decoding="async" src={data?.image3 ? `${SERVER_URL}${data.image3}` : ""} 
                     alt={data?.image3Alt || "Wellness Pavilion"} 
                     className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" 
                   />
@@ -139,8 +137,7 @@ const AboutSection = () => {
                   transition={{ duration: 0.8, delay: 0.4 }}
                   className="relative overflow-hidden rounded-2xl border-2 border-slate-200/50 shadow-md aspect-[16/9]"
                 >
-                  <img 
-                    src={data?.image2 ? `${SERVER_URL}${data.image2}` : ""} 
+                  <img loading="lazy" decoding="async" src={data?.image2 ? `${SERVER_URL}${data.image2}` : ""} 
                     alt={data?.image2Alt || "Medical Innovation"} 
                     className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" 
                   />

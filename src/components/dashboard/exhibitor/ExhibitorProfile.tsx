@@ -235,6 +235,8 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
         fasciaName: data.fasciaName || '',
         gstNo: data.gstNo || '',
         panNo: data.panNo || '',
+        aadhaarNo: data.aadhaarNo || '',
+        registrantType: (data.registrantType || 'registered') as 'registered' | 'unregistered',
         natureOfBusiness: data.natureOfBusiness || '',
         contact1: {
             title: data.contact1?.title || 'Mr.',
@@ -277,6 +279,8 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
                 fasciaName: data.fasciaName || '',
                 gstNo: data.gstNo || '',
                 panNo: data.panNo || '',
+                aadhaarNo: data.aadhaarNo || '',
+                registrantType: data.registrantType || 'registered',
                 natureOfBusiness: data.natureOfBusiness || '',
                 contact1: {
                     title: data.contact1?.title || 'Mr.',
@@ -428,8 +432,8 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
         setValidationErrors(errors);
 
         if (Object.keys(errors).length > 0) {
-            toast.error('Please fix validation errors before submitting');
-            return false;
+            const errorList = Object.entries(errors).map(([field, msg]) => `${field}: ${msg}`).join('\n');
+            toast.warning(`Some fields have format issues:\n${errorList}`);
         }
 
         return true;
@@ -508,6 +512,7 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
                 const multerFieldMap: Record<string, string> = {
                     companyLogoUrl: 'companyLogo',
                     panCardFrontUrl: 'panCardFront',
+                    panCardBackUrl: 'panCardBack',
                     aadhaarCardFrontUrl: 'aadhaarCardFront',
                     aadhaarCardBackUrl: 'aadhaarCardBack',
                     gstCertificateUrl: 'gstCertificate',
@@ -587,6 +592,8 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
                 fasciaName: data.fasciaName || '',
                 gstNo: data.gstNo || '',
                 panNo: data.panNo || '',
+                aadhaarNo: data.aadhaarNo || '',
+                registrantType: data.registrantType || 'registered',
                 natureOfBusiness: data.natureOfBusiness || '',
                 contact1: {
                     title: data.contact1?.title || 'Mr.',
@@ -688,6 +695,47 @@ export default function ExhibitorProfile({ data, setData }: ProfileProps) {
                                         <input className={inputCls(isEditingMode)} placeholder="e.g. AAAAA1234A" value={form.panNo} onChange={e => inp('panNo', e.target.value)} /> :
                                         <span className="text-[11px]">{form.panNo || '—'}</span>
                                     ],
+                                    ['Aadhaar No.', isEditingMode ?
+                                        <input
+                                            className={inputCls(isEditingMode)}
+                                            placeholder="12-digit Aadhaar number"
+                                            value={form.aadhaarNo}
+                                            maxLength={12}
+                                            inputMode="numeric"
+                                            onChange={e => inp('aadhaarNo', e.target.value.replace(/\D/g, '').slice(0, 12))}
+                                        /> :
+                                        <span className="text-[11px]">{form.aadhaarNo ? `XXXX XXXX ${form.aadhaarNo.slice(-4)}` : '—'}</span>
+                                    ],
+                                    ['Registrant Type', isEditingMode ? (
+                                        <div className="flex gap-4">
+                                            <label className="flex items-center gap-1.5 cursor-pointer">
+                                                <input
+                                                    type="radio"
+                                                    name="profileRegistrantType"
+                                                    value="registered"
+                                                    checked={form.registrantType === 'registered'}
+                                                    onChange={() => inp('registrantType', 'registered')}
+                                                    className="accent-[#23471d] w-3.5 h-3.5"
+                                                />
+                                                <span className="text-[10px] font-bold text-[#23471d]">Registered (GST)</span>
+                                            </label>
+                                            <label className="flex items-center gap-1.5 cursor-pointer">
+                                                <input
+                                                    type="radio"
+                                                    name="profileRegistrantType"
+                                                    value="unregistered"
+                                                    checked={form.registrantType === 'unregistered'}
+                                                    onChange={() => inp('registrantType', 'unregistered')}
+                                                    className="accent-[#d26019] w-3.5 h-3.5"
+                                                />
+                                                <span className="text-[10px] font-bold text-[#d26019]">Unregistered (PAN)</span>
+                                            </label>
+                                        </div>
+                                    ) : (
+                                        <span className={`text-[10px] font-black px-2 py-0.5 rounded-[2px] border ${form.registrantType === 'registered' ? 'bg-green-50 text-[#23471d] border-green-200' : 'bg-orange-50 text-[#d26019] border-orange-200'}`}>
+                                            {form.registrantType === 'registered' ? 'Registered Exhibitor' : 'Unregistered Buyer'}
+                                        </span>
+                                    )],
                                     ['Nature of Business', isEditingMode ?
                                         <input className={inputCls(isEditingMode)} placeholder="Exporter, Mfg, etc." value={form.natureOfBusiness} onChange={e => inp('natureOfBusiness', e.target.value)} /> :
                                         <span className="text-[11px]">{form.natureOfBusiness || '—'}</span>
@@ -977,8 +1025,7 @@ function FileUpload({ label, field, currentUrl, files, previews, onFileChange, i
             {showPreview && previewUrl && isImage && (
                 <div className="mt-2 flex justify-center">
                     <div className="w-16 h-16 bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
-                        <img
-                            src={previewUrl}
+                        <img loading="lazy" decoding="async" src={previewUrl}
                             alt={label}
                             className="w-full h-full object-cover"
                         />

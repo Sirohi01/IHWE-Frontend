@@ -114,7 +114,7 @@ const BlogDetail = () => {
           <div className="flex flex-wrap items-center gap-5 text-white/70 text-xs font-bold uppercase tracking-widest">
             <span className="flex items-center gap-1.5">
               <User className="w-3.5 h-3.5 text-[#DE802B]" />
-              {blog.author || "IHWE Team"}
+              {blog.author?.name || blog.author || "IHWE Team"}
             </span>
             <span className="flex items-center gap-1.5">
               <Calendar className="w-3.5 h-3.5 text-[#DE802B]" />
@@ -218,7 +218,7 @@ const BlogDetail = () => {
                   <User className="w-6 h-6 text-[#134E8E]" />
                 </div>
                 <div>
-                  <p className="font-bold text-slate-900 text-sm">{blog.author || "IHWE Team"}</p>
+                  <p className="font-bold text-slate-900 text-sm">{blog.author?.name || blog.author || "IHWE Team"}</p>
                   <p className="text-[11px] text-slate-400 font-medium mt-0.5">Official Exhibition Partner</p>
                 </div>
               </div>
@@ -251,8 +251,7 @@ const BlogDetail = () => {
                     >
                       {/* Thumbnail */}
                       <div className="w-16 h-16 shrink-0 overflow-hidden bg-slate-100 rounded-lg">
-                        <img
-                          src={recent.image.startsWith('http') ? recent.image : `${SERVER_URL}${recent.image}`}
+                        <img loading="lazy" decoding="async" src={recent.image.startsWith('http') ? recent.image : `${SERVER_URL}${recent.image}`}
                           alt={recent.title}
                           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                         />

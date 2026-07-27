@@ -11,6 +11,7 @@ import Swal from "sweetalert2";
 import QRCode from "react-qr-code";
 import { toPng } from "html-to-image";
 
+
 const DownloadBadge = () => {
   const [settings, setSettings] = useState<any>(null);
   const [heroData, setHeroData] = useState<any>(null);
@@ -220,7 +221,7 @@ const DownloadBadge = () => {
               </style>
             </head>
             <body>
-              <img src="${dataUrl}" />
+              <img loading="lazy" decoding="async" src="${dataUrl}" />
               <script>
                 window.onload = function() {
                   window.print();
@@ -309,6 +310,7 @@ const DownloadBadge = () => {
             backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : "/src/assets/idcard.jpg"})`
           }}
         >
+
           <div className="absolute inset-0 bg-black/40" />
           <div
             className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-[#f9fafb]"
@@ -352,8 +354,7 @@ const DownloadBadge = () => {
                   {/* Left Side: Brand & Info */}
                   <div className="space-y-8" data-aos="fade-right">
                     <div className="flex items-center gap-6">
-                      <img 
-                        src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"} 
+                      <img loading="lazy" decoding="async" src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"} 
                         alt="IHWE Logo" 
                         className="h-24 w-auto object-contain"
                       />
@@ -537,8 +538,7 @@ const DownloadBadge = () => {
                         
                         {/* REFINED HEADER: LOGO LEFT, DETAILS RIGHT */}
                         <div className="flex items-center gap-6 mb-8 w-full px-6">
-                          <img 
-                            src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"} 
+                          <img loading="lazy" decoding="async" src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"} 
                             alt="Logo" 
                             className="h-28 w-auto object-contain"
                           />
@@ -614,7 +614,7 @@ const DownloadBadge = () => {
                         </ul>
                         
                         <div className="mt-auto pt-6 text-center md:text-left opacity-30">
-                           <img src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"} className="h-6 grayscale brightness-0 mb-1 mx-auto md:mx-0" />
+                           <img loading="lazy" decoding="async" src={settings?.logo ? `${SERVER_URL}${settings.logo}` : "/logo.png"} className="h-6 grayscale brightness-0 mb-1 mx-auto md:mx-0" />
                            <p className="text-[6px] font-bold uppercase tracking-widest">Namo Gange Trust Initiative</p>
                         </div>
                     </div>

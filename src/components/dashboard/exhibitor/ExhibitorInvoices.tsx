@@ -1,165 +1,621 @@
+import { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FileText, Download, Receipt } from 'lucide-react';
+import { Printer, FileText, Receipt } from 'lucide-react';
 import { SERVER_URL } from '@/lib/api';
 
 interface InvoicesProps {
-    data: any; cur: string; total: number; paid: number;
-    balance: number; paidPct: number; regDate: string;
+    data: any;
+    settings: any;
+    cur: string;
+    total: number;
+    paid: number;
+    balance: number;
+    paidPct: number;
+    regDate: string;
 }
 
-/* 🔥 SAME GRID (4 per row) */
-function InfoGrid({ rows }: { rows: [string, React.ReactNode][] }) {
-    return (
-        <div className="border border-slate-200 rounded-sm overflow-hidden">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-                {rows.map(([label, value], i) => (
-                    <div key={i} className="flex border-r border-b border-slate-200 last:border-r-0 hover:bg-slate-50/40">
-                        <div className="w-[120px] min-w-[120px] px-2 py-2 text-[10px] font-semibold text-slate-500 uppercase border-r bg-slate-50 flex items-center">
-                            {label}
-                        </div>
-                        <div className="flex-1 px-2 py-2 text-[11px] text-slate-800 flex items-center break-all">
-                            {value ?? '—'}
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-}
-
-function Section({ title, children }: any) {
-    return (
-        <div className="mb-4">
-            <div className="flex items-center gap-2 mb-1.5">
-                <div className="w-1 h-3.5 bg-[#23471d] rounded-full" />
-                <span className="text-[11px] font-semibold text-[#23471d] uppercase tracking-wider">
-                    {title}
-                </span>
-            </div>
-            {children}
-        </div>
-    );
+function toWords(n: number): string {
+    const ones = ['', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine',
+        'Ten', 'Eleven', 'Twelve', 'Thirteen', 'Fourteen', 'Fifteen', 'Sixteen', 'Seventeen', 'Eighteen', 'Nineteen'];
+    const tens = ['', '', 'Twenty', 'Thirty', 'Forty', 'Fifty', 'Sixty', 'Seventy', 'Eighty', 'Ninety'];
+    if (n === 0) return 'Zero';
+    const convert = (num: number): string => {
+        if (num < 20) return ones[num];
+        if (num < 100) return tens[Math.floor(num / 10)] + (num % 10 ? ' ' + ones[num % 10] : '');
+        if (num < 1000) return ones[Math.floor(num / 100)] + ' Hundred' + (num % 100 ? ' ' + convert(num % 100) : '');
+        if (num < 100000) return convert(Math.floor(num / 1000)) + ' Thousand' + (num % 1000 ? ' ' + convert(num % 1000) : '');
+        if (num < 10000000) return convert(Math.floor(num / 100000)) + ' Lakh' + (num % 100000 ? ' ' + convert(num % 100000) : '');
+        return convert(Math.floor(num / 10000000)) + ' Crore' + (num % 10000000 ? ' ' + convert(num % 10000000) : '');
+    };
+    const intPart = Math.floor(n);
+    return convert(intPart) + ' Rupees Only.';
 }
 
 function DownloadBtn({ url, label, icon: Icon }: any) {
     return (
-        <a
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            download
-            className="flex items-center gap-2 px-3 py-1.5 bg-[#23471d] text-white text-[10px] font-bold rounded"
-        >
+        <a href={url} target="_blank" rel="noopener noreferrer" download
+            className="flex items-center gap-2 px-3 py-1.5 bg-[#23471d] text-white text-[10px] font-bold rounded no-print">
             <Icon size={12} /> {label}
         </a>
     );
 }
 
-export default function ExhibitorInvoices({
-    data, cur, total, paid, balance, paidPct, regDate
-}: InvoicesProps) {
+export default function ExhibitorInvoices({ data, settings, cur, total, paid, balance, paidPct, regDate }: InvoicesProps) {
+    const printRef = useRef<HTMLDivElement>(null);
+    const [headerImageUrl, setHeaderImageUrl] = useState<string | null>(null);
+    const [bankDetails, setBankDetails] = useState<any>(null);
+    const history = data.paymentHistory || [];
 
-    const receiptUrl = data.receiptUrl
-        ? (data.receiptUrl.startsWith('http') ? data.receiptUrl : `${SERVER_URL}${data.receiptUrl}`)
-        : null;
+    useEffect(() => {
+        const token = localStorage.getItem('exhibitorToken');
+        if (!token) return;
+        fetch(`${SERVER_URL}/api/message-templates/exhibitor-registration`, {
+            headers: { Authorization: `Bearer ${token}` }
+        })
+            .then(r => r.json())
+            .then(res => {
+                const img = res?.data?.headerImage || res?.headerImage;
+                if (img) setHeaderImageUrl(img.startsWith('http') ? img : `${SERVER_URL}/${img.replace(/^\//, '')}`);
+            })
+            .catch(() => { });
 
-    const txId = data.manualPaymentDetails?.transactionId || data.paymentId || '—';
-    const method = data.manualPaymentDetails?.method || data.paymentMode || '—';
+        fetch(`${SERVER_URL}/api/banks`)
+            .then(r => r.json())
+            .then(res => {
+                if (res && res.length > 0) {
+                    const activeBank = res.find((b: any) => b.status === 'active') || res[0];
+                    setBankDetails(activeBank);
+                }
+            })
+            .catch(() => {});
+    }, []);
+
+    const fb = data.financeBreakdown || {};
+    const p = data.participation || {};
+    const c1 = data.contact1 || {};
+
+    const isFullPayment = data.paymentPlanType === 'full' || fb.isFullPayment === true;
+    const effectiveDiscount = (fb.stallDiscountAmount || 0) + (isFullPayment ? (fb.discountAmount || 0) : 0);
+
+    const grossAmt = fb.grossAmount || p.amount || 0;
+    const taxableVal = fb.subtotal || p.amount || 0;
+    const effectiveTaxableVal = isFullPayment ? taxableVal : (fb.subtotal1 || taxableVal + (fb.discountAmount || 0));
+    const gstAmt = fb.gstAmount || Math.round(taxableVal * 0.18);
+    const fmt = (n: number) => `${cur} ${Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 })}`;
+    const fmtNum = (n: number) => Number(n || 0).toLocaleString('en-IN', { maximumFractionDigits: 2 });
+    const cgst = Math.round(gstAmt / 2);
+    const sgst = Math.round(gstAmt / 2);
+    const tdsAmt = fb.tdsAmount || 0;
+    const invoiceTotal = taxableVal + gstAmt;
+    const netPayable = fb.netPayable || invoiceTotal - tdsAmt;
+
+    const companyName = settings?.companyName || 'Namo Gange Wellness Pvt. Ltd.';
+    const companyAddress = settings?.companyAddress || '12/29, Site-II, Loni Road, Industrial Area, Mohan Nagar, Ghaziabad, India';
+    const companyGst = settings?.companyGst || '';
+    const companyCin = settings?.companyCin || '';
+    const sigUrl = settings?.authorizedSignature ? (settings.authorizedSignature.startsWith('http') ? settings.authorizedSignature : `${SERVER_URL}${settings.authorizedSignature}`) : null;
+    const stampUrl = settings?.companyStamp ? (settings.companyStamp.startsWith('http') ? settings.companyStamp : `${SERVER_URL}${settings.companyStamp}`) : null;
+    const latestPayment = history.length > 0 ? history[history.length - 1] : null;
+    const seqNum = data.registrationId ? data.registrationId.split('-').pop()?.padStart(3, '0') : '001';
+    const invoiceYear = new Date().getFullYear();
+    const nextYear = (invoiceYear + 1).toString().slice(-2);
+    const lastThreeDigits = seqNum.slice(-3);
+    const invoiceNo = `NGW/${invoiceYear}-${nextYear}/PI/${lastThreeDigits}`;
+    const invoiceDate = latestPayment?.paidAt
+        ? new Date(latestPayment.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' })
+        : regDate;
+    const createdDateTime = data.createdAt
+        ? (() => {
+            const d = new Date(data.createdAt);
+            const date = d.toLocaleDateString('en-IN', { day: '2-digit', month: 'long', year: 'numeric' });
+            const time = d.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit', hour12: true });
+            return `${date}, ${time}`;
+        })()
+        : regDate;
+
+    const handlePrint = () => {
+        const content = printRef.current;
+        if (!content) return;
+        const iframe = document.createElement('iframe');
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow?.document;
+        if (!iframeDoc) return;
+        const htmlContent = `<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice ${invoiceNo} - ${data.registrationId}</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { margin: 0; padding: 0; }
+        body { 
+            margin: 0; 
+            padding: 10mm; 
+            font-family: Calibri, Arial, Helvetica, sans-serif; 
+            font-size: 11px; 
+            font-weight: 400;
+            color: #000000 !important; 
+            background: white;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-bottom: 12px;
+        }
+        td, th { 
+            border: 1px solid #000; 
+            padding: 6px 8px; 
+            vertical-align: top;
+            font-size: 11px;
+            font-family: Calibri, Arial, Helvetica, sans-serif;
+            font-weight: 400;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            color: #000000 !important;
+        }
+        th {
+            background: #0d1f3c !important;
+            color: #ffffff !important;
+            font-weight: bold;
+            text-align: center;
+            padding: 3px 2px;
+            font-size: 10px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        img { 
+            max-width: 100%; 
+            height: auto; 
+            display: block;
+        }
+        .bold { font-weight: bold; }
+        .right { text-align: right; }
+        .center { text-align: center; }
+        .no-print { display: none !important; }
+        div { margin: 0; padding: 0; }
+        .terms-box { padding: 6px 8px !important; margin-bottom: 8px !important; }
+        .invoice-title-bar { padding-top: 10px !important; padding-bottom: 10px !important; text-align: center !important; }
+        .bank-details-table { width: auto !important; margin-bottom: 0 !important; }
+        .bank-details-table td { border: none !important; padding: 1px 4px 1px 0 !important; font-size: 10px !important; line-height: 1.3 !important; white-space: nowrap !important; }
+        .auth-sig-line {
+            border-top: 1px solid #ccc;
+            padding-top: 4px;
+            font-weight: 700;
+            width: 60%;
+            margin-left: auto !important;
+            margin-right: auto !important;
+            text-align: center;
+        }
+        .dark-header-cell {
+            background: #0d1f3c !important;
+            color: #ffffff !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        section { margin-bottom: 16px; }
+        
+        /* Terms section spacing */
+        div[style*="fontSize: 10"] {
+            margin-bottom: 20px !important;
+            padding: 8px !important;
+        }
+        
+        /* HSN Code column - keep on one line */
+        td:nth-child(3),
+        th:nth-child(3) {
+            white-space: nowrap;
+            font-size: 10px;
+        }
+        
+        /* HSN/SAC No. header - keep on one line */
+        th {
+            white-space: nowrap;
+        }
+        
+        /* Size column - make it smaller */
+        td:nth-child(5),
+        th:nth-child(5) {
+            width: 8%;
+            font-size: 9px;
+            padding: 4px 2px;
+        }
+        
+        /* Discount column - make it much smaller */
+        td:nth-child(8),
+        th:nth-child(8) {
+            width: 8%;
+            font-size: 9px;
+            padding: 4px 2px;
+            max-width: 50px;
+        }
+        
+        /* Amount column */
+        td:nth-child(7),
+        th:nth-child(7) {
+            width: 10%;
+            font-size: 10px;
+            padding: 4px 3px;
+        }
+        
+        /* Rate column */
+        td:nth-child(6),
+        th:nth-child(6) {
+            width: 10%;
+            font-size: 10px;
+            padding: 4px 3px;
+        }
+        
+        /* Total column - make it smaller */
+        td:nth-child(9),
+        th:nth-child(9) {
+            width: 11%;
+            font-size: 10px;
+            padding: 4px 3px;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        
+        @page { 
+            size: A4; 
+            margin: 8mm;
+        }
+        @media print { 
+            body { 
+                margin: 0; 
+                padding: 10mm; 
+                color: #000000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            * { 
+                margin: 0 !important; 
+                padding: 0 !important; 
+                color: #000000 !important;
+            }
+            section { margin-bottom: 16px !important; }
+            table { margin-bottom: 12px !important; }
+            td, th { 
+                padding: 6px 8px !important; 
+                color: #000000 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            th {
+                background: #0d1f3c !important;
+                color: #ffffff !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            div[style*="fontSize: 10"] { margin-bottom: 20px !important; padding: 8px !important; }
+        }
+    </style>
+</head>
+<body>
+${content.innerHTML}
+</body>
+</html>`;
+
+        iframeDoc.open();
+        iframeDoc.write(htmlContent);
+        iframeDoc.close();
+
+        // Wait for content to fully load
+        setTimeout(() => {
+            iframe.contentWindow?.print();
+            // Clean up after printing
+            setTimeout(() => {
+                document.body.removeChild(iframe);
+            }, 100);
+        }, 500);
+    };
 
     return (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="bg-white border border-slate-200 p-4 rounded-md">
 
-                {/* Header */}
-                <div className="mb-4 border-b pb-3">
-                    <h1 className="text-[14px] font-semibold uppercase">Invoices & Payments</h1>
-                    <p className="text-[10px] text-slate-400">ID: {data.registrationId}</p>
+            {/* Action Buttons */}
+            {/* <div className="flex items-center gap-3 mb-4 no-print flex-wrap">
+                <button onClick={handlePrint}
+                    className="flex items-center gap-2 px-4 py-2 bg-[#1a3a6b] text-white text-[11px] font-bold rounded hover:bg-[#152d54] transition">
+                    <Printer size={14} /> Print Tax Invoice
+                </button>
+                {data.registrationPdfUrl && <DownloadBtn url={data.registrationPdfUrl} label="Registration PDF" icon={FileText} />}
+                {data.receiptPdfUrl && <DownloadBtn url={data.receiptPdfUrl} label="Receipt PDF" icon={Receipt} />}
+            </div> */}
+
+            {/* Printable Invoice */}
+            <div ref={printRef} className="bg-white border border-slate-300 p-4 text-[11px] font-sans text-black" style={{ fontFamily: 'Calibri, Arial, sans-serif' }}>
+
+                {/* ── HEADER IMAGE ── */}
+                {headerImageUrl && (
+                    <div style={{ marginBottom: 8, textAlign: 'center' }}>
+                        <img loading="lazy" decoding="async" src={headerImageUrl} alt="Header" style={{ width: '100%', maxWidth: '100%', display: 'block' }} />
+                    </div>
+                )}
+
+                {/* ── TAX INVOICE TITLE ── */}
+                <div
+                    className="invoice-title-bar"
+                    style={{
+                        position: 'relative',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        minHeight: 22,
+                        marginBottom: 0,
+                        paddingTop: 0,
+                        paddingBottom: 0,
+                        color: '#0d1f3c',
+                        textTransform: 'uppercase',
+                    }}
+                >
+                    <div style={{ fontWeight: 500, fontSize: 15, lineHeight: 1, textAlign: 'center' }}>PROFORMA INVOICE</div>
+                    <div
+                        className="invoice-copy-label"
+                        style={{
+                            position: 'absolute',
+                            right: 0,
+                            top: '50%',
+                            transform: 'translateY(-50%)',
+                            fontWeight: 600,
+                            fontSize: 11,
+                            lineHeight: 1,
+                            paddingRight: 2,
+                            whiteSpace: 'nowrap',
+                            textAlign: 'right',
+                            letterSpacing: '-0.35px',
+                        }}
+                    >
+                        ORIGINAL COPY
+                    </div>
                 </div>
 
-                {/* Summary */}
-                <Section title="Summary">
-                    <InfoGrid rows={[
-                        ['Total Amount', `${cur}${total.toLocaleString()}`],
-                        ['Paid', `${cur}${paid.toLocaleString()}`],
-                        ['Balance', <span className={balance > 0 ? 'text-red-600 font-bold' : 'text-green-600 font-bold'}>
-                            {cur}{balance.toLocaleString()}
-                        </span>],
-                        ['Settlement', `${paidPct}%`],
-                    ]} />
-                </Section>
+                {/* ── BUYER / SHIPMENT / INVOICE DETAILS (3 columns) ── */}
+                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
+                    <thead>
+                        <tr>
+                            <th style={{ background: '#0d1f3c', color: '#fff', border: '1px solid #0d1f3c', padding: '3px 2px', width: '33%', textAlign: 'center', fontSize: 10, fontWeight: 'bold' }}>Client Name &amp; Address</th>
+                            <th style={{ background: '#0d1f3c', color: '#fff', border: '1px solid #0d1f3c', padding: '3px 2px', width: '34%', textAlign: 'center', fontSize: 10, fontWeight: 'bold' }}>Shipment Details</th>
+                            <th style={{ background: '#0d1f3c', color: '#fff', border: '1px solid #0d1f3c', padding: '3px 2px', width: '33%', textAlign: 'center', fontSize: 10, fontWeight: 'bold' }}> Proforma Invoice Details</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {/* Buyer */}
+                            <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
+                                <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>{data.exhibitorName || '—'}</div>
+                                <div style={{ marginTop: 4, textTransform: 'capitalize' }}>{data.address || ''}{data.city ? ', ' + data.city : ''}{data.pincode ? ' - ' + data.pincode : ''}, {data.state || ''}{data.country ? ', ' + data.country : ''}</div>
+                                <div></div>
+                                <div style={{ marginTop: 4 }}>Contact Person: {c1.title} {c1.firstName} {c1.lastName}</div>
+                                <div>Email: {c1.email || '—'}</div>
+                                {data.gstNo && <div style={{ marginTop: 4 }}>GSTIN.: {data.gstNo}</div>}
+                            </td>
+                            {/* Shipment */}
+                            <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
+                                <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>{data.eventId?.name || '9th IHWE 2026'}</div>
+                                <div style={{ marginTop: 4 }}>Place of Supply: {data.eventId?.location || 'New Delhi, India'}</div>
+                                {data.gstNo && <div style={{ marginTop: 4 }}>GSTIN.: {data.gstNo}</div>}
+                            </td>
+                            {/* Invoice Details */}
+                            <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 11 }}>
+                                <table className="bank-details-table" style={{ borderCollapse: 'collapse', border: 'none', lineHeight: '1.3', width: '100%' }}>
+                                    <tbody>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Proforma Inv No.</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                            <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{invoiceNo}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Proforma Inv. Date</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                            <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{invoiceDate}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Created Time</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                            <td style={{ border: 'none', padding: '1px 0', textAlign: 'right' }}>{createdDateTime}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Created By</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                            <td style={{ border: 'none', padding: '1px 0', textAlign: 'right', textTransform: 'capitalize' }}>
+                                                {!data.filledBy || data.filledBy === 'User'
+                                                    ? 'Self'
+                                                    : (data.filledByFullName || data.filledBy)
+                                                        .split(' ')
+                                                        .map((w: string) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+                                                        .join(' ')}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                {/* Payment Details */}
-                <Section title="Payment Details">
-                    <InfoGrid rows={[
-                        ['Payment Mode', data.paymentMode],
-                        ['Payment Type', data.paymentType],
-                        ['Transaction ID', txId],
-                        ['Method', method],
-                        ['Registration Date', regDate],
-                        ['Status', data.status],
-                    ]} />
-                </Section>
+                {/* ── ITEM TABLE ── */}
+                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
+                    <thead>
+                        <tr style={{ background: '#0d1f3c', color: '#fff' }}>
+                            {[
+                                { label: 'S.No.', width: '3%' },
+                                { label: 'Item Description', width: '52%' },
+                                { label: 'HSN Code', width: '7%' },
+                                { label: 'Qty.', width: '3%' },
+                                { label: 'Area', width: '6%' },
+                                { label: 'Rate', width: '6%' },
+                                { label: 'Amount', width: '6%' },
+                                { label: 'Discount', width: '6%' },
+                                { label: 'Total', width: '7%' },
+                            ].map(h => (
+                                <th key={h.label} style={{ border: '1px solid #0d1f3c', padding: '3px 2px', textAlign: 'center', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold', width: h.width }}>{h.label}</th>
+                            ))}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>1</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px' }}>
+                                <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>{data.eventId?.name || 'IHWE 2026'}</div>
+                                <div style={{ fontSize: 10, color: '#555' }}>Exhibition Stall | {p.stallType} | Stall No. {p.stallFor} | {p.stallScheme} {p.dimension} |  Hall No. 8, 9, 10 Pragati
+                                    Maidan, New Delhi, Bharat - 110001</div>
+                            </td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>998596</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>1</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{p.stallSize || 0} Sqm.</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(p.rate || 0)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(grossAmt)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right' }}>{fmtNum(effectiveDiscount)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(effectiveTaxableVal)}</td>
+                        </tr>
+                        {/* Empty rows */}
+                        {[1, 2, 3].map(i => (
+                            <tr key={i} style={{ height: 24 }}>
+                                {Array(9).fill(0).map((_, j) => <td key={j} style={{ border: '1px solid #ccc' }}></td>)}
+                            </tr>
+                        ))}
+                        <tr>
+                            <td colSpan={8} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right', background: '#f8fafc' }}>Taxable Value</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(taxableVal)}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                {/* Stall Details */}
-                <Section title="Stall & Pricing">
-                    <InfoGrid rows={[
-                        ['Stall No.', data.participation?.stallFor],
-                        ['Stall Type', data.participation?.stallType],
-                        ['Area', `${data.participation?.stallSize || 0} sqm`],
-                        ['Dimension', data.participation?.dimension],
-                        ['Rate', `${cur}${(data.participation?.rate || 0).toLocaleString()}`],
-                        ['Base', `${cur}${(data.participation?.amount || 0).toLocaleString()}`],
-                        ['GST', `${cur}${(total - (data.participation?.amount || 0)).toLocaleString()}`],
-                        ['Total', <span className="text-[#23471d] font-bold">{cur}{total.toLocaleString()}</span>],
-                    ]} />
-                </Section>
+                {/* ── GST TABLE ── */}
+                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
+                    <thead>
+                        <tr style={{ background: '#0d1f3c', color: '#fff' }}>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>S.No.</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>HSN/SAC No.</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Item Value</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Qty.</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>CGST(%)</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Amount</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>SGST(%)</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Amount</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>IGST(%)</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Amount</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Total Tax</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>1</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>998596</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right' }}>{fmtNum(taxableVal)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>1</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>9%</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right' }}>{fmtNum(cgst)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>9%</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right' }}>{fmtNum(sgst)}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}></td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right' }}></td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right', fontWeight: 700 }}>{fmtNum(gstAmt)}</td>
+                        </tr>
+                        <tr style={{ background: '#f8fafc' }}>
+                            <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}></td>
+                            <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px' }}></td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Total GST Amount</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(gstAmt)}</td>
+                        </tr>
+                        {/* Net Payable heading row */}
+                        <tr style={{ height: 8 }}>
+                            {Array(11).fill(0).map((_, j) => <td key={j} style={{ border: 'none', padding: 0 }}></td>)}
+                        </tr>
+                        <tr style={{ background: '#f8fafc' }}>
+                            <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
+                            <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px' }}>{toWords(Math.round(netPayable))}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Grand Total</td>
+                            <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(netPayable)}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                {/* Payment History (same table keep) */}
-                <Section title="Payment History">
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-[11px]">
-                            <thead className="bg-[#23471d] text-white">
-                                <tr>
-                                    <th className="p-2 text-left">#</th>
-                                    <th className="p-2 text-left">Amount</th>
-                                    <th className="p-2 text-left">Method</th>
-                                    <th className="p-2 text-left">Txn</th>
-                                    <th className="p-2 text-left">Date</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {data.paymentHistory?.map((h: any, i: number) => (
-                                    <tr key={i} className="border-b">
-                                        <td className="p-2">{i + 1}</td>
-                                        <td className="p-2">{cur}{h.amount}</td>
-                                        <td className="p-2">{h.method}</td>
-                                        <td className="p-2">{h.transactionId}</td>
-                                        <td className="p-2">
-                                            {h.paidAt ? new Date(h.paidAt).toLocaleDateString() : '—'}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </Section>
+                {/* ── TERMS ── */}
+                <div className="terms-box" style={{ fontSize: 10, marginBottom: 8, padding: '6px 8px', border: '1px solid #ccc', background: '#fafafa', paddingBottom: 2 }}>
+                    <div style={{ fontWeight: 700, marginBottom: 4 }}>Terms and Conditions:</div>
+                    <div>1. Payment must be made in favor of {companyName} via Cheque / DD / RTGS / NEFT / UPI only.</div>
+                    <div>2. Full payment is due within the stipulated invoice period.</div>
+                    <div>3. Delay in payment shall attract interest @24% per annum.</div>
+                    <div>4. Booking / services shall be confirmed only after receipt of payment.</div>
+                    <div>5. Cancellation or amendments shall be subject to company policy and management approval.</div>
+                    <div>6. All disputes are subject to Delhi Jurisdiction only.</div>
+                    {/* <div style={{ marginTop: 6, fontStyle: 'italic' }}>This is a computer-generated invoice and does not require a physical signature.</div> */}
+                </div>
 
-                {/* Documents */}
-                <Section title="Documents">
-                    <div className="flex gap-2 flex-wrap">
-                        {data.registrationPdfUrl && (
-                            <DownloadBtn url={data.registrationPdfUrl} label="Registration PDF" icon={FileText} />
-                        )}
-                        {data.receiptPdfUrl && (
-                            <DownloadBtn url={data.receiptPdfUrl} label="Receipt PDF" icon={Receipt} />
-                        )}
-                        {receiptUrl && (
-                            <DownloadBtn url={receiptUrl} label="Invoice" icon={Download} />
-                        )}
-                    </div>
-                </Section>
+                {/* ── BANK & SIGNATURE ── */}
+                <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 8 }}>
+                    <thead>
+                        <tr style={{ background: '#0d1f3c', color: '#fff' }}>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', width: '33%', background: '#0d1f3c', color: '#fff', fontWeight: 'bold', fontSize: 10, textAlign: 'center' }}>NGWPL Bank Details</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', width: '33%', background: '#0d1f3c', color: '#fff', fontWeight: 'bold', fontSize: 10, textAlign: 'center' }}>Client Signature</th>
+                            <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', width: '34%', background: '#0d1f3c', color: '#fff', fontWeight: 'bold', fontSize: 10, textAlign: 'center' }}>For {companyName}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style={{ border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10 }}>
+                                <table className="bank-details-table" style={{ borderCollapse: 'collapse', border: 'none', lineHeight: '1.3', width: 'auto' }}>
+                                    <tbody>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>Bank Name</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>{bankDetails?.bankname || 'Kotak Mahindra Bank'}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>Account Name</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>{bankDetails?.accountname || 'Namo Gange Wellness Pvt. Ltd.'}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>Account No.</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>{bankDetails?.accountno || '6812013962'}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>IFSC Code</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>{bankDetails?.ifsccode || 'KKBK0004584'}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none' }}>Branch Name</td>
+                                            <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0' }}>:</td>
+                                            <td style={{ border: 'none', whiteSpace: 'nowrap', padding: '1px 0' }}>{bankDetails?.bankbranch || 'Jagriti Enclave, Anand Vihar, Delhi'}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center', verticalAlign: 'bottom' }}>
+                                <div style={{ height: 60 }}></div>
+                                <div className="auth-sig-line">Auth Signatory</div>
+                            </td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px 8px', textAlign: 'center', verticalAlign: 'bottom' }}>
+                                <div style={{ height: 60, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+                                    {sigUrl && <img loading="lazy" decoding="async" src={sigUrl} alt="Signature" style={{ maxHeight: 50, maxWidth: 130 }} />}
+                                    {stampUrl && <img loading="lazy" decoding="async" src={stampUrl} alt="Stamp" style={{ maxHeight: 50, maxWidth: 60 }} />}
+                                </div>
+                                <div className="auth-sig-line">Auth Signatory</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {/* ── FOOTER ── */}
+                <div style={{ fontSize: 12, textAlign: 'center', color: '#666', marginTop: 8, paddingTop: 6 }}>
+                    <b>Register Address:</b> First Floor, E-1, Opposite KFC, Kalkaji Main Market, South Delhi-110019, Delhi, India
+                </div>
+                <div style={{ fontSize: 11, textAlign: 'center', color: '#999', marginTop: 4, }}>
+                    This is a computer generated document and does not require a physical signature.
+                </div>
 
             </div>
         </motion.div>
     );
 }
+

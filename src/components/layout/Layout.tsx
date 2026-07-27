@@ -19,7 +19,7 @@ const Layout = ({ children, onRegisterVisit }: LayoutProps) => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col overflow-x-hidden">
+    <div className="min-h-screen flex flex-col">
       <Topbar />
       <Navbar onRegisterVisit={onRegisterVisit} />
       <SocialSidebar />

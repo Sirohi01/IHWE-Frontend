@@ -11,6 +11,16 @@ const NotFound = () => {
   useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
     
+    // SMART REDIRECT FOR STATIC SEO/VERIFICATION FILES:
+    // If the path is a root-level file request (e.g. google6581b418ce0ea55e.html, sitemap_index.xml, verification.txt)
+    // redirect to the backend to let it serve dynamically.
+    const path = location.pathname;
+    const isFileRequest = path.includes('.') && !path.substring(1).includes('/');
+    if (isFileRequest) {
+      window.location.href = `${SERVER_URL}${path}`;
+      return;
+    }
+
     const fetchSettings = async () => {
       try {
         const data = await settingsApi.get();
@@ -34,8 +44,7 @@ const NotFound = () => {
         <div className="mb-10 flex justify-center">
           <Link to="/">
             {settings?.logo ? (
-              <img
-                src={`${SERVER_URL}${settings.logo}`}
+              <img loading="lazy" decoding="async" src={`${SERVER_URL}${settings.logo}`}
                 alt="IHWE Logo"
                 className="h-16 w-auto object-contain"
               />
@@ -76,8 +85,7 @@ const NotFound = () => {
 
         {/* Decorative Element */}
         <div className="mt-16 grayscale opacity-20 hover:grayscale-0 hover:opacity-100 transition-all duration-700 flex justify-center">
-           <img 
-            src="/favicon-32x32.png" 
+           <img loading="lazy" decoding="async" src="/favicon-32x32.png" 
             alt="Decoration" 
             className="w-12 h-12 animate-pulse"
            />

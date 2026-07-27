@@ -1,0 +1,101 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { API_URL } from "@/lib/api";
+import * as Icons from "lucide-react";
+import { CheckCircle2, Download } from "lucide-react";
+
+export default function SubmissionGuidelinesSection() {
+  const [data, setData] = useState({ guidelines: [], topics: [] });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/paper-presentation`);
+        if (res.data.success && res.data.data) {
+          setData(res.data.data);
+          console.log("Paper presentation data fetched successfully:", res.data.data);
+        } else {
+          console.error("Failed to fetch paper presentation data:", res.data);
+        }
+      } catch (error) {
+        console.error("Error fetching paper presentation data", error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const guidelines = data.guidelines || [];
+  const topics = data.topics || [];
+  return (
+    <section className="bg-white py-2">
+      <div className=" px-5 sm:px-6 lg:px-14">
+        <div className="grid gap-6 lg:grid-cols-2">
+          {/* Submission Guidelines */}
+          <div className="rounded-xl border border-gray-200 bg-white px-5 py-2 shadow-sm">
+            <div className="mb-2">
+              <h2 className="text-lg font-medium uppercase text-[#1B1B1B]">
+                Submission Guidelines
+              </h2>
+
+              <div className="mt-1 h-0.5 w-12 rounded-full bg-[#2F8B2E]" />
+            </div>
+
+            <div className="space-y-3 mt-3">
+              {guidelines.map((item, index) => (
+                <div key={index} className="flex items-start gap-3">
+                  <CheckCircle2
+                    size={18}
+                    className="mt-0.5 shrink-0 text-[#2F8B2E]"
+                  />
+
+                  <p className="text-[14px] leading-7 text-gray-600">
+                    {item}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <button className="mt-4 flex items-center gap-2 rounded-full border border-[#2F8B2E] px-6 py-1.5 text-[13px] font-medium uppercase text-[#2F8B2E] transition hover:bg-[#2F8B2E] hover:text-white">
+              Download Detailed Guidelines
+              <Download size={16} />
+            </button>
+          </div>
+
+          {/* Topics */}
+          <div className="rounded-xl border border-gray-200 bg-white px-5 py-2 shadow-sm">
+            <div className="mb-2">
+              <h2 className="text-lg font-medium uppercase text-[#1B1B1B]">
+                Paper Presentation Topics
+              </h2>
+
+              <div className="mt-1 h-0.5 w-12 rounded-full bg-[#2F8B2E]" />
+            </div>
+
+            <div className="grid gap-x-6 gap-y-3 mt-3 sm:grid-cols-2">
+              {topics.map((topic, index) => {
+                // Safely resolve the icon
+                const Icon = (topic?.icon && Icons[topic.icon as keyof typeof Icons] 
+                                ? Icons[topic.icon as keyof typeof Icons] 
+                                : Icons.Circle) as React.ElementType;
+
+                return (
+                  <div key={index} className="flex items-start gap-3">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#EDF8EE] mt-0.5">
+                      <Icon size={14} className="text-[#2F8B2E]" />
+                    </div>
+
+                    <p className="text-[14px] leading-7 text-gray-600">
+                      {topic.title}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}

@@ -7,7 +7,7 @@ import {
     Image as ImageIcon, X, Loader2,
     CheckCircle2, AlertCircle, ShoppingBag,
     Star, Tag, ExternalLink, Mail, Phone,
-    TrendingUp, Users, Info, Layers
+    TrendingUp, Users, Info, Layers, Calendar, MapPin
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -50,9 +50,13 @@ interface Analytics {
     recentEnquiries: Enquiry[];
 }
 
-export default function StallProductManager({ data }: { data: any }) {
+export default function StallProductManager({ data, mode = 'seller', initialSection = 'stall-info' }: { 
+    data: any, 
+    mode?: 'exhibitor' | 'seller',
+    initialSection?: 'stall-info' | 'products' | 'enquiries' | 'analytics'
+}) {
     const navigate = useNavigate();
-    const [activeSection, setActiveSection] = useState<'stall-info' | 'products' | 'enquiries' | 'analytics'>('stall-info');
+    const [activeSection, setActiveSection] = useState<'stall-info' | 'products' | 'enquiries' | 'analytics'>(initialSection);
     const [products, setProducts] = useState<Product[]>([]);
     const [analytics, setAnalytics] = useState<Analytics | null>(null);
     const [loading, setLoading] = useState(true);
@@ -75,14 +79,20 @@ export default function StallProductManager({ data }: { data: any }) {
     const total = data?.participation?.total || 0;
     const paid = data?.amountPaid || 0;
     const balance = data?.balanceAmount || 0;
+    const getRegParam = () => {
+        const selectedRegId = localStorage.getItem('selectedRegId');
+        return selectedRegId ? `?regId=${selectedRegId}` : '';
+    };
 
     const fetchData = async () => {
         setIsRefreshing(true);
         try {
             const token = localStorage.getItem('exhibitorToken');
+            const regParam = getRegParam();
+
             const [pRes, aRes, uRes] = await Promise.all([
-                fetch(`${API_URL}/stall-products/my`, { headers: { Authorization: `Bearer ${token}` } }),
-                fetch(`${API_URL}/stall-products/analytics/summary`, { headers: { Authorization: `Bearer ${token}` } }),
+                fetch(`${API_URL}/stall-products/my${regParam}`, { headers: { Authorization: `Bearer ${token}` } }),
+                fetch(`${API_URL}/stall-products/analytics/summary${regParam}`, { headers: { Authorization: `Bearer ${token}` } }),
                 fetch(`${API_URL}/units`)
             ]);
 
@@ -120,26 +130,50 @@ export default function StallProductManager({ data }: { data: any }) {
         setImagePreviews(prev => prev.filter((_, i) => i !== index));
     };
 
-    const handleAddProduct = async (e: React.FormEvent<HTMLFormElement>) => {
+    const openAddModal = () => {
+        setEditingProduct(null);
+        setSelectedImages([]);
+        setImagePreviews([]);
+        setShowAddModal(true);
+    };
+
+    const openEditModal = (product: Product) => {
+        setEditingProduct(product);
+        setSelectedImages([]);
+        setImagePreviews([]);
+        setShowAddModal(true);
+    };
+
+    const closeProductModal = () => {
+        setShowAddModal(false);
+        setEditingProduct(null);
+        setSelectedImages([]);
+        setImagePreviews([]);
+    };
+
+    const handleSaveProduct = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setFormLoading(true);
         try {
             const formData = new FormData(e.currentTarget);
             selectedImages.forEach(file => formData.append('images', file));
 
+            // Pass selectedRegId so product is created under the correct registration
+            const selectedRegId = localStorage.getItem('selectedRegId');
+            if (selectedRegId) formData.append('regId', selectedRegId);
+
             const token = localStorage.getItem('exhibitorToken');
-            const res = await fetch(`${API_URL}/stall-products`, {
-                method: 'POST',
+            const isEdit = !!editingProduct;
+            const res = await fetch(`${API_URL}/stall-products${isEdit ? `/${editingProduct._id}${getRegParam()}` : ''}`, {
+                method: isEdit ? 'PUT' : 'POST',
                 headers: { Authorization: `Bearer ${token}` },
                 body: formData
             });
 
             const result = await res.json();
             if (result.success) {
-                toast.success("Product added successfully");
-                setShowAddModal(false);
-                setSelectedImages([]);
-                setImagePreviews([]);
+                toast.success(isEdit ? "Product updated successfully" : "Product added successfully");
+                closeProductModal();
                 fetchData();
             } else {
                 toast.error(result.message);
@@ -155,7 +189,7 @@ export default function StallProductManager({ data }: { data: any }) {
         if (!confirm("Are you sure you want to delete this product?")) return;
         try {
             const token = localStorage.getItem('exhibitorToken');
-            const res = await fetch(`${API_URL}/stall-products/${id}`, {
+            const res = await fetch(`${API_URL}/stall-products/${id}${getRegParam()}`, {
                 method: 'DELETE',
                 headers: { Authorization: `Bearer ${token}` }
             });
@@ -176,7 +210,7 @@ export default function StallProductManager({ data }: { data: any }) {
         setEnquiryLoading(true);
         try {
             const token = localStorage.getItem('exhibitorToken');
-            const res = await fetch(`${API_URL}/stall-products/${product._id}/enquiries`, {
+            const res = await fetch(`${API_URL}/stall-products/${product._id}/enquiries${getRegParam()}`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
             const result = await res.json();
@@ -203,60 +237,64 @@ export default function StallProductManager({ data }: { data: any }) {
                     <h2 className="text-xl font-black text-slate-900 uppercase tracking-tight mb-1">Stall Management</h2>
                     <p className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">Digital Product Showcase & Lead Center</p>
                 </div>
-                <div className="flex flex-wrap items-center gap-4">
-                    <div className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-sm">
-                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Total Views</p>
-                        <div className="flex items-center gap-2">
-                            <span className="text-lg font-black text-slate-900">{analytics?.totalViews || 0}</span>
-                            <TrendingUp size={14} className="text-[#16a34a]" />
+                {mode === 'seller' && (
+                    <div className="flex flex-wrap items-center gap-4">
+                        <div className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-sm">
+                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Total Views</p>
+                            <div className="flex items-center gap-2">
+                                <span className="text-lg font-black text-slate-900">{analytics?.totalViews || 0}</span>
+                                <TrendingUp size={14} className="text-[#16a34a]" />
+                            </div>
                         </div>
-                    </div>
-                    <div className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-sm">
-                        <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Lead Conversion</p>
-                        <div className="flex items-center gap-2">
-                            <span className="text-lg font-black text-slate-900">{analytics?.totalEnquiries || 0}</span>
-                            <MessageCircle size={14} className="text-[#0284c7]" />
+                        <div className="px-4 py-2 bg-slate-50 border border-slate-100 rounded-sm">
+                            <p className="text-[9px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Lead Conversion</p>
+                            <div className="flex items-center gap-2">
+                                <span className="text-lg font-black text-slate-900">{analytics?.totalEnquiries || 0}</span>
+                                <MessageCircle size={14} className="text-[#0284c7]" />
+                            </div>
                         </div>
+                        <button
+                            onClick={() => {
+                                setActiveSection('products');
+                                openAddModal();
+                            }}
+                            className="h-11 px-6 bg-[#23471d] hover:bg-[#1a3516] text-white rounded-sm flex items-center gap-2 transition-all shadow-md group"
+                        >
+                            <Plus size={18} className="group-hover:rotate-90 transition-transform duration-300" />
+                            <span className="text-[11px] font-black uppercase tracking-widest">Add New Product</span>
+                        </button>
                     </div>
-                    <button
-                        onClick={() => {
-                            setActiveSection('products');
-                            setShowAddModal(true);
-                        }}
-                        className="h-11 px-6 bg-[#23471d] hover:bg-[#1a3516] text-white rounded-sm flex items-center gap-2 transition-all shadow-md group"
-                    >
-                        <Plus size={18} className="group-hover:rotate-90 transition-transform duration-300" />
-                        <span className="text-[11px] font-black uppercase tracking-widest">Add New Product</span>
-                    </button>
-                </div>
+                )}
             </div>
 
             {/* Navigation Tabs */}
-            <div className="flex items-center border-b border-slate-200 bg-white px-6">
-                {[
-                    { id: 'stall-info', label: 'Stall Information', icon: Info },
-                    { id: 'products', label: 'Product Listing', icon: Package },
-                    { id: 'enquiries', label: 'All Enquiries', icon: Mail },
-                    { id: 'analytics', label: 'Store Insights', icon: BarChart3 },
-                ].map(tab => (
-                    <button
-                        key={tab.id}
-                        onClick={() => setActiveSection(tab.id as any)}
-                        className={`py-4 px-6 flex items-center gap-2 border-b-2 transition-all relative ${activeSection === tab.id
-                            ? 'border-[#23471d] text-[#23471d]'
-                            : 'border-transparent text-slate-500 hover:text-slate-800'
-                            }`}
-                    >
-                        <tab.icon size={16} />
-                        <span className="text-[11px] font-black uppercase tracking-widest">{tab.label}</span>
-                        {tab.id === 'enquiries' && analytics?.totalEnquiries ? (
-                            <span className="ml-2 w-5 h-5 bg-[#d26019] text-white text-[9px] font-black flex items-center justify-center rounded-full">
-                                {analytics.totalEnquiries}
-                            </span>
-                        ) : null}
-                    </button>
-                ))}
-            </div>
+            {mode === 'seller' && (
+                <div className="flex items-center border-b border-slate-200 bg-white px-6">
+                    {[
+                        { id: 'stall-info', label: 'Stall Information', icon: Info },
+                        { id: 'products', label: 'Product Listing', icon: Package },
+                        { id: 'enquiries', label: 'All Enquiries', icon: Mail },
+                        { id: 'analytics', label: 'Store Insights', icon: BarChart3 },
+                    ].map(tab => (
+                        <button
+                            key={tab.id}
+                            onClick={() => setActiveSection(tab.id as any)}
+                            className={`py-4 px-6 flex items-center gap-2 border-b-2 transition-all relative ${activeSection === tab.id
+                                ? 'border-[#23471d] text-[#23471d]'
+                                : 'border-transparent text-slate-500 hover:text-slate-800'
+                                }`}
+                        >
+                            <tab.icon size={16} />
+                            <span className="text-[11px] font-black uppercase tracking-widest">{tab.label}</span>
+                            {tab.id === 'enquiries' && analytics?.totalEnquiries ? (
+                                <span className="ml-2 w-5 h-5 bg-[#d26019] text-white text-[9px] font-black flex items-center justify-center rounded-full">
+                                    {analytics.totalEnquiries}
+                                </span>
+                            ) : null}
+                        </button>
+                    ))}
+                </div>
+            )}
 
             {/* Content Area */}
             <AnimatePresence mode="wait">
@@ -287,36 +325,69 @@ export default function StallProductManager({ data }: { data: any }) {
                                     <ChevronRight size={16} className="text-slate-300 group-hover:text-[#d26019] group-hover:translate-x-0.5 transition-all" />
                                 </button>
 
-                                <button
-                                    onClick={() => setActiveSection('products')}
-                                    className="p-5 bg-white border border-slate-200 rounded-sm hover:border-[#23471d] transition-all group shadow-sm flex items-center justify-between"
-                                >
-                                    <div className="flex items-center gap-4 text-left">
-                                        <div className="w-12 h-12 bg-[#23471d]/5 text-[#23471d] rounded-sm flex items-center justify-center group-hover:bg-[#23471d] group-hover:text-white transition-all shrink-0">
-                                            <Package size={20} />
+                                {mode === 'seller' && (
+                                    <button
+                                        onClick={() => setActiveSection('products')}
+                                        className="p-5 bg-white border border-slate-200 rounded-sm hover:border-[#23471d] transition-all group shadow-sm flex items-center justify-between"
+                                    >
+                                        <div className="flex items-center gap-4 text-left">
+                                            <div className="w-12 h-12 bg-[#23471d]/5 text-[#23471d] rounded-sm flex items-center justify-center group-hover:bg-[#23471d] group-hover:text-white transition-all shrink-0">
+                                                <Package size={20} />
+                                            </div>
+                                            <div>
+                                                <h3 className="text-[12px] font-black text-slate-900 uppercase tracking-tight leading-none mb-1.5">Manage your Products</h3>
+                                                <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Add products, gallery images & descriptions</p>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <h3 className="text-[12px] font-black text-slate-900 uppercase tracking-tight leading-none mb-1.5">Manage your Products</h3>
-                                            <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Add products, gallery images & descriptions</p>
-                                        </div>
-                                    </div>
-                                    <ChevronRight size={16} className="text-slate-300 group-hover:text-[#23471d] group-hover:translate-x-0.5 transition-all" />
-                                </button>
+                                        <ChevronRight size={16} className="text-slate-300 group-hover:text-[#23471d] group-hover:translate-x-0.5 transition-all" />
+                                    </button>
+                                )}
                             </div>
 
                             {/* Info Grid */}
-                            <div className="grid-cols-1 lg:grid-cols-3">
-                                <div className="lg:col-span-2 space-y-6">
+                            <div className="grid grid-cols-1 gap-6">
+                                <div className="space-y-6">
+                                    {/* Event Details */}
+                                    {data?.eventId && (
+                                        <div className="bg-white border border-slate-200 rounded-sm overflow-hidden">
+                                            <div className="bg-[#23471d] px-6 py-3 border-b flex items-center gap-2">
+                                                <Calendar size={14} className="text-white/80" />
+                                                <span className="text-[10px] font-black text-white uppercase tracking-widest">Event Details</span>
+                                            </div>
+                                            <div className="p-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                                {[
+                                                    { label: 'Event Name', value: data.eventId?.name, icon: Star },
+                                                    { label: 'Venue / Location', value: data.eventId?.location, icon: MapPin },
+                                                    { label: 'Start Date', value: data.eventId?.startDate ? new Date(data.eventId.startDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : null, icon: Calendar },
+                                                    { label: 'End Date', value: data.eventId?.endDate ? new Date(data.eventId.endDate).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : null, icon: Calendar },
+                                                ].map((item, i) => (
+                                                    <div key={i} className="space-y-1.5">
+                                                        <div className="flex items-center gap-1.5 text-slate-400">
+                                                            <item.icon size={12} />
+                                                            <span className="text-[9px] font-black uppercase tracking-widest">{item.label}</span>
+                                                        </div>
+                                                        <p className="text-[12px] font-bold text-slate-900">{item.value || 'N/A'}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {/* Stall Details */}
                                     <div className="bg-white border border-slate-200 rounded-sm overflow-hidden">
                                         <div className="bg-slate-50 px-6 py-3 border-b flex items-center justify-between">
                                             <div className="px-2 py-0.5 bg-[#23471d]/10 text-[#23471d] text-[8px] font-black uppercase rounded-sm border border-[#23471d]/20">Official Allocation</div>
                                         </div>
-                                        <div className="p-4 grid grid-cols-2 sm:grid-cols-4">
+                                        <div className="p-4 grid grid-cols-2 sm:grid-cols-4 gap-4">
                                             {[
                                                 { label: 'Stall No.', value: data?.participation?.stallFor, icon: Target },
                                                 { label: 'Stall Type', value: data?.participation?.stallType, icon: Layers },
-                                                { label: 'Stall Size', value: `${data?.participation?.stallSize} SQM`, icon: Package },
+                                                { label: 'Stall Size', value: data?.participation?.stallSize ? `${data.participation.stallSize} SQM` : null, icon: Package },
                                                 { label: 'Scheme', value: data?.participation?.stallScheme, icon: Star },
+                                                { label: 'Dimension', value: data?.participation?.dimension, icon: Layers },
+                                                { label: 'Rate / SQM', value: data?.participation?.rate ? `${cur} ${Number(data.participation.rate).toLocaleString('en-IN')}` : null, icon: Target },
+                                                { label: 'Currency', value: data?.participation?.currency, icon: Star },
+                                                { label: 'Reg. ID', value: data?.registrationId, icon: Target },
                                             ].map((item, i) => (
                                                 <div key={i} className="space-y-1.5">
                                                     <div className="flex items-center gap-1.5 text-slate-400">
@@ -329,12 +400,68 @@ export default function StallProductManager({ data }: { data: any }) {
                                         </div>
                                     </div>
 
+                                    {/* Google Maps Section */}
+                                    <div className="bg-white border border-slate-200 rounded-sm overflow-hidden">
+                                        <div className="bg-slate-50 px-6 py-3 border-b flex items-center justify-between">
+                                            <div className="flex items-center gap-2">
+                                                <MapPin size={14} className="text-[#23471d]" />
+                                                <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">Venue Location & Directions</span>
+                                            </div>
+                                            <a
+                                                href="https://www.google.com/maps/dir/?api=1&destination=Hall+9+Pragati+Maidan+New+Delhi"
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-[10px] font-black text-[#d26019] uppercase tracking-widest hover:underline flex items-center gap-1 group/link"
+                                            >
+                                                Directions <ExternalLink size={12} className="group-hover/link:translate-x-0.5 transition-transform" />
+                                            </a>
+                                        </div>
+                                        <div className="p-4 space-y-4">
+                                            <div className="relative w-full h-[400px] rounded-sm overflow-hidden border border-slate-200">
+                                                <iframe 
+                                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3502.40515138456!2d77.24287917613687!3d28.61761698475674!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390ce3292652f09b%3A0x5291514307e237c5!2sHall%20-%209!5e0!3m2!1sen!2sin!4v1777211227510!5m2!1sen!2sin" 
+                                                    width="100%" 
+                                                    height="100%" 
+                                                    style={{ border: 0 }} 
+                                                    allowFullScreen 
+                                                    loading="lazy" 
+                                                    referrerPolicy="no-referrer-when-downgrade"
+                                                    title="Venue Location Map"
+                                                />
+                                            </div>
+                                            
+                                            <div className="flex flex-col md:flex-row items-center gap-4">
+                                                <div className="flex-1 flex items-start gap-3">
+                                                    <div className="w-8 h-8 bg-slate-100 rounded-sm flex items-center justify-center shrink-0">
+                                                        <MapPin size={16} className="text-[#23471d]" />
+                                                    </div>
+                                                    <div>
+                                                        <p className="text-[11px] font-black text-slate-900 uppercase leading-tight">Pragati Maidan, New Delhi</p>
+                                                        <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mt-1">Hall - 9, IECC Complex, Pragati Maidan, New Delhi, Delhi 110001</p>
+                                                    </div>
+                                                </div>
+                                                <a
+                                                    href="https://www.google.com/maps/place/Hall+-+9/@28.6176169,77.2428791,17z/data=!3m1!4b1!4m6!3m5!1s0x390ce3292652f09b:0x5291514307e237c5!8m2!3d28.6176169!4d77.245454!16s%2Fg%2F11c5q5y5qy?entry=ttu"
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="h-10 px-6 bg-[#23471d] hover:bg-[#1a3516] text-white rounded-sm flex items-center justify-center gap-2 transition-all shadow-md group shrink-0"
+                                                >
+                                                    <MapPin size={14} className="group-hover:scale-110 transition-transform" />
+                                                    <span className="text-[10px] font-black uppercase tracking-widest">Open in Maps</span>
+                                                    <ExternalLink size={12} className="opacity-70" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div className="bg-white border border-slate-200 rounded-sm overflow-hidden text-center p-12">
                                         <ImageIcon className="mx-auto text-slate-100 mb-4" size={48} />
                                         <h3 className="text-[12px] font-black text-slate-400 uppercase tracking-widest mb-2">Technical Documents</h3>
                                         <p className="text-[10px] font-medium text-slate-400 max-w-xs mx-auto mb-6 italics">Please visit the documentation section to download your stall technical manual and entry passes.</p>
                                     </div>
                                 </div>
+
+
                             </div>
                         </div>
                     )}
@@ -346,6 +473,7 @@ export default function StallProductManager({ data }: { data: any }) {
                             onDelete={handleDeleteProduct}
                             onEnquiries={fetchProductEnquiries}
                             onView={setSelectedProduct}
+                            onEdit={openEditModal}
                         />
                     )}
 
@@ -375,7 +503,7 @@ export default function StallProductManager({ data }: { data: any }) {
                                                             <div className="w-10 h-10 bg-slate-100 rounded-sm overflow-hidden border flex">
                                                                 {/* @ts-ignore */}
                                                                 {enq.productId?.images?.[0] ? (
-                                                                    <img src={`${backendBaseUrl}${enq.productId.images[0]}`} alt="" className="w-full h-full object-contain m-auto" />
+                                                                    <img loading="lazy" decoding="async" src={`${backendBaseUrl}${enq.productId.images[0]}`} alt="" className="w-full h-full object-contain m-auto" />
                                                                 ) : <Package className="w-full h-full p-2 text-slate-300" />}
                                                             </div>
                                                             <div className="min-w-0">
@@ -468,7 +596,7 @@ export default function StallProductManager({ data }: { data: any }) {
                                         <div className="flex items-center gap-4">
                                             <div className="w-16 h-16 bg-slate-100 rounded-sm overflow-hidden border">
                                                 {analytics.topProduct.images?.[0] ? (
-                                                    <img src={`${backendBaseUrl}${analytics.topProduct.images[0]}`} alt="" className="w-full h-full object-cover" />
+                                                    <img loading="lazy" decoding="async" src={`${backendBaseUrl}${analytics.topProduct.images[0]}`} alt="" className="w-full h-full object-cover" />
                                                 ) : <Package className="w-full h-full p-3 text-slate-300" />}
                                             </div>
                                             <div>
@@ -499,7 +627,7 @@ export default function StallProductManager({ data }: { data: any }) {
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
-                            onClick={() => setShowAddModal(false)}
+                            onClick={closeProductModal}
                             className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm"
                         />
                         <motion.div
@@ -509,18 +637,21 @@ export default function StallProductManager({ data }: { data: any }) {
                             className="bg-white w-full max-w-2xl rounded-sm shadow-2xl overflow-hidden relative"
                         >
                             <div className="bg-[#23471d] p-4 flex items-center justify-between">
-                                <h3 className="text-white text-[12px] font-black uppercase tracking-widest">Register New Product</h3>
-                                <button onClick={() => setShowAddModal(false)} className="text-white/70 hover:text-white transition-colors">
+                                <h3 className="text-white text-[12px] font-black uppercase tracking-widest">
+                                    {editingProduct ? 'Update Product' : 'Register New Product'}
+                                </h3>
+                                <button onClick={closeProductModal} className="text-white/70 hover:text-white transition-colors">
                                     <X size={20} />
                                 </button>
                             </div>
 
-                            <form onSubmit={handleAddProduct} className="p-8">
+                            <form onSubmit={handleSaveProduct} className="p-8">
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="col-span-1 md:col-span-2 space-y-2">
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Product Name *</label>
                                         <input
                                             name="name" required placeholder="e.g. Handmade Terracotta Vase"
+                                            defaultValue={editingProduct?.name || ''}
                                             className="w-full h-11 bg-slate-50 border border-slate-200 rounded-sm px-4 text-[12px] font-bold focus:bg-white focus:border-[#23471d] outline-none transition-all"
                                         />
                                     </div>
@@ -530,10 +661,12 @@ export default function StallProductManager({ data }: { data: any }) {
                                         <div className="flex gap-2">
                                             <input
                                                 name="price" type="number" placeholder="500"
+                                                defaultValue={editingProduct?.price || ''}
                                                 className="flex-1 h-11 bg-slate-50 border border-slate-200 rounded-sm px-4 text-[12px] font-bold focus:bg-white focus:border-[#23471d] outline-none"
                                             />
                                             <select
                                                 name="priceUnit"
+                                                defaultValue={editingProduct?.priceUnit || 'per piece'}
                                                 className="w-24 h-11 bg-slate-50 border border-slate-200 rounded-sm px-2 text-[10px] font-bold focus:bg-white outline-none"
                                             >
                                                 {units.length > 0 ? (
@@ -555,6 +688,7 @@ export default function StallProductManager({ data }: { data: any }) {
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">MOQ (Min Order Qty)</label>
                                         <input
                                             name="moq" placeholder="e.g. 100 units"
+                                            defaultValue={editingProduct?.moq || ''}
                                             className="w-full h-11 bg-slate-50 border border-slate-200 rounded-sm px-4 text-[12px] font-bold focus:bg-white focus:border-[#23471d] outline-none"
                                         />
                                     </div>
@@ -565,6 +699,7 @@ export default function StallProductManager({ data }: { data: any }) {
                                             <Package className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={14} />
                                             <input
                                                 name="category" placeholder="handicraft, vase, home decor"
+                                                defaultValue={editingProduct?.category || ''}
                                                 className="w-full h-11 bg-slate-50 border border-slate-200 rounded-sm pl-10 pr-4 text-[12px] font-bold focus:bg-white focus:border-[#23471d] outline-none"
                                             />
                                         </div>
@@ -574,6 +709,7 @@ export default function StallProductManager({ data }: { data: any }) {
                                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Description</label>
                                         <textarea
                                             name="description" rows={3} placeholder="Tell buyers about your product features, quality and material..."
+                                            defaultValue={editingProduct?.description || ''}
                                             className="w-full bg-slate-50 border border-slate-200 rounded-sm p-4 text-[12px] font-bold focus:bg-white focus:border-[#23471d] outline-none transition-all resize-none"
                                         />
                                     </div>
@@ -586,7 +722,7 @@ export default function StallProductManager({ data }: { data: any }) {
                                         <div className="grid grid-cols-4 sm:grid-cols-6 gap-3">
                                             {imagePreviews.map((url, i) => (
                                                 <div key={i} className="aspect-square bg-slate-100 rounded-sm relative group overflow-hidden border flex">
-                                                    <img src={url} alt="" className="w-full h-full object-contain m-auto" />
+                                                    <img loading="lazy" decoding="async" src={url} alt="" className="w-full h-full object-contain m-auto" />
                                                     <button
                                                         type="button"
                                                         onClick={() => removePreview(i)}
@@ -610,7 +746,7 @@ export default function StallProductManager({ data }: { data: any }) {
                                 <div className="mt-8 flex gap-3">
                                     <button
                                         type="button"
-                                        onClick={() => setShowAddModal(false)}
+                                        onClick={closeProductModal}
                                         className="h-12 px-6 border border-slate-200 hover:bg-slate-50 text-slate-600 text-[11px] font-black uppercase tracking-widest rounded-sm transition-all"
                                     >
                                         Cancel
@@ -621,7 +757,7 @@ export default function StallProductManager({ data }: { data: any }) {
                                         className="h-12 flex-1 bg-[#23471d] hover:bg-[#1a3516] text-white text-[11px] font-black uppercase tracking-widest rounded-sm transition-all flex items-center justify-center gap-2"
                                     >
                                         {formLoading ? <Loader2 size={16} className="animate-spin" /> : <Package size={16} />}
-                                        Save Product Details
+                                        {editingProduct ? 'Update Product Details' : 'Save Product Details'}
                                     </button>
                                 </div>
                             </form>
@@ -651,7 +787,7 @@ export default function StallProductManager({ data }: { data: any }) {
                                 <div className="flex items-center gap-4">
                                     <div className="w-12 h-12 bg-slate-50 border rounded-sm overflow-hidden">
                                         {selectedEnquiryProduct.images?.[0] ? (
-                                            <img src={`${backendBaseUrl}${selectedEnquiryProduct.images[0]}`} alt="" className="w-full h-full object-cover" />
+                                            <img loading="lazy" decoding="async" src={`${backendBaseUrl}${selectedEnquiryProduct.images[0]}`} alt="" className="w-full h-full object-cover" />
                                         ) : <Package className="w-full h-full p-2 text-slate-300" />}
                                     </div>
                                     <div>
@@ -753,8 +889,7 @@ export default function StallProductManager({ data }: { data: any }) {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                                     {selectedProduct.images?.map((img, i) => (
                                         <div key={i} className="group aspect-square bg-white border border-slate-200 rounded-sm overflow-hidden shadow-sm relative flex">
-                                            <img
-                                                src={`${backendBaseUrl}${img}`}
+                                            <img loading="lazy" decoding="async" src={`${backendBaseUrl}${img}`}
                                                 alt=""
                                                 className="w-full h-full object-contain m-auto transition-transform duration-700 group-hover:scale-110"
                                             />
@@ -773,12 +908,13 @@ export default function StallProductManager({ data }: { data: any }) {
     );
 }
 
-function ProductGrid({ products, baseUrl, onDelete, onEnquiries, onView }: {
+function ProductGrid({ products, baseUrl, onDelete, onEnquiries, onView, onEdit }: {
     products: Product[],
     baseUrl: string,
     onDelete: (id: string) => void,
     onEnquiries: (p: Product) => void,
-    onView: (p: Product) => void
+    onView: (p: Product) => void,
+    onEdit: (p: Product) => void
 }) {
     if (!products.length) return (
         <div className="bg-white border-2 border-dashed border-slate-200 rounded-sm p-40 text-center">
@@ -798,8 +934,7 @@ function ProductGrid({ products, baseUrl, onDelete, onEnquiries, onView }: {
                 >
                     <div className="aspect-square bg-slate-50 relative overflow-hidden">
                         {p.images?.[0] ? (
-                            <img
-                                src={`${baseUrl}${p.images[0]}`}
+                            <img loading="lazy" decoding="async" src={`${baseUrl}${p.images[0]}`}
                                 alt={p.name}
                                 className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                             />
@@ -824,6 +959,13 @@ function ProductGrid({ products, baseUrl, onDelete, onEnquiries, onView }: {
                                 title="View Leads"
                             >
                                 <MessageCircle size={12} />
+                            </button>
+                            <button
+                                onClick={() => onEdit(p)}
+                                className="w-7 h-7 bg-white text-slate-900 rounded-full flex items-center justify-center hover:bg-[#23471d] hover:text-white transition-all shadow-lg"
+                                title="Edit Product"
+                            >
+                                <Edit2 size={12} />
                             </button>
                             <button
                                 onClick={() => onDelete(p._id)}

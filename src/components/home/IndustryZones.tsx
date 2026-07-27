@@ -121,8 +121,7 @@ const IndustryZones = () => {
                             {/* Image Part */}
                             <div className="relative w-full overflow-hidden" style={{ aspectRatio: '16/9' }}>
                                 {card.image ? (
-                                    <img
-                                        src={`${SERVER_URL}${card.image}`}
+                                    <img loading="lazy" decoding="async" src={`${SERVER_URL}${card.image}`}
                                         alt={card.imageAlt || card.title}
                                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
                                     />
@@ -151,9 +150,20 @@ const IndustryZones = () => {
                                 <h3 className="text-xl font-bold text-slate-900 mb-3 transition-colors duration-300">
                                     {card.title}
                                 </h3>
-                                <p className="text-slate-500 text-sm leading-relaxed">
+                                <p className="text-slate-500 text-sm leading-relaxed mb-6">
                                     {truncateWords(card.description, 95)}
                                 </p>
+
+                                {card.buttonText && (
+                                    <div className="mt-auto">
+                                        <Link
+                                            to={card.buttonUrl && card.buttonUrl !== '#' ? card.buttonUrl : `/industry-zone/${card._id}`}
+                                            className="inline-flex items-center gap-2 text-[#23471d] font-bold text-xs uppercase tracking-widest hover:text-[#d26019] transition-colors group/btn"
+                                        >
+                                            {card.buttonText} <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                                        </Link>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Bottom Accent Line */}

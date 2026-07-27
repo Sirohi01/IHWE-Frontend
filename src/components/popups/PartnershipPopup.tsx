@@ -1,0 +1,628 @@
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "react-toastify";
+import { CheckCircle, ShieldCheck } from "lucide-react";
+import { API_URL, otpApi, expoSupportEnquiryApi, socialMediaApi } from "../../lib/api";
+import pop1 from "../../assets/pop1.png";
+import leaf2 from "../../assets/leaf2.png";
+import why1 from "../../assets/why1.png";
+import t1 from "../../assets/t1.png";
+import t2 from "../../assets/t2.png";
+import t3 from "../../assets/t3.png";
+import t4 from "../../assets/t4.png";
+import t5 from "../../assets/t5.png";
+
+const Sparkle = ({ style, color = '#fff176' }: { style?: React.CSSProperties, color?: string }) => (
+  <span
+    style={{
+      position: 'absolute',
+      pointerEvents: 'none',
+      fontSize: '12px',
+      color: color,
+      textShadow: `0 0 6px ${color}, 0 0 12px ${color}`,
+      animation: 'sparkleAnim 1.6s ease-in-out infinite',
+      opacity: 0,
+      zIndex: 20,
+      ...style,
+    }}
+  >
+    ✦
+  </span>
+);
+
+const serviceOptions = [
+  {
+    id: "hotel", label: "Hotel Booking",
+    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><rect x="6" y="14" width="28" height="22" rx="2" /><path d="M12 36V28h6v8M22 28h6v8M6 22h28M14 14V10a6 6 0 0112 0v4" /><rect x="16" y="20" width="8" height="5" rx="1" /></svg>
+  },
+  {
+    id: "travel", label: "Travel Assistance",
+    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><path d="M8 30l4-14 4 7 6-12 4 8 5-7 4 7" strokeLinejoin="round" /><ellipse cx="20" cy="22" rx="11" ry="5" /></svg>
+  },
+  {
+    id: "stall", label: "Stall Design & Fabrication",
+    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><rect x="6" y="16" width="28" height="20" rx="1" /><path d="M6 16l4-8h20l4 8M14 36V26h12v10" /><path d="M10 20h4v6h-4zM26 20h4v6h-4z" /></svg>
+  },
+  {
+    id: "logistics", label: "Logistics Support",
+    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><rect x="4" y="14" width="22" height="16" rx="2" /><path d="M26 20h6l4 6v4h-10V20z" /><circle cx="11" cy="32" r="3" /><circle cx="29" cy="32" r="3" /><path d="M4 22h22" /></svg>
+  },
+  {
+    id: "printing", label: "Printing & Branding",
+    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><rect x="8" y="6" width="24" height="16" rx="2" /><path d="M12 22v12h16V22M8 14h24M16 28h8M16 32h6" /><circle cx="12" cy="17" r="1.5" fill="#2d6a2d" /></svg>
+  },
+  {
+    id: "hospitality", label: "Hospitality Services",
+    icon: <svg viewBox="0 0 40 40" fill="none" className="w-6 h-6" stroke="#2d6a2d" strokeWidth="1.6"><path d="M10 28a10 6 0 0020 0" /><path d="M8 28h24M20 10v6M14 16a6 4 0 0012 0" /><circle cx="20" cy="8" r="2" /><path d="M16 34h8" /></svg>
+  },
+];
+
+const whyChoose = [
+  {
+    id: 1, title: "Verified & Trusted", desc: "All partners are verified and experienced",
+    icon: <img loading="lazy" decoding="async" src={t1} alt="verified" className="w-[34px] h-[34px] object-contain" />
+  },
+  {
+    id: 2, title: "Best Pricing", desc: "Competitive rates and best value",
+    icon: <img loading="lazy" decoding="async" src={t2} alt="pricing" className="w-[34px] h-[34px] object-contain" />
+  },
+  {
+    id: 3, title: "Faster Coordination", desc: "Quick response and smooth execution",
+    icon: <img loading="lazy" decoding="async" src={t3} alt="coordination" className="w-[34px] h-[34px] object-contain" />
+  },
+  {
+    id: 4, title: "Expo-Specific Support", desc: "Solutions tailored for IHWE exhibitors",
+    icon: <img loading="lazy" decoding="async" src={t4} alt="support" className="w-[34px] h-[34px] object-contain" />
+  },
+  {
+    id: 5, title: "Trusted Network", desc: "Backed by IHWE's reliable partner network",
+    icon: <img loading="lazy" decoding="async" src={t5} alt="network" className="w-[34px] h-[34px] object-contain" />
+  },
+];
+
+interface PartnershipPopupProps {
+  isOpen: boolean;
+  onClose: () => void;
+  initialService?: string | null;
+}
+
+export default function PartnershipPopup({ isOpen, onClose, initialService }: PartnershipPopupProps) {
+  const [formData, setFormData] = useState({ fullName: "", companyName: "", mobile: "", email: "", stallSize: "", message: "" });
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
+  const [charCount, setCharCount] = useState(0);
+
+  // OTP & Submission States
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  // Phone OTP States
+  const [phoneOtp, setPhoneOtp] = useState("");
+  const [showPhoneOtpInput, setShowPhoneOtpInput] = useState(false);
+  const [isPhoneVerified, setIsPhoneVerified] = useState(false);
+  const [isSendingPhoneOtp, setIsSendingPhoneOtp] = useState(false);
+  const [isVerifyingPhoneOtp, setIsVerifyingPhoneOtp] = useState(false);
+
+  // Email OTP States
+  const [emailOtp, setEmailOtp] = useState("");
+  const [showEmailOtpInput, setShowEmailOtpInput] = useState(false);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isSendingEmailOtp, setIsSendingEmailOtp] = useState(false);
+  const [isVerifyingEmailOtp, setIsVerifyingEmailOtp] = useState(false);
+
+  // WhatsApp Configuration States
+  const [whatsappNumber, setWhatsappNumber] = useState("9654900525");
+  const [whatsappMessage, setWhatsappMessage] = useState("Hello! I would like to know more about the International Health & Wellness Expo 2026.");
+
+  useEffect(() => {
+    const fetchSocialData = async () => {
+      try {
+        const data = await socialMediaApi.get();
+        if (data) {
+          if (data.whatsappNumber) setWhatsappNumber(data.whatsappNumber);
+          if (data.whatsappMessage) setWhatsappMessage(data.whatsappMessage);
+        }
+      } catch (error) {
+        console.error("Error fetching WhatsApp data:", error);
+      }
+    };
+    fetchSocialData();
+  }, []);
+
+  const cleanPhone = whatsappNumber.replace(/\D/g, "");
+  const formattedPhone = cleanPhone.length === 10 ? "91" + cleanPhone : cleanPhone;
+  const whatsappUrl = `https://wa.me/${formattedPhone}?text=${encodeURIComponent(whatsappMessage)}`;
+
+  // Initialize selected services when initialService changes
+  useEffect(() => {
+    if (initialService) {
+      setSelectedServices([initialService]);
+    } else if (isOpen) {
+      // Don't reset if just opening without initialService
+    } else {
+      setSelectedServices([]);
+      setIsSubmitted(false);
+      setIsEmailVerified(false);
+      setIsPhoneVerified(false);
+      setShowEmailOtpInput(false);
+      setShowPhoneOtpInput(false);
+    }
+  }, [initialService, isOpen]);
+
+  const toggleService = (id: string) => setSelectedServices(p => p.includes(id) ? p.filter(s => s !== id) : [...p, id]);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    if (name === "message") setCharCount(value.length);
+    setFormData(p => ({ ...p, [name]: value }));
+
+    if (name === 'email') {
+      setIsEmailVerified(false);
+      setShowEmailOtpInput(false);
+    }
+    if (name === 'mobile') {
+      setIsPhoneVerified(false);
+      setShowPhoneOtpInput(false);
+    }
+  };
+
+  const handleRequestPhoneOtp = async () => {
+    if (!formData.mobile || formData.mobile.length < 10) {
+      return toast.error("Please enter a valid mobile number");
+    }
+    setIsSendingPhoneOtp(true);
+    try {
+      const res = await otpApi.request(formData.mobile, 'phone', formData.fullName, 'EXPO_SUPPORT');
+      if (res.success) {
+        setShowPhoneOtpInput(true);
+        toast.success("OTP sent to WhatsApp");
+      } else {
+        toast.error(res.message || "Failed to send OTP");
+      }
+    } catch (error) {
+      toast.error("Error sending OTP");
+    } finally {
+      setIsSendingPhoneOtp(false);
+    }
+  };
+
+  const handleVerifyPhoneOtp = async () => {
+    if (!phoneOtp || phoneOtp.length !== 6) {
+      return toast.error("Enter 6-digit OTP");
+    }
+    setIsVerifyingPhoneOtp(true);
+    try {
+      const res = await otpApi.verify(formData.mobile, phoneOtp, 'phone');
+      if (res.success) {
+        setIsPhoneVerified(true);
+        setShowPhoneOtpInput(false);
+        toast.success("Mobile verified!");
+      } else {
+        toast.error(res.message || "Invalid OTP");
+      }
+    } catch (error) {
+      toast.error("Verification failed");
+    } finally {
+      setIsVerifyingPhoneOtp(false);
+    }
+  };
+
+  const handleRequestEmailOtp = async () => {
+    if (!formData.email || !formData.email.includes('@')) {
+      return toast.error("Please enter a valid email");
+    }
+    setIsSendingEmailOtp(true);
+    try {
+      const res = await otpApi.request(formData.email, 'email', formData.fullName, 'EXPO_SUPPORT');
+      if (res.success) {
+        setShowEmailOtpInput(true);
+        toast.success("OTP sent to your email");
+      } else {
+        toast.error(res.message || "Failed to send OTP");
+      }
+    } catch (error) {
+      toast.error("Error sending OTP");
+    } finally {
+      setIsSendingEmailOtp(false);
+    }
+  };
+
+  const handleVerifyEmailOtp = async () => {
+    if (!emailOtp || emailOtp.length !== 6) {
+      return toast.error("Enter 6-digit OTP");
+    }
+    setIsVerifyingEmailOtp(true);
+    try {
+      const res = await otpApi.verify(formData.email, emailOtp, 'email');
+      if (res.success) {
+        setIsEmailVerified(true);
+        setShowEmailOtpInput(false);
+        toast.success("Email verified!");
+      } else {
+        toast.error(res.message || "Invalid OTP");
+      }
+    } catch (error) {
+      toast.error("Verification failed");
+    } finally {
+      setIsVerifyingEmailOtp(false);
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!formData.fullName || !formData.companyName || !formData.mobile || !formData.email) {
+      return toast.error("Please fill all required fields");
+    }
+    if (selectedServices.length === 0) {
+      return toast.error("Please select at least one service");
+    }
+    if (!isPhoneVerified) {
+      return toast.warning("Please verify your mobile number via OTP");
+    }
+    if (!isEmailVerified) {
+      return toast.warning("Please verify your email via OTP");
+    }
+
+    setIsSubmitting(true);
+    try {
+      const res = await expoSupportEnquiryApi.submit({
+        ...formData,
+        selectedServices
+      });
+      if (res.success) {
+        setIsSubmitted(true);
+        toast.success("Enquiry submitted successfully!");
+      } else {
+        toast.error(res.message || "Failed to submit enquiry");
+      }
+    } catch (error) {
+      toast.error("Something went wrong. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="fixed inset-0 z-[999] flex items-center justify-center bg-black/70 backdrop-blur-md p-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.4 }}
+        >
+          <style>{`
+            @keyframes goldShift {
+              0%   { background-position: 0% 50%; }
+              50%  { background-position: 100% 50%; }
+              100% { background-position: 0% 50%; }
+            }
+            @keyframes shimmer {
+              0%   { left: -75%; }
+              100% { left: 150%; }
+            }
+            @keyframes sparkleAnim {
+              0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+              40%  { opacity: 1; transform: scale(1.2) translateY(-4px); }
+              80%  { opacity: 0.6; transform: scale(0.9) translateY(-6px); }
+              100% { opacity: 0; transform: scale(0.5) translateY(-8px); }
+            }
+            .blue-btn-pp {
+              background: linear-gradient(135deg, #2FA4D7 0%, #4db8e6 30%, #1c88bc 60%, #2FA4D7 100%);
+              background-size: 200% 200%;
+              animation: goldShift 2.5s ease infinite;
+              box-shadow: 0 0 16px 4px rgba(47, 164, 215, 0.3), 0 4px 15px rgba(47, 164, 215, 0.25);
+              position: relative;
+              overflow: hidden;
+            }
+            .blue-btn-pp::before {
+              content: '';
+              position: absolute;
+              top: -50%;
+              left: -75%;
+              width: 50%;
+              height: 200%;
+              background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+              transform: skewX(-20deg);
+              animation: shimmer 2s infinite;
+            }
+            .green-btn-pp {
+              background: linear-gradient(135deg, #084c17 0%, #1a682d 30%, #063c12 60%, #084c17 100%);
+              background-size: 200% 200%;
+              animation: goldShift 2.5s ease infinite;
+              box-shadow: 0 0 16px 4px rgba(8, 76, 23, 0.3), 0 4px 15px rgba(8, 76, 23, 0.25);
+              position: relative;
+              overflow: hidden;
+            }
+            .green-btn-pp::before {
+              content: '';
+              position: absolute;
+              top: -50%;
+              left: -75%;
+              width: 50%;
+              height: 200%;
+              background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+              transform: skewX(-20deg);
+              animation: shimmer 2s infinite;
+            }
+          `}</style>
+
+          <motion.div
+            className="relative bg-white rounded-3xl shadow-2xl overflow-hidden flex mt-6"
+            style={{ width: '100%', maxWidth: 720, height: 'auto', maxHeight: 'min(94vh, 850px)' }}
+            initial={{ opacity: 0, scale: 0.85, rotateX: 15, y: 60, perspective: 1000 }}
+            animate={{ opacity: 1, scale: 1, rotateX: 0, y: 0 }}
+            exit={{ opacity: 0, scale: 0.9, y: 40, rotateX: -10, transition: { duration: 0.3, ease: "easeInOut" } }}
+            transition={{ type: "spring", damping: 18, stiffness: 100, mass: 1, duration: 0.6 }}
+          >
+            <button
+              onClick={onClose}
+              className="absolute top-4 right-4 z-50 w-8 h-8 bg-black/10 hover:bg-red-600 text-black hover:text-white rounded-full flex items-center justify-center transition-all shadow-sm backdrop-blur-sm"
+            >
+              <svg viewBox="0 0 20 20" className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M4 4l12 12M16 4L4 16" strokeLinecap="round" /></svg>
+            </button>
+
+            <div className="flex-1 flex flex-col p-6 overflow-hidden">
+              <motion.div
+                className="flex items-center gap-3 mb-5 flex-shrink-0"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.3 }}
+              >
+                <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center border-2 border-[#2d6a2d] p-1 shadow-sm flex-shrink-0">
+                  <img loading="lazy" decoding="async" src={pop1} alt="Support" className="w-full h-full object-contain" />
+                </div>
+                <div>
+                  <h2 className="text-[19px] font-bold text-gray-900 leading-tight tracking-tight">Request Expo Support</h2>
+                  <p className="text-gray-800 text-[11px] leading-tight">
+                    Share requirements and we'll connect you with the <span className="text-[#2d6a2d] font-semibold">right partner.</span>
+                  </p>
+                </div>
+              </motion.div>
+
+              {!isSubmitted ? (
+                <>
+                  <motion.div
+                    className="space-y-5 flex-shrink-0"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                  >
+                    <div className="grid grid-cols-2 gap-4 px-1">
+                      <div>
+                        <label className="text-[9.5px] font-bold text-black uppercase tracking-wide block mb-1">Full Name *</label>
+                        <div className="relative">
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><circle cx="10" cy="6" r="3" /><path d="M3 18a7 7 0 0114 0" strokeLinecap="round" /></svg></span>
+                          <input type="text" name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="text-[9.5px] font-bold text-black uppercase tracking-wide block mb-1">Company Name *</label>
+                        <div className="relative">
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="6" width="16" height="12" rx="1" /><path d="M6 6V4a4 4 0 018 0v2" strokeLinecap="round" /></svg></span>
+                          <input type="text" name="companyName" placeholder="Company Name" value={formData.companyName} onChange={handleChange} className="w-full pl-7 pr-3 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 px-1">
+                      <div>
+                        <label className="text-[9.5px] font-bold text-black uppercase tracking-wide block mb-1 flex justify-between items-center">
+                          Mobile Number *
+                          {isPhoneVerified && <span className="text-green-600 flex items-center gap-0.5 normal-case font-bold text-[8px] bg-green-50 px-1 rounded-full"><CheckCircle className="w-2 h-2" /> Verified</span>}
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="5" y="2" width="10" height="16" rx="2" /><circle cx="10" cy="15" r="0.7" fill="currentColor" /></svg></span>
+                          <input type="tel" name="mobile" placeholder="Mobile Number" value={formData.mobile} onChange={handleChange} disabled={isPhoneVerified} className="w-full pl-7 pr-16 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all disabled:opacity-70" />
+
+                          {!isPhoneVerified && !showPhoneOtpInput && (
+                            <button onClick={handleRequestPhoneOtp} disabled={isSendingPhoneOtp} className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[8px] font-black bg-[#2d6a2d] text-white px-2 py-1 rounded hover:bg-[#1a4d1a] transition-all disabled:opacity-50">
+                              {isSendingPhoneOtp ? "..." : "GET OTP"}
+                            </button>
+                          )}
+                        </div>
+
+                        {showPhoneOtpInput && !isPhoneVerified && (
+                          <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="mt-1.5 flex gap-1.5 items-center bg-gray-50 p-1.5 rounded-lg border border-gray-200">
+                            <input type="text" maxLength={6} placeholder="6-digit OTP" value={phoneOtp} onChange={(e) => setPhoneOtp(e.target.value)} className="flex-1 text-[10px] bg-white border border-gray-200 px-2 py-1 rounded focus:outline-none focus:border-[#2d6a2d]" />
+                            <button onClick={handleVerifyPhoneOtp} disabled={isVerifyingPhoneOtp} className="bg-[#2d6a2d] text-white text-[8px] font-bold px-2 py-1 rounded hover:bg-[#1a4d1a] transition-all disabled:opacity-50">
+                              {isVerifyingPhoneOtp ? "..." : "VERIFY"}
+                            </button>
+                          </motion.div>
+                        )}
+                      </div>
+
+                      <div>
+                        <label className="text-[9.5px] font-bold text-black uppercase tracking-wide block mb-1 flex justify-between items-center">
+                          Email Address *
+                          {isEmailVerified && <span className="text-green-600 flex items-center gap-0.5 normal-case font-bold text-[8px] bg-green-50 px-1 rounded-full"><CheckCircle className="w-2 h-2" /> Verified</span>}
+                        </label>
+                        <div className="relative">
+                          <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-400"><svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="5" width="16" height="11" rx="2" /><path d="M2 7l8 5 8-5" strokeLinecap="round" /></svg></span>
+                          <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} disabled={isEmailVerified} className="w-full pl-7 pr-16 py-2 border border-gray-200 rounded-lg text-[11.5px] bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all disabled:opacity-70" />
+
+                          {!isEmailVerified && !showEmailOtpInput && (
+                            <button onClick={handleRequestEmailOtp} disabled={isSendingEmailOtp} className="absolute right-1.5 top-1/2 -translate-y-1/2 text-[8px] font-black bg-[#2d6a2d] text-white px-2 py-1 rounded hover:bg-[#1a4d1a] transition-all disabled:opacity-50">
+                              {isSendingEmailOtp ? "..." : "GET OTP"}
+                            </button>
+                          )}
+                        </div>
+
+                        {showEmailOtpInput && !isEmailVerified && (
+                          <motion.div initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} className="mt-1.5 flex gap-1.5 items-center bg-gray-50 p-1.5 rounded-lg border border-gray-200">
+                            <input type="text" maxLength={6} placeholder="6-digit OTP" value={emailOtp} onChange={(e) => setEmailOtp(e.target.value)} className="flex-1 text-[10px] bg-white border border-gray-200 px-2 py-1 rounded focus:outline-none focus:border-[#2d6a2d]" />
+                            <button onClick={handleVerifyEmailOtp} disabled={isVerifyingEmailOtp} className="bg-[#2d6a2d] text-white text-[8px] font-bold px-2 py-1 rounded hover:bg-[#1a4d1a] transition-all disabled:opacity-50">
+                              {isVerifyingEmailOtp ? "..." : "VERIFY"}
+                            </button>
+                          </motion.div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="px-2">
+                      <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-2">Select Required Service(s) *</label>
+                      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                        {serviceOptions.map(s => {
+                          const checked = selectedServices.includes(s.id);
+                          return (
+                            <button key={s.id} type="button" onClick={() => toggleService(s.id)}
+                              className={`relative border-2 rounded-lg pt-2 pb-1.5 px-1.5 flex flex-col items-center gap-1 transition-all cursor-pointer
+                                ${checked ? "border-[#2d6a2d] bg-[#f0f7ee]" : "border-gray-200 bg-white hover:border-[#a5d6a7]"}`}>
+                              <div className={`absolute top-1 right-1 w-3.5 h-3.5 border-2 rounded flex items-center justify-center
+                                ${checked ? "border-[#2d6a2d] bg-[#2d6a2d]" : "border-gray-300 bg-white"}`}>
+                                {checked && <svg viewBox="0 0 10 10" className="w-2 h-2" fill="none" stroke="white" strokeWidth="2.5"><path d="M2 5l2.5 2.5L8 3" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                              </div>
+                              {s.icon}
+                              <span className="text-[9.5px] font-semibold text-gray-700 leading-tight text-center">{s.label}</span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    <div className="px-2">
+                      <label className="text-[10px] font-bold text-black uppercase tracking-wide block mb-1">Message <span className="normal-case font-normal">(Optional)</span></label>
+                      <div className="relative w-full">
+                        <textarea
+                          name="message"
+                          placeholder="Share your specific requirements or queries here..."
+                          value={formData.message}
+                          onChange={handleChange}
+                          maxLength={300}
+                          rows={2}
+                          className="w-full px-4 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50/50 focus:outline-none focus:border-[#2d6a2d] focus:bg-white transition-all resize-none"
+                        />
+                        <span className="absolute bottom-2 right-3 text-[8.5px] text-gray-400">{charCount}/300</span>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    className="flex flex-wrap gap-2.5 mt-8 mb-4 px-2 flex-shrink-0"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <div className="relative group/btn flex-1 min-w-[140px]">
+                      <Sparkle style={{ top: '-10px', left: '10%', animationDelay: '0.1s' }} />
+                      <Sparkle style={{ top: '-8px', right: '15%', animationDelay: '0.9s' }} />
+                      <Sparkle style={{ bottom: '-10px', left: '25%', animationDelay: '0.3s' }} />
+
+                      <button
+                        type="button"
+                        onClick={handleSubmit}
+                        disabled={isSubmitting}
+                        className="blue-btn-pp w-full text-white font-black text-[9.5px] tracking-widest uppercase py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02] shadow-lg disabled:opacity-70"
+                      >
+                        {isSubmitting ? "SUBMITTING..." : "SUBMIT"}
+                        {!isSubmitting && <svg viewBox="0 0 20 20" className="w-3 h-3" fill="none" stroke="white" strokeWidth="2.5"><path d="M4 10h12M10 4l6 6-6 6" strokeLinecap="round" strokeLinejoin="round" /></svg>}
+                      </button>
+                    </div>
+
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex-1 min-w-[120px] no-underline flex"
+                    >
+                      <button type="button" className="w-full border-2 border-[#2d6a2d] text-[#2d6a2d] hover:bg-[#f0f7ee] font-black text-[9.5px] tracking-widest uppercase py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02]">
+                        <svg viewBox="0 0 20 20" className="w-3.5 h-3.5" fill="#2d6a2d"><path d="M10 2C5.58 2 2 5.36 2 9.5c0 1.74.6 3.35 1.6 4.64L2 18l4.07-1.56C7.24 17.46 8.58 18 10 18c4.42 0 8-3.36 8-7.5S14.42 2 10 2z" /></svg>
+                        WHATSAPP
+                      </button>
+                    </a>
+
+                    <div className="relative group/btn flex-1 min-w-[120px]">
+                      <Sparkle color="#a2d149" style={{ top: '-8px', left: '15%', animationDelay: '0.2s' }} />
+                      <Sparkle color="#a2d149" style={{ bottom: '-8px', right: '10%', animationDelay: '0.6s' }} />
+                      <a href="tel:+91 9654900525" className="w-full">
+                        <button type="button" className="green-btn-pp w-full text-white font-black text-[9.5px] tracking-widest uppercase py-2.5 rounded-lg flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02] shadow-lg">
+                          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5" fill="currentColor"><path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57a1.02 1.02 0 00-1.02.24l-2.2 2.2a15.05 15.05 0 01-6.59-6.59l2.2-2.2a1 1 0 00.25-1.02A11.36 11.36 0 018.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1z" /></svg>
+                          QUICK CALL
+                        </button>
+                      </a>
+                    </div>
+                  </motion.div>
+                </>
+              ) : (
+                <motion.div
+                  className="flex-1 flex flex-col items-center justify-center text-center p-8"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                >
+                  <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mb-6 border-4 border-green-100 shadow-inner">
+                    <CheckCircle className="w-12 h-12 text-[#2d6a2d]" />
+                  </div>
+                  <h3 className="text-2xl font-black text-gray-900 mb-3 uppercase tracking-tight">Request Received!</h3>
+                  <p className="text-gray-600 text-sm leading-relaxed max-w-[280px] mb-8 font-medium">
+                    Thank you, <span className="text-[#2d6a2d] font-bold">{formData.fullName}</span>. Our team has received your request and will contact you shortly to coordinate further.
+                  </p>
+                  <button
+                    onClick={onClose}
+                    className="green-btn-pp text-white font-black text-[11px] tracking-widest uppercase px-10 py-3 rounded-xl transition-all hover:scale-105 shadow-xl"
+                  >
+                    CLOSE WINDOW
+                  </button>
+                </motion.div>
+              )}
+
+              <div className="flex items-center justify-center gap-2 text-gray-800 text-[9px] flex-shrink-0 mt-auto opacity-70 mb-4">
+                <svg viewBox="0 0 16 16" className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="7" width="10" height="8" rx="1" /><path d="M5 7V5a3 3 0 016 0v2" /></svg>
+                Your information is safe. We never share your details.
+              </div>
+            </div>
+
+            <div className="w-56 bg-[#f5f9f4] border-l border-gray-100 flex flex-col p-5 relative flex-shrink-0 overflow-hidden">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: 0.6, type: "spring" }}
+              >
+                <div className="flex justify-center mb-3">
+                  <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md border-2 border-[#2d6a2d] p-0.5 relative">
+                    <img loading="lazy" decoding="async" src={why1} alt="Why IHWE" className="w-full h-full object-contain" />
+                  </div>
+                </div>
+
+                <div className="text-left mb-4 px-1">
+                  <p className="text-black text-[11px] font-medium uppercase tracking-wider leading-tight">Why Choose</p>
+                  <h3 className="text-[15px] font-extrabold text-[#2d6a2d] leading-tight">IHWE Partners?</h3>
+                  <div className="w-6 h-0.5 bg-[#2d6a2d] mt-1 rounded-full" />
+                </div>
+              </motion.div>
+
+              <div className="relative z-10 space-y-0.5 flex-1">
+                {whyChoose.map((item, i) => (
+                  <motion.div
+                    key={item.id}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.7 + i * 0.1 }}
+                  >
+                    <div className="flex items-start gap-2.5 py-2.5">
+                      <div className="w-9 h-9 bg-white rounded-full flex items-center justify-center flex-shrink-0 shadow-sm border border-[#e8f5e9]">
+                        {item.icon}
+                      </div>
+                      <div>
+                        <p className="text-[11.5px] font-bold text-gray-900 leading-tight">{item.title}</p>
+                        <p className="text-[9.5px] text-gray-900 leading-snug">{item.desc}</p>
+                      </div>
+                    </div>
+                    {i < whyChoose.length - 1 && <div className="h-px bg-gray-300/50" />}
+                  </motion.div>
+                ))}
+              </div>
+
+              <motion.div
+                className="absolute -bottom-8 -right-8 w-56 h-56 pointer-events-none transform -rotate-12"
+                initial={{ opacity: 0, scale: 0.5, rotate: -30 }}
+                animate={{ opacity: 1, scale: 1, rotate: -12 }}
+                transition={{ delay: 1.2, duration: 1 }}
+              >
+                <img loading="lazy" decoding="async" src={leaf2} alt="decoration" className="w-full h-full object-contain" />
+              </motion.div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}

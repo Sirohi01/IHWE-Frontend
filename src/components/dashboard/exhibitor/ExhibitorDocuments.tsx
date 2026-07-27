@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import { Upload, FileText, Image as ImageIcon, ExternalLink, Trash2, FolderPlus, Download, Plus } from 'lucide-react';
+import { Upload, FileText, Image as ImageIcon, ExternalLink, Trash2, FolderPlus, Download, Plus, Loader2 } from 'lucide-react';
 import { API_URL, SERVER_URL } from '@/lib/api';
 import { toast } from 'sonner';
 
@@ -22,6 +22,46 @@ export default function ExhibitorDocuments({ data, setData }: DocsProps) {
     const [label, setLabel] = useState('');
     const [file, setFile] = useState<File | null>(null);
     const [uploading, setUploading] = useState(false);
+    const [uploadingField, setUploadingField] = useState<string | null>(null);
+    const kycFileInputRef = useRef<HTMLInputElement>(null);
+    const activeKycField = useRef<string | null>(null);
+
+    const triggerKycUpload = (field: string) => {
+        activeKycField.current = field;
+        kycFileInputRef.current?.click();
+    };
+
+    const handleKycFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const selected = e.target.files?.[0];
+        const field = activeKycField.current;
+        e.target.value = '';
+        if (!selected || !field) return;
+
+        if (selected.size > 5 * 1024 * 1024) { toast.error('File size should be less than 5MB'); return; }
+
+        setUploadingField(field);
+        try {
+            const token = localStorage.getItem('exhibitorToken');
+            const fd = new FormData();
+            fd.append(field, selected);
+            const res = await fetch(`${API_URL}/exhibitor-auth/update-profile?id=${data._id}`, {
+                method: 'PUT',
+                headers: { Authorization: `Bearer ${token}` },
+                body: fd,
+            });
+            const result = await res.json();
+            if (result.success) {
+                toast.success('Document uploaded successfully');
+                if (result.data) setData(result.data);
+            } else {
+                toast.error(result.message || 'Upload failed');
+            }
+        } catch {
+            toast.error('Upload failed');
+        } finally {
+            setUploadingField(null);
+        }
+    };
 
     const handleUpload = async () => {
         if (!label || !file) { toast.error('Label and File are required'); return; }
@@ -131,20 +171,26 @@ export default function ExhibitorDocuments({ data, setData }: DocsProps) {
                         <ImageIcon size={12} /> Business & KYC Credentials
                     </h3>
                 </div>
+                <input type="file" ref={kycFileInputRef} className="hidden" accept="image/*,.pdf" onChange={handleKycFileChange} />
                 <div className="p-3 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-3">
                     {kycDocs.map((doc, i) => {
                         const url = fixUrl(doc.url);
                         const hasUrl = !!doc.url && doc.url !== 'undefined' && doc.url !== 'null';
                         const urlIsImage = hasUrl && isImage(url);
+                        const isUploadingThis = uploadingField === doc.field;
 
                         return (
                             <div key={i} className="flex flex-col border border-slate-100 rounded p-1.5 bg-slate-50/50">
                                 <span className="text-[8px] font-bold text-slate-400 uppercase mb-1.5 truncate">{doc.label}</span>
                                 <div className="aspect-square bg-slate-200 rounded-sm overflow-hidden relative group border border-slate-200">
-                                    {hasUrl ? (
+                                    {isUploadingThis ? (
+                                        <div className="w-full h-full flex items-center justify-center bg-slate-100">
+                                            <Loader2 size={18} className="text-[#23471d] animate-spin" />
+                                        </div>
+                                    ) : hasUrl ? (
                                         <>
                                             {urlIsImage ? (
-                                                <img src={url} alt={doc.label} className="w-full h-full object-cover" />
+                                                <img loading="lazy" decoding="async" src={url} alt={doc.label} className="w-full h-full object-cover" />
                                             ) : (
                                                 <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 gap-1">
                                                     <FileText size={20} className="text-rose-500" />
@@ -152,6 +198,11 @@ export default function ExhibitorDocuments({ data, setData }: DocsProps) {
                                                 </div>
                                             )}
                                             <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5">
+                                                <button onClick={() => triggerKycUpload(doc.field)}
+                                                   title="Replace File"
+                                                   className="p-1.5 bg-white rounded-full text-black hover:bg-slate-100 shadow-sm transition-all transform hover:scale-110">
+                                                    <Upload size={10} />
+                                                </button>
                                                 <button onClick={() => handleDownload(url, doc.label)}
                                                    title="Force Download"
                                                    className="p-1.5 bg-white rounded-full text-black hover:bg-slate-100 shadow-sm transition-all transform hover:scale-110">
@@ -163,9 +214,13 @@ export default function ExhibitorDocuments({ data, setData }: DocsProps) {
                                             </div>
                                         </>
                                     ) : (
-                                        <div className="w-full h-full flex items-center justify-center text-slate-300">
+                                        <button
+                                            onClick={() => triggerKycUpload(doc.field)}
+                                            title="Upload File"
+                                            className="w-full h-full flex items-center justify-center text-slate-300 hover:text-[#23471d] hover:bg-slate-100 transition-colors"
+                                        >
                                             <Plus size={16} />
-                                        </div>
+                                        </button>
                                     )}
                                 </div>
                                 {!hasUrl && <p className="text-[7px] text-center mt-1 font-bold text-rose-500 uppercase tracking-tighter">Missing</p>}

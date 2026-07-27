@@ -3,6 +3,7 @@ import {
     Calendar, MapPin, CheckCircle2, Users, Building2, Sparkles
 } from "lucide-react";
 import { heroBackgroundApi, SERVER_URL, exhibitorProfileApi } from "@/lib/api";
+
 import heroImgFallback from "../assets/profile.jpg";
 
 const ExhibitorProfile = () => {
@@ -37,6 +38,7 @@ const ExhibitorProfile = () => {
                     backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : heroImgFallback})`
                 }}
             >
+
                 <div className="absolute inset-0 bg-black/40" />
                 <div className="absolute bottom-0 left-0 w-full h-4 md:h-8 bg-white" style={{ clipPath: "ellipse(60% 100% at 50% 100%)" }} />
 

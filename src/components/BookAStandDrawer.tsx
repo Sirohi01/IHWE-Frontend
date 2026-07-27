@@ -36,7 +36,7 @@ const BookAStandDrawer = ({ open, onClose }: BookAStandDrawerProps) => {
     visible: {
       pathLength: 1,
       opacity: 1,
-      transition: { pathLength: { duration: 1.5, ease: "easeInOut", delay: 0.5 }, opacity: { duration: 0.3, delay: 0.5 } }
+      transition: { pathLength: { duration: 1.5, ease: "easeInOut" as const, delay: 0.5 }, opacity: { duration: 0.3, delay: 0.5 } }
     }
   };
 
@@ -55,7 +55,7 @@ const BookAStandDrawer = ({ open, onClose }: BookAStandDrawerProps) => {
             initial={{ x: "-100%" }}
             animate={{ x: 0 }}
             exit={{ x: "-100%" }}
-            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+            transition={{ type: "spring" as const, damping: 30, stiffness: 300 }}
             className="fixed left-0 top-0 bottom-0 w-full max-w-lg bg-[#F7F8F0] z-[101] shadow-2xl flex flex-col font-inter"
           >
             {/* Header - Reduced Height */}

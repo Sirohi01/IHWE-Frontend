@@ -116,8 +116,7 @@ const GallerySection = () => {
                             >
                                 {/* Fixed Landscape Aspect Ratio for Better Visibility */}
                                 <div className="aspect-[3/2] overflow-hidden">
-                                    <img
-                                        src={imageUrl}
+                                    <img loading="lazy" decoding="async" src={imageUrl}
                                         alt={img.altText || img.title}
                                         className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110"
                                     />
@@ -167,12 +166,11 @@ const GallerySection = () => {
                             initial={{ scale: 0.9, opacity: 0 }}
                             animate={{ scale: 1, opacity: 1 }}
                             exit={{ scale: 0.9, opacity: 0 }}
-                            transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                            transition={{ type: "spring" as const, damping: 30, stiffness: 300 }}
                             className="relative max-w-5xl w-full flex items-center justify-center"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            <img
-                                src={selectedImg}
+                            <img loading="lazy" decoding="async" src={selectedImg}
                                 alt="Full View"
                                 className="max-w-full max-h-[85vh] object-contain shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-lg"
                             />
