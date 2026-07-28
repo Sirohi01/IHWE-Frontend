@@ -780,6 +780,7 @@ const BookAStand = () => {
                 // Step 1: Save registration first (status=payment-failed) to get a DB _id for order creation
                 const pendingData = {
                     ...formData,
+                    registrationSource: 'website',
                     status: 'payment-failed',
                     paymentMode: 'online',
                     amountPaid: 0,
