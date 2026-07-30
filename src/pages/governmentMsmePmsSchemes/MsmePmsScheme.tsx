@@ -13,11 +13,11 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { motion, useInView, animate } from "framer-motion";
-import band1 from "@/assets/band1.png";
-import band2 from "@/assets/band2.png";
-import band3 from "@/assets/band3.png";
-import band4 from "@/assets/band4.png";
-import band5 from "@/assets/band5.png";
+import band1 from "@/assets/band1.webp";
+import band2 from "@/assets/band2.webp";
+import band3 from "@/assets/band3.webp";
+import band4 from "@/assets/band4.webp";
+import band5 from "@/assets/band5.webp";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -67,9 +67,9 @@ const DEFAULT_PAGE_DATA = {
   heroTitle: "MSME PMS SCHEME",
   heroSubTitle2: "BENEFITS & REGISTRATION",
   heroDescription: "Exhibit at International Health & Wellness Expo 2026 with Financial Assistance from Ministry of MSME, Government of India.",
-  heroBannerImg: "/msmepmsscheme/msme_pms_header_banner.png",
+  heroBannerImg: "/msmepmsscheme/msme_pms_header_banner.webp",
   subsidyLimit: "₹1,50,000",
-  subsidyImg: "/msmepmsscheme/mony-bag.png",
+  subsidyImg: "/msmepmsscheme/mony-bag.webp",
   subsidyFeatures: [
     "Government Financial Support",
     "Increase Market Reach",
@@ -81,36 +81,36 @@ const DEFAULT_PAGE_DATA = {
   ],
   subsidyNotice: "*Subsidy amount may vary as per MSME guidelines, category and approval.",
   stats: [
-    { img: "/msmepmsscheme/global.png", val: "1,000+", label: "GLOBAL BUYERS" },
-    { img: "/msmepmsscheme/exhibitors.png", val: "150+", label: "EXHIBITORS" },
-    { img: "/msmepmsscheme/visitors.png", val: "8,000+", label: "VISITORS/ DELEGATES" },
-    { img: "/msmepmsscheme/conference.png", val: "18+", label: "CONFERENCE SESSIONS" },
-    { img: "/msmepmsscheme/businessOpportunities.png", val: "3 DAYS", label: "OF BUSINESS OPPORTUNITIES" },
-    { img: "/msmepmsscheme/networkevents.png", val: "MULTIPLE", label: "NETWORKING EVENTS" },
+    { img: "/msmepmsscheme/global.webp", val: "1,000+", label: "GLOBAL BUYERS" },
+    { img: "/msmepmsscheme/exhibitors.webp", val: "150+", label: "EXHIBITORS" },
+    { img: "/msmepmsscheme/visitors.webp", val: "8,000+", label: "VISITORS/ DELEGATES" },
+    { img: "/msmepmsscheme/conference.webp", val: "18+", label: "CONFERENCE SESSIONS" },
+    { img: "/msmepmsscheme/businessOpportunities.webp", val: "3 DAYS", label: "OF BUSINESS OPPORTUNITIES" },
+    { img: "/msmepmsscheme/networkevents.webp", val: "MULTIPLE", label: "NETWORKING EVENTS" },
   ],
   footerStats: [
-    { img: "/msmepmsscheme/global1.png", val: "1,000+", label: "GLOBAL BUYERS" },
-    { img: "/msmepmsscheme/exhibitors.png", val: "150+", label: "EXHIBITORS" },
-    { img: "/msmepmsscheme/visitors.png", val: "8,000+", label: "VISITORS/ DELEGATES" },
-    { img: "/msmepmsscheme/conference.png", val: "18+", label: "CONFERENCE SESSIONS" },
+    { img: "/msmepmsscheme/global1.webp", val: "1,000+", label: "GLOBAL BUYERS" },
+    { img: "/msmepmsscheme/exhibitors.webp", val: "150+", label: "EXHIBITORS" },
+    { img: "/msmepmsscheme/visitors.webp", val: "8,000+", label: "VISITORS/ DELEGATES" },
+    { img: "/msmepmsscheme/conference.webp", val: "18+", label: "CONFERENCE SESSIONS" },
     { img: "/msmepmsscheme/businessOpportunities1.png", val: "3 DAYS", label: "OF BUSINESS OPPORTUNITIES" },
   ],
   aboutTitle: "ABOUT PMS SCHEME",
-  aboutImg: "/msmepmsscheme/aboutpmsscheme.png",
+  aboutImg: "/msmepmsscheme/aboutpmsscheme.webp",
   aboutParagraphs: [
     "The Procurement and Marketing Support (PMS) Scheme of the Ministry of MSME, Government of India, aims to provide financial assistance to Micro, Small and Medium Enterprises (MSMEs) for participating in domestic and international exhibitions / trade fairs.",
     "The scheme helps MSMEs promote their products, explore new markets, enhance brand visibility and generate business opportunities."
   ],
   benefitsTitle: "BENEFITS OF PMS SCHEME",
   benefits: [
-    { img: "/msmepmsscheme/reimbursement.png", title: "Up to ₹1.5 Lakh* Reimbursement", desc: "Subsidy on stall booking & participation cost" },
-    { img: "/msmepmsscheme/reducedCost.png", title: "Reduced Cost", desc: "Lower financial burden for market expansion" },
-    { img: "/msmepmsscheme/marketexposure.png", title: "Market Exposure", desc: "Showcase your products to national & international buyers" },
-    { img: "/msmepmsscheme/businessgrowth.png", title: "Business Growth", desc: "Generate leads & expand your network" },
-    { img: "/msmepmsscheme/govsupport.png", title: "Government Support", desc: "Exhibit with the backing of Ministry of MSME" },
-    { img: "/msmepmsscheme/brandvisibility.png", title: "Brand Visibility", desc: "Enhance brand credibility and recognition" },
+    { img: "/msmepmsscheme/reimbursement.webp", title: "Up to ₹1.5 Lakh* Reimbursement", desc: "Subsidy on stall booking & participation cost" },
+    { img: "/msmepmsscheme/reducedCost.webp", title: "Reduced Cost", desc: "Lower financial burden for market expansion" },
+    { img: "/msmepmsscheme/marketexposure.webp", title: "Market Exposure", desc: "Showcase your products to national & international buyers" },
+    { img: "/msmepmsscheme/businessgrowth.webp", title: "Business Growth", desc: "Generate leads & expand your network" },
+    { img: "/msmepmsscheme/govsupport.webp", title: "Government Support", desc: "Exhibit with the backing of Ministry of MSME" },
+    { img: "/msmepmsscheme/brandvisibility.webp", title: "Brand Visibility", desc: "Enhance brand credibility and recognition" },
   ],
-  collageImg: "/msmepmsscheme/msme_exhibition_stalls_grid.png",
+  collageImg: "/msmepmsscheme/msme_exhibition_stalls_grid.webp",
   whoCanApplyTitle: "WHO CAN APPLY?",
   whoCanApplyItems: [
     "MSMEs with valid Udyam Registration",
@@ -119,7 +119,7 @@ const DEFAULT_PAGE_DATA = {
     "Businesses in Health, Wellness, Ayurveda, Organic, Pharma, Nutraceuticals and related sectors"
   ],
   whyPmsTitle: "WHY PMS SCHEME?",
-  whyPmsImg: "/msmepmsscheme/whypms.png",
+  whyPmsImg: "/msmepmsscheme/whypms.webp",
   whyPmsItems: [
     "Encourages MSMEs to participate in exhibitions",
     "Helps in exploring new markets & technologies",
@@ -142,7 +142,7 @@ const DEFAULT_PAGE_DATA = {
   helpSubTitle: "Our team is here to assist you",
   helpPhone: "+91 9654900525",
   helpEmail: "info@ihwe.in",
-  footerCtaImg: "/msmepmsscheme/Announcement.png",
+  footerCtaImg: "/msmepmsscheme/Announcement.webp",
   facebookUrl: "https://www.facebook.com/namogangewellness.event",
   instagramUrl: "https://instagram.com",
   twitterUrl: "https://twitter.com",
@@ -401,7 +401,7 @@ const MsmePmsScheme = () => {
               {/* Gold Ribbon - Fixed position with refined spacing */}
               <div className="absolute top-3 left-2 sm:top-8 lg:left-0 z-30">
                 <div className="relative w-24 h-32 sm:w-28 sm:h-36 lg:w-32 lg:h-44 flex items-center justify-center">
-                  <img loading="lazy" decoding="async" src="/msmepmsscheme/gold-ribbon.png" alt="Limited Slots" className="absolute inset-0 w-full h-full object-contain" />
+                  <img loading="lazy" decoding="async" src="/msmepmsscheme/gold-ribbon.webp" alt="Limited Slots" className="absolute inset-0 w-full h-full object-contain" />
                 </div>
               </div>
 
@@ -484,7 +484,7 @@ const MsmePmsScheme = () => {
           {/* <div className="absolute top-8 right-8 bg-white/95 backdrop-blur shadow-2xl p-4 rounded-xl flex items-center gap-4 border border-slate-100 z-20">
             <div className="flex flex-col items-center">
               <span className="text-[7px] font-black text-slate-400 uppercase tracking-tighter mb-1">SUPPORTED BY</span>
-              <img loading="lazy" decoding="async" src="/msmepmsscheme/MSME.png" alt="Ministry of MSME" className="h-10 object-contain" />
+              <img loading="lazy" decoding="async" src="/msmepmsscheme/MSME.webp" alt="Ministry of MSME" className="h-10 object-contain" />
             </div>
             <div className="w-[1px] h-10 bg-slate-200"></div>
             <div className="flex flex-col text-[8px] font-black text-slate-800 leading-tight">
@@ -700,12 +700,12 @@ const MsmePmsScheme = () => {
               <h3 className="text-[18px] font-black text-[#1a3615] mb-4 uppercase tracking-tight">DOCUMENTS REQUIRED</h3>
               <ul className="space-y-3">
                 {[
-                  { label: "Udyam Registration Certificate", img: "/msmepmsscheme/udyamreg.png" },
-                  { label: "PAN Card", img: "/msmepmsscheme/pan.png" },
-                  { label: "GST Certificate", img: "/msmepmsscheme/gstcerti.png" },
-                  { label: "Company Profile", img: "/msmepmsscheme/companyprofile.png" },
-                  { label: "Product / Service Details", img: "/msmepmsscheme/productdetails.png" },
-                  { label: "Bank Account Details", img: "/msmepmsscheme/bankaccdetails.png" },
+                  { label: "Udyam Registration Certificate", img: "/msmepmsscheme/udyamreg.webp" },
+                  { label: "PAN Card", img: "/msmepmsscheme/pan.webp" },
+                  { label: "GST Certificate", img: "/msmepmsscheme/gstcerti.webp" },
+                  { label: "Company Profile", img: "/msmepmsscheme/companyprofile.webp" },
+                  { label: "Product / Service Details", img: "/msmepmsscheme/productdetails.webp" },
+                  { label: "Bank Account Details", img: "/msmepmsscheme/bankaccdetails.webp" },
                 ].map((doc, i) => (
                   <li key={i} className="flex gap-5 items-center group">
                     <div className="w-8 h-8 flex items-center justify-center group-hover:scale-110 transition-transform shrink-0">
@@ -770,7 +770,7 @@ const MsmePmsScheme = () => {
 
               {/* Checklist Graphic */}
               <div className="w-full md:w-[300px] shrink-0 flex items-center justify-center relative">
-                <img loading="lazy" decoding="async" src="/msmepmsscheme/approved.png"
+                <img loading="lazy" decoding="async" src="/msmepmsscheme/approved.webp"
                   alt="Application Approved"
                   className="w-full max-w-[240px] h-auto object-contain drop-shadow-2xl"
                 />
@@ -808,7 +808,7 @@ const MsmePmsScheme = () => {
                 <div className="bg-[#fdf8f1] rounded-xl p-4 border border-orange-100">
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-6 h-6 bg-[#1a3615] rounded-full flex items-center justify-center text-yellow-400">
-                      <img loading="lazy" decoding="async" src="/msmepmsscheme/impnotice.png" alt="Important Note" className="w-full h-full object-contain" />
+                      <img loading="lazy" decoding="async" src="/msmepmsscheme/impnotice.webp" alt="Important Note" className="w-full h-full object-contain" />
                     </div>
                     <span className="text-[9px] font-black text-[#1a3615] uppercase tracking-wider">IMPORTANT NOTE</span>
                   </div>
@@ -1068,7 +1068,7 @@ const MsmePmsScheme = () => {
 
             <div className="flex flex-col sm:flex-row items-center gap-4 md:gap-6 text-center sm:text-left">
               <div className="w-24 h-24 md:w-32 md:h-32 shrink-0 -my-8 md:-my-10 relative z-10 drop-shadow-xl transition-transform hover:scale-105">
-                <img loading="lazy" decoding="async" src={pageData.footerCtaImg || "/msmepmsscheme/Announcement.png"} alt="Announcement" className="w-full h-full object-contain" />
+                <img loading="lazy" decoding="async" src={pageData.footerCtaImg || "/msmepmsscheme/Announcement.webp"} alt="Announcement" className="w-full h-full object-contain" />
               </div>
 
               <div className="space-y-1 mt-4 sm:mt-0">

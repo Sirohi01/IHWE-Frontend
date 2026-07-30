@@ -12,45 +12,45 @@ import {
 } from "./Icons";
 
 
-import doctorImg from "../../../assets/arogyasangostiimageform/Doctor (1).png";
-import ayushIconImg from "../../../assets/arogyasangostiimageform/Ayush (1).png";
-import hospitalImg from "../../../assets/arogyasangostiimageform/Hospital.png";
-import universityImg from "../../../assets/arogyasangostiimageform/University (1).png";
-import pharmaImg from "../../../assets/arogyasangostiimageform/pharma (1).png";
-import startupImg from "../../../assets/arogyasangostiimageform/Startup.png";
+import doctorImg from "../../../assets/arogyasangostiimageform/Doctor (1).webp";
+import ayushIconImg from "../../../assets/arogyasangostiimageform/Ayush (1).webp";
+import hospitalImg from "../../../assets/arogyasangostiimageform/Hospital.webp";
+import universityImg from "../../../assets/arogyasangostiimageform/University (1).webp";
+import pharmaImg from "../../../assets/arogyasangostiimageform/pharma (1).webp";
+import startupImg from "../../../assets/arogyasangostiimageform/Startup.webp";
 
-import ayurvedaImg from "../../../assets/arogyasangostiimageform/ayurveda (2).png";
-import modernMedImg from "../../../assets/arogyasangostiimageform/modern medicine.png";
-import digitalHealthImg from "../../../assets/arogyasangostiimageform/Digital Helth  ai (2).png";
-import wellnessImg from "../../../assets/arogyasangostiimageform/wellness & lifestyle.png";
-import hospMgmtImg from "../../../assets/arogyasangostiimageform/hospital management.png";
-import researchImg from "../../../assets/arogyasangostiimageform/Research & education.png";
-import policyImg from "../../../assets/arogyasangostiimageform/Policy  government.png";
+import ayurvedaImg from "../../../assets/arogyasangostiimageform/ayurveda (2).webp";
+import modernMedImg from "../../../assets/arogyasangostiimageform/modern medicine.webp";
+import digitalHealthImg from "../../../assets/arogyasangostiimageform/Digital Helth  ai (2).webp";
+import wellnessImg from "../../../assets/arogyasangostiimageform/wellness & lifestyle.webp";
+import hospMgmtImg from "../../../assets/arogyasangostiimageform/hospital management.webp";
+import researchImg from "../../../assets/arogyasangostiimageform/Research & education.webp";
+import policyImg from "../../../assets/arogyasangostiimageform/Policy  government.webp";
 
-import ayushWellnessImg from "../../../assets/arogyasangostiimageform/Ayush & Wellness (1).png";
-import medicalHealthcareImg from "../../../assets/arogyasangostiimageform/Medical & Health care.png";
-import bothImg from "../../../assets/arogyasangostiimageform/both (1).png";
+import ayushWellnessImg from "../../../assets/arogyasangostiimageform/Ayush & Wellness (1).webp";
+import medicalHealthcareImg from "../../../assets/arogyasangostiimageform/Medical & Health care.webp";
+import bothImg from "../../../assets/arogyasangostiimageform/both (1).webp";
 
-import keynoteImg from "../../../assets/arogyasangostiimageform/keynote.png";
-import panelImg from "../../../assets/arogyasangostiimageform/Panel Dicusion.png";
-import expertImg from "../../../assets/arogyasangostiimageform/Expert.png";
+import keynoteImg from "../../../assets/arogyasangostiimageform/keynote.webp";
+import panelImg from "../../../assets/arogyasangostiimageform/Panel Dicusion.webp";
+import expertImg from "../../../assets/arogyasangostiimageform/Expert.webp";
 
-import speakerPhotoImg from "../../../assets/arogyasangostiimageform/speaker photo.png";
-import companyLogoImg from "../../../assets/arogyasangostiimageform/company logo.png";
-import presentationImg from "../../../assets/arogyasangostiimageform/presentation.png";
+import speakerPhotoImg from "../../../assets/arogyasangostiimageform/speaker photo.webp";
+import companyLogoImg from "../../../assets/arogyasangostiimageform/company logo.webp";
+import presentationImg from "../../../assets/arogyasangostiimageform/presentation.webp";
 
-import expectationImg from "../../../assets/arogyasangostiimageform/leaf-removebg-preview.png";
-import consentImg from "../../../assets/arogyasangostiimageform/ChatGPT Image May 1, 2026, 05_33_52 PM (1).png";
+import expectationImg from "../../../assets/arogyasangostiimageform/leaf-removebg-preview.webp";
+import consentImg from "../../../assets/arogyasangostiimageform/ChatGPT Image May 1, 2026, 05_33_52 PM (1).webp";
 
 
-import headerBasicImg from "../../../assets/arogyasangostiimageform/Basic Details (1).png";
-import headerContactImg from "../../../assets/arogyasangostiimageform/Contact Deatils.png";
-import headerSpeakerImg from "../../../assets/arogyasangostiimageform/Speacker Profile.png";
-import headerSessionImg from "../../../assets/arogyasangostiimageform/Session Deatils.png";
-import headerSpeakingExpImg from "../../../assets/arogyasangostiimageform/speaking profile.png";
-import headerSupportingImg from "../../../assets/arogyasangostiimageform/supporting details.png";
-import headerExpectationImg from "../../../assets/arogyasangostiimageform/Expectation.png";
-import headerConsentImg from "../../../assets/arogyasangostiimageform/Consent.png";
+import headerBasicImg from "../../../assets/arogyasangostiimageform/Basic Details (1).webp";
+import headerContactImg from "../../../assets/arogyasangostiimageform/Contact Deatils.webp";
+import headerSpeakerImg from "../../../assets/arogyasangostiimageform/Speacker Profile.webp";
+import headerSessionImg from "../../../assets/arogyasangostiimageform/Session Deatils.webp";
+import headerSpeakingExpImg from "../../../assets/arogyasangostiimageform/speaking profile.webp";
+import headerSupportingImg from "../../../assets/arogyasangostiimageform/supporting details.webp";
+import headerExpectationImg from "../../../assets/arogyasangostiimageform/Expectation.webp";
+import headerConsentImg from "../../../assets/arogyasangostiimageform/Consent.webp";
 
 
 export const BasicDetailsSection = ({ form, set, industryCategory, setIndustryCategory }: any) => {

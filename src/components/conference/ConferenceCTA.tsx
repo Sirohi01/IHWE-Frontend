@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import lastBg from "../../assets/confrencetrack/last.png";
-import leafImg from "../../assets/dayimagesarogyasangosti/leaf.png";
+import lastBg from "../../assets/confrencetrack/last.webp";
+import leafImg from "../../assets/dayimagesarogyasangosti/leaf.webp";
 import { Link } from "react-router-dom";
 
 const ConferenceCTA: React.FC = () => {

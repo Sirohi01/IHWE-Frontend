@@ -4,9 +4,9 @@ import user from "../assets/day/user.webp"
 
 import { api } from "@/lib/api";
 import { Loader2 } from "lucide-react";
-import day1HeroImg from "../assets/dayimagesarogyasangosti/design1.png";
-import day2HeroImg from "../assets/dayimagesarogyasangosti/nista1.png";
-import day3HeroImg from "../assets/dayimagesarogyasangosti/sagar.png";
+import day1HeroImg from "../assets/dayimagesarogyasangosti/design1.webp";
+import day2HeroImg from "../assets/dayimagesarogyasangosti/nista1.webp";
+import day3HeroImg from "../assets/dayimagesarogyasangosti/sagar.webp";
 import Day1Hero from "@/components/conference/Day1/Day1NewHero";
 import DayAgendaSection from "@/components/conference/Day1/Day1NewAgenda";
 import AboutDayOne from "@/components/conference/Day1/Day1NewAbout";

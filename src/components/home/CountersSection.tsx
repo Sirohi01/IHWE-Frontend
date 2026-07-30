@@ -1,8 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const counters = [
   { value: 8000, suffix: "+", label: "Visitors" },
@@ -12,39 +8,41 @@ const counters = [
   { value: 3, suffix: "", label: "Days Mega Event" },
 ];
 
+const easeOutCubic = (t: number) => 1 - Math.pow(1 - t, 3);
+
 const CountersSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [counts, setCounts] = useState(counters.map(() => 0));
   const animated = useRef(false);
 
   useEffect(() => {
-    if (!sectionRef.current) return;
+    const el = sectionRef.current;
+    if (!el) return;
 
-    const trigger = ScrollTrigger.create({
-      trigger: sectionRef.current,
-      start: "top 80%",
-      onEnter: () => {
-        if (animated.current) return;
+    // Mirrors the previous GSAP ScrollTrigger's `start: "top 80%"`: fires once
+    // the section's top edge crosses into the bottom 20% of the viewport.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries[0].isIntersecting || animated.current) return;
         animated.current = true;
-        counters.forEach((c, i) => {
-          const obj = { val: 0 };
-          gsap.to(obj, {
-            val: c.value,
-            duration: 2,
-            ease: "power2.out",
-            onUpdate: () => {
-              setCounts((prev) => {
-                const next = [...prev];
-                next[i] = Math.round(obj.val);
-                return next;
-              });
-            },
-          });
-        });
-      },
-    });
+        observer.disconnect();
 
-    return () => trigger.kill();
+        const duration = 2000;
+        const start = performance.now();
+
+        const tick = (now: number) => {
+          const progress = Math.min((now - start) / duration, 1);
+          const eased = easeOutCubic(progress);
+          setCounts(counters.map((c) => Math.round(c.value * eased)));
+          if (progress < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      },
+      { threshold: 0, rootMargin: "0px 0px -20% 0px" }
+    );
+
+    observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   return (

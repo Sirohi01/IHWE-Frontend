@@ -10,7 +10,7 @@ const VerifyCheck = () => {
             icon: Settings,
             color: "green",
             link: "/User_Manual_Domestic.pdf",
-            img: "/mpscheme/qa1.png"
+            img: "/mpscheme/qa1.webp"
         },
         {
             title: "VERIFY EVENT LISTING",
@@ -19,7 +19,7 @@ const VerifyCheck = () => {
             icon: BadgeCheck,
             color: "blue",
             link: "https://my.msme.gov.in/MyMsme/Reg/COM_Matu.aspx",
-            img: "/mpscheme/qa2.png"
+            img: "/mpscheme/qa2.webp"
         },
         {
             title: "VERIFY PMS SCHEME",
@@ -28,7 +28,7 @@ const VerifyCheck = () => {
             icon: ShieldCheck,
             color: "purple",
             link: "https://dcmsme.gov.in/OM%20&%20PMS%20Scheme%20Guidelines.pdf",
-            img: "/mpscheme/qa3.png"
+            img: "/mpscheme/qa3.webp"
         },
         {
             title: "VIEW APPROVAL LETTER",
@@ -37,7 +37,7 @@ const VerifyCheck = () => {
             icon: FileText,
             color: "orange",
             link: "/MSME_Approval_Letter.pdf",
-            img: "/mpscheme/qa4.png"
+            img: "/mpscheme/qa4.webp"
         },
         {
             title: "NEW MSME REGISTRATION",
@@ -46,7 +46,7 @@ const VerifyCheck = () => {
             icon: UserPlus,
             color: "rose",
             link: "https://udyamregistration.gov.in",
-            img: "/mpscheme/qa5.png"
+            img: "/mpscheme/qa5.webp"
         }
     ];
 
@@ -256,7 +256,7 @@ const VerifyCheck = () => {
                         {/* Floating Money Bag image overlap for depth */}
                         <div className="absolute inset-0 flex items-center justify-center z-10 translate-x-4">
                             <div className="relative w-[80%] h-[80%] rounded-3xl overflow-hidden border-[4px] border-[#22c55e] shadow-2xl rotate-[-3deg]">
-                                <img loading="lazy" decoding="async" src="/msmepmsscheme/mony-bag.png"
+                                <img loading="lazy" decoding="async" src="/msmepmsscheme/mony-bag.webp"
                                     className="w-full h-full object-cover rotate-[3deg] scale-110"
                                     alt=""
                                     onError={(e) => { e.target.style.display = 'none'; }}

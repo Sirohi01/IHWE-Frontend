@@ -5,9 +5,9 @@ import {
   ShieldCheck, Printer
 } from "lucide-react";
 import { policyApi } from "@/lib/api";
-import termBanner from "@/assets/termPage.jpeg";
-import team1Icon from "@/assets/team1.png";
-import doc22Icon from "@/assets/doc22.png";
+import termBanner from "@/assets/termPage.webp";
+import team1Icon from "@/assets/team1.webp";
+import doc22Icon from "@/assets/doc22.webp";
 
 // Sparkle component
 const Sparkle = ({ style, color = "#fca5a5", shadow = "#5E0006" }: { style?: React.CSSProperties, color?: string, shadow?: string }) => (

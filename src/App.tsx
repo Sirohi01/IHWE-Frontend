@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense, useEffect } from "react";
+import { useState, lazy, Suspense } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,6 +17,7 @@ const Exhibitors = lazy(() => import("./pages/Exhibitors"));
 const WhyExhibit = lazy(() => import("./pages/WhyExhibit"));
 const BookAStand = lazy(() => import("./pages/book-a-stand"));
 const Blog = lazy(() => import("./pages/Blog"));
+const BlogAll = lazy(() => import("./pages/BlogAll"));
 const BlogDetail = lazy(() => import("./pages/BlogDetail"));
 const Contact = lazy(() => import("./pages/contact"));
 const Gallery = lazy(() => import("./pages/Gallery"));
@@ -149,12 +150,11 @@ const Awards = lazy(() => import("./pages/awards/Awards"));
 const NominationFormPage = lazy(() => import("./pages/awards/NominationFormPage"));
 const DelegateRegistration = lazy(() => import("@/pages/delegate/DelegateRegistration"));
 const GroupRegistration = lazy(() => import("@/pages/visitors/GroupRegistration"));
-import { SERVER_URL } from "./lib/api";
-import MSMEDashboard from "./pages/MSME_PMS_ReimbursementCenter";
-import MSMEPMSBankDetailsPage from "./pages/exhibitor/MSMEPMSBankDetailsPage";
-import MSMEPMSDocumentsUploadPage from "./pages/exhibitor/MSMEPMSDocumentsUploadPage";
-import PMSReimbursementApprovedPage from "./pages/exhibitor/PMSFinalSubmissionPage";
-import MSMEApplicationReviewPage from "./pages/exhibitor/MSMEApplicationReviewPage";
+const MSMEDashboard = lazy(() => import("./pages/MSME_PMS_ReimbursementCenter"));
+const MSMEPMSBankDetailsPage = lazy(() => import("./pages/exhibitor/MSMEPMSBankDetailsPage"));
+const MSMEPMSDocumentsUploadPage = lazy(() => import("./pages/exhibitor/MSMEPMSDocumentsUploadPage"));
+const PMSReimbursementApprovedPage = lazy(() => import("./pages/exhibitor/PMSFinalSubmissionPage"));
+const MSMEApplicationReviewPage = lazy(() => import("./pages/exhibitor/MSMEApplicationReviewPage"));
 const ProductServices = lazy(() => import("./pages/exhibitor/ProductServices"));
 const StallInformation = lazy(() => import("./pages/exhibitor/StallInformation"));
 const MyEvent = lazy(() => import("./pages/exhibitor/MyEvent"));
@@ -163,20 +163,6 @@ const BuyerContacts = lazy(() => import("./pages/exhibitor/BuyerContacts"));
 const PaperPresentation = lazy(() => import("./pages/presentation/PaperPresentation"));
 const PosterPresentation = lazy(() => import("./pages/presentation/PosterPresentation"));
 const AbstractPresentation = lazy(() => import("./pages/presentation/AbstractPresentation"));
-
-const SitemapRedirect = () => {
-  useEffect(() => {
-    window.location.href = `${SERVER_URL}/sitemap/xml`;
-  }, []);
-  return null;
-};
-
-const RobotsRedirect = () => {
-  useEffect(() => {
-    window.location.href = `${SERVER_URL}/robots.txt`;
-  }, []);
-  return null;
-};
 
 const queryClient = new QueryClient();
 
@@ -238,6 +224,7 @@ const App = () => {
                     <Route path="/group-registration" element={<GroupRegistration />} />
                     <Route path="/exhibitors" element={<Exhibitors />} />
                     <Route path="/blog" element={<Blog />} />
+                    <Route path="/blog/all" element={<BlogAll />} />
                     <Route path="/blog/:id" element={<BlogDetail />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/gallery" element={<Gallery />} />
@@ -264,9 +251,6 @@ const App = () => {
                     <Route path="/hospitality-partner" element={<HospitalityPartner />} />
                     <Route path="/epromotion" element={<EEPromotion />} />
                     <Route path="/e-promotion-web" element={<EPromotionWeb />} />
-                    <Route path="/sitemap/xml" element={<SitemapRedirect />} />
-                    <Route path="/sitemap.xml" element={<SitemapRedirect />} />
-                    <Route path="/robots.txt" element={<RobotsRedirect />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
 

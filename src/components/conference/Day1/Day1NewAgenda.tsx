@@ -10,18 +10,37 @@ import {
   ChevronLeft,
   ChevronRightIcon,
 } from "lucide-react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination } from "swiper/modules";
-import { useRef } from "react";
-
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import useEmblaCarousel from "embla-carousel-react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?: any; dayTitle?: string; dayNumber?: number }) {
   const agenda = data.agenda;
-  const prevRef = useRef<HTMLButtonElement>(null);
-  const nextRef = useRef<HTMLButtonElement>(null);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: "start" });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+  const scrollTo = useCallback((index: number) => emblaApi?.scrollTo(index), [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    setScrollSnaps(emblaApi.scrollSnapList());
+    const onSelect = () => {
+      setSelectedIndex(emblaApi.selectedScrollSnap());
+      setCanScrollPrev(emblaApi.canScrollPrev());
+      setCanScrollNext(emblaApi.canScrollNext());
+    };
+    onSelect();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
+  }, [emblaApi]);
 
   return (
     <div className="mx-auto max-w-[1320px] py-4">
@@ -109,79 +128,75 @@ export default function DayAgendaSection({ data, dayTitle, dayNumber }: { data?:
 
             <div className="relative px-1">
               <button
-                ref={prevRef}
+                onClick={scrollPrev}
+                disabled={!canScrollPrev}
                 className="absolute -left-2 top-1/2 z-10 -translate-y-1/2 rounded-full border bg-white p-1 disabled:opacity-30"
               >
                 <ChevronLeft size={14} />
               </button>
 
               <button
-                ref={nextRef}
+                onClick={scrollNext}
+                disabled={!canScrollNext}
                 className="absolute -right-2 top-1/2 z-10 -translate-y-1/2 rounded-full border bg-white p-1 disabled:opacity-30"
               >
                 <ChevronRightIcon size={14} />
               </button>
 
-              <Swiper
-                modules={[Navigation, Pagination]}
-                spaceBetween={12}
-                slidesPerView={2}
-                pagination={{ clickable: true, el: ".speakers-pagination" }}
-                onBeforeInit={(swiper) => {
-                  // @ts-ignore
-                  swiper.params.navigation.prevEl = prevRef.current;
-                  // @ts-ignore
-                  swiper.params.navigation.nextEl = nextRef.current;
-                }}
-                navigation={{
-                  prevEl: prevRef.current,
-                  nextEl: nextRef.current,
-                }}
-                breakpoints={{
-                  0: { slidesPerView: 1.3, spaceBetween: 10 },
-                  480: { slidesPerView: 2, spaceBetween: 10 },
-                  768: { slidesPerView: 2, spaceBetween: 12 },
-                  1024: { slidesPerView: 3, spaceBetween: 12 },
-                  1280: { slidesPerView: 4, spaceBetween: 12 },
-                }}
-                className="!pb-2"
-              >
-                {data.featuredSpeakers.map((speaker, i) => (
-                  <SwiperSlide key={i} className="h-auto">
-                    <div className="flex h-[190px] flex-col items-center overflow-hidden rounded-xl border border-[#e9e9e9] bg-white px-2 py-4 text-center transition hover:shadow-sm">
-                      {/* Avatar */}
-                      <img loading="lazy" decoding="async" src={`${SERVER_URL}${speaker?.image}`}
-                        alt={speaker.name}
-                        className="mb-3 h-16 w-16 shrink-0 rounded-full object-cover"
-                      />
+              <div className="overflow-hidden pb-2" ref={emblaRef}>
+                <div className="flex -ml-3">
+                  {data.featuredSpeakers.map((speaker, i) => (
+                    <div
+                      key={i}
+                      className="pl-3 min-w-0 shrink-0 grow-0 basis-[76.9%] sm:basis-1/2 lg:basis-1/3 xl:basis-1/4 h-auto"
+                    >
+                      <div className="flex h-[190px] flex-col items-center overflow-hidden rounded-xl border border-[#e9e9e9] bg-white px-2 py-4 text-center transition hover:shadow-sm">
+                        {/* Avatar */}
+                        <img loading="lazy" decoding="async" src={`${SERVER_URL}${speaker?.image}`}
+                          alt={speaker.name}
+                          className="mb-3 h-16 w-16 shrink-0 rounded-full object-cover"
+                        />
 
-                      {/* Name */}
-                      <h3 className="line-clamp-2 text-[11px] font-semibold text-[#111111]">
-                        {speaker.name}
-                      </h3>
+                        {/* Name */}
+                        <h3 className="line-clamp-2 text-[11px] font-semibold text-[#111111]">
+                          {speaker.name}
+                        </h3>
 
-                      {/* Role */}
-                      <p className="mt-1 line-clamp-2 text-[8px] leading-[13px] font-medium">
-                        {speaker.role}
-                      </p>
+                        {/* Role */}
+                        <p className="mt-1 line-clamp-2 text-[8px] leading-[13px] font-medium">
+                          {speaker.role}
+                        </p>
 
-                      {/* Company */}
-                      <p className="mt-1 line-clamp-2 text-[9px] font-medium">
-                        {speaker.company}
-                      </p>
+                        {/* Company */}
+                        <p className="mt-1 line-clamp-2 text-[9px] font-medium">
+                          {speaker.company}
+                        </p>
 
-                      {/* Badge */}
-                      <div className="mt-auto">
-                        <span className="rounded-full border border-[#2f7d32] px-2 py-1 text-[8px] font-semibold uppercase tracking-wide text-[#2f7d32]">
-                          {speaker.badge || "FEATURED SPEAKER"}
-                        </span>
+                        {/* Badge */}
+                        <div className="mt-auto">
+                          <span className="rounded-full border border-[#2f7d32] px-2 py-1 text-[8px] font-semibold uppercase tracking-wide text-[#2f7d32]">
+                            {speaker.badge || "FEATURED SPEAKER"}
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </SwiperSlide>
-                ))}
-              </Swiper>
+                  ))}
+                </div>
+              </div>
 
-              <div className="speakers-pagination mt-4 flex justify-center gap-1 [&_.swiper-pagination-bullet]:h-2 [&_.swiper-pagination-bullet]:w-2 [&_.swiper-pagination-bullet]:rounded-full [&_.swiper-pagination-bullet]:bg-gray-300 [&_.swiper-pagination-bullet-active]:bg-green-700" />
+              {scrollSnaps.length > 1 && (
+                <div className="speakers-pagination mt-4 flex justify-center gap-1">
+                  {scrollSnaps.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => scrollTo(index)}
+                      aria-label={`Go to slide ${index + 1}`}
+                      className={`h-2 w-2 rounded-full transition-colors ${index === selectedIndex ? "bg-green-700" : "bg-gray-300"
+                        }`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 

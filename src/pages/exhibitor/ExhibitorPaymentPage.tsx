@@ -10,7 +10,7 @@ import {
     IndianRupee, ShieldCheck, Zap, Info, Percent, Building2, Calendar,
     Store, Ruler, Layers3, WalletCards
 } from 'lucide-react';
-import paymentCompleteImg from '@/assets/paymentComplete.png';
+import paymentCompleteImg from '@/assets/paymentComplete.webp';
 
 const RAZORPAY_CHARGE_PCT = 2.5;
 const loadRazorpay = (): Promise<boolean> => {

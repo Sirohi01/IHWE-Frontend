@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Phone } from "lucide-react";
 import { Link } from "react-router-dom";
-import ctaImg from "../../assets/cta.png";
+import ctaImg from "../../assets/cta.webp";
 
 const AwardsCTA = () => {
   return (

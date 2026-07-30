@@ -1,10 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
-import backgroundImage from "../../../assets/delegatepassimage/backgroundimage.png";
-import one3 from "../../../assets/delegatepassimage/one3.png";
-import one5 from "../../../assets/delegatepassimage/one5.png";
-import one4 from "../../../assets/delegatepassimage/one4.png";
+import backgroundImage from "../../../assets/delegatepassimage/backgroundimage.webp";
+import one3 from "../../../assets/delegatepassimage/one3.webp";
+import one5 from "../../../assets/delegatepassimage/one5.webp";
+import one4 from "../../../assets/delegatepassimage/one4.webp";
 
 const bgTextures = [
   "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80", // Wellness/Yoga feel

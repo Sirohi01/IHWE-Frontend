@@ -1,4 +1,4 @@
-import paperHero from "../../../assets/day/abstract_hero.png";
+import paperHero from "../../../assets/day/abstract_hero.webp";
 
 import {
   Download,

@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useInView, animate } from "framer-motion";
-import band1 from "@/assets/band1.png";
-import band2 from "@/assets/band2.png";
-import band3 from "@/assets/band3.png";
-import band4 from "@/assets/band4.png";
-import band5 from "@/assets/band5.png";
+import band1 from "@/assets/band1.webp";
+import band2 from "@/assets/band2.webp";
+import band3 from "@/assets/band3.webp";
+import band4 from "@/assets/band4.webp";
+import band5 from "@/assets/band5.webp";
 
 // StatCounter component
 const StatCounter = ({ value }) => {

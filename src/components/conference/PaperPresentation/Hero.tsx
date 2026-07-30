@@ -1,4 +1,4 @@
-import paperHero from "../../../assets/day/paper_hero.png";
+import paperHero from "../../../assets/day/paper_hero.webp";
 
 import {
   ChevronRight,

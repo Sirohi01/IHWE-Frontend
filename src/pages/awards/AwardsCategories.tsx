@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useRef } from "react";
 import { motion, useInView, animate } from "framer-motion";
-import icon1 from "../../assets/icon1.png";
-import icon2 from "../../assets/icon2.png";
-import icon3 from "../../assets/icon3.png";
-import icon4 from "../../assets/icon4.png";
-import icon5 from "../../assets/icon5.png";
-import icon6 from "../../assets/icon6.png";
-import icon7 from "../../assets/icon7.png";
-import icon8 from "../../assets/icon8.png";
-import icon9 from "../../assets/icon9.png";
-import icon10 from "../../assets/icon10.png";
-import icon11 from "../../assets/icon11.png";
-import icon12 from "../../assets/icon12.png";
-import icon13 from "../../assets/icon13.png";
-import icon14 from "../../assets/icon14.png";
+import icon1 from "../../assets/icon1.webp";
+import icon2 from "../../assets/icon2.webp";
+import icon3 from "../../assets/icon3.webp";
+import icon4 from "../../assets/icon4.webp";
+import icon5 from "../../assets/icon5.webp";
+import icon6 from "../../assets/icon6.webp";
+import icon7 from "../../assets/icon7.webp";
+import icon8 from "../../assets/icon8.webp";
+import icon9 from "../../assets/icon9.webp";
+import icon10 from "../../assets/icon10.webp";
+import icon11 from "../../assets/icon11.webp";
+import icon12 from "../../assets/icon12.webp";
+import icon13 from "../../assets/icon13.webp";
+import icon14 from "../../assets/icon14.webp";
 
 const StatCounter = ({ value }: { value: string }) => {
   const ref = useRef(null);

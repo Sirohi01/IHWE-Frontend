@@ -1,11 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
-import imgInsights from "../../assets/mettingindustery/insights.png";
-import imgGrowth from "../../assets/mettingindustery/growth.png";
-import imgTrends from "../../assets/mettingindustery/trends.png";
-import imgPanel from "../../assets/mettingindustery/panel.png";
-import imgConnect from "../../assets/mettingindustery/connect.png";
-import imgFuture from "../../assets/mettingindustery/future.png";
+import imgInsights from "../../assets/mettingindustery/insights.webp";
+import imgGrowth from "../../assets/mettingindustery/growth.webp";
+import imgTrends from "../../assets/mettingindustery/trends.webp";
+import imgPanel from "../../assets/mettingindustery/panel.webp";
+import imgConnect from "../../assets/mettingindustery/connect.webp";
+import imgFuture from "../../assets/mettingindustery/future.webp";
 
 const benefits = [
   {

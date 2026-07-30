@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, ArrowRight, CheckCircle, FileDown, Info, Store } from 'lucide-react';
-import bannerImg from '../../assets/banner2.jpg';
+import bannerImg from '../../assets/banner2.webp';
 
 interface BrochurePopUpProps {
   isOpen: boolean;

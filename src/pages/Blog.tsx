@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { blogApi } from "@/lib/api";
-import blogHero from "../assets/blog/rename.jpeg";
+import blogHero from "../assets/blog/rename.webp";
 
 // Components
 import BlogHero from "@/components/blog/BlogHero";

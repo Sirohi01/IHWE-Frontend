@@ -39,7 +39,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import HeroBg from "@/assets/buyer.jpg";
+import HeroBg from "@/assets/buyer.webp";
 import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL, crmApi, otpApi, policyApi } from "@/lib/api";
 import { toast } from "sonner";
 import { useRef, useEffect as useEffectDropdown } from "react";

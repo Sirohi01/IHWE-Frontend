@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { MapPin, Globe, Users, Activity, Sparkles, Quote } from 'lucide-react';
 import { newTestimonialsApi, SERVER_URL } from '../../lib/api';
-import pattern from '../../assets/pattern.png';
-import pattern1 from '../../assets/test1.png';
-import test23 from '../../assets/test23.png';
-import test24 from '../../assets/test24.png';
-import test25 from '../../assets/test25.png';
-import test26 from '../../assets/test26.png';
+import pattern from '../../assets/pattern.webp';
+import pattern1 from '../../assets/test1.webp';
+import test23 from '../../assets/test23.webp';
+import test24 from '../../assets/test24.webp';
+import test25 from '../../assets/test25.webp';
+import test26 from '../../assets/test26.webp';
 
 const TOP_IMAGES_MAP: Record<string, any> = {
   test23, test24, test25, test26
@@ -102,7 +102,7 @@ const Testimonials = () => {
       }} />
 
 
-      {/* LEFT SLANT IMAGE - replacing SVG with pattern1.png asset */}
+      {/* LEFT SLANT IMAGE - replacing SVG with pattern1.webp asset */}
       <div style={{
         position: 'absolute',
         top: -20,

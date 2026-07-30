@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /exhibitor-login
+Disallow: /exhibitor-print
+Disallow: /exhibitor-dashboard
+Disallow: /buyer-login
+Disallow: /buyer-dashboard
+Disallow: /buyer-scan
+Disallow: /delegates-login
+Disallow: /seller-portal
+Disallow: /visitor
+
+Sitemap: https://ihwe.in/sitemap.xml

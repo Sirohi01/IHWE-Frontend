@@ -63,7 +63,7 @@ const ParallaxSection = () => {
     );
   };
 
-  const bgImage = data?.imageUrl ? `${SERVER_URL}${data.imageUrl}` : "/images/cara121.png";
+  const bgImage = data?.imageUrl ? `${SERVER_URL}${data.imageUrl}` : "/images/cara121.webp";
 
   return (
     <section

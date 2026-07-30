@@ -8,16 +8,16 @@ import {
 } from "@/lib/api";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import partnersHeroFallback from "../assets/cara14.jpg";
+import partnersHeroFallback from "../assets/cara14.webp";
 
 const fallbackCards = [
   {
     no: "01",
     title: "Hotel & Stay Partner",
-    image: "/images/partnership/3.png",
+    image: "/images/partnership/3.webp",
     color: "#619941",
     link: "/hotel-stay-partner",
-    icon: "/images/partnership/bed.png",
+    icon: "/images/partnership/bed.webp",
     points: [
       "Brand visibility on official platforms",
       "Direct access to exhibitors & delegates",
@@ -29,10 +29,10 @@ const fallbackCards = [
   {
     no: "02",
     title: "Travel Partner",
-    image: "/images/partnership/2.png",
+    image: "/images/partnership/2.webp",
     color: "#2f68c5",
     link: "/travel-partner",
-    icon: "/images/partnership/aeroplan.png",
+    icon: "/images/partnership/aeroplan.webp",
     points: [
       "Featured as official travel partner",
       "Exposure to global exhibitors & buyers",
@@ -44,10 +44,10 @@ const fallbackCards = [
   {
     no: "03",
     title: "Stall Design & Fabrication",
-    image: "/images/partnership/1.png",
+    image: "/images/partnership/1.webp",
     color: "#11a7b8",
     link: "/fabrication-partner",
-    icon: "/images/partnership/home.png",
+    icon: "/images/partnership/home.webp",
     points: [
       "Official branding on event collaterals",
       "High visibility at venue",
@@ -59,10 +59,10 @@ const fallbackCards = [
   {
     no: "04",
     title: "Logistics Partner",
-    image: "/images/partnership/Logistics.png",
+    image: "/images/partnership/Logistics.webp",
     color: "#7b43c9",
     link: "/logistic-partner",
-    icon: "/images/partnership/delivery.png",
+    icon: "/images/partnership/delivery.webp",
     points: [
       "Listed as official logistics partner",
       "International partner recognition",
@@ -74,10 +74,10 @@ const fallbackCards = [
   {
     no: "05",
     title: "Printing & Branding",
-    image: "/images/partnership/printing.png",
+    image: "/images/partnership/printing.webp",
     color: "#ff7a00",
     link: "/printing-branding-partner",
-    icon: "/images/partnership/print.png",
+    icon: "/images/partnership/print.webp",
     points: [
       "Branding across event materials",
       "On-site branding opportunities",
@@ -89,10 +89,10 @@ const fallbackCards = [
   {
     no: "06",
     title: "Hospitality Partner",
-    image: "/images/partnership/hospitality.jpg",
+    image: "/images/partnership/hospitality.webp",
     color: "#e93d8b",
     link: "/hospitality-partner",
-    icon: "/images/partnership/bell.png",
+    icon: "/images/partnership/bell.webp",
     points: [
       "Recognition as hospitality partner",
       "Networking with delegates & exhibitors",
@@ -159,7 +159,7 @@ const Partnership = () => {
         <div
           className="relative min-h-[580px] bg-cover bg-center"
           style={{
-            backgroundImage: `url('/images/hero.jpg')`,
+            backgroundImage: `url('/images/hero.webp')`,
           }}
         >
 
@@ -229,7 +229,7 @@ const Partnership = () => {
                       {
                         number: "100+",
                         label: "Global Buyers",
-                        image: "/images/partnership/globe.png",
+                        image: "/images/partnership/globe.webp",
                       },
                       {
                         number: "3",
@@ -239,7 +239,7 @@ const Partnership = () => {
                       {
                         number: "Unlimited",
                         label: "Business Opportunities",
-                        image: "/images/partnership/business.png",
+                        image: "/images/partnership/business.webp",
                       },
                       {
                         number: "High",
@@ -318,12 +318,12 @@ const Partnership = () => {
                 {
                   title: "Direct Access",
                   desc: "Connect with 8,000+ industry leaders & Decision makers",
-                  image: "/images/partnership/visitor.png",
+                  image: "/images/partnership/visitor.webp",
                 },
                 {
                   title: "Global Exposure",
                   desc: "Enhance your brand presence globally",
-                  image: "/images/partnership/global.png",
+                  image: "/images/partnership/global.webp",
                 },
                 {
                   title: "Brand Visibility",
@@ -338,7 +338,7 @@ const Partnership = () => {
                 {
                   title: "Business Growth",
                   desc: "Genrate quality leads, expand customer base & increase ROI",
-                  image: "/images/partnership/businessgrow.png",
+                  image: "/images/partnership/businessgrow.webp",
                 },
               ].map((item, idx) => (
                 <div
@@ -567,7 +567,7 @@ const Partnership = () => {
       <section
         className="relative overflow-hidden bg-no-repeat bg-top bg-contain mb-0 hidden md:block"
         style={{
-          backgroundImage: "url('/images/partnership/impact-bg.png')",
+          backgroundImage: "url('/images/partnership/impact-bg.webp')",
           backgroundSize: "100% auto",
           minHeight: "490px",
         }}

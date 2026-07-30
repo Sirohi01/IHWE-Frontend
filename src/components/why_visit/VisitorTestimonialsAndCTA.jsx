@@ -100,7 +100,7 @@ const VisitorTestimonialsAndCTA = () => {
             <div className="w-full bg-[#011630] relative overflow-hidden py-2">
                 {/* High-tech overlay digital earth on far right */}
                 <div className="absolute right-0 top-0 bottom-0 w-[40%] hidden lg:block">
-                    <img loading="lazy" decoding="async" src="/whyVisit/cta_earth.png"
+                    <img loading="lazy" decoding="async" src="/whyVisit/cta_earth.webp"
                         alt="digital sphere"
                         className="w-full h-full object-contain object-right scale-110 opacity-75 mix-blend-screen select-none pointer-events-none"
                     />

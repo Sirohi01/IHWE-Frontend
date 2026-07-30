@@ -1,5 +1,4 @@
 import { Printer, StarIcon, X } from "lucide-react";
-import printer from "../../assets/printing/printer.webp"
 const PartnerShipBenefitCard = ({ title, icon = null, price, list, color }) => {
   return (
     <div className="flex flex-row items-start gap-2 rounded-lg white pt-2 justify-between flex-1 border-b border-b-2 border-gray relative">

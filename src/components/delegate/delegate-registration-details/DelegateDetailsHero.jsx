@@ -1,6 +1,6 @@
 import React from "react";
-import bannerBg from "@/assets/deligateimage/detailsbg.png";
-import logo from "@/assets/deligateimage/logoImg.png";
+import bannerBg from "@/assets/deligateimage/detailsbg.webp";
+import logo from "@/assets/deligateimage/logoImg.webp";
 import SectionContainer from "@/components/layout/SectionContainer";
 import SingleRegistration from "./SingleRegistration";
 import GroupRegistration from "./GroupRegistration";
@@ -123,22 +123,22 @@ const DelegateDetailsHero = () => {
                 <section className="grid grid-cols-1 md:flex md:items-center md:justify-between my-3 p-4 md:py-3 md:px-2 gap-4 md:gap-0 bg-white border border-gray-100 rounded-xl shadow-sm">
                     {[
                         {
-                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/icons/c1.png') center/contain no-repeat", mask: "url('/icons/c1.png') center/contain no-repeat" }} />,
+                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/icons/c1.webp') center/contain no-repeat", mask: "url('/icons/c1.webp') center/contain no-repeat" }} />,
                             title: 'Global Platform',
                             desc: 'Uniting healthcare, wellness, and sustainable industries',
                         },
                         {
-                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b1.png') center/contain no-repeat", mask: "url('/exhibition/b1.png') center/contain no-repeat" }} />,
+                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b1.webp') center/contain no-repeat", mask: "url('/exhibition/b1.webp') center/contain no-repeat" }} />,
                             title: 'Trusted Brands',
                             desc: "Connect with India's most trusted brands & manufacturers",
                         },
                         {
-                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b5.png') center/contain no-repeat", mask: "url('/exhibition/b5.png') center/contain no-repeat" }} />,
+                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b5.webp') center/contain no-repeat", mask: "url('/exhibition/b5.webp') center/contain no-repeat" }} />,
                             title: 'Targeted Audience',
                             desc: 'Engage with qualified buyers, Investors & decision makers',
                         },
                         {
-                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/icons/growth.png') center/contain no-repeat", mask: "url('/exhibition/b6.png') center/contain no-repeat" }} />,
+                            icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/icons/growth.webp') center/contain no-repeat", mask: "url('/exhibition/b6.webp') center/contain no-repeat" }} />,
                             title: 'Business Growth',
                             desc: 'Expand your market & accelerate your growth',
                         },
@@ -210,7 +210,7 @@ const DelegateDetailsHero = () => {
                                 className={`cursor-pointer transition-all duration-300 rounded-xl px-5 py-4 flex flex-col items-center text-center gap-2 border-2 ${delegateType === 'single' ? 'bg-[#f0f7e6] border-[#4a8f2f] shadow-lg scale-[1.02]' : 'bg-[#f0f7e6]/50 border-transparent hover:border-[#c8e6a0] hover:bg-[#f0f7e6]'}`}
                             >
                                 <div className="flex items-center justify-center">
-                                    <img loading="lazy" decoding="async" src="/exhibition/dom.png" alt="Single Delegate" className="w-18 h-20 object-contain" />
+                                    <img loading="lazy" decoding="async" src="/exhibition/dom.webp" alt="Single Delegate" className="w-18 h-20 object-contain" />
                                 </div>
                                 <div>
                                     <p className="text-gray-800 font-bold text-base mb-1">Delegate Register </p>
@@ -235,7 +235,7 @@ const DelegateDetailsHero = () => {
                                 className={`cursor-pointer transition-all duration-300 rounded-xl px-5 py-4 flex flex-col items-center text-center gap-2 border-2 ${delegateType === 'group' ? 'bg-[#fff7f0] border-[#d26019] shadow-lg scale-[1.02]' : 'bg-[#fff7f0]/50 border-transparent hover:border-[#f5d5b0] hover:bg-[#fff7f0]'}`}
                             >
                                 <div className="flex items-center justify-center">
-                                    <img loading="lazy" decoding="async" src="/exhibition/int.png" alt="Group Delegate" className="w-18 h-20 object-contain" />
+                                    <img loading="lazy" decoding="async" src="/exhibition/int.webp" alt="Group Delegate" className="w-18 h-20 object-contain" />
                                 </div>
                                 <div>
                                     <p className="text-gray-800 font-bold text-base mb-1">Delegate Group Register </p>

@@ -9,8 +9,8 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import SectionContainer from "@/components/layout/SectionContainer";
-import TopImage from "@/assets/hospitalityPartner/TopImage.jpeg";
-import BottomImage from "@/assets/hospitalityPartner/BottomImage2.jpeg";
+import TopImage from "@/assets/hospitalityPartner/TopImage.webp";
+import BottomImage from "@/assets/hospitalityPartner/BottomImage2.webp";
 import persons from "@/assets/hospitalityPartner/persons.jpeg"
 import awards from "@/assets/hospitalityPartner/award.jpeg"
 import bed from "@/assets/hospitalityPartner/bed.jpeg"

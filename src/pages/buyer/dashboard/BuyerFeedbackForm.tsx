@@ -513,7 +513,7 @@ export default function BuyerFeedbackForm() {
 
             {/* New Image Header for Print */}
             <div className="hidden print:block w-full">
-                <img loading="lazy" decoding="async" src="/feedbackform_header.jpeg"
+                <img loading="lazy" decoding="async" src="/feedbackform_header.webp"
                     className="w-full h-[120px] object-cover block"
                     alt="IHWE Header"
                 />
@@ -821,7 +821,7 @@ export default function BuyerFeedbackForm() {
 
             {/* New Image Footer for Print */}
             {/* <div className="hidden print:block w-full print-footer h-[5px]">
-                <img loading="lazy" decoding="async" src="/feedbackform_fooder.jpeg"
+                <img loading="lazy" decoding="async" src="/feedbackform_fooder.webp"
                     className="w-full h-auto block"
                     alt="IHWE Footer"
                 />

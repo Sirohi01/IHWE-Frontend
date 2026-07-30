@@ -15,22 +15,22 @@ const attendees = [
     {
         title: "WELLNESS\nENTHUSIASTS",
         desc: "Fitness lovers, Ayurveda users & health-conscious consumers",
-        icon: <img loading="lazy" decoding="async" src="/whyVisit/wellness.png" alt="Wellness" className="w-11 h-11 object-contain" />
+        icon: <img loading="lazy" decoding="async" src="/whyVisit/wellness.webp" alt="Wellness" className="w-11 h-11 object-contain" />
     },
     {
         title: "INVESTORS &\nSTARTUPS",
         desc: "Investors, founders, wellness startups & innovators",
-        icon: <img loading="lazy" decoding="async" src="/whyVisit/investors.png" alt="Investors" className="w-11 h-11 object-contain" />
+        icon: <img loading="lazy" decoding="async" src="/whyVisit/investors.webp" alt="Investors" className="w-11 h-11 object-contain" />
     },
     {
         title: "AYUSH\nPROFESSIONALS",
         desc: "Ayurveda, Yoga, Naturopathy & holistic practitioners",
-        icon: <img loading="lazy" decoding="async" src="/whyVisit/ayush.png" alt="Ayush" className="w-11 h-11 object-contain" />
+        icon: <img loading="lazy" decoding="async" src="/whyVisit/ayush.webp" alt="Ayush" className="w-11 h-11 object-contain" />
     },
     {
         title: "HOSPITALITY &\nSPA CHAINS",
         desc: "Hotels, spas, resorts & wellness retreat operators",
-        icon: <img loading="lazy" decoding="async" src="/whyVisit/hostpitality.png" alt="Hospitality" className="w-11 h-11 object-contain" />
+        icon: <img loading="lazy" decoding="async" src="/whyVisit/hostpitality.webp" alt="Hospitality" className="w-11 h-11 object-contain" />
     }
 ];
 
@@ -49,7 +49,7 @@ const WhoWillYouMeet = () => {
                     </div>
                     {/* Small Leaf below title */}
                     <div className="mt-2 flex justify-center">
-                        <img loading="lazy" decoding="async" src="/whyVisit/leaf.png" alt="Leaf" className="h-4 object-contain" />
+                        <img loading="lazy" decoding="async" src="/whyVisit/leaf.webp" alt="Leaf" className="h-4 object-contain" />
                     </div>
                 </div>
 

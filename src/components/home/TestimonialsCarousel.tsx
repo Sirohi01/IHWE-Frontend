@@ -7,12 +7,12 @@ import {
 import { Link } from 'react-router-dom';
 import SectionContainer from '../layout/SectionContainer';
 import { cn } from "@/lib/utils";
-import testImg from '../../assets/test11.jpeg';
-import leafPng from '../../assets/leaf.png';
-import img1 from '../../assets/1.png';
-import img2 from '../../assets/2 (1).png';
-import img3 from '../../assets/3 (1).png';
-import img4 from '../../assets/4.png';
+import testImg from '../../assets/test11.webp';
+import leafPng from '../../assets/leaf.webp';
+import img1 from '../../assets/1.webp';
+import img2 from '../../assets/2 (1).webp';
+import img3 from '../../assets/3 (1).webp';
+import img4 from '../../assets/4.webp';
 
 import { newTestimonialsApi, SERVER_URL } from "@/lib/api";
 

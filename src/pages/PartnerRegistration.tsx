@@ -13,9 +13,9 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import Swal from "sweetalert2";
-import heroImg from "@/assets/partnerRegistration/new.jpeg";
-import MiddleImage from "@/assets/partnerRegistration/MiddleImage.png";
-import BottomImage from "@/assets/partnerRegistration/BottomImage.png";
+import heroImg from "@/assets/partnerRegistration/new.webp";
+import MiddleImage from "@/assets/partnerRegistration/MiddleImage.webp";
+import BottomImage from "@/assets/partnerRegistration/BottomImage.webp";
 
 
 

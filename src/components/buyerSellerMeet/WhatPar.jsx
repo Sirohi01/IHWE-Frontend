@@ -66,7 +66,7 @@ const WhatPar = () => {
                 <div
                     className="w-full md:w-[40%] rounded-[14px] pt-6 px-7 pb-7 relative flex-1"
                     style={{
-                        backgroundImage: "url('/bsmeet/world-map.png')",
+                        backgroundImage: "url('/bsmeet/world-map.webp')",
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                         backgroundRepeat: 'no-repeat',
@@ -81,10 +81,10 @@ const WhatPar = () => {
                     {/* Stats Row - Desktop (Visible on Desktop) */}
                     <div className="hidden md:grid grid-cols-[1fr_1px_1fr_1px_1fr_1px_1fr] items-start relative z-10">
                         {[
-                            { icon: '/bsmeet/bsm1.png', num: '600+', label: 'Pre-scheduled\nMeetings' },
-                            { icon: '/bsmeet/bsm2.png', num: '1000+', label: 'Verified\nBuyers' },
-                            { icon: '/bsmeet/bsm3.png', num: '150+', label: 'Exhibiting\nBrands' },
-                            { icon: '/bsmeet/bsm4.png', num: 'Global', label: 'World Wide\nParticipation' },
+                            { icon: '/bsmeet/bsm1.webp', num: '600+', label: 'Pre-scheduled\nMeetings' },
+                            { icon: '/bsmeet/bsm2.webp', num: '1000+', label: 'Verified\nBuyers' },
+                            { icon: '/bsmeet/bsm3.webp', num: '150+', label: 'Exhibiting\nBrands' },
+                            { icon: '/bsmeet/bsm4.webp', num: 'Global', label: 'World Wide\nParticipation' },
                         ].map((item, i) => (
                             <React.Fragment key={i}>
                                 {i > 0 && (
@@ -106,10 +106,10 @@ const WhatPar = () => {
                     {/* Stats Row - Mobile (Visible on Mobile) */}
                     <div className="grid md:hidden grid-cols-2 gap-y-6 gap-x-4 items-start relative z-10 w-full max-w-sm mx-auto">
                         {[
-                            { icon: '/bsmeet/bsm1.png', num: '600+', label: 'Pre-scheduled\nMeetings' },
-                            { icon: '/bsmeet/bsm2.png', num: '1000+', label: 'Verified\nBuyers' },
-                            { icon: '/bsmeet/bsm3.png', num: '100+', label: 'Exhibiting\nBrands' },
-                            { icon: '/bsmeet/bsm4.png', num: 'Global', label: 'World Wide\nParticipation' },
+                            { icon: '/bsmeet/bsm1.webp', num: '600+', label: 'Pre-scheduled\nMeetings' },
+                            { icon: '/bsmeet/bsm2.webp', num: '1000+', label: 'Verified\nBuyers' },
+                            { icon: '/bsmeet/bsm3.webp', num: '100+', label: 'Exhibiting\nBrands' },
+                            { icon: '/bsmeet/bsm4.webp', num: 'Global', label: 'World Wide\nParticipation' },
                         ].map((item, i) => (
                             <div key={i} className="flex flex-col items-center gap-2 px-1.5">
                                 <img loading="lazy" decoding="async" src={item.icon} alt="" className="w-[60px] h-[60px] object-contain" />

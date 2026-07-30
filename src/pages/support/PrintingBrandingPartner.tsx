@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import heroBg from "../../assets/printing.jpeg";
+import heroBg from "../../assets/printing.webp";
 import WhyPartner from "../../components/printingBrandingPartner/WhyPartner";
 import StatCardsGroup from "../../components/printingBrandingPartner/StatsCardGroup";
 import CardWithTagGroup from "../../components/printingBrandingPartner/CardWithTagGroup";
@@ -39,7 +39,7 @@ const PrintingBrandingPartner = () => {
 
     // Resolve image URL — handle uploads paths from backend
     const resolveImg = (img: string) => {
-        if (!img || img === '/images/printing.jpeg') return heroBg;
+        if (!img || img === '/images/printing.webp') return heroBg;
         const normalizedImg = img.replace(/\\/g, "/");
         if (normalizedImg.startsWith("http://") || normalizedImg.startsWith("https://")) return normalizedImg;
         if (normalizedImg.startsWith("/uploads") || normalizedImg.startsWith("uploads/")) {

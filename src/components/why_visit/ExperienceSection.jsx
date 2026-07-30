@@ -5,19 +5,19 @@ const experiences = [
     {
         title: "INNOVATION\nSHOWCASE",
         desc: "Discover cutting-edge products in healthcare, wellness, AYUSH, fitness, nutraceuticals & organic industries.",
-        icon: "/whyVisit/innovation.png",
+        icon: "/whyVisit/innovation.webp",
         alt: "Innovation"
     },
     {
         title: "GLOBAL\nNETWORKING",
         desc: "Meet manufacturers, importers, distributors, hospitals, wellness brands & investors from around the world.",
-        icon: "/whyVisit/globalnetworkw.png",
+        icon: "/whyVisit/globalnetworkw.webp",
         alt: "Networking"
     },
     {
         title: "BUSINESS\nOPPORTUNITIES",
         desc: "Generate leads, explore dealership opportunities & build strategic partnerships.",
-        icon: "/whyVisit/businessOpp.png",
+        icon: "/whyVisit/businessOpp.webp",
         alt: "Business"
     },
     {
@@ -29,13 +29,13 @@ const experiences = [
     {
         title: "WELLNESS\nEXPERIENCES",
         desc: "Experience live wellness demos, Ayurveda therapies, fitness innovations & organic lifestyle solutions.",
-        icon: "/whyVisit/wellnessExp.png",
+        icon: "/whyVisit/wellnessExp.webp",
         alt: "Wellness"
     },
     {
         title: "PRODUCT\nLAUNCHES",
         desc: "Witness exclusive launches from emerging and established international brands.",
-        icon: "/whyVisit/produceLonch.png",
+        icon: "/whyVisit/produceLonch.webp",
         alt: "Products"
     }
 ];
@@ -55,7 +55,7 @@ const ExperienceSection = () => {
                     </div>
                     {/* Small Leaf below title */}
                     <div className="mt-2 flex justify-center">
-                        <img loading="lazy" decoding="async" src="/whyVisit/leaf.png" alt="Leaf" className="h-4 object-contain" />
+                        <img loading="lazy" decoding="async" src="/whyVisit/leaf.webp" alt="Leaf" className="h-4 object-contain" />
                     </div>
                 </div>
 

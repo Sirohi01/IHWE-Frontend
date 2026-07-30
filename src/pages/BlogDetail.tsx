@@ -70,10 +70,13 @@ const BlogDetail = () => {
       {/* SEO Injection */}
       <SeoHelmet
         data={{
-          metaTitle: blog.metaTitle,
-          metaDescription: blog.metaDescription,
+          metaTitle: blog.metaTitle || blog.title,
+          metaDescription: blog.metaDescription || blog.excerpt,
           metaKeywords: blog.metaKeywords,
-          ogImage: blog.image,
+          ogTitle: blog.ogTitle || blog.title,
+          ogDescription: blog.ogDescription || blog.excerpt,
+          ogImage: blog.ogImage || blog.image,
+          ogType: "article",
           openGraphTags: blog.openGraphTags,
           schemaMarkup: blog.schemaMarkup,
           canonicalTag: blog.canonicalTag

@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import * as Icons from 'lucide-react';
-import heroBg from '../../assets/fabrication.png';
+import heroBg from '../../assets/fabrication.webp';
 import { SERVER_URL } from '../../lib/api';
 
 const IconRenderer = ({ name, className }: { name: string, className?: string }) => {

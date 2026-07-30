@@ -479,13 +479,13 @@ import { API_URL } from '@/lib/api';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import mmImage from '../../assets/mm.png';
-import ccImage from '../../assets/cc.png';
-import hhImage from '../../assets/hh.png';
-import b1Image from '../../assets/b1.png';
-import b2Image from '../../assets/b2.png';
-import b3Image from '../../assets/b3.png';
-import b4Image from '../../assets/b4.png';
+import mmImage from '../../assets/mm.webp';
+import ccImage from '../../assets/cc.webp';
+import hhImage from '../../assets/hh.webp';
+import b1Image from '../../assets/b1.webp';
+import b2Image from '../../assets/b2.webp';
+import b3Image from '../../assets/b3.webp';
+import b4Image from '../../assets/b4.webp';
 
 const typeConfig = {
     payment_success: { icon: <Mail size={14} />, bg: 'bg-emerald-50', text: 'text-emerald-600', badge: 'text-emerald-600 bg-emerald-50', badgeText: 'New', dot: 'bg-emerald-500' },

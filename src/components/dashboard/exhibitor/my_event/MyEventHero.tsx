@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, Store, Calendar, Wrench, AlertTriangle, Users } from "lucide-react";
-import Hero from "@/assets/exhibitor/myeventhero2.png";
+import Hero from "@/assets/exhibitor/myeventhero2.webp";
 import { useNavigate } from "react-router-dom";
 
 const formatDateRange = (start?: string, end?: string) => {

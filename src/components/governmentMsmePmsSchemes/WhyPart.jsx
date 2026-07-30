@@ -25,37 +25,37 @@ const WhyPart = ({ onApplyClick }) => {
         {
             label: 'Significant reduction\nin exhibition cost',
             icon: (
-                <img loading="lazy" decoding="async" src="/mpscheme/why1.png" alt="" className="w-20 h-20 object-contain" />
+                <img loading="lazy" decoding="async" src="/mpscheme/why1.webp" alt="" className="w-20 h-20 object-contain" />
             ),
         },
         {
             label: 'Access to national &\nInternational buyers',
             icon: (
-                <img loading="lazy" decoding="async" src="/mpscheme/why2.png" alt="" className="w-20 h-20 object-contain" />
+                <img loading="lazy" decoding="async" src="/mpscheme/why2.webp" alt="" className="w-20 h-20 object-contain" />
             ),
         },
         {
             label: 'Government-supported\ncredibility',
             icon: (
-                <img loading="lazy" decoding="async" src="/mpscheme/why3.png" alt="" className="w-20 h-20 object-contain" />
+                <img loading="lazy" decoding="async" src="/mpscheme/why3.webp" alt="" className="w-20 h-20 object-contain" />
             ),
         },
         {
             label: 'Increase brand\nvisibility',
             icon: (
-                <img loading="lazy" decoding="async" src="/mpscheme/why4.png" alt="" className="w-20 h-20 object-contain" />
+                <img loading="lazy" decoding="async" src="/mpscheme/why4.webp" alt="" className="w-20 h-20 object-contain" />
             ),
         },
         {
             label: 'Expand your\nbusiness network',
             icon: (
-                <img loading="lazy" decoding="async" src="/mpscheme/why5.png" alt="" className="w-20 h-20 object-contain" />
+                <img loading="lazy" decoding="async" src="/mpscheme/why5.webp" alt="" className="w-20 h-20 object-contain" />
             ),
         },
         {
             label: 'Boost sales &\ndistribution',
             icon: (
-                <img loading="lazy" decoding="async" src="/mpscheme/why6.png" alt="" className="w-20 h-20 object-contain" />
+                <img loading="lazy" decoding="async" src="/mpscheme/why6.webp" alt="" className="w-20 h-20 object-contain" />
             ),
         },
     ];
@@ -174,7 +174,7 @@ const WhyPart = ({ onApplyClick }) => {
                                 title: 'Apply Online',
                                 desc: 'Fill the PMS application form',
                                 icon: (
-                                    <img loading="lazy" decoding="async" src="/mpscheme/how1.png" alt="" className="h-18 w-18 object-contain" />
+                                    <img loading="lazy" decoding="async" src="/mpscheme/how1.webp" alt="" className="h-18 w-18 object-contain" />
                                 ),
                             },
                             {
@@ -182,7 +182,7 @@ const WhyPart = ({ onApplyClick }) => {
                                 title: 'Upload Documents',
                                 desc: 'Submit all required documents online',
                                 icon: (
-                                    <img loading="lazy" decoding="async" src="/mpscheme/how2.png" alt="" className="h-18 w-18 object-contain" />
+                                    <img loading="lazy" decoding="async" src="/mpscheme/how2.webp" alt="" className="h-18 w-18 object-contain" />
                                 ),
                             },
                             {
@@ -190,7 +190,7 @@ const WhyPart = ({ onApplyClick }) => {
                                 title: 'MSME Verification',
                                 desc: 'Documents verified by MSME',
                                 icon: (
-                                    <img loading="lazy" decoding="async" src="/mpscheme/how3.png" alt="" className="h-18 w-18 object-contain" />
+                                    <img loading="lazy" decoding="async" src="/mpscheme/how3.webp" alt="" className="h-18 w-18 object-contain" />
                                 ),
                             },
                             {
@@ -198,7 +198,7 @@ const WhyPart = ({ onApplyClick }) => {
                                 title: 'Stall Allocation',
                                 desc: 'Stall will be allocated',
                                 icon: (
-                                    <img loading="lazy" decoding="async" src="/mpscheme/how4.png" alt="" className="h-18 w-18 object-contain" />
+                                    <img loading="lazy" decoding="async" src="/mpscheme/how4.webp" alt="" className="h-18 w-18 object-contain" />
                                 ),
                             },
                             {
@@ -206,7 +206,7 @@ const WhyPart = ({ onApplyClick }) => {
                                 title: 'Exhibit at IHWE',
                                 desc: 'Participate in IHWE 2026',
                                 icon: (
-                                    <img loading="lazy" decoding="async" src="/mpscheme/how5.png" alt="" className="h-18 w-18 object-contain" />
+                                    <img loading="lazy" decoding="async" src="/mpscheme/how5.webp" alt="" className="h-18 w-18 object-contain" />
                                 ),
                             },
                             {
@@ -214,7 +214,7 @@ const WhyPart = ({ onApplyClick }) => {
                                 title: 'Claim Reimbursement',
                                 desc: 'Get reimbursement after approval',
                                 icon: (
-                                    <img loading="lazy" decoding="async" src="/mpscheme/how6.png" alt="" className="h-18 w-18 object-contain" />
+                                    <img loading="lazy" decoding="async" src="/mpscheme/how6.webp" alt="" className="h-18 w-18 object-contain" />
                                 ),
                             },
                         ].map((step, i) => (
@@ -254,7 +254,7 @@ const WhyPart = ({ onApplyClick }) => {
 
                     {/* The floating Checklist Illustration - dimmed on mobile for readability */}
                     <div className="absolute bottom-2 -right-4 w-[140px] h-[140px] pointer-events-none z-0 opacity-10 sm:opacity-90 scale-100 group-hover:scale-105 transition-transform duration-700">
-                        <img loading="lazy" decoding="async" src="/msmepmsscheme/approved.png" className="w-full h-full object-contain" alt="" />
+                        <img loading="lazy" decoding="async" src="/msmepmsscheme/approved.webp" className="w-full h-full object-contain" alt="" />
                     </div>
 
                     <div className="relative z-10 pr-4 sm:pr-[110px] flex-1 flex flex-col">
@@ -292,7 +292,7 @@ const WhyPart = ({ onApplyClick }) => {
 
                 {/* Trophy Image — HIDDEN ON MOBILE to prevent messy overlapping */}
                 <div className="hidden md:block shrink-0 z-10" style={{ marginBottom: 0, marginTop: '-44px' }}>
-                    <img loading="lazy" decoding="async" src="/mpscheme/trofi1.png"
+                    <img loading="lazy" decoding="async" src="/mpscheme/trofi1.webp"
                         alt="Trophy"
                         className="w-28 h-36 object-contain object-bottom block"
                     />

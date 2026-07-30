@@ -63,7 +63,7 @@ const defaultAdvantages = [
     text: "Opportunity to offer exclusive deals to exhibitors",
   },
   {
-    icon: "/images/partnership/chart.png",
+    icon: "/images/partnership/chart.webp",
     text: "Year-round visibility through pre & post event promotions",
   },
 ];

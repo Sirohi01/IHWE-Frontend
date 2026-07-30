@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { heroBackgroundApi, SERVER_URL, verifyApi, visitorApi, eventApi, crmApi } from "@/lib/api";
-import HeroBg from "@/assets/car22.jpg";
+import HeroBg from "@/assets/car22.webp";
 
 const PURPOSE_OPTIONS = [
     "Business Networking", "Product Sourcing", "Distributor Search",

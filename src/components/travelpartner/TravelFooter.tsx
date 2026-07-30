@@ -2,7 +2,7 @@ import React from 'react';
 import * as Icons from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { SERVER_URL } from '../../lib/api';
-import footerImage from '../../assets/nishu.png';
+import footerImage from '../../assets/nishu.webp';
 
 const IconRenderer = ({ name, className }: { name: string, className?: string }) => {
   const Icon = (Icons as any)[name] || Icons.Star;

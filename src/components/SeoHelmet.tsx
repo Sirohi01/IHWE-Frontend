@@ -11,6 +11,11 @@ interface SeoData {
     schemaMarkup?: string;
     canonicalTag?: string;
     ogImage?: string;
+    ogTitle?: string;
+    ogDescription?: string;
+    ogType?: string;
+    ogUrl?: string;
+    siteName?: string;
 }
 
 interface GlobalScripts {
@@ -65,6 +70,15 @@ const SeoHelmet = ({ data }: { data?: SeoData }) => {
 
     const displayData = data || seoData || defaultSeo;
     const fullOgImage = displayData.ogImage ? (displayData.ogImage.startsWith('http') ? displayData.ogImage : `${SERVER_URL}${displayData.ogImage}`) : "";
+
+    // Resolved OG/Twitter fields — /api/seo/page already applies this fallback
+    // chain server-side, but pages that pass a custom `data` prop directly
+    // (e.g. BlogDetail) may not, so it's repeated here defensively.
+    const resolvedOgTitle = displayData.ogTitle || displayData.metaTitle || defaultSeo.metaTitle!;
+    const resolvedOgDescription = displayData.ogDescription || displayData.metaDescription || defaultSeo.metaDescription!;
+    const resolvedOgType = displayData.ogType || "website";
+    const resolvedOgUrl = displayData.ogUrl || (typeof window !== "undefined" ? window.location.href : "");
+    const resolvedSiteName = displayData.siteName || "International Health & Wellness Expo (IHWE)";
 
     // Helper to parse meta tags from the openGraphTags string
     const parseMetaTags = (html: string | undefined) => {
@@ -163,6 +177,8 @@ const SeoHelmet = ({ data }: { data?: SeoData }) => {
     };
 
     const dynamicMetaTags = parseMetaTags(displayData.openGraphTags);
+    const hasDynamicTag = (key: string) =>
+        dynamicMetaTags.some((tag) => tag.property === key || tag.name === key);
 
     return (
         <>
@@ -190,9 +206,20 @@ const SeoHelmet = ({ data }: { data?: SeoData }) => {
                 {/* Schema Markup */}
                 {renderSchemaMarkup(displayData.schemaMarkup)}
 
-                {/* OG Image fallback if not in openGraphTags */}
-                {fullOgImage && <meta property="og:image" content={fullOgImage} />}
-                {fullOgImage && <meta name="twitter:image" content={fullOgImage} />}
+                {/* Open Graph — auto-derived from OG Title/Description (or Meta Title/Description
+                    as fallback), skipped for any tag already supplied via the raw openGraphTags field. */}
+                {!hasDynamicTag("og:type") && <meta property="og:type" content={resolvedOgType} />}
+                {!hasDynamicTag("og:site_name") && <meta property="og:site_name" content={resolvedSiteName} />}
+                {!hasDynamicTag("og:title") && <meta property="og:title" content={resolvedOgTitle} />}
+                {!hasDynamicTag("og:description") && <meta property="og:description" content={resolvedOgDescription} />}
+                {!hasDynamicTag("og:url") && resolvedOgUrl && <meta property="og:url" content={resolvedOgUrl} />}
+                {fullOgImage && !hasDynamicTag("og:image") && <meta property="og:image" content={fullOgImage} />}
+
+                {/* Twitter Card */}
+                {!hasDynamicTag("twitter:card") && <meta name="twitter:card" content="summary_large_image" />}
+                {!hasDynamicTag("twitter:title") && <meta name="twitter:title" content={resolvedOgTitle} />}
+                {!hasDynamicTag("twitter:description") && <meta name="twitter:description" content={resolvedOgDescription} />}
+                {fullOgImage && !hasDynamicTag("twitter:image") && <meta name="twitter:image" content={fullOgImage} />}
 
                 {/* Header Scripts */}
                 {renderHeaderScripts(globalScripts?.headerScripts)}

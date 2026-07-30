@@ -1,10 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
-import backgroundImage from "../../../assets/delegatepassimage/backgroundimage.png";
-import one1 from "../../../assets/delegatepassimage/1.png";
-import one2 from "../../../assets/delegatepassimage/one2.png";
-import one from "../../../assets/delegatepassimage/2.png";
+import backgroundImage from "../../../assets/delegatepassimage/backgroundimage.webp";
+import one1 from "../../../assets/delegatepassimage/1.webp";
+import one2 from "../../../assets/delegatepassimage/one2.webp";
+import one from "../../../assets/delegatepassimage/2.webp";
 
 const bgTextures = [
   "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80",

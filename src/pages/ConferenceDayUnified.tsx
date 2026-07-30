@@ -12,9 +12,9 @@ import Day3BottomCTA from "../components/conference/Day3/Day3BottomCTA";
 import Day3Footer from "../components/conference/Day3/Day3Footer";
 import { api } from "@/lib/api";
 import { Loader2 } from "lucide-react";
-import day1HeroImg from "../assets/dayimagesarogyasangosti/design1.png";
-import day2HeroImg from "../assets/dayimagesarogyasangosti/nista1.png";
-import day3HeroImg from "../assets/dayimagesarogyasangosti/sagar.png";
+import day1HeroImg from "../assets/dayimagesarogyasangosti/design1.webp";
+import day2HeroImg from "../assets/dayimagesarogyasangosti/nista1.webp";
+import day3HeroImg from "../assets/dayimagesarogyasangosti/sagar.webp";
 
 const ConferenceDayUnified: React.FC = () => {
   const { dayNumber } = useParams<{ dayNumber: string }>();

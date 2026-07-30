@@ -12,7 +12,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence, useInView, animate } from 'framer-motion';
 
-import bgImage from '../../assets/12345.png';
+import bgImage from '../../assets/12345.webp';
 import titleSponsorImg from '../../assets/icon111.webp';
 import poweredByImg from '../../assets/icon222.webp';
 import associateSponsorImg from '../../assets/icon333.webp';
@@ -21,7 +21,7 @@ import registrationSponsorImg from '../../assets/icon555.webp';
 import lanyardSponsorImg from '../../assets/icon666.webp';
 import wellnessSponsorImg from '../../assets/icon777.webp';
 import digitalSponsorImg from '../../assets/icon888.webp';
-import leafImg from '../../assets/leave.png';
+import leafImg from '../../assets/leave.webp';
 import logo1 from '../../logos/logo1.png';
 import logo2 from '../../logos/logo2.png';
 import logo3 from '../../logos/logo3.png';
@@ -138,7 +138,7 @@ const BRANDS: Brand[] = [
   { name: "Herbalife", sub: "", color: "#e8000d", logo: logo8 },
   { name: "nveda", sub: "", color: "#2d7a2d", logo: logo9 },
   { name: "MORE", sub: "", color: "#555", logo: logo10 },
-  { name: "SHETH", sub: "", color: "#000", logo: "/sheth.jpeg" },
+  { name: "SHETH", sub: "", color: "#000", logo: "/sheth.webp" },
 ];
 
 // Animated counter — counts up when section scrolls into view

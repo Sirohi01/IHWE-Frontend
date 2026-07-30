@@ -5,11 +5,11 @@ import {
     IconEmail, IconMobile, IconLocation
 } from "./Icons";
 
-import networkImg from "../../../assets/arogyasangostiimageform/Network with industry leaders.png";
-import shareExpertiseImg from "../../../assets/arogyasangostiimageform/SHARE YOUR EXPERTISE.png";
-import influenceImg from "../../../assets/arogyasangostiimageform/nfluence heathcare conversation.png";
-import driveInnovationImg from "../../../assets/arogyasangostiimageform/Drive Innovation & Positive.png";
-import promoteHealthImg from "../../../assets/arogyasangostiimageform/wellness & lifestyle.png";
+import networkImg from "../../../assets/arogyasangostiimageform/Network with industry leaders.webp";
+import shareExpertiseImg from "../../../assets/arogyasangostiimageform/SHARE YOUR EXPERTISE.webp";
+import influenceImg from "../../../assets/arogyasangostiimageform/nfluence heathcare conversation.webp";
+import driveInnovationImg from "../../../assets/arogyasangostiimageform/Drive Innovation & Positive.webp";
+import promoteHealthImg from "../../../assets/arogyasangostiimageform/wellness & lifestyle.webp";
 
 export const BottomTagline = () => (
     <div

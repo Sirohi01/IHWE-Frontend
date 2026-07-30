@@ -2,9 +2,9 @@ import { motion } from "framer-motion";
 import { Download } from "lucide-react";
 import { useState, useEffect } from "react";
 import { settingsApi, SERVER_URL } from "@/lib/api";
-import s1Image from "@/assets/s1.png";
-import s2Image from "@/assets/s2.png";
-import s4Image from "@/assets/s4.png";
+import s1Image from "@/assets/s1.webp";
+import s2Image from "@/assets/s2.webp";
+import s4Image from "@/assets/s4.webp";
 
 const CategoryStarIcon = () => (
   <svg width="60" height="60" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">

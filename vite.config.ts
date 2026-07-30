@@ -12,20 +12,6 @@ export default defineConfig(({ mode }) => ({
     hmr: {
       overlay: false,
     },
-    proxy: {
-      '/sitemap.xml': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-      },
-      '/sitemap/xml': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-      },
-      '/robots.txt': {
-        target: 'http://localhost:5000',
-        changeOrigin: true,
-      },
-    },
   },
   plugins: [
     react(),
@@ -37,6 +23,9 @@ export default defineConfig(({ mode }) => ({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
+  },
+  esbuild: {
+    drop: mode === "production" ? ["console", "debugger"] : [],
   },
   build: {
     chunkSizeWarningLimit: 2000,

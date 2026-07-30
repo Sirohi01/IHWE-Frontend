@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import { Phone, Mail, Globe, ShieldCheck, CheckCircle2, ShieldQuestion, Award } from "lucide-react";
 import { awardCategoryApi } from "../../lib/api";
-import oneImg from "../../assets/one.png";
-import award2Img from "../../assets/award2.png";
-import team1Img from "../../assets/team1.png";
-import jaiImg from "../../assets/jai.png";
-import lastImg from "../../assets/last.png";
+import oneImg from "../../assets/one.webp";
+import award2Img from "../../assets/award2.webp";
+import team1Img from "../../assets/team1.webp";
+import jaiImg from "../../assets/jai.webp";
+import lastImg from "../../assets/last.webp";
 
 const BenefitItem = ({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) => (
   <div className="flex items-center gap-3">

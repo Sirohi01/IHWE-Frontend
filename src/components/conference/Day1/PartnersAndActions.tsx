@@ -6,12 +6,9 @@ import {
   CloudUpload,
   ArrowRight,
 } from "lucide-react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Pagination, Autoplay } from "swiper/modules";
-
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
+import useEmblaCarousel from "embla-carousel-react";
+import AutoplayPlugin from "embla-carousel-autoplay";
+import { useCallback, useEffect, useState } from "react";
 import partner from "../../../assets/day/partners.webp"
 import { Link } from "react-router-dom";
 import { SERVER_URL } from "@/lib/api";
@@ -26,6 +23,26 @@ const icons = [
 export default function PartnersAndActionsSection({ currentDay, data }: { currentDay: number; data: any }) {
   const cards = data.cards;
   const associates = data.associates;
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false, align: "start" }, [
+    AutoplayPlugin({ delay: 2500, stopOnInteraction: false }),
+  ]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+  const scrollTo = useCallback((index: number) => emblaApi?.scrollTo(index), [emblaApi]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    setScrollSnaps(emblaApi.scrollSnapList());
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    onSelect();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
+  }, [emblaApi]);
 
   return (
     <div className="mx-auto px-6 md:px-0 max-w-[1320px] py-2">
@@ -74,61 +91,38 @@ export default function PartnersAndActionsSection({ currentDay, data }: { curren
             </h2>
           </div>
 
-          <Swiper
-            modules={[Navigation, Pagination, Autoplay]}
-            // navigation
-            pagination={{ clickable: true }}
-            autoplay={{
-              delay: 2500,
-              disableOnInteraction: false,
-            }}
-            spaceBetween={16}
-            breakpoints={{
-              0: { slidesPerView: 2 },
-              640: { slidesPerView: 3 },
-              1024: { slidesPerView: 4 },
-              1280: { slidesPerView: 5 },
-            }}
-            className="partner-swiper w-full !pb-8"
-          >
-            {associates.map((logo, i) => (
-              <SwiperSlide key={i}>
-                <div className="group flex h-[90px] items-center justify-center rounded-xl bg-white p-3 shadow-sm border border-gray-100 transition-all duration-300 hover:border-[#2F8B2E] hover:shadow-md cursor-pointer">
-                  <img loading="lazy" decoding="async" src={`${SERVER_URL}${logo}`}
-                    alt="partner"
-                    className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
-                  />
+          <div className="overflow-hidden pb-8 w-full partner-swiper" ref={emblaRef}>
+            <div className="flex -ml-4">
+              {associates.map((logo, i) => (
+                <div
+                  key={i}
+                  className="pl-4 min-w-0 shrink-0 grow-0 basis-1/2 sm:basis-1/3 lg:basis-1/4 xl:basis-1/5"
+                >
+                  <div className="group flex h-[90px] items-center justify-center rounded-xl bg-white p-3 shadow-sm border border-gray-100 transition-all duration-300 hover:border-[#2F8B2E] hover:shadow-md cursor-pointer">
+                    <img loading="lazy" decoding="async" src={`${SERVER_URL}${logo}`}
+                      alt="partner"
+                      className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
+                    />
+                  </div>
                 </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+              ))}
+            </div>
+          </div>
+
+          {scrollSnaps.length > 1 && (
+            <div className="flex items-center justify-center gap-1.5 -mt-6">
+              {scrollSnaps.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => scrollTo(index)}
+                  aria-label={`Go to slide ${index + 1}`}
+                  className={`h-[7px] w-[7px] rounded-full transition-colors ${index === selectedIndex ? "bg-[#2f7d32]" : "bg-[#d8d8d8]"
+                    }`}
+                />
+              ))}
+            </div>
+          )}
         </div>
-
-        <style>{`
-        .partner-swiper .swiper-button-next,
-        .partner-swiper .swiper-button-prev {
-          width: 26px;
-          height: 26px;
-          color: #222;
-        }
-
-        .partner-swiper .swiper-button-next:after,
-        .partner-swiper .swiper-button-prev:after {
-          font-size: 14px;
-          font-weight: 700;
-        }
-
-        .partner-swiper .swiper-pagination-bullet {
-          width: 7px;
-          height: 7px;
-          background: #d8d8d8;
-          opacity: 1;
-        }
-
-        .partner-swiper .swiper-pagination-bullet-active {
-          background: #2f7d32;
-        }
-      `}</style>
       </section>
     </div>
   );

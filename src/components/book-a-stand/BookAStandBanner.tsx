@@ -7,22 +7,22 @@ const BookAStandBanner = () => {
             <section className="grid grid-cols-1 md:flex md:items-center md:justify-between my-3 p-4 md:py-3 md:px-2 gap-4 md:gap-0 bg-white border border-gray-100 rounded-xl shadow-sm">
                 {[
                     {
-                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/sb4.png') center/contain no-repeat", mask: "url('/exhibition/sb4.png') center/contain no-repeat" }} />,
+                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/sb4.webp') center/contain no-repeat", mask: "url('/exhibition/sb4.webp') center/contain no-repeat" }} />,
                         title: 'Global Platform',
                         desc: 'Uniting healthcare, wellness, and sustainable industries',
                     },
                     {
-                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b1.png') center/contain no-repeat", mask: "url('/exhibition/b1.png') center/contain no-repeat" }} />,
+                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b1.webp') center/contain no-repeat", mask: "url('/exhibition/b1.webp') center/contain no-repeat" }} />,
                         title: 'Trusted Brands',
                         desc: "Connect with India's most trusted brands & manufacturers",
                     },
                     {
-                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b5.png') center/contain no-repeat", mask: "url('/exhibition/b5.png') center/contain no-repeat" }} />,
+                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/exhibition/b5.webp') center/contain no-repeat", mask: "url('/exhibition/b5.webp') center/contain no-repeat" }} />,
                         title: 'Targeted Audience',
                         desc: 'Engage with qualified buyers, Investors & decision makers',
                     },
                     {
-                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/icons/growth.png') center/contain no-repeat", mask: "url('/exhibition/b6.png') center/contain no-repeat" }} />,
+                        icon: <div className="w-full h-full bg-[#19491A]" style={{ WebkitMask: "url('/icons/growth.webp') center/contain no-repeat", mask: "url('/exhibition/b6.webp') center/contain no-repeat" }} />,
                         title: 'Business Growth',
                         desc: 'Expand your market & accelerate your growth',
                     },

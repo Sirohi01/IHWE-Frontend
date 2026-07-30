@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import exhibitorBg from '../../assets/exhibitor.webp';
-import h1 from '../../assets/h1.png';
-import h2 from '../../assets/h2.png';
-import h3 from '../../assets/h3.png';
-import h4 from '../../assets/h4.png';
+import h1 from '../../assets/h1.webp';
+import h2 from '../../assets/h2.webp';
+import h3 from '../../assets/h3.webp';
+import h4 from '../../assets/h4.webp';
 
 const STATS = [
     { label: 'Years of Legacy', value: '10+', icon: h4 },

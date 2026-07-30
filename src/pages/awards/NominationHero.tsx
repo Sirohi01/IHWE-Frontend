@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import awardsLogo from "../../assets/new.png";
+import awardsLogo from "../../assets/new.webp";
 import nominationHeroImg from "../../assets/nomination7.webp";
 
 import { MapPin, Calendar, Star } from "lucide-react";

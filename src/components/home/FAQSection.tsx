@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Minus, HelpCircle } from "lucide-react";
 import { faqApi, SERVER_URL } from "@/lib/api";
-import leaf from "@/assets/leaf.png";
+import leaf from "@/assets/leaf.webp";
 import SectionContainer from "@/components/layout/SectionContainer";
 
 // Fallback static data shown while loading or if API fails

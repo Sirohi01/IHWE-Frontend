@@ -4,13 +4,13 @@ import {
     ChevronRight, MessageCircle, Phone, FileText, Clock, BarChart2, 
     ShieldCheck, Zap, CheckCircle, Target, Mail, User
 } from 'lucide-react';
-import SupportAgentImg from '@/assets/ss.png';
-import cc1Image from '@/assets/cc1.png';
-import cc2Image from '@/assets/cc2.png';
-import cc3Image from '@/assets/cc3.png';
-import cc4Image from '@/assets/cc4.png';
-import cc5Image from '@/assets/cc5.png';
-import cc6Image from '@/assets/cc6.png';
+import SupportAgentImg from '@/assets/ss.webp';
+import cc1Image from '@/assets/cc1.webp';
+import cc2Image from '@/assets/cc2.webp';
+import cc3Image from '@/assets/cc3.webp';
+import cc4Image from '@/assets/cc4.webp';
+import cc5Image from '@/assets/cc5.webp';
+import cc6Image from '@/assets/cc6.webp';
 
 export default function SupportAssistance() {
     return (

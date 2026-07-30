@@ -3,12 +3,12 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Download } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { settingsApi, SERVER_URL } from '../../lib/api';
-import leaveImg from '../../assets/leave.png';
-import cta1 from '../../assets/cta1.png';
-import cta2 from '../../assets/cta2.png';
-import cta3 from '../../assets/cta3.png';
-import cta4 from '../../assets/cta4.png';
-import cta5 from '../../assets/cta5.png';
+import leaveImg from '../../assets/leave.webp';
+import cta1 from '../../assets/cta1.webp';
+import cta2 from '../../assets/cta2.webp';
+import cta3 from '../../assets/cta3.webp';
+import cta4 from '../../assets/cta4.webp';
+import cta5 from '../../assets/cta5.webp';
 
 const BOTTOM_STATS = [
     { label: 'Years of Legacy', value: '10+', icon: cta1 },

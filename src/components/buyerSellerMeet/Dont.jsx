@@ -10,7 +10,7 @@ const Dont = () => {
             <div
                 className="relative overflow-hidden rounded-xl py-8 md:py-6 px-6 md:px-20"
                 style={{
-                    backgroundImage: "url('/bsmeet/dontBg.png')",
+                    backgroundImage: "url('/bsmeet/dontBg.webp')",
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',

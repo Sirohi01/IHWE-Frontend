@@ -2,8 +2,8 @@ import React from "react";
 import SectionContainer from "@/components/layout/SectionContainer";
 import { Mail, Clock, CheckCircle, Send } from "lucide-react";
 import contactBg from "@/assets/contactbg.webp";
-import leafImg from "@/assets/leaf.png";
-import webg from "@/assets/webg.png";
+import leafImg from "@/assets/leaf.webp";
+import webg from "@/assets/webg.webp";
 
 const ContactHero = () => {
   return (

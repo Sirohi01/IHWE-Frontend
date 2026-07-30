@@ -335,4 +335,90 @@
   .custom-scrollbar::-webkit-scrollbar-thumb:hover {
     background: #64748B;
   }
+
+  /* Homepage hero (HeroSection.tsx) — moved out of a runtime-injected <style> tag
+     so it's purged/minified with the rest of the stylesheet instead of being
+     re-parsed by the browser on every mount. */
+  @keyframes skeleton-shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  .skeleton-shimmer {
+    animation: skeleton-shimmer 2s infinite linear;
+  }
+
+  @keyframes goldShift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  @keyframes shimmer {
+    0%   { left: -75%; }
+    100% { left: 150%; }
+  }
+  @keyframes sparkleAnim {
+    0%   { opacity: 0; transform: scale(0.5) translateY(0); }
+    40%  { opacity: 1; transform: scale(1.2) translateY(-4px); }
+    80%  { opacity: 0.6; transform: scale(0.9) translateY(-6px); }
+    100% { opacity: 0; transform: scale(0.5) translateY(-8px); }
+  }
+  .golden-btn-hero {
+    background: linear-gradient(135deg, #f5c842 0%, #ffdd00 30%, #ffa500 60%, #f5c842 100%);
+    background-size: 200% 200%;
+    animation: goldShift 2.5s ease infinite;
+    box-shadow: 0 0 20px 5px rgba(255,200,0,0.3), 0 4px 25px rgba(255,165,0,0.2);
+    position: relative;
+    overflow: hidden;
+    border: 2px solid white !important;
+  }
+  .golden-btn-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -75%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+    transform: skewX(-20deg);
+    animation: shimmer 2s infinite;
+  }
+  .hero-title-responsive {
+    font-size: var(--desktop-fs) !important;
+  }
+  .hero-desc-responsive {
+    font-size: var(--desktop-fs-desc) !important;
+  }
+  @media (max-width: 768px) {
+    .hero-title-responsive {
+      font-size: clamp(16px, 7vw, 22px) !important;
+      line-height: 1.1 !important;
+      letter-spacing: -0.01em !important;
+    }
+    .hero-title-responsive * {
+      font-size: inherit !important;
+      line-height: inherit !important;
+    }
+    .hero-desc-responsive {
+      font-size: clamp(10px, 3vw, 11px) !important;
+      line-height: 1.4 !important;
+      margin-bottom: 1rem !important;
+      opacity: 0.95;
+    }
+    .hero-desc-responsive * {
+      font-size: inherit !important;
+      line-height: inherit !important;
+    }
+    .hero-subtitle-responsive {
+      font-size: 8px !important;
+      letter-spacing: 0.1em !important;
+    }
+  }
+  @media (max-width: 640px) {
+    .hero-title-gap {
+      margin-bottom: 4px !important;
+    }
+    .hero-desc-gap {
+      margin-bottom: 16px !important;
+    }
+  }
 }

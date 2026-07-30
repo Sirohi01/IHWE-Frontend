@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import plaqueImg from "../../assets/aboutA.png";
-import credImg from "../../assets/cred.png";
+import plaqueImg from "../../assets/aboutA.webp";
+import credImg from "../../assets/cred.webp";
 
 const AwardsAbout = () => {
   const navyColor = "#003366";

@@ -1,5 +1,5 @@
 import { SectionHeader } from "./FormComponents";
-import awardImg from "../../../assets/awards1.png";
+import awardImg from "../../../assets/awards1.webp";
 import type { FormData } from "../NominationForm";
 
 type Props = {

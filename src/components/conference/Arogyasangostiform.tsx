@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import heroImg from "../../assets/arogyasangostiimageform/name.jpg.jpeg";
+import heroImg from "../../assets/arogyasangostiimageform/name.jpg.webp";
 import arogyaLogo from "../../assets/arogyasangostilogo/compressed_arogyasangosti.webp";
 
 import { HeroSection } from "./ArogyaSanghosti/Hero";

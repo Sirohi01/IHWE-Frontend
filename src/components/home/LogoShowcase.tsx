@@ -7,18 +7,18 @@ import { API_URL, SERVER_URL } from '../../lib/api';
 const LogoShowcase = () => {
   const [knowledgePartners, setKnowledgePartners] = useState<any[]>([
     { logo: "/aa3.png", name: "Knowledge Partner 1" },
-    { logo: "/knowledge2.png", name: "Knowledge Partner 2" },
-    { logo: "/knowledge3.png", name: "Knowledge Partner 3" }
+    { logo: "/knowledge2.webp", name: "Knowledge Partner 2" },
+    { logo: "/knowledge3.webp", name: "Knowledge Partner 3" }
   ]);
   const [healthcarePartners, setHealthcarePartners] = useState<any[]>([
-    { logo: "/health1.png", name: "Healthcare Partner 1" },
+    { logo: "/health1.webp", name: "Healthcare Partner 1" },
     { logo: "/applog.jpeg", name: "Healthcare Partner 2" },
     { logo: "/forlog.png", name: "Healthcare Partner 3" }
   ]);
   const [supportingAssociations, setSupportingAssociations] = useState<any[]>([
-    { logo: "/aa2.png", name: "Supporting Association 3" },
-    { logo: "/health.png", name: "Healthcare Partner" },
-    { logo: "/Supporting.png", name: "Supporting Association 1" },
+    { logo: "/aa2.webp", name: "Supporting Association 3" },
+    { logo: "/health.webp", name: "Healthcare Partner" },
+    { logo: "/Supporting.webp", name: "Supporting Association 1" },
     { logo: "/Supporting Association (2).webp", name: "Supporting Association 2" }
   ]);
 

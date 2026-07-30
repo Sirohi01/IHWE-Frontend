@@ -25,8 +25,8 @@ import {
   ArrowRight
 } from "lucide-react";
 import SectionContainer from "@/components/layout/SectionContainer";
-import refundBg from "@/assets/termPage.jpeg";
-import footerBand from "@/assets/footerband.png";
+import refundBg from "@/assets/termPage.webp";
+import footerBand from "@/assets/footerband.webp";
 
 // Sparkle component
 const Sparkle = ({ style, color = "#5ef5e0", shadow = "#0A7C6E" }: { style?: React.CSSProperties, color?: string, shadow?: string }) => (

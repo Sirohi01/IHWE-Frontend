@@ -721,7 +721,7 @@ const GroupRegistration: React.FC<{ embedded?: boolean }> = ({ embedded = false 
         <div className="min-h-screen bg-white font-inter text-slate-900 pb-0">
             <section className="relative overflow-hidden pt-[80px] pb-0"
                 style={{
-                    backgroundImage: "linear-gradient(to right, rgba(14,66,147,0.96) 0%, rgba(14,66,147,0.85) 35%, rgba(14,66,147,0.4) 65%, rgba(14,66,147,0.1) 100%), url('/visitor/visitor-reg.png')",
+                    backgroundImage: "linear-gradient(to right, rgba(14,66,147,0.96) 0%, rgba(14,66,147,0.85) 35%, rgba(14,66,147,0.4) 65%, rgba(14,66,147,0.1) 100%), url('/visitor/visitor-reg.webp')",
                     backgroundSize: "cover", backgroundPosition: "center right", backgroundRepeat: "no-repeat",
                     fontFamily: "'Barlow', sans-serif",
                 }}>
@@ -738,10 +738,10 @@ const GroupRegistration: React.FC<{ embedded?: boolean }> = ({ embedded = false 
                             </p>
                             <div className="flex items-center justify-center lg:justify-start w-full">
                                 {[
-                                    { label: "5–10 Members\nPer Registration", img: "/visitor/meet.png" },
-                                    { label: "Dedicated Group\nSupport Desk", img: "/visitor/explore.png" },
-                                    { label: "Faster Group\nCheck-in", img: "/visitor/conference.png" },
-                                    { label: "Corporate\nNetworking Access", img: "/visitor/buildvalue.png" },
+                                    { label: "5–10 Members\nPer Registration", img: "/visitor/meet.webp" },
+                                    { label: "Dedicated Group\nSupport Desk", img: "/visitor/explore.webp" },
+                                    { label: "Faster Group\nCheck-in", img: "/visitor/conference.webp" },
+                                    { label: "Corporate\nNetworking Access", img: "/visitor/buildvalue.webp" },
                                 ].map((stat, i) => (
                                     <React.Fragment key={i}>
                                         <div className="flex flex-col items-center text-center px-4 md:px-6">
@@ -754,7 +754,7 @@ const GroupRegistration: React.FC<{ embedded?: boolean }> = ({ embedded = false 
                             </div>
                         </div>
                         <div className="shrink-0 flex items-center justify-center lg:mr-12 z-20">
-                            <img loading="lazy" decoding="async" src="/visitor/free_register_now.png" alt="Register Now" className="w-[160px] sm:w-[200px] lg:w-[240px] h-auto object-contain drop-shadow-2xl" />
+                            <img loading="lazy" decoding="async" src="/visitor/free_register_now.webp" alt="Register Now" className="w-[160px] sm:w-[200px] lg:w-[240px] h-auto object-contain drop-shadow-2xl" />
                         </div>
                     </div>
                 </div>

@@ -13,12 +13,12 @@ import {
 } from 'lucide-react';
 import SectionContainer from '../layout/SectionContainer';
 import { useInView, animate } from 'framer-motion';
-import rightImageBg from '@/assets/rightimage1.jpeg';
+import rightImageBg from '@/assets/rightimage1.webp';
 
-import buy1 from '@/assets/h1.png';
-import buy2 from '@/assets/h2.png';
-import buy3 from '@/assets/h3.png';
-import buy4 from '@/assets/h4.png';
+import buy1 from '@/assets/h1.webp';
+import buy2 from '@/assets/h2.webp';
+import buy3 from '@/assets/h3.webp';
+import buy4 from '@/assets/h4.webp';
 
 // ── Maroon Sparkle component ──
 const MaroonSparkle = ({ style }: { style?: React.CSSProperties }) => (

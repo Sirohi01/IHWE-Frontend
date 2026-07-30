@@ -10,8 +10,8 @@ import {
 } from "lucide-react";
 import { io, Socket } from "socket.io-client";
 import { API_URL, SERVER_URL } from "@/lib/api";
-import exhibitorContactImg from "@/assets/exhibitorcontact.png";
-import chatSupportImg from "@/assets/chatsupport1.png";
+import exhibitorContactImg from "@/assets/exhibitorcontact.webp";
+import chatSupportImg from "@/assets/chatsupport1.webp";
 
 interface Props {
   data: any;

@@ -230,7 +230,7 @@ function ExpenseCard({ icon, title, note, selected, onClick }) {
             className={cx(
                 'relative flex h-[88px] min-w-0 cursor-pointer flex-col items-center justify-center gap-[5px]',
                 'rounded-lg border border-[#dce4ed] bg-white px-2 pt-[13px] pb-2 text-[#087536]',
-                'font-[inherit] transition-[border-color,transform] duration-[180ms] ease-[ease]',
+                'font-[inherit] transition-[border-color,transform]',
                 'hover:-translate-y-px hover:border-[#a9d4ba]',
                 '[@media(max-height:1100px)_and_(min-width:1181px)]:h-[78px]',
                 '[@media(max-height:1100px)_and_(min-width:1181px)]:gap-1',
@@ -238,6 +238,7 @@ function ExpenseCard({ icon, title, note, selected, onClick }) {
                 'max-[820px]:h-[100px] max-[820px]:gap-2 max-[820px]:pt-4',
                 selected && '!border-[#8dc7a3] !bg-[#f3fbf6]'
             )}
+            style={{ transitionDuration: '180ms', transitionTimingFunction: 'ease' }}
             onClick={onClick}
         >
             <span

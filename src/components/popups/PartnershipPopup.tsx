@@ -3,14 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "react-toastify";
 import { CheckCircle, ShieldCheck } from "lucide-react";
 import { API_URL, otpApi, expoSupportEnquiryApi, socialMediaApi } from "../../lib/api";
-import pop1 from "../../assets/pop1.png";
-import leaf2 from "../../assets/leaf2.png";
-import why1 from "../../assets/why1.png";
-import t1 from "../../assets/t1.png";
-import t2 from "../../assets/t2.png";
-import t3 from "../../assets/t3.png";
-import t4 from "../../assets/t4.png";
-import t5 from "../../assets/t5.png";
+import pop1 from "../../assets/pop1.webp";
+import leaf2 from "../../assets/leaf2.webp";
+import why1 from "../../assets/why1.webp";
+import t1 from "../../assets/t1.webp";
+import t2 from "../../assets/t2.webp";
+import t3 from "../../assets/t3.webp";
+import t4 from "../../assets/t4.webp";
+import t5 from "../../assets/t5.webp";
 
 const Sparkle = ({ style, color = '#fff176' }: { style?: React.CSSProperties, color?: string }) => (
   <span

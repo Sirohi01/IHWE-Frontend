@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import msmeban from '../../assets/msmeban.png';
+import msmeban from '../../assets/msmeban.webp';
 
 const MsmePmsSection = () => {
   return (

@@ -307,7 +307,7 @@ const DownloadBadge = () => {
         <section
           className="hero-background-standard no-print"
           style={{ 
-            backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : "/src/assets/idcard.jpg"})`
+            backgroundImage: `url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : "/src/assets/idcard.webp"})`
           }}
         >
 

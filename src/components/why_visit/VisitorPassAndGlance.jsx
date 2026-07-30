@@ -65,7 +65,7 @@ const passColumns = [
 ];
 
 const stats = [
-    { value: "150+", label: "Exhibitors", icon: "/whyVisit/exhibitors.png", color: "text-[#4a7729]" },
+    { value: "150+", label: "Exhibitors", icon: "/whyVisit/exhibitors.webp", color: "text-[#4a7729]" },
     { value: "8,000+", label: "Visitors/ Delegates", icon: "/whyVisit/stat_visitors.svg", color: "text-[#0f3b73]" },
     { value: "1,000+", label: "GLOBAL BUYERS", icon: "/whyVisit/stat_globe.svg", color: "text-[#4a7729]" },
     { value: "3 Days", label: "of Networking", icon: "/whyVisit/stat_calendar.svg", color: "text-[#0f3b73]" }
@@ -142,13 +142,13 @@ const VisitorPassAndGlance = () => {
                             <div className="md:col-span-8 grid grid-cols-3 gap-1 self-center">
                                 {/* Top Row: 2 images */}
                                 <div className="col-span-2 h-28 rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:opacity-95 transition-opacity">
-                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_conf_hall.png"
+                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_conf_hall.webp"
                                         alt="Seminar Hall"
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <div className="col-span-1 h-28 rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:opacity-95 transition-opacity">
-                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_handshake.png"
+                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_handshake.webp"
                                         alt="Handshake"
                                         className="w-full h-full object-cover"
                                     />
@@ -156,19 +156,19 @@ const VisitorPassAndGlance = () => {
 
                                 {/* Bottom Row: 3 images */}
                                 <div className="col-span-1 h-28 rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:opacity-95 transition-opacity">
-                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_massage.png"
+                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_massage.webp"
                                         alt="Spa Massage"
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <div className="col-span-1 h-28 rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:opacity-95 transition-opacity">
-                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_expo_aisle.png"
+                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_expo_aisle.webp"
                                         alt="Convention Hall"
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <div className="col-span-1 h-28 rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:opacity-95 transition-opacity">
-                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_cosmetics.png"
+                                    <img loading="lazy" decoding="async" src="/whyVisit/glance_cosmetics.webp"
                                         alt="Cosmetics Shelf"
                                         className="w-full h-full object-cover"
                                     />

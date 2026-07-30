@@ -52,7 +52,7 @@ import {
     publicApi
 } from "@/lib/api";
 
-import HeroBg from "@/assets/car22.jpg";
+import HeroBg from "@/assets/car22.webp";
 
 // --- Types & Constants ---
 

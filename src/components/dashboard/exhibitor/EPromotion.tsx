@@ -70,19 +70,19 @@ export default function EPromotion({ data }: any) {
           {[
             {
               text: "Reach 20,000+ Trade Visitors Before Event",
-              icon: "/images/5.png",
+              icon: "/images/5.webp",
             },
             {
               text: "Targeted B2B & B2C Audience",
-              icon: "/images/6.png",
+              icon: "/images/6.webp",
             },
             {
               text: "Build Brand Recall Before the Exhibition",
-              icon: "/images/7.png",
+              icon: "/images/7.webp",
             },
             {
               text: "Generate Pre-qualified Leads & Business Opportunities",
-              icon: "/images/8.png",
+              icon: "/images/8.webp",
             },
             {
               text: "Maximize ROI from Your Participation",
@@ -186,27 +186,27 @@ export default function EPromotion({ data }: any) {
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 max-w-7xl mx-auto">
           {[
             {
-              image: "/images/epromotion/website.png",
+              image: "/images/epromotion/website.webp",
               label: "Website\nFeatured Listings",
             },
             {
-              image: "/images/epromotion/emailMarketing.png",
+              image: "/images/epromotion/emailMarketing.webp",
               label: "Email Marketing\nCampaigns",
             },
             {
-              image: "/images/epromotion/social-media.png",
+              image: "/images/epromotion/social-media.webp",
               label: "Social Media\nPromotions",
             },
             {
-              image: "/images/epromotion/whatsapp.png",
+              image: "/images/epromotion/whatsapp.webp",
               label: "WhatsApp\nCampaigns",
             },
             {
-              image: "/images/epromotion/targeted.png",
+              image: "/images/epromotion/targeted.webp",
               label: "Targeted\nOnline Ads",
             },
             {
-              image: "/images/epromotion/visitor.png",
+              image: "/images/epromotion/visitor.webp",
               label: "Visitor Database\nOutreach",
             },
           ].map((item, i) => (
@@ -265,11 +265,11 @@ export default function EPromotion({ data }: any) {
 
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               {[
-                ["/images/epromotion/visitors.png", "20,000+", "Trade Visitors"],
-                ["/images/epromotion/exhibitors.png", "500+", "Exhibitors"],
-                ["/images/epromotion/globe.png", "25+", "Countries"],
-                ["/images/epromotion/social-reach.png", "5,00,000+", "Social Media Reach"],
-                ["/images/epromotion/email-reach.png", "1,00,000+", "Email Reach"],
+                ["/images/epromotion/visitors.webp", "20,000+", "Trade Visitors"],
+                ["/images/epromotion/exhibitors.webp", "500+", "Exhibitors"],
+                ["/images/epromotion/globe.webp", "25+", "Countries"],
+                ["/images/epromotion/social-reach.webp", "5,00,000+", "Social Media Reach"],
+                ["/images/epromotion/email-reach.webp", "1,00,000+", "Email Reach"],
               ].map((item, i) => (
                 <div
                   key={i}
@@ -332,7 +332,7 @@ export default function EPromotion({ data }: any) {
 
                 {/* RIGHT IMAGE */}
                 <div className="relative h-[120px] md:h-auto overflow-hidden">
-                  <img loading="lazy" decoding="async" src="/images/epromotion/test.png"
+                  <img loading="lazy" decoding="async" src="/images/epromotion/test.webp"
                     alt="Testimonial"
                     className="w-full h-full object-cover"
                   />
@@ -365,7 +365,7 @@ export default function EPromotion({ data }: any) {
 
               {/* ICON */}
               <div className="w-[62px] h-[62px] shrink-0 flex items-center justify-center shadow-md">
-                <img loading="lazy" decoding="async" src="/images/epromotion/megaphone.png"
+                <img loading="lazy" decoding="async" src="/images/epromotion/megaphone.webp"
                   alt="Megaphone"
                   className="w-20 h-20 object-contain"
                 />
@@ -442,11 +442,11 @@ export default function EPromotion({ data }: any) {
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-5 items-center">
 
             {[
-              ["/images/epromotion/globe.png", "25+", "COUNTRIES"],
-              ["/images/epromotion/exhibitors.png", "500+", "EXHIBITORS"],
-              ["/images/epromotion/visitors.png", "20,000+", "TRADE VISITORS"],
+              ["/images/epromotion/globe.webp", "25+", "COUNTRIES"],
+              ["/images/epromotion/exhibitors.webp", "500+", "EXHIBITORS"],
+              ["/images/epromotion/visitors.webp", "20,000+", "TRADE VISITORS"],
               ["/images/epromotion/speakers.png", "50+", "CONFERENCE SPEAKERS"],
-              ["/images/epromotion/business.png", "3 DAYS", "BUSINESS OPPORTUNITIES"],
+              ["/images/epromotion/business.webp", "3 DAYS", "BUSINESS OPPORTUNITIES"],
             ].map((item, i) => (
               <div
                 key={i}

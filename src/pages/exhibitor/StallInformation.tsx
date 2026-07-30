@@ -11,7 +11,7 @@ import QRCode from 'react-qr-code';
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import { API_URL, downloadPdfApi, SERVER_URL } from '@/lib/api';
 import FloorPlanPreview from '@/components/dashboard/exhibitor/FloorPlanPreview';
-import stallImage from '@/assets/stallImage.png';
+import stallImage from '@/assets/stallImage.webp';
 
 const dateFmt = new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
 

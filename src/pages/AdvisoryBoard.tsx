@@ -18,7 +18,7 @@ import {
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import heroImgFallback from "../assets/members.jpg";
+import heroImgFallback from "../assets/members.webp";
 import SectionContainer from "@/components/layout/SectionContainer";
 
 const AdvisoryBoard = () => {
@@ -143,7 +143,7 @@ const AdvisoryBoard = () => {
         {/* Background */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#eaf3f0] via-[#f0f7f4] to-[#ddeee8]" />
         <div className="absolute inset-0 opacity-[0.1] bg-cover bg-center bg-no-repeat"
-          style={{ backgroundImage: `url("/advisory/bg.png")` }} />
+          style={{ backgroundImage: `url("/advisory/bg.webp")` }} />
 
         <SectionContainer className="relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr_210px] gap-8 items-center">
@@ -162,7 +162,7 @@ const AdvisoryBoard = () => {
 
               {/* Photo */}
               <div className="absolute top-[10px] left-[13px] right-0 bottom-[27px] rounded-[14px] overflow-hidden z-[1]">
-                <img loading="lazy" decoding="async" src={chairmanData?.photo ? (chairmanData.photo.startsWith('http') ? chairmanData.photo : `${SERVER_URL}${chairmanData.photo}`) : "/advisory/vijay.png"}
+                <img loading="lazy" decoding="async" src={chairmanData?.photo ? (chairmanData.photo.startsWith('http') ? chairmanData.photo : `${SERVER_URL}${chairmanData.photo}`) : "/advisory/vijay.webp"}
                   alt={chairmanData?.chairmanName || "Dr. Randeep Guleria"}
                   className="w-full h-full object-cover object-top"
                 />
@@ -456,7 +456,7 @@ const AdvisoryBoard = () => {
 
             {/* Right image */}
             <div className="hidden md:block absolute right-0 bottom-0 h-full w-[420px] pointer-events-none">
-              <img loading="lazy" decoding="async" src="/advisory/last1.png"
+              <img loading="lazy" decoding="async" src="/advisory/last1.webp"
                 alt="Nominate"
                 className="h-full w-full object-contain object-right-bottom"
               />

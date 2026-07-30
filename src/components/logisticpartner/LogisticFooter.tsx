@@ -8,7 +8,7 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-import busAndTruck from '../../assets/logistic/raman.png';
+import busAndTruck from '../../assets/logistic/raman.webp';
 
 interface LogisticFooterProps {
   data?: any;

@@ -6,31 +6,31 @@ const steps = [
         num: 1,
         title: "REGISTER\nONLINE",
         desc: "Sign up as Buyer or Seller",
-        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit11.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit11.webp" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 2,
         title: "PROFILE SCREENING\n& APPROVAL",
         desc: "Our team verifies your profile",
-        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit22.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit22.webp" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 3,
         title: "MEETING\nMATCHMAKING",
         desc: "We match you with relevant partners",
-        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit33.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit33.webp" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 4,
         title: "SCHEDULE\nCONFIRMATION",
         desc: "Get your meeting calendar",
-        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit44.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit44.webp" alt="" className="w-full h-full object-contain" />,
     },
     {
         num: 5,
         title: "FACE-TO-FACE\nMEETINGS AT EXPO",
         desc: "Meet, discuss & grow your business",
-        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit55.png" alt="" className="w-full h-full object-contain" />,
+        icon: <img loading="lazy" decoding="async" src="/bsmeet/howit55.webp" alt="" className="w-full h-full object-contain" />,
     },
 ]
 
@@ -42,21 +42,21 @@ const ArrowIcon = () => (
     </div>
 )
 const industries = [
-    { icon: '/bsmeet/ind1.png', label: 'Ayurveda &\nHerbal' },
-    { icon: '/bsmeet/ind2.png', label: 'Nutraceuticals\n& Supplements' },
-    { icon: '/bsmeet/ind3.png', label: 'Organic &\nNatural Products' },
-    { icon: '/bsmeet/ind4.png', label: 'Medical Devices\n& Equipment' },
-    { icon: '/bsmeet/ind5.png', label: 'Cosmetics &\nPersonal Care' },
-    { icon: '/bsmeet/ind6.png', label: 'Food &\nBeverages' },
-    { icon: '/bsmeet/ind7.png', label: 'Spa &\nWellness' },
-    { icon: '/bsmeet/ind8.png', label: 'Fitness &\nNutrition' },
-    { icon: '/bsmeet/ind9.png', label: 'Pharma &\nBiotech' },
-    { icon: '/bsmeet/ind10.png', label: 'Home Care &\nHygiene' },
-    { icon: '/bsmeet/ind11.png', label: 'Packaging &\nRaw Materials' },
-    { icon: '/bsmeet/ind12.png', label: 'Contract\nManufacturing' },
-    { icon: '/bsmeet/ind13.png', label: 'E-commerce &\nRetail' },
-    { icon: '/bsmeet/ind14.png', label: 'Health Tech &\nDigital Health' },
-    { icon: '/bsmeet/ind15.png', label: 'Education &\nTraining' },
+    { icon: '/bsmeet/ind1.webp', label: 'Ayurveda &\nHerbal' },
+    { icon: '/bsmeet/ind2.webp', label: 'Nutraceuticals\n& Supplements' },
+    { icon: '/bsmeet/ind3.webp', label: 'Organic &\nNatural Products' },
+    { icon: '/bsmeet/ind4.webp', label: 'Medical Devices\n& Equipment' },
+    { icon: '/bsmeet/ind5.webp', label: 'Cosmetics &\nPersonal Care' },
+    { icon: '/bsmeet/ind6.webp', label: 'Food &\nBeverages' },
+    { icon: '/bsmeet/ind7.webp', label: 'Spa &\nWellness' },
+    { icon: '/bsmeet/ind8.webp', label: 'Fitness &\nNutrition' },
+    { icon: '/bsmeet/ind9.webp', label: 'Pharma &\nBiotech' },
+    { icon: '/bsmeet/ind10.webp', label: 'Home Care &\nHygiene' },
+    { icon: '/bsmeet/ind11.webp', label: 'Packaging &\nRaw Materials' },
+    { icon: '/bsmeet/ind12.webp', label: 'Contract\nManufacturing' },
+    { icon: '/bsmeet/ind13.webp', label: 'E-commerce &\nRetail' },
+    { icon: '/bsmeet/ind14.webp', label: 'Health Tech &\nDigital Health' },
+    { icon: '/bsmeet/ind15.webp', label: 'Education &\nTraining' },
 ]
 
 const HowIT = () => {

@@ -11,7 +11,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
 import { API_URL } from '@/lib/api';
-import productImage from '../../assets/productImage7.png'
+import productImage from '../../assets/productImage7.webp'
 
 
 type CatalogItem = {

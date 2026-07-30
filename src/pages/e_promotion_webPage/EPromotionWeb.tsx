@@ -183,19 +183,19 @@ export default function EPromotionWeb({ data }: any) {
           {[
             {
               text: "Reach 20,000+ Trade Visitors Before Event",
-              icon: "/images/5.png",
+              icon: "/images/5.webp",
             },
             {
               text: "Targeted B2B & B2C Audience",
-              icon: "/images/6.png",
+              icon: "/images/6.webp",
             },
             {
               text: "Build Brand Recall Before the Exhibition",
-              icon: "/images/7.png",
+              icon: "/images/7.webp",
             },
             {
               text: "Generate Pre-qualified Leads & Business Opportunities",
-              icon: "/images/8.png",
+              icon: "/images/8.webp",
             },
             {
               text: "Maximize ROI from Your Participation",
@@ -300,27 +300,27 @@ export default function EPromotionWeb({ data }: any) {
         <div className="grid grid-cols-2 md:grid-cols-6 gap-4 max-w-7xl mx-auto">
           {[
             {
-              image: "/images/epromotion/website.png",
+              image: "/images/epromotion/website.webp",
               label: "Website\nFeatured Listings",
             },
             {
-              image: "/images/epromotion/emailMarketing.png",
+              image: "/images/epromotion/emailMarketing.webp",
               label: "Email Marketing\nCampaigns",
             },
             {
-              image: "/images/epromotion/social-media.png",
+              image: "/images/epromotion/social-media.webp",
               label: "Social Media\nPromotions",
             },
             {
-              image: "/images/epromotion/whatsapp.png",
+              image: "/images/epromotion/whatsapp.webp",
               label: "WhatsApp\nCampaigns",
             },
             {
-              image: "/images/epromotion/targeted.png",
+              image: "/images/epromotion/targeted.webp",
               label: "Targeted\nOnline Ads",
             },
             {
-              image: "/images/epromotion/visitor.png",
+              image: "/images/epromotion/visitor.webp",
               label: "Visitor Database\nOutreach",
             },
           ].map((item, i) => (
@@ -387,11 +387,11 @@ export default function EPromotionWeb({ data }: any) {
 
             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
               {[
-                { icon: "/images/epromotion/visitors.png", value: reach?.tradeVisitors || "20,000+", label: "Trade Visitors" },
-                { icon: "/images/epromotion/exhibitors.png", value: reach?.exhibitors || "500+", label: "Exhibitors" },
-                { icon: "/images/epromotion/globe.png", value: reach?.countries || "25+", label: "Countries" },
-                { icon: "/images/epromotion/social-reach.png", value: reach?.socialMediaReach || "5,00,000+", label: "Social Media Reach" },
-                { icon: "/images/epromotion/email-reach.png", value: reach?.emailReach || "1,00,000+", label: "Email Reach" },
+                { icon: "/images/epromotion/visitors.webp", value: reach?.tradeVisitors || "20,000+", label: "Trade Visitors" },
+                { icon: "/images/epromotion/exhibitors.webp", value: reach?.exhibitors || "500+", label: "Exhibitors" },
+                { icon: "/images/epromotion/globe.webp", value: reach?.countries || "25+", label: "Countries" },
+                { icon: "/images/epromotion/social-reach.webp", value: reach?.socialMediaReach || "5,00,000+", label: "Social Media Reach" },
+                { icon: "/images/epromotion/email-reach.webp", value: reach?.emailReach || "1,00,000+", label: "Email Reach" },
               ].map((item, i) => (
                 <div
                   key={i}
@@ -461,7 +461,7 @@ export default function EPromotionWeb({ data }: any) {
 
                 {/* RIGHT IMAGE */}
                 <div className="relative h-[120px] md:h-auto overflow-hidden">
-                  <img loading="lazy" decoding="async" src="/images/epromotion/test.png"
+                  <img loading="lazy" decoding="async" src="/images/epromotion/test.webp"
                     alt="Testimonial"
                     className="w-full h-full object-cover"
                   />
@@ -490,7 +490,7 @@ export default function EPromotionWeb({ data }: any) {
 
               {/* ICON */}
               <div className="w-[62px] h-[62px] shrink-0 flex items-center justify-center shadow-md bg-[#0d3a20] rounded-xl border border-[#7ea35f]/30">
-                <img loading="lazy" decoding="async" src="/images/epromotion/megaphone.png"
+                <img loading="lazy" decoding="async" src="/images/epromotion/megaphone.webp"
                   alt="Megaphone"
                   className="w-14 h-14 object-contain"
                 />
@@ -588,11 +588,11 @@ export default function EPromotionWeb({ data }: any) {
           <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-5 items-center">
 
             {[
-              ["/images/epromotion/globe1.png", "25+", "COUNTRIES"],
-              ["/images/epromotion/exhibitors1.png", "500+", "EXHIBITORS"],
-              ["/images/epromotion/visitors1.png", "20,000+", "TRADE VISITORS"],
-              ["/images/epromotion/speakers1.png", "50+", "CONFERENCE SPEAKERS"],
-              ["/images/epromotion/business1.png", "3 DAYS", "BUSINESS OPPORTUNITIES"],
+              ["/images/epromotion/globe1.webp", "25+", "COUNTRIES"],
+              ["/images/epromotion/exhibitors1.webp", "500+", "EXHIBITORS"],
+              ["/images/epromotion/visitors1.webp", "20,000+", "TRADE VISITORS"],
+              ["/images/epromotion/speakers1.webp", "50+", "CONFERENCE SPEAKERS"],
+              ["/images/epromotion/business1.webp", "3 DAYS", "BUSINESS OPPORTUNITIES"],
             ].map((item, i) => (
               <div
                 key={i}

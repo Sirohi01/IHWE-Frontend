@@ -1,5 +1,5 @@
 import React from "react";
-import Hero from "@/assets/exhibitor/buyercon.png";
+import Hero from "@/assets/exhibitor/buyercon.webp";
 // ── Quick Action Button ────────────────────────────────────────────────────
 
 const QuickAction = ({

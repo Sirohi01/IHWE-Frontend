@@ -72,7 +72,7 @@ const Day1Hero: React.FC<{ data?: any, defaultImage?: string, currentDay: number
               {/* Features */}
               <div className="mt-4 md:mt-8 flex flex-wrap gap-x-4 gap-y-4">
                 {data.stats ? data.stats?.map((feature: any, index: number) => (
-                  <div className="flex items-start gap-2">
+                  <div key={feature.label ?? index} className="flex items-start gap-2">
                     {icons[index]}
                     <div>
                       <p className="text-[12px] font-bold text-[#0B2C66]">

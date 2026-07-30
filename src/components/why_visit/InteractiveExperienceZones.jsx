@@ -5,43 +5,43 @@ const zones = [
     {
         title: "MEDICAL\nINNOVATION ZONE",
         desc: "Healthcare technology & diagnostics",
-        image: "/whyVisit/medical_zone.png",
-        icon: "/whyVisit/heart_pulse.png",
+        image: "/whyVisit/medical_zone.webp",
+        icon: "/whyVisit/heart_pulse.webp",
         alt: "Medical Innovation"
     },
     {
         title: "ORGANIC &\nNATURAL ZONE",
         desc: "Organic food, herbal & sustainable products",
-        image: "/whyVisit/organic_zone.png",
-        icon: "/whyVisit/sprout.png",
+        image: "/whyVisit/organic_zone.webp",
+        icon: "/whyVisit/sprout.webp",
         alt: "Organic & Natural"
     },
     {
         title: "AYUSH\nPAVILION",
         desc: "Ayurveda, Yoga & naturopathy",
-        image: "/whyVisit/ayush_zone.png",
-        icon: "/whyVisit/gold_lotus.png",
+        image: "/whyVisit/ayush_zone.webp",
+        icon: "/whyVisit/gold_lotus.webp",
         alt: "Ayush Pavilion"
     },
     {
         title: "FITNESS\nARENA",
         desc: "Fitness products, supplements & live demos",
-        image: "/whyVisit/fitness_zone.png",
-        icon: "/whyVisit/dumbbell.png",
+        image: "/whyVisit/fitness_zone.webp",
+        icon: "/whyVisit/dumbbell.webp",
         alt: "Fitness Arena"
     },
     {
         title: "BEAUTY &\nWELLNESS ZONE",
         desc: "Skincare, spa & beauty innovations",
-        image: "/whyVisit/beauty_zone.png",
-        icon: "/whyVisit/beauty_flower.png",
+        image: "/whyVisit/beauty_zone.webp",
+        icon: "/whyVisit/beauty_flower.webp",
         alt: "Beauty & Wellness"
     },
     {
         title: "STARTUP\nPAVILION",
         desc: "Emerging wellness startups & innovations",
-        image: "/whyVisit/startup_zone.png",
-        icon: "/whyVisit/rocket.png",
+        image: "/whyVisit/startup_zone.webp",
+        icon: "/whyVisit/rocket.webp",
         alt: "Startup Pavilion"
     }
 ];

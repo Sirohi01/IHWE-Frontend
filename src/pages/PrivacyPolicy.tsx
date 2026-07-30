@@ -7,7 +7,7 @@ import {
   Download, Leaf
 } from 'lucide-react';
 import SectionContainer from "@/components/layout/SectionContainer";
-import TopImage from "@/assets/privacyPolicy/topImage.png";
+import TopImage from "@/assets/privacyPolicy/topImage.webp";
 import middleimage from "@/assets/privacyPolicy/middleImage.png";
 
 const PrivacyPolicies = () => {

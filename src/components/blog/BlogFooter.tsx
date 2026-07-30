@@ -1,6 +1,6 @@
 import React from 'react';
 import { ArrowRight, Plus } from 'lucide-react';
-import lotusImg from '../../assets/blog/outputonlinepngtools.png';
+import lotusImg from '../../assets/blog/outputonlinepngtools.webp';
 
 const BlogFooter: React.FC = () => {
   return (

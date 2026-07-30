@@ -7,15 +7,15 @@ import {
 import { settingsApi, heroBackgroundApi, contactEnquiryApi, verifyApi, SERVER_URL } from "@/lib/api";
 import SectionContainer from "@/components/layout/SectionContainer";
 import contactBg from "@/assets/contactbg.webp";
-import conbg from "@/assets/conbg.png";
-import arrowImg from "@/assets/arrow.png";
-import leafImg from "@/assets/leaf.png";
-import teleImg from "@/assets/tele.png";
-import webg from "@/assets/webg.png";
-import c1 from "@/assets/c1.png";
+import conbg from "@/assets/conbg.webp";
+import arrowImg from "@/assets/arrow.webp";
+import leafImg from "@/assets/leaf.webp";
+import teleImg from "@/assets/tele.webp";
+import webg from "@/assets/webg.webp";
+import c1 from "@/assets/c1.webp";
 import TrustBand from "@/components/contact/TrustBand";
 import ContactHero from "@/components/contact/ContactHero";
-import c4 from "@/assets/c4.png";
+import c4 from "@/assets/c4.webp";
 const Contact = () => {
   const [settings, setSettings] = useState<any>(null);
   const [formData, setFormData] = useState({ name: "", phone: "", email: "", service: "", message: "" });

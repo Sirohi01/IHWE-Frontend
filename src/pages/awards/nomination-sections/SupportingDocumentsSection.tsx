@@ -1,8 +1,8 @@
 import { SectionHeader, UploadCard } from "./FormComponents";
-import doc22 from "../../../assets/doc22.png";
-import certificate11 from "../../../assets/certificate11.png";
-import documentsImg from "../../../assets/documents.png";
-import uplinkImg from "../../../assets/uplink.png";
+import doc22 from "../../../assets/doc22.webp";
+import certificate11 from "../../../assets/certificate11.webp";
+import documentsImg from "../../../assets/documents.webp";
+import uplinkImg from "../../../assets/uplink.webp";
 import type { FormData } from "../NominationForm";
 
 type Props = { form: FormData; update: (field: keyof FormData, value: string | boolean) => void };

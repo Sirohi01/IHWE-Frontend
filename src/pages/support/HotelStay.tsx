@@ -8,11 +8,11 @@ import {
 } from "lucide-react";
 
 // Assets
-import who1 from "../../assets/who1.png";
-import who2 from "../../assets/who2.png";
-import who3 from "../../assets/who3.png";
-import who4 from "../../assets/who4.png";
-import who5 from "../../assets/who5.png";
+import who1 from "../../assets/who1.webp";
+import who2 from "../../assets/who2.webp";
+import who3 from "../../assets/who3.webp";
+import who4 from "../../assets/who4.webp";
+import who5 from "../../assets/who5.webp";
 import part11 from "../../assets/part11.webp";
 import part22 from "../../assets/part22.webp";
 import part33 from "../../assets/part33.webp";

@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import lineImg from "../../assets/line.png";
+import lineImg from "../../assets/line.webp";
 
 const steps = [
   { title: "Submit Nomination", desc: "Fill the online nomination form\nwith required details." },

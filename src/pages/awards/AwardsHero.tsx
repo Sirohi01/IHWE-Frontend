@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { MapPin, Calendar, Star } from "lucide-react";
 
 import heroBg from "../../assets/heroA.webp";
-import awardsLogo from "../../assets/new.png";
+import awardsLogo from "../../assets/new.webp";
 
 const AwardsHero = () => {
   const navyColor = "#0a2e5c";

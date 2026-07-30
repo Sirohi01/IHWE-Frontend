@@ -1,5 +1,5 @@
 import { SectionHeader, FormSelect } from "./FormComponents";
-import profileImg from "../../../assets/profile1.png";
+import profileImg from "../../../assets/profile1.webp";
 import type { FormData } from "../NominationForm";
 
 type Props = { form: FormData; update: (field: keyof FormData, value: string | boolean) => void };

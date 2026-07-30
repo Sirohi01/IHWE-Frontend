@@ -1,9 +1,9 @@
 import React from "react";
 import SectionContainer from "@/components/layout/SectionContainer";
-import c1 from "@/assets/c1.png";
-import c2 from "@/assets/c2.png";
-import c3 from "@/assets/c3.png";
-import c4 from "@/assets/c4.png";
+import c1 from "@/assets/c1.webp";
+import c2 from "@/assets/c2.webp";
+import c3 from "@/assets/c3.webp";
+import c4 from "@/assets/c4.webp";
 
 const TrustBand = () => {
   return (

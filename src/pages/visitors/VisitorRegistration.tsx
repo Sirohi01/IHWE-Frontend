@@ -36,7 +36,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { heroBackgroundApi, SERVER_URL, verifyApi, visitorApi, eventApi, crmApi } from "@/lib/api";
-import HeroBg from "@/assets/car22.jpg";
+import HeroBg from "@/assets/car22.webp";
 import AddInternationalVistor from "./international_vistor/AddInternationalVistor";
 import DelegateRegistration from "../delegate/DelegateRegistration";
 import GroupRegistration from "./GroupRegistration";
@@ -790,7 +790,7 @@ const VisitorRegistration = () => {
             <section
                 className="hero-background-registration relative overflow-hidden pt-[135px] sm:pt-[110px] lg:pt-[85px] pb-8 lg:pb-0 !aspect-auto lg:!aspect-[16/5] !h-auto lg:!h-auto"
                 style={{
-                    backgroundImage: `linear-gradient(to right, rgba(0, 40, 15, 0.96) 0%, rgba(0, 40, 15, 0.85) 35%, rgba(0, 40, 15, 0.4) 65%, rgba(0, 40, 15, 0.1) 100%), url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : '/visitor/visitor-reg.png'})`,
+                    backgroundImage: `linear-gradient(to right, rgba(0, 40, 15, 0.96) 0%, rgba(0, 40, 15, 0.85) 35%, rgba(0, 40, 15, 0.4) 65%, rgba(0, 40, 15, 0.1) 100%), url(${heroData?.backgroundImage ? `${SERVER_URL}${heroData.backgroundImage}` : '/visitor/visitor-reg.webp'})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center right',
                     backgroundRepeat: 'no-repeat',
@@ -826,10 +826,10 @@ const VisitorRegistration = () => {
                             {/* Stats Row with separators */}
                             <div className="grid grid-cols-2 lg:flex lg:items-center lg:justify-start gap-y-6 gap-x-2 lg:gap-0 mb-4 lg:mb-0 w-full max-w-lg lg:max-w-none mx-auto lg:mx-0 mt-3">
                                 {[
-                                    { label: 'Meet 8,000+\nIndustry Professionals', img: "/visitor/meet.png" },
-                                    { label: 'Explore 8,000+\nProducts & Solutions', img: "/visitor/explore.png" },
-                                    { label: 'Attend Conferences\n& Live Sessions', img: "/visitor/conference.png" },
-                                    { label: 'Build Valuable\nBusiness Connections', img: "/visitor/buildvalue.png" },
+                                    { label: 'Meet 8,000+\nIndustry Professionals', img: "/visitor/meet.webp" },
+                                    { label: 'Explore 8,000+\nProducts & Solutions', img: "/visitor/explore.webp" },
+                                    { label: 'Attend Conferences\n& Live Sessions', img: "/visitor/conference.webp" },
+                                    { label: 'Build Valuable\nBusiness Connections', img: "/visitor/buildvalue.webp" },
                                 ].map((stat, i, arr) => (
                                     <div key={i} className="flex items-center lg:contents">
                                         <div className="flex flex-col items-center text-center px-2 flex-1">
@@ -848,7 +848,7 @@ const VisitorRegistration = () => {
 
                         {/* Right-Side Visual Identity Seal */}
                         <div className="shrink-0 relative flex items-center justify-center lg:mr-12 z-20">
-                            <img loading="lazy" decoding="async" src="/visitor/free_register_now.png"
+                            <img loading="lazy" decoding="async" src="/visitor/free_register_now.webp"
                                 alt="Registration is Free! Register Now."
                                 className="w-[160px] sm:w-[200px] lg:w-[240px] h-auto object-contain drop-shadow-2xl animate-float-subtle"
                             />
@@ -923,7 +923,7 @@ const VisitorRegistration = () => {
                                                 </div>
                                                 <div className="flex items-center gap-5 mb-6">
                                                     <div className="w-24 h-24 rounded-full shrink-0 relative group-hover:scale-105 transition-transform duration-300">
-                                                        <img loading="lazy" decoding="async" src="/visitor/domestic.png" alt="Domestic Visitor" className="w-full h-full object-contain" />
+                                                        <img loading="lazy" decoding="async" src="/visitor/domestic.webp" alt="Domestic Visitor" className="w-full h-full object-contain" />
                                                     </div>
                                                     <div className="flex-1 space-y-0.5">
                                                         <h3 className="text-[22px] md:text-[24px] font-bold text-[#1a5f15] tracking-tight leading-tight">Domestic Visitor</h3>
@@ -952,7 +952,7 @@ const VisitorRegistration = () => {
                                             <div className="border border-[#ffebd8] bg-[#fffcf9] hover:border-[#e25c05] hover:shadow-xl hover:shadow-[#fff5eb] transition-all duration-300 rounded-[20px] p-6 flex flex-col justify-between relative group">
                                                 <div className="flex items-center gap-5 mb-6">
                                                     <div className="w-24 h-24 rounded-full shrink-0 relative group-hover:scale-105 transition-transform duration-300">
-                                                        <img loading="lazy" decoding="async" src="/visitor/international.png" alt="International Visitor" className="w-full h-full object-contain" />
+                                                        <img loading="lazy" decoding="async" src="/visitor/international.webp" alt="International Visitor" className="w-full h-full object-contain" />
                                                     </div>
                                                     <div className="flex-1 space-y-0.5">
                                                         <h3 className="text-[22px] md:text-[24px] font-bold text-[#e25c05] tracking-tight leading-tight">International Visitor</h3>
@@ -981,7 +981,7 @@ const VisitorRegistration = () => {
                                             <div className="border border-[#dfe9f8] bg-[#f7faff] hover:border-[#0e4293] hover:shadow-xl hover:shadow-[#edf4fe] transition-all duration-300 rounded-[20px] p-6 flex flex-col justify-between relative group">
                                                 <div className="flex items-center gap-5 mb-6">
                                                     <div className="w-24 h-24 rounded-full shrink-0 relative group-hover:scale-105 transition-transform duration-300">
-                                                        <img loading="lazy" decoding="async" src="/visitor/group.png" alt="Group Registration" className="w-full h-full object-contain" />
+                                                        <img loading="lazy" decoding="async" src="/visitor/group.webp" alt="Group Registration" className="w-full h-full object-contain" />
                                                     </div>
                                                     <div className="flex-1 space-y-0.5">
                                                         <h3 className="text-[22px] md:text-[24px] font-bold text-[#0e4293] tracking-tight leading-tight">Group Registration</h3>

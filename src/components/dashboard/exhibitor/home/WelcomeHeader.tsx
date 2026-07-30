@@ -73,7 +73,7 @@ const WelcomeHeader = () => {
                 <div
                     className="flex-none sm:w-[350px] rounded-lg overflow-hidden relative flex items-center px-4 py-3 text-left min-h-[70px] shadow-sm"
                     style={{
-                        backgroundImage: "url('/exhibition/topright.png')",
+                        backgroundImage: "url('/exhibition/topright.webp')",
                         backgroundSize: "cover",
                         backgroundPosition: "center",
                         backgroundRepeat: "no-repeat",

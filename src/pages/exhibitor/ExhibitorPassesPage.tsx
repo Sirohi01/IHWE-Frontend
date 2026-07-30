@@ -9,12 +9,12 @@ import {
 } from "lucide-react";
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
 import { API_URL } from "@/lib/api";
-import passesImg from "@/assets/passes1.png";
-import thaliImg from "@/assets/thali.png";
-import bottleImg from "@/assets/bottle.png";
-import howitworksImg from "@/assets/howitworks.png";
-import notepadImg from "@/assets/notepad.png";
-import shoppingImg from "@/assets/shopping.png";
+import passesImg from "@/assets/passes1.webp";
+import thaliImg from "@/assets/thali.webp";
+import bottleImg from "@/assets/bottle.webp";
+import howitworksImg from "@/assets/howitworks.webp";
+import notepadImg from "@/assets/notepad.webp";
+import shoppingImg from "@/assets/shopping.webp";
 import Swal from "sweetalert2";
 import DelegateRegistrationModal from "./DelegateRegistrationModal";
 import { logActivity } from "@/utils/activityLogger";
@@ -660,7 +660,7 @@ export default function ExhibitorPassesPage() {
         >
             {/* ─── TOP HEADER SECTION ─── */}
             <div className="flex flex-col xl:flex-row items-stretch justify-between gap-1.5 mb-1">
-                {/* Left Description & Brand Illustration replaced entirely by passes1.png */}
+                {/* Left Description & Brand Illustration replaced entirely by passes1.webp */}
                 <div className="flex-1 bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden flex items-center justify-center p-0 xl:h-[220px]">
                     <img loading="lazy" decoding="async" src={passesImg} alt="Exhibitor Passes Banner" className="w-full h-full object-contain object-center" />
                 </div>

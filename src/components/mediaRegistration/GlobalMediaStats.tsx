@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import global_stats_bg from "@/assets/global_stats_bg.jpg";
+import global_stats_bg from "@/assets/global_stats_bg.webp";
 import { useState, useEffect } from "react";
 import { mediaRegistrationApi } from "@/lib/api";
 import SectionContainer from "../layout/SectionContainer";

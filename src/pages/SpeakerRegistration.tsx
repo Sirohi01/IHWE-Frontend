@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { heroBackgroundApi, verifyApi, SERVER_URL, crmApi } from "@/lib/api";
-import HeroBg from "@/assets/speakers.jpg";
+import HeroBg from "@/assets/speakers.webp";
 
 import Swal from 'sweetalert2';
 

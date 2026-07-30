@@ -14,7 +14,7 @@ import {
     Globe,
     Lock
 } from "lucide-react";
-import HeroBg from "@/assets/buyer.jpg";
+import HeroBg from "@/assets/buyer.webp";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -1024,7 +1024,7 @@ const BookAStand = () => {
                                 className={`cursor-pointer transition-all duration-300 rounded-xl px-5 py-4 flex flex-col items-center text-center gap-2 border-2 ${exhibitorType === 'domestic' ? 'bg-[#f0f7e6] border-[#4a8f2f] shadow-lg scale-[1.02]' : 'bg-[#f0f7e6]/50 border-transparent hover:border-[#c8e6a0] hover:bg-[#f0f7e6]'}`}
                             >
                                 <div className="flex items-center justify-center">
-                                    <img loading="lazy" decoding="async" src="/exhibition/dom.png" alt="Domestic" className="w-18 h-20 object-contain" />
+                                    <img loading="lazy" decoding="async" src="/exhibition/dom.webp" alt="Domestic" className="w-18 h-20 object-contain" />
                                 </div>
                                 <div>
                                     <p className="text-gray-800 font-bold text-base mb-1">Domestic Exhibitor</p>
@@ -1049,7 +1049,7 @@ const BookAStand = () => {
                                 className={`cursor-pointer transition-all duration-300 rounded-xl px-5 py-4 flex flex-col items-center text-center gap-2 border-2 ${exhibitorType === 'international' ? 'bg-[#fff7f0] border-[#d26019] shadow-lg scale-[1.02]' : 'bg-[#fff7f0]/50 border-transparent hover:border-[#f5d5b0] hover:bg-[#fff7f0]'}`}
                             >
                                 <div className="flex items-center justify-center">
-                                    <img loading="lazy" decoding="async" src="/exhibition/int.png" alt="International" className="w-18 h-20 object-contain" />
+                                    <img loading="lazy" decoding="async" src="/exhibition/int.webp" alt="International" className="w-18 h-20 object-contain" />
                                 </div>
                                 <div>
                                     <p className="text-gray-800 font-bold text-base mb-1">International Exhibitor</p>
@@ -1801,7 +1801,7 @@ const BookAStand = () => {
                                                         </div>
 
                                                         <div className="w-[25%] flex justify-end items-end">
-                                                            <img loading="lazy" decoding="async" src="/bookStand/books.png" alt="Payment Partners" className="w-full h-[160px] object-contain" />
+                                                            <img loading="lazy" decoding="async" src="/bookStand/books.webp" alt="Payment Partners" className="w-full h-[160px] object-contain" />
                                                         </div>
                                                     </div>
 

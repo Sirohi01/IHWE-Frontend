@@ -1,6 +1,6 @@
 import React from "react";
 import { Users, FileText, UserCheck, Globe, Calendar, MapPin } from "lucide-react";
-import delegateBg from "@/assets/deligateimage/uoi.png";
+import delegateBg from "@/assets/deligateimage/uoi.webp";
 const DelegateHero: React.FC = () => {
   const stats = [
     { label: "Expert Speakers", value: "150+", icon: <UserCheck className="w-8 h-8" /> },

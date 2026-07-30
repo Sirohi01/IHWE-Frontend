@@ -342,7 +342,7 @@ const Sponsership = () => {
         <div
           className="relative min-h-[480px] bg-cover bg-center bg-no-repeat"
           style={{
-            backgroundImage: "url('/images/sponsor/sponsor-hero.png')",
+            backgroundImage: "url('/images/sponsor/sponsor-hero.webp')",
           }}
         >
 
@@ -383,7 +383,7 @@ const Sponsership = () => {
                                         {
                                             number: "1,000+",
                                             label: "Global Buyers",
-                                            icon: "/images/partnership/global.png",
+                                            icon: "/images/partnership/global.webp",
                                         },
                                         {
                                             number: "150+",
@@ -433,11 +433,11 @@ const Sponsership = () => {
                   {[
                     {
                       label: "21 – 23 August 2026",
-                      icon: "/images/partnership/blue-calender.png",
+                      icon: "/images/partnership/blue-calender.webp",
                     },
                     {
                       label: "Pragati Maidan\nNew Delhi, India",
-                      icon: "/images/partnership/location.png",
+                      icon: "/images/partnership/location.webp",
                     },
 
                   ].map((item, idx) => (
@@ -797,7 +797,7 @@ const Sponsership = () => {
               className="relative min-h-[420px] bg-cover bg-center bg-no-repeat p-8 md:p-10 flex items-center"
               style={{
                 backgroundImage:
-                  "url('/images/partnership/pattern.png')",
+                  "url('/images/partnership/pattern.webp')",
               }}
             >
 

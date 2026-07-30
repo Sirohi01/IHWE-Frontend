@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Download, Mic, ChevronRight, Home, Users, Share2, Lightbulb } from "lucide-react";
-import amanImage from "../../../assets/dayimagesarogyasangosti/nista1.png";
+import amanImage from "../../../assets/dayimagesarogyasangosti/nista1.webp";
 
 const Day2Hero: React.FC = () => {
   return (

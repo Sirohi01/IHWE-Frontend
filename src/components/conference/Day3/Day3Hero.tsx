@@ -1,7 +1,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Download, ChevronRight, Home, Users, Share2, ShieldCheck, Globe, Zap } from "lucide-react";
-import amanImage from "../../../assets/dayimagesarogyasangosti/sagar.png";
+import amanImage from "../../../assets/dayimagesarogyasangosti/sagar.webp";
 import { SERVER_URL } from "@/lib/api";
 
 interface Day3HeroProps {

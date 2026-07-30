@@ -6,7 +6,7 @@ const BookAStandHero = () => {
         <section
             className="hero-background-registration relative overflow-hidden !aspect-auto md:!aspect-[16/5] !h-auto md:!h-auto py-6 md:py-0"
             style={{
-                backgroundImage: "url('/exhibition/bg.png')",
+                backgroundImage: "url('/exhibition/bg.webp')",
                 backgroundSize: 'cover',
                 backgroundPosition: 'left',
                 backgroundRepeat: 'no-repeat',
@@ -40,19 +40,19 @@ const BookAStandHero = () => {
                             {[
                                 {
                                     num: '', label: '8,000+\nHealthcare\nProfessionals',
-                                    icon: <img loading="lazy" decoding="async" src="/exhibition/b1.png" alt="" className="w-10 h-10 md:w-12 md:h-12 object-contain" />
+                                    icon: <img loading="lazy" decoding="async" src="/exhibition/b1.webp" alt="" className="w-10 h-10 md:w-12 md:h-12 object-contain" />
                                 },
                                 {
                                     num: '', label: 'Custom\nStall\nSolutions',
-                                    icon: <img loading="lazy" decoding="async" src="/exhibition/b2.png" alt="" className="w-10 h-10 md:w-12 md:h-12 object-contain" />,
+                                    icon: <img loading="lazy" decoding="async" src="/exhibition/b2.webp" alt="" className="w-10 h-10 md:w-12 md:h-12 object-contain" />,
                                 },
                                 {
                                     num: '', label: 'Maximum\nBrand\nVisibility',
-                                    icon: <img loading="lazy" decoding="async" src="/exhibition/b3.png" alt="" className="w-10 h-10 md:w-12 md:h-12 object-contain" />,
+                                    icon: <img loading="lazy" decoding="async" src="/exhibition/b3.webp" alt="" className="w-10 h-10 md:w-12 md:h-12 object-contain" />,
                                 },
                                 {
                                     num: '', label: 'High-Value\nBusiness\nConnections',
-                                    icon: <img loading="lazy" decoding="async" src="/exhibition/b4.png" alt="" className="w-10 h-10 md:w-12 md:h-12 object-contain" />,
+                                    icon: <img loading="lazy" decoding="async" src="/exhibition/b4.webp" alt="" className="w-10 h-10 md:w-12 md:h-12 object-contain" />,
                                 },
                             ].map((stat, i, arr) => (
                                 <div key={i} className="flex items-center md:contents">
@@ -88,7 +88,7 @@ const BookAStandHero = () => {
                     </div>
 
                     <div className="w-[40%]">
-                        {/* <img loading="lazy" decoding="async" src="/bsmeet/bsherob.png" alt="" /> */}
+                        {/* <img loading="lazy" decoding="async" src="/bsmeet/bsherob.webp" alt="" /> */}
                     </div>
                 </div>
             </SectionContainer>

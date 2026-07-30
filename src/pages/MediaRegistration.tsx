@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { heroBackgroundApi, SERVER_URL, crmApi } from "@/lib/api";
-import HeroBg from "@/assets/media.jpg";
+import HeroBg from "@/assets/media.webp";
 import FeaturedMediaCoverage from "@/components/mediaRegistration/FeaturedMediaCarousel";
 import MediaSection from "@/components/mediaRegistration/MediaSection";
 import MediaBanner from "@/components/mediaRegistration/MediaBanner";

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import media_registration_bg from "@/assets/media_registration.webp";
 import { mediaRegistrationApi, SERVER_URL } from "@/lib/api";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay } from "swiper/modules";
+import AutoScroll from "embla-carousel-auto-scroll";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import {
     Globe,
     Newspaper,
@@ -312,73 +312,49 @@ const MediaBanner = () => {
                             <div className="h-px bg-gray-300 flex-1 max-w-[120px]"></div>
                         </div>
 
-                        {/* SWIPER */}
-                        <Swiper
-                            modules={[Autoplay]}
-                            slidesPerView={2}
-                            spaceBetween={20}
-                            loop={true}
-                            speed={4000}
-                            autoplay={{
-                                delay: 0,
-                                disableOnInteraction: false,
-                                pauseOnMouseEnter: false,
-                            }}
-                            breakpoints={{
-                                640: {
-                                    slidesPerView: 3,
-                                },
-                                768: {
-                                    slidesPerView: 4,
-                                },
-                                1024: {
-                                    slidesPerView: 5,
-                                },
-                                1280: {
-                                    slidesPerView: 7,
-                                },
-                            }}
-                            className="media-logo-swiper"
+                        {/* LOGO MARQUEE */}
+                        <Carousel
+                            opts={{ loop: true, align: "start" }}
+                            plugins={[AutoScroll({ playOnInit: true, speed: 1.5, stopOnInteraction: false, stopOnMouseEnter: false })]}
+                            className="w-full"
                         >
-                            {dynamicLogos.map((logo, index) => (
-                                <SwiperSlide key={index} className="!h-auto">
-                                    <motion.div
-                                        initial={{
-                                            opacity: 0,
-                                            scale: 0.8,
-                                            y: 20,
-                                        }}
-                                        whileInView={{
-                                            opacity: 1,
-                                            scale: 1,
-                                            y: 0,
-                                        }}
-                                        transition={{
-                                            delay: 1.2 + index * 0.08,
-                                            duration: 0.5,
-                                        }}
-                                        viewport={{ once: true }}
-                                        whileHover={{
-                                            y: -6,
-                                            scale: 1.04,
-                                        }}
-                                        className="h-16 rounded-xl border border-gray-100 flex items-center justify-center hover:shadow-md transition-all duration-300 bg-white"
+                            <CarouselContent className="-ml-4 items-center">
+                                {[...dynamicLogos, ...dynamicLogos].map((logo, index) => (
+                                    <CarouselItem
+                                        key={index}
+                                        className="pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5 xl:basis-[14.28%] !h-auto"
                                     >
-                                        <img loading="lazy" decoding="async" src={logo}
-                                            alt={`Media Logo ${index + 1}`}
-                                            className="object-contain min-h-10 max-h-20"
-                                        />
-                                    </motion.div>
-                                </SwiperSlide>
-                            ))}
-                        </Swiper>
-
-                        <style>{`
-            .media-logo-swiper .swiper-wrapper {
-                transition-timing-function: linear !important;
-                align-items: center;
-            }
-        `}</style>
+                                        <motion.div
+                                            initial={{
+                                                opacity: 0,
+                                                scale: 0.8,
+                                                y: 20,
+                                            }}
+                                            whileInView={{
+                                                opacity: 1,
+                                                scale: 1,
+                                                y: 0,
+                                            }}
+                                            transition={{
+                                                delay: 1.2 + (index % dynamicLogos.length) * 0.08,
+                                                duration: 0.5,
+                                            }}
+                                            viewport={{ once: true }}
+                                            whileHover={{
+                                                y: -6,
+                                                scale: 1.04,
+                                            }}
+                                            className="h-16 rounded-xl border border-gray-100 flex items-center justify-center hover:shadow-md transition-all duration-300 bg-white"
+                                        >
+                                            <img loading="lazy" decoding="async" src={logo}
+                                                alt={`Media Logo ${(index % dynamicLogos.length) + 1}`}
+                                                className="object-contain min-h-10 max-h-20"
+                                            />
+                                        </motion.div>
+                                    </CarouselItem>
+                                ))}
+                            </CarouselContent>
+                        </Carousel>
                     </div>
                 </motion.div>
             </SectionContainer>

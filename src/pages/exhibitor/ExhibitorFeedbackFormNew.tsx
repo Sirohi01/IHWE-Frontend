@@ -35,7 +35,7 @@ import Swal from 'sweetalert2';
 import { cn } from "@/lib/utils";
 import { API_URL, socialMediaApi } from "@/lib/api";
 import { PrintFeedbackReport } from "./PrintFeedbackReport";
-import gift from "@/assets/exhibitor/gift.png"
+import gift from "@/assets/exhibitor/gift.webp"
 import exhibor_feedback from "@/assets/exhibitor/exhibitor_feedback.png"
 // ── Static Reference Data ──────────────────────────────────────────────────
 

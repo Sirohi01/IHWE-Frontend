@@ -39,7 +39,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Textarea } from "@/components/ui/textarea";
-import HeroBg from "@/assets/buyer.jpg";
+import HeroBg from "@/assets/buyer.webp";
 import { buyerRegistrationApi, heroBackgroundApi, SERVER_URL, crmApi, otpApi, policyApi } from "@/lib/api";
 import { toast } from "sonner";
 import { useRef, useEffect as useEffectDropdown } from "react";
@@ -1628,7 +1628,7 @@ const BuyerRegistration = () => {
                                                                     onClick={() => setShowMembershipOptions(true)}
                                                                     className="relative border-2 border-dashed border-emerald-300 transition-all rounded-xl cursor-pointer hover:border-emerald-400 overflow-hidden"
                                                                     style={{
-                                                                        backgroundImage: 'url(/buyer/optionbg.png)',
+                                                                        backgroundImage: 'url(/buyer/optionbg.webp)',
                                                                         backgroundSize: 'cover',
                                                                         backgroundPosition: 'center',
                                                                         minHeight: '120px',
@@ -1644,7 +1644,7 @@ const BuyerRegistration = () => {
 
                                                                         {/* Top — Logo + org name */}
                                                                         <div className="flex flex-col items-center gap-1">
-                                                                            <img loading="lazy" decoding="async" src="/buyer/icoa.png"
+                                                                            <img loading="lazy" decoding="async" src="/buyer/icoa.webp"
                                                                                 alt="ICOA"
                                                                                 className="w-48 h-auto object-contain"
                                                                                 style={{

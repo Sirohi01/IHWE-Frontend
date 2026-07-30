@@ -139,7 +139,7 @@ const DelegateFooter: React.FC = () => {
               <p className="text-[9px] font-black text-gray-300 uppercase tracking-[0.2em] mb-2 text-center md:text-left w-full">Supported By</p>
               <div className="flex flex-col sm:flex-row items-center gap-6 sm:gap-8 justify-center">
                 <div className="flex items-center gap-3">
-                  <img loading="lazy" decoding="async" src="/MSME.png"
+                  <img loading="lazy" decoding="async" src="/MSME.webp"
                     alt="Govt of India"
                     className="w-10 h-10 object-contain"
                   />
@@ -149,7 +149,7 @@ const DelegateFooter: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <img loading="lazy" decoding="async" src="/MSME.png"
+                  <img loading="lazy" decoding="async" src="/MSME.webp"
                     alt="NITI Aayog"
                     className="w-10 h-10 object-contain"
                   />

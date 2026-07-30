@@ -6,42 +6,42 @@ const features = [
         title: "PRE-SCHEDULED\nONE-TO-ONE MEETINGS",
         desc: "Well-matched meetings as per your business interests.",
         icon: (
-            <img loading="lazy" decoding="async" src="/bsmeet/what1.png" alt="Pre-Scheduled Meetings" className="w-full h-full object-contain p-2.5" />
+            <img loading="lazy" decoding="async" src="/bsmeet/what1.webp" alt="Pre-Scheduled Meetings" className="w-full h-full object-contain p-2.5" />
         ),
     },
     {
         title: "VERIFIED BUYER\nPROFILES",
         desc: "Connect with genuine buyers for quality business.",
         icon: (
-            <img loading="lazy" decoding="async" src="/bsmeet/what2.png" alt="Verified Profiles" className="w-full h-full object-contain p-2.5" />
+            <img loading="lazy" decoding="async" src="/bsmeet/what2.webp" alt="Verified Profiles" className="w-full h-full object-contain p-2.5" />
         ),
     },
     {
         title: "FOCUSED BUSINESS\nDISCUSSIONS",
         desc: "Have productive conversations that lead to real outcomes.",
         icon: (
-            <img loading="lazy" decoding="async" src="/bsmeet/what3.png" alt="Focused Discussions" className="w-full h-full object-contain p-2.5" />
+            <img loading="lazy" decoding="async" src="/bsmeet/what3.webp" alt="Focused Discussions" className="w-full h-full object-contain p-2.5" />
         ),
     },
     {
         title: "ACCESS TO NEW MARKETS,\nCHANNELS & PARTNERSHIPS",
         desc: "Expand your reach and build strong partnerships.",
         icon: (
-            <img loading="lazy" decoding="async" src="/bsmeet/what4.png" alt="New Markets" className="w-full h-full object-contain p-2.5" />
+            <img loading="lazy" decoding="async" src="/bsmeet/what4.webp" alt="New Markets" className="w-full h-full object-contain p-2.5" />
         ),
     },
     {
         title: "REAL OPPORTUNITIES\nFOR GROWTH",
         desc: "Generate leads, explore opportunities and close deals.",
         icon: (
-            <img loading="lazy" decoding="async" src="/bsmeet/what5.png" alt="Real Opportunities" className="w-full h-full object-contain p-2.5" />
+            <img loading="lazy" decoding="async" src="/bsmeet/what5.webp" alt="Real Opportunities" className="w-full h-full object-contain p-2.5" />
         ),
     },
 ]
 
 const WhatIsBuyer = () => {
     return (
-        <div className="relative overflow-hidden py-10 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whatbg.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
+        <div className="relative overflow-hidden py-10 bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whatbg.webp')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
             <SectionContainer className="relative z-10">
                 <div className="flex flex-col lg:flex-row justify-between w-full gap-8 lg:gap-10 items-stretch">
                     

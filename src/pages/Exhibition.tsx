@@ -39,7 +39,7 @@ const Exhibition = () => {
 
   const heroBg = heroData?.backgroundImage
     ? `${SERVER_URL}${heroData.backgroundImage}`
-    : "/images/expo-innovation.png";
+    : "/images/expo-innovation.webp";
 
   return (
     <div className="bg-white min-h-screen font-inter">

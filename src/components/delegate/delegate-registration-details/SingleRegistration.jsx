@@ -1,7 +1,7 @@
 import React from "react";
 import SectionContainer from "@/components/layout/SectionContainer";
 import { Calendar, MapPin, Users, Lightbulb, BookOpen, TrendingUp, Mail, Lock } from "lucide-react";
-import leftImg from "@/assets/deligateimage/left.png";
+import leftImg from "@/assets/deligateimage/left.webp";
 import BottomData from "./BottomData";
 import { Link } from "react-router-dom";
 import { Checkbox } from "@/components/ui/checkbox";

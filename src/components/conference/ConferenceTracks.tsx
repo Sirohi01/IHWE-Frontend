@@ -3,14 +3,14 @@ import React from "react";
 import Marquee from "react-fast-marquee";
 
 // Import original images
-import imgMedical from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.42.11 AM.png";
-import imgHospital from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.42.21 AM.png";
-import imgAyurveda from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.42.31 AM.png";
-import imgWellness from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.42.37 AM.png";
-import imgPharma from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.42.55 AM.png";
-import imgDigital from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.43.03 AM.png";
-import imgOrganic from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.43.11 AM.png";
-import imgBeauty from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.43.18 AM.png";
+import imgMedical from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.42.11 AM.webp";
+import imgHospital from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.42.21 AM.webp";
+import imgAyurveda from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.42.31 AM.webp";
+import imgWellness from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.42.37 AM.webp";
+import imgPharma from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.42.55 AM.webp";
+import imgDigital from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.43.03 AM.webp";
+import imgOrganic from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.43.11 AM.webp";
+import imgBeauty from "../../assets/confrencetrack/Screenshot 2026-05-01 at 11.43.18 AM.webp";
 
 const tracks = [
   // New SVG-based Categories

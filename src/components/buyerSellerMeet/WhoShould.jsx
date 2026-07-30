@@ -193,7 +193,7 @@ const BuyerIcon = () => (
 const WhoShould = () => {
     return (
 
-        <div className=" relative w-full overflow-hidden py-8  bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whoShould.png')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
+        <div className=" relative w-full overflow-hidden py-8  bg-cover bg-center bg-no-repeat" style={{ backgroundImage: "url('/bsmeet/whoShould.webp')", backgroundColor: '#f5f8f0', fontFamily: "'Barlow', sans-serif" }}>
             <SectionContainer className="flex flex-col md:flex-row justify-between gap-8 md:gap-4 lg:gap-8 items-start">
                 {/* ── LEFT: WHO SHOULD + BUYERS ── */}
                 <div className="w-full md:w-auto md:max-w-[400px]">

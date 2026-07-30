@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Download, Mic, ChevronRight, Home, Users, Share2 } from "lucide-react";
 import arogyaLogo from "../../../assets/arogyasangosti.png";
-import amanImage from "../../../assets/dayimagesarogyasangosti/design1.png";
+import amanImage from "../../../assets/dayimagesarogyasangosti/design1.webp";
 
 const Day1Hero: React.FC = () => {
   const darkYellow = "#C9A227";

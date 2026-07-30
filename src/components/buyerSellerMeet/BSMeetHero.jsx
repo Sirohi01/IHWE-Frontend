@@ -194,7 +194,7 @@ const BSMeetHero = () => {
                     {/* RIGHT SIDE EMPTY (optional ya kuch aur add kar sakte ho) */}
                     {/* <div className="relative w-[45%]">
                    
-                        <img loading="lazy" decoding="async" src="/bsmeet/bsmeetRight3.png" alt="Buyer Seller Meet" className="mix-blend-multiply bg-transparent object-contain w-full h-auto" />
+                        <img loading="lazy" decoding="async" src="/bsmeet/bsmeetRight3.webp" alt="Buyer Seller Meet" className="mix-blend-multiply bg-transparent object-contain w-full h-auto" />
                         
                         <a
                             href="https://wa.me/919220408160"
@@ -202,7 +202,7 @@ const BSMeetHero = () => {
                             rel="noopener noreferrer"
                             className="absolute bottom-4 right-60 z-10 cursor-pointer hover:scale-110 transition-transform duration-300 drop-shadow-xl hover:drop-shadow-2xl"
                         >
-                            <img loading="lazy" decoding="async" src="/bsmeet/bsherob.png" alt="WhatsApp Chat" className="w-24 h-24 object-contain" />
+                            <img loading="lazy" decoding="async" src="/bsmeet/bsherob.webp" alt="WhatsApp Chat" className="w-24 h-24 object-contain" />
                         </a>
                     </div> */}
 

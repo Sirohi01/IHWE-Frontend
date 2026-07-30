@@ -76,7 +76,7 @@ const ExpensesIndustries = () => {
                 {/* Background Blended Right */}
                 <div className="absolute top-0 right-0 w-full sm:w-[45%] h-full pointer-events-none z-0 opacity-10 sm:opacity-90">
                     <div className="absolute inset-0 bg-gradient-to-r from-white via-white/60 to-transparent z-10" />
-                    <img loading="lazy" decoding="async" src="/msmepmsscheme/industries_bg.png"
+                    <img loading="lazy" decoding="async" src="/msmepmsscheme/industries_bg.webp"
                         className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
                         alt=""
                     />
