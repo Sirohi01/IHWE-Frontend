@@ -164,7 +164,7 @@ const Contact = () => {
 
     setSendingEmailOtp(true);
     try {
-      const res = await verifyApi.sendEmailOtp(formData.email);
+      const res = await verifyApi.sendEmailOtp(formData.email, 'CONTACT');
       if (res.success) {
         setEmailOtpSent(true);
         setEmailResendTimer(60);
