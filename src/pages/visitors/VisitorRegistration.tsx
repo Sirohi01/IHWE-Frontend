@@ -212,6 +212,7 @@ const VisitorRegistration = () => {
     const [healthCampCities, setHealthCampCities] = useState<any[]>([]);
     const [loadingHealthCampStates, setLoadingHealthCampStates] = useState(false);
     const [loadingHealthCampCities, setLoadingHealthCampCities] = useState(false);
+    const [requireOtpForVisitorRegistration, setRequireOtpForVisitorRegistration] = useState(true);
 
     // OTP States
     const [formData, setFormData] = useState({
@@ -256,6 +257,22 @@ const VisitorRegistration = () => {
     const [isVerifyingPhone, setIsVerifyingPhone] = useState(false);
     const [emailTimer, setEmailTimer] = useState(0);
     const [phoneTimer, setPhoneTimer] = useState(0);
+
+    
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await fetch(`${SERVER_URL}/api/settings?website=9th%20IHWE`);
+                const data = await res.json();
+                if (data.success && data.data && data.data.requireOtpForVisitorRegistration !== undefined) {
+                    setRequireOtpForVisitorRegistration(data.data.requireOtpForVisitorRegistration);
+                }
+            } catch (error) {
+                console.error("Error fetching settings:", error);
+            }
+        };
+        fetchSettings();
+    }, []);
 
     useEffect(() => {
         const fetchInitialData = async () => {
@@ -643,7 +660,7 @@ const VisitorRegistration = () => {
         e.preventDefault();
         setErrorMessage("");
 
-        if (!emailVerified || !phoneVerified) {
+        if (requireOtpForVisitorRegistration && (!emailVerified || !phoneVerified)) {
             alert("Please verify both your Email and WhatsApp number.");
             return;
         }
@@ -1447,7 +1464,7 @@ const VisitorRegistration = () => {
                                                                                 required placeholder="Enter WhatsApp Number"
                                                                                 className={`${inputClasses} pr-20 ${phoneVerified ? "bg-green-50 border-green-200 text-green-700" : ""}`}
                                                                             />
-                                                                            {!phoneVerified && (
+                                                                            {requireOtpForVisitorRegistration && !phoneVerified && (
                                                                                 <button
                                                                                     type="button"
                                                                                     onClick={sendPhoneOtp}
@@ -1481,7 +1498,7 @@ const VisitorRegistration = () => {
                                                                                 type="email" required placeholder="Enter Email Address"
                                                                                 className={`${inputClasses} pr-20 ${emailVerified ? "bg-green-50 border-green-200 text-green-700" : ""}`}
                                                                             />
-                                                                            {!emailVerified && (
+                                                                            {requireOtpForVisitorRegistration && !emailVerified && (
                                                                                 <button
                                                                                     type="button"
                                                                                     onClick={sendEmailOtp}
@@ -1499,7 +1516,7 @@ const VisitorRegistration = () => {
 
                                                                 {/* —— DUAL OTP INPUT GRID —— */}
                                                                 <AnimatePresence>
-                                                                    {((emailOtpSent && !emailVerified) || (phoneOtpSent && !phoneVerified)) && (
+                                                                    {requireOtpForVisitorRegistration && ((emailOtpSent && !emailVerified) || (phoneOtpSent && !phoneVerified)) && (
                                                                         <motion.div
                                                                             initial={{ opacity: 0, height: 0 }}
                                                                             animate={{ opacity: 1, height: "auto" }}
@@ -1562,7 +1579,7 @@ const VisitorRegistration = () => {
                                                                 </AnimatePresence>
                                                             </div>
 
-                                                            {phoneVerified && emailVerified && (
+                                                            {(!requireOtpForVisitorRegistration || (phoneVerified && emailVerified)) && (
                                                                 <div className="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-6 border-t-2 border-dashed border-slate-200">
                                                                     <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-slate-400 pb-1.5 mb-6 gap-2">
                                                                         <h3
@@ -1795,7 +1812,7 @@ const VisitorRegistration = () => {
 
                                                             {/* —— SUBMIT BAR —— */}
                                                             <div className="pt-6 flex flex-col items-center">
-                                                                {(!emailVerified || !phoneVerified) ? (
+                                                                {(requireOtpForVisitorRegistration && (!emailVerified || !phoneVerified)) ? (
                                                                     <>
                                                                         <Button
                                                                             type="button"

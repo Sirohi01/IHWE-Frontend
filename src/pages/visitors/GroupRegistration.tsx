@@ -11,7 +11,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { AnimatePresence, motion } from "framer-motion";
-import { crmApi, eventApi, visitorApi, verifyApi } from "@/lib/api";
+import { SERVER_URL, crmApi, eventApi, visitorApi, verifyApi } from "@/lib/api";
 
 // ── Constants ──────────────────────────────────────────────────────────────
 const MIN_PERSONS = 5;
@@ -80,7 +80,7 @@ const PersonCard = ({
     onVerifyEmailOtp, onVerifyPhoneOtp,
     isSendingEmailOtp, isSendingPhoneOtp,
     isVerifyingEmail, isVerifyingPhone,
-    emailTimer, phoneTimer,
+    emailTimer, phoneTimer, requireOtpForVisitorRegistration,
 }: {
     index: number; person: Person;
     onChange: (i: number, f: keyof Person, v: string) => void;
@@ -93,7 +93,7 @@ const PersonCard = ({
     onVerifyEmailOtp?: () => void; onVerifyPhoneOtp?: () => void;
     isSendingEmailOtp?: boolean; isSendingPhoneOtp?: boolean;
     isVerifyingEmail?: boolean; isVerifyingPhone?: boolean;
-    emailTimer?: number; phoneTimer?: number;
+    emailTimer?: number; phoneTimer?: number; requireOtpForVisitorRegistration?: boolean;
 }) => (
     <div className={`border rounded-lg px-4 py-3 ${index === 0 ? "border-[#0e4293]/40 bg-[#f7faff]" : "border-slate-200 bg-slate-50/40"}`}>
         <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-[28px_1fr_1fr_1fr_1fr_1fr_1fr_28px] gap-x-3 gap-y-2 items-end">
@@ -142,7 +142,7 @@ const PersonCard = ({
                             disabled={emailVerified || emailOtpSent}
                             placeholder="Email Address"
                             className={`${inputClasses} pr-20 ${emailVerified ? "bg-green-50 border-green-300 text-green-700" : ""}`} />
-                        {!emailVerified && (
+                        {requireOtpForVisitorRegistration && !emailVerified && (
                             <button type="button" onClick={onSendEmailOtp}
                                 disabled={isSendingEmailOtp || !person.email || (emailTimer ?? 0) > 0}
                                 className="absolute right-1 px-2 py-1 bg-[#d26019] text-white text-[9px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#a84c14] disabled:bg-slate-300 transition-all whitespace-nowrap">
@@ -166,7 +166,7 @@ const PersonCard = ({
                             disabled={phoneVerified || phoneOtpSent}
                             placeholder="WhatsApp Number"
                             className={`${inputClasses} pr-20 ${phoneVerified ? "bg-green-50 border-green-300 text-green-700" : ""}`} />
-                        {!phoneVerified && (
+                        {requireOtpForVisitorRegistration && !phoneVerified && (
                             <button type="button" onClick={onSendPhoneOtp}
                                 disabled={isSendingPhoneOtp || !person.mobileNo || (phoneTimer ?? 0) > 0}
                                 className="absolute right-1 px-2 py-1 bg-[#23471d] text-white text-[9px] uppercase font-bold tracking-wider rounded-sm hover:bg-[#1a3516] disabled:bg-slate-300 transition-all whitespace-nowrap">
@@ -204,7 +204,7 @@ const PersonCard = ({
         {/* OTP input row — only for person 0 */}
         {index === 0 && (
             <AnimatePresence>
-                {((emailOtpSent && !emailVerified) || (phoneOtpSent && !phoneVerified)) && (
+                {requireOtpForVisitorRegistration && ((emailOtpSent && !emailVerified) || (phoneOtpSent && !phoneVerified)) && (
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
                         className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 overflow-hidden">
                         {phoneOtpSent && !phoneVerified && (
@@ -240,6 +240,7 @@ const PersonCard = ({
 
 // ── Main Component ──────────────────────────────────────────────────────────
 const GroupRegistration: React.FC<{ embedded?: boolean }> = ({ embedded = false }) => {
+    const [requireOtpForVisitorRegistration, setRequireOtpForVisitorRegistration] = useState(true);
     const [isSuccess, setIsSuccess] = useState(false);
     const [step, setStep] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -275,6 +276,13 @@ const GroupRegistration: React.FC<{ embedded?: boolean }> = ({ embedded = false 
         const init = async () => {
             try {
                 const [eventsRes, countriesRes] = await Promise.all([eventApi.getActive(), crmApi.getCountries()]);
+                try {
+                    const res = await fetch(`${SERVER_URL}/api/settings?website=9th%20IHWE`);
+                    const data = await res.json();
+                    if (data.success && data.data && data.data.requireOtpForVisitorRegistration !== undefined) {
+                        setRequireOtpForVisitorRegistration(data.data.requireOtpForVisitorRegistration);
+                    }
+                } catch (err) { console.error("Settings error:", err); }
                 setEvents(eventsRes);
                 setCountries(countriesRes);
             } catch (err) { console.error(err); }
@@ -393,7 +401,7 @@ const GroupRegistration: React.FC<{ embedded?: boolean }> = ({ embedded = false 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setErrorMessage("");
-        if (!emailVerified || !phoneVerified) {
+        if (requireOtpForVisitorRegistration && (!emailVerified || !phoneVerified)) {
             alert("Please verify the Email and WhatsApp number for Person 1.");
             return;
         }
@@ -579,7 +587,7 @@ const GroupRegistration: React.FC<{ embedded?: boolean }> = ({ embedded = false 
 
                     {/* Note for person 1 */}
                     <p className="text-[10px] text-[#0e4293] font-bold bg-[#eef3ff] border border-[#0e4293]/20 rounded px-3 py-1.5">
-                        Person 1 is the primary contact — email &amp; WhatsApp OTP verification required.
+                        {requireOtpForVisitorRegistration ? 'Person 1 is the primary contact — email & WhatsApp OTP verification required.' : 'Person 1 is the primary contact.'}
                     </p>
 
                     <div className="space-y-2">
@@ -595,7 +603,7 @@ const GroupRegistration: React.FC<{ embedded?: boolean }> = ({ embedded = false 
                                     onVerifyEmailOtp: verifyEmailOtp, onVerifyPhoneOtp: verifyPhoneOtp,
                                     isSendingEmailOtp, isSendingPhoneOtp,
                                     isVerifyingEmail, isVerifyingPhone,
-                                    emailTimer, phoneTimer,
+                                    emailTimer, phoneTimer, requireOtpForVisitorRegistration,
                                 } : {})}
                             />
                         ))}
@@ -615,12 +623,12 @@ const GroupRegistration: React.FC<{ embedded?: boolean }> = ({ embedded = false 
                         <Button 
                             type="button" 
                             onClick={() => setStep(2)} 
-                            disabled={!emailVerified || !phoneVerified}
+                            disabled={requireOtpForVisitorRegistration && (!emailVerified || !phoneVerified)}
                             className="w-full md:w-[380px] h-10 rounded-sm bg-[#0e4293] hover:bg-[#092f6d] text-white font-black text-[12px] uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 group disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                         >
                             Next Step <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                         </Button>
-                        {(!emailVerified || !phoneVerified) && (
+                        {(requireOtpForVisitorRegistration && (!emailVerified || !phoneVerified)) && (
                             <p className="mt-2 text-[10px] text-red-500 font-bold uppercase tracking-wider text-center">
                                 Please verify both Email and Mobile Number to proceed
                             </p>

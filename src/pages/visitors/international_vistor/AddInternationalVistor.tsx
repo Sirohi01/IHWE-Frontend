@@ -59,6 +59,7 @@ function YesNoRadio({ label, name, value, onChange }: any) {
 }
 
 const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) => {
+    const [requireOtpForVisitorRegistration, setRequireOtpForVisitorRegistration] = useState(true);
     const [isSuccess, setIsSuccess] = useState(false);
     const [step, setStep] = useState(1);
     const [heroData, setHeroData] = useState<any>(null);
@@ -116,6 +117,13 @@ const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) =>
                 if (heroRes) setHeroData(heroRes);
                 setEvents(eventsRes);
                 setCountries(countriesRes);
+                try {
+                    const res = await fetch(`${SERVER_URL}/api/settings?website=9th%20IHWE`);
+                    const data = await res.json();
+                    if (data.success && data.data && data.data.requireOtpForVisitorRegistration !== undefined) {
+                        setRequireOtpForVisitorRegistration(data.data.requireOtpForVisitorRegistration);
+                    }
+                } catch (err) { console.error("Settings error:", err); }
             } catch (err) { console.error(err); }
         };
         fetchInitialData();
@@ -251,7 +259,7 @@ const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) =>
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!emailVerified || !phoneVerified) { alert("Please verify Email and Mobile first."); return; }
+        if (requireOtpForVisitorRegistration && (!emailVerified || !phoneVerified)) { alert("Please verify Email and Mobile first."); return; }
         if (!formData.confirmInfo || !formData.agreeTerms || !formData.acceptPrivacy || !formData.agreeRules) {
             alert("Please accept all declarations."); return;
         }
@@ -377,7 +385,7 @@ const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) =>
                                     <Label className={labelClasses}>Mobile No. (with Country Code) <span className="text-red-500 font-bold">*</span> </Label>
                                     <div className="relative flex items-center">
                                         <Input name="mobileNo" value={formData.mobileNo} onChange={handleInputChange} disabled={phoneVerified || phoneOtpSent} required placeholder="+1 234 567 8900" className={`${inputClasses} pr-20 ${phoneVerified ? "bg-green-50 border-green-300 text-green-700" : ""}`} />
-                                        {!phoneVerified ? (
+                                        {requireOtpForVisitorRegistration && !phoneVerified ? (
                                             <button type="button" onClick={sendPhoneOtp} disabled={isSendingPhoneOtp || !formData.mobileNo || phoneTimer > 0}
                                                 className="absolute right-1 px-2 py-1 bg-[#23471d] text-white text-[8px] uppercase font-black tracking-wider rounded-sm hover:bg-[#1a3a14] disabled:bg-slate-300 transition-all">
                                                 {isSendingPhoneOtp ? "..." : phoneTimer > 0 ? `${phoneTimer}s` : phoneOtpSent ? "RESEND" : "SEND OTP"}
@@ -401,7 +409,7 @@ const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) =>
                                     <Label className={labelClasses}>Official Email ID <span className="text-red-500 font-bold">*</span> </Label>
                                     <div className="relative flex items-center">
                                         <Input name="email" type="email" value={formData.email} onChange={handleInputChange} disabled={emailVerified || emailOtpSent} required placeholder="official@company.com" className={`${inputClasses} pr-20 ${emailVerified ? "bg-green-50 border-green-300 text-green-700" : ""}`} />
-                                        {!emailVerified ? (
+                                        {requireOtpForVisitorRegistration && !emailVerified ? (
                                             <button type="button" onClick={sendEmailOtp} disabled={isSendingEmailOtp || !formData.email || emailTimer > 0}
                                                 className="absolute right-1 px-2 py-1 bg-[#d26019] text-white text-[8px] uppercase font-black tracking-wider rounded-sm hover:bg-[#a84c14] disabled:bg-slate-300 transition-all">
                                                 {isSendingEmailOtp ? "..." : emailTimer > 0 ? `${emailTimer}s` : emailOtpSent ? "RESEND" : "SEND OTP"}
@@ -418,7 +426,7 @@ const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) =>
 
                             {/* OTP Verify Row */}
                             <AnimatePresence>
-                                {((emailOtpSent && !emailVerified) || (phoneOtpSent && !phoneVerified)) && (
+                                {requireOtpForVisitorRegistration && ((emailOtpSent && !emailVerified) || (phoneOtpSent && !phoneVerified)) && (
                                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
                                         className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 overflow-hidden">
                                         {phoneOtpSent && !phoneVerified && (
@@ -483,12 +491,12 @@ const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) =>
                                 <Button 
                                     type="button" 
                                     onClick={() => setStep(2)} 
-                                    disabled={!emailVerified || !phoneVerified}
+                                    disabled={requireOtpForVisitorRegistration && (!emailVerified || !phoneVerified)}
                                     className="w-full max-w-xs h-10 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-white font-black text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 group disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                                 >
                                     Next Step <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                                 </Button>
-                                {(!emailVerified || !phoneVerified) && (
+                                {requireOtpForVisitorRegistration && (!emailVerified || !phoneVerified) && (
                                     <p className="mt-2 text-[10px] text-red-500 font-bold uppercase tracking-wider">
                                         Please verify both Email and Mobile Number to proceed
                                     </p>
