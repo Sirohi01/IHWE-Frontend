@@ -137,7 +137,7 @@ const About = () => {
 
         const jData = await ourJourneyApi.get();
         if (jData) setJourneyData(jData);
-        
+
         setTimeout(() => AOS.refresh(), 500);
       } catch (error) {
         console.error("Error fetching event overview:", error);
@@ -237,11 +237,11 @@ const About = () => {
       {/* PROFESSIONAL HERO SECTION - REPLICATING IMAGE DESIGN */}
       {/* PROFESSIONAL HERO SECTION - REPLICATING IMAGE DESIGN */}
       <section className="relative flex items-center pt-24 md:pt-12 pb-10 md:pb-6 overflow-hidden bg-white aspect-[0.75/1] sm:aspect-[16/9] md:aspect-[21/9] lg:aspect-[16/7] min-h-[380px] md:min-h-[420px] lg:min-h-[480px]">
-        
+
         {/* Full Width Background Image */}
         <div className="absolute inset-0 z-0">
-          <img loading="lazy" decoding="async" src={About12} 
-            alt="Hero Background" 
+          <img loading="lazy" decoding="async" src={About12}
+            alt="Hero Background"
             className="w-full h-full object-cover object-[80%] md:object-right"
           />
           {/* Enhanced Mobile Overlay for Readability */}
@@ -249,27 +249,27 @@ const About = () => {
         </div>
 
         {/* Decorative Leaf Element */}
-        <img loading="lazy" decoding="async" src={LeafImg} 
-          alt="decoration" 
+        <img loading="lazy" decoding="async" src={LeafImg}
+          alt="decoration"
           className="absolute -top-10 -left-10 w-40 h-40 opacity-10 pointer-events-none rotate-45"
         />
 
         <div className="container mx-auto px-5 md:px-12 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-            
+
             {/* Left Content */}
             <div data-aos="fade-right" className="relative z-20 bg-white/40 md:bg-transparent backdrop-blur-[4px] md:backdrop-blur-none p-6 md:p-0 rounded-3xl md:rounded-none border border-white/50 md:border-none shadow-2xl shadow-black/5 md:shadow-none -mt-6 md:-mt-12">
               <div className="flex items-center gap-3 mb-4">
                 <div className="h-[2px] w-8 bg-[#d26019]" />
-                <p 
-                  className="font-extrabold text-[9px] md:text-[11px] uppercase tracking-[0.15em] md:tracking-[0.25em]" 
+                <p
+                  className="font-extrabold text-[9px] md:text-[11px] uppercase tracking-[0.15em] md:tracking-[0.25em]"
                   style={{ color: '#23471d', textShadow: '0 0 15px rgba(255,255,255,0.9)' }}
                 >
                   INDIA'S LEADING GLOBAL PLATFORM FOR
                 </p>
               </div>
 
-              <h1 
+              <h1
                 className="text-[#051c4b] font-black text-2xl md:text-3xl lg:text-[38px] leading-[1.1] mb-5 uppercase tracking-tight"
                 style={{ textShadow: '0 2px 10px rgba(255,255,255,0.8)' }}
               >
@@ -277,7 +277,7 @@ const About = () => {
                 <span className="block mt-2" style={{ color: '#0b471c' }}>INNOVATION</span>
               </h1>
 
-              <div 
+              <div
                 className="flex flex-wrap items-center gap-x-6 gap-y-3 mb-6 text-black font-extrabold text-[10px] md:text-[11px] uppercase tracking-[0.1em] md:tracking-[0.15em]"
                 style={{ textShadow: '0 0 8px rgba(255,255,255,1)' }}
               >
@@ -293,15 +293,15 @@ const About = () => {
 
               <div className="flex items-center gap-4 mb-4 md:mb-6">
                 <div className="h-[2px] w-12 bg-[#d26019]" />
-                <p 
-                  className="font-extrabold text-[11px] md:text-sm uppercase tracking-[0.1em] md:tracking-[0.15em]" 
+                <p
+                  className="font-extrabold text-[11px] md:text-sm uppercase tracking-[0.1em] md:tracking-[0.15em]"
                   style={{ color: '#081834', textShadow: 'none' }}
                 >
                   ABOUT IHWE - GLOBAL EDITION
                 </p>
               </div>
 
-              <p 
+              <p
                 className="text-black/80 text-[13px] md:text-sm leading-relaxed mb-2 max-w-xl font-medium"
               >
                 Uniting the world's leading healthcare brands, innovators,<br className="hidden md:block" />
@@ -325,8 +325,8 @@ const About = () => {
                 </div>
                 <div className="flex items-center gap-3 md:pr-6 md:border-r border-gray-400 last:border-r-0">
                   <img loading="lazy" decoding="async" src={G3} alt="Business Growth" className="w-8 h-8 object-contain" />
-                  <span 
-                    className="font-bold text-[9px] uppercase tracking-wider leading-tight" 
+                  <span
+                    className="font-bold text-[9px] uppercase tracking-wider leading-tight"
                     style={{ color: '#081e4a', textShadow: 'none' }}
                   >
                     BUSINESS<br />GROWTH
@@ -334,8 +334,8 @@ const About = () => {
                 </div>
                 <div className="flex items-center gap-3 md:pr-6 md:border-r border-gray-400 last:border-r-0">
                   <img loading="lazy" decoding="async" src={G4} alt="Brand Visibility" className="w-8 h-8 object-contain" />
-                  <span 
-                    className="font-bold text-[9px] uppercase tracking-wider leading-tight" 
+                  <span
+                    className="font-bold text-[9px] uppercase tracking-wider leading-tight"
                     style={{ color: '#081e4a', textShadow: '1px 1px 1px rgba(0,0,0,0.1)' }}
                   >
                     BRAND<br />VISIBILITY
@@ -354,7 +354,7 @@ const About = () => {
                     <Sparkle style={{ bottom: '-8px', left: '25%', animationDelay: '0.2s' }} />
                     <Sparkle style={{ bottom: '-10px', right: '30%', animationDelay: '0.6s' }} />
                   </div>
-                  <Link 
+                  <Link
                     to="/book-a-stand"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -365,7 +365,7 @@ const About = () => {
                     <ArrowRight size={13} className="text-[#050A1A] ml-2" />
                   </Link>
                 </div>
-                
+
                 <div className="relative group/btn">
                   <div className="hidden md:block">
                     <Sparkle style={{ top: '-8px', left: '10%', animationDelay: '0s' }} />
@@ -374,7 +374,7 @@ const About = () => {
                     <Sparkle style={{ bottom: '-8px', left: '25%', animationDelay: '0.2s' }} />
                     <Sparkle style={{ bottom: '-10px', right: '30%', animationDelay: '0.6s' }} />
                   </div>
-                  <Link 
+                  <Link
                     to="/buyer-registration"
                     target="_blank"
                     rel="noopener noreferrer"
@@ -427,9 +427,9 @@ const About = () => {
               <h2 className="text-[#23471d] font-black text-2xl leading-[1.3] mb-3" style={{ fontFamily: "'Inter', sans-serif" }}>
                 {organizerData?.title || "Namo Gange Wellness Pvt. Ltd."}
               </h2>
-              
+
               {organizerData?.descriptionHtml ? (
-                <div 
+                <div
                   className="text-gray-800 text-[13px] leading-[1.7] mb-4 text-justify strip-editor-bg"
                   style={{ fontFamily: "'Inter', sans-serif" }}
                   dangerouslySetInnerHTML={{ __html: organizerData.descriptionHtml }}
@@ -461,7 +461,7 @@ const About = () => {
                   <div key={i} className="flex items-start gap-2.5">
                     <div className="w-[17px] h-[17px] rounded-full bg-[#fef0e6] flex items-center justify-center shrink-0 mt-[2px]">
                       <svg viewBox="0 0 12 12" fill="none" className="w-[9px] h-[9px]">
-                        <path d="M2 6l3 3 5-5" stroke="#d26019" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M2 6l3 3 5-5" stroke="#d26019" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
                     </div>
                     <span className="text-gray-900 text-[13px] leading-[1.5] font-medium" style={{ fontFamily: "'Inter', sans-serif" }}>{item}</span>
@@ -537,11 +537,11 @@ const About = () => {
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-7 h-7 rounded-lg bg-[#fef0e6] flex items-center justify-center shrink-0">
                   <svg viewBox="0 0 24 24" fill="none" stroke="#d26019" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
                   </svg>
                 </div>
                 <p className="text-[#23471d] font-bold text-[12px] uppercase tracking-[0.12em]" style={{ fontFamily: "'Inter', sans-serif" }}>
-                   {journeyData?.journeyHeading || "Our Journey: A Legacy of Growth"}
+                  {journeyData?.journeyHeading || "Our Journey: A Legacy of Growth"}
                 </p>
               </div>
               <div className="flex flex-col gap-4 pl-3 border-l-2 border-[#d26019]/25">
@@ -563,11 +563,11 @@ const About = () => {
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-7 h-7 rounded-lg bg-[#fef0e6] flex items-center justify-center shrink-0">
                   <svg viewBox="0 0 24 24" fill="none" stroke="#d26019" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                    <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/>
+                    <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
                   </svg>
                 </div>
                 <p className="text-[#23471d] font-bold text-[12px] uppercase tracking-[0.12em]" style={{ fontFamily: "'Inter', sans-serif" }}>
-                   {journeyData?.sectorsHeading || "Driving Innovation Across Core Sectors"}
+                  {journeyData?.sectorsHeading || "Driving Innovation Across Core Sectors"}
                 </p>
               </div>
               <div className="flex flex-col gap-3">
@@ -592,11 +592,11 @@ const About = () => {
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-7 h-7 rounded-lg bg-[#fef0e6] flex items-center justify-center shrink-0">
                   <svg viewBox="0 0 24 24" fill="none" stroke="#d26019" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4">
-                    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/>
+                    <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" y1="22" x2="4" y2="15" />
                   </svg>
                 </div>
                 <p className="text-[#23471d] font-bold text-[12px] uppercase tracking-[0.12em]" style={{ fontFamily: "'Inter', sans-serif" }}>
-                   {journeyData?.eventsHeading || "Flagship Events: A Proven Track Record"}
+                  {journeyData?.eventsHeading || "Flagship Events: A Proven Track Record"}
                 </p>
               </div>
               <p className="text-gray-500 text-[11px] leading-[1.5] mb-3" style={{ fontFamily: "'Inter', sans-serif" }}>
@@ -629,8 +629,8 @@ const About = () => {
       <MissionVision />
 
 
-  {/* FROM INDIA TO THE WORLD - Full Width */}
-{/* <section
+      {/* FROM INDIA TO THE WORLD - Full Width */}
+      {/* <section
   className="w-full overflow-hidden relative border-t border-gray-100"
   style={{ fontFamily: "'DM Sans', sans-serif", background: '#faf9f6' }}
 >
@@ -761,7 +761,7 @@ const About = () => {
       {/* ONE PLATFORM. FOUR POWERFUL PILLARS. */}
       <section className="pt-4 pb-8 bg-white border-t border-gray-100">
         <div className="container mx-auto px-8 lg:px-12 max-w-7xl">
-          
+
           <div className="text-center mb-2">
             <h2 className="font-bold text-[18px] text-[#1e3a8a] uppercase tracking-[0.2em]" style={{ fontFamily: "'Inter', sans-serif" }}>
               ONE PLATFORM. FOUR POWERFUL PILLARS.
@@ -799,10 +799,10 @@ const About = () => {
                 img: B2BImg,
               },
             ].map((pillar, i) => (
-              <div key={i} 
+              <div key={i}
                 className="bg-white border-[1.5px] rounded-[1.25rem] flex flex-col group transition-all duration-300 hover:shadow-xl relative"
                 style={{ borderColor: `${pillar.themeColor}55` }}>
-                
+
                 {/* Image Area - Minimized gap from border */}
                 <div className="p-[4px]">
                   <div className="relative h-[160px] overflow-hidden rounded-[1rem]">
@@ -850,7 +850,7 @@ const About = () => {
               <span
                 className="absolute top-4 right-4 bg-[#d26019] text-white text-[9px] font-semibold uppercase tracking-[0.15em] px-[10px] py-[5px] rounded-[5px]"
                 style={{ fontFamily: "'Inter', sans-serif" }}>
-                Hall 08, 09 &amp; 10
+                Hall 12
               </span>
               <div className="absolute bottom-4 left-4 bg-white/95 px-[14px] py-2 rounded-lg flex items-center gap-2">
                 <svg viewBox="0 0 24 24" fill="none" stroke="#d26019" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" className="w-[14px] h-[14px] shrink-0">
@@ -976,7 +976,7 @@ const About = () => {
         }
       `}</style>
 
-            <FAQSection />
+      <FAQSection />
 
       <section className="py-3 bg-[#23471d] relative overflow-hidden border-t border-white/5">
         {/* Particle Canvas */}
@@ -1046,19 +1046,19 @@ const About = () => {
 
 
 
- {/* THE SCALE. THE IMPACT. */}
-          <div className="mt-1 border-t border-gray-100 pt-6">
-            <p className="flex items-center justify-center gap-3 text-[#d26019] font-extrabold text-[15px] uppercase tracking-[0.28em] mb-4" style={{ fontFamily: "'Inter', sans-serif" }}>
-              <span className="inline-block w-8 h-[1.5px] bg-[#d26019] " />
-              The Scale. The Impact.
-              <span className="inline-block w-8 h-[1.5px] bg-[#d26019]" />
-            </p>
-            <div className="bg-[#f0f9f1] py-2 px-5 rounded-2xl border border-[#23471d15]">
-              <VenueStats />
-            </div>
-          </div>
-    
- 
+      {/* THE SCALE. THE IMPACT. */}
+      <div className="mt-1 border-t border-gray-100 pt-6">
+        <p className="flex items-center justify-center gap-3 text-[#d26019] font-extrabold text-[15px] uppercase tracking-[0.28em] mb-4" style={{ fontFamily: "'Inter', sans-serif" }}>
+          <span className="inline-block w-8 h-[1.5px] bg-[#d26019] " />
+          The Scale. The Impact.
+          <span className="inline-block w-8 h-[1.5px] bg-[#d26019]" />
+        </p>
+        <div className="bg-[#f0f9f1] py-2 px-5 rounded-2xl border border-[#23471d15]">
+          <VenueStats />
+        </div>
+      </div>
+
+
 
       {/* WHY ATTEND SECTION */}
       {/* <WhyAttend /> */}
