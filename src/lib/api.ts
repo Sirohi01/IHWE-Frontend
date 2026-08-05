@@ -944,6 +944,13 @@ export const visitorApi = {
         });
         return await response.json();
     },
+    submitInternational: async (formData: FormData) => {
+        const response = await fetch(`${API_URL}/international-visitors`, {
+            method: 'POST',
+            body: formData
+        });
+        return await response.json();
+    },
     submitGeneral: async (payload: any) => {
         const response = await fetch(`${API_URL}/general-visitors`, {
             method: 'POST',

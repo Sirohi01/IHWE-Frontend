@@ -77,7 +77,7 @@ const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) =>
         nationality: "", passportNo: "", occupation: "",
         email: "", personalEmail: "", mobileNo: "", whatsappNo: "", indiaContactNo: "",
         designation: "", companyName: "", companyWebsite: "",
-        industry: "", companySize: "",
+        industry: "", otherIndustry: "", companySize: "",
         address: "", country: "", state: "", city: "", companyPincode: "",
         preferredDate: "", numAttendees: "",
         invitationLetter: "no", hotelAssistance: "no", airportPickup: "no", translatorSupport: "no",
@@ -264,23 +264,39 @@ const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) =>
             alert("Please accept all declarations."); return;
         }
 
-        const { 
-            mobileNo, subscribeNewsletter, schedulingB2B, anyRequirement, industry, 
-            ...restFormData 
-        } = formData;
+        const data = new FormData();
+        Object.entries(formData).forEach(([key, value]) => {
+            if (key === 'otherIndustry') return; // folded into industrySector below, not a model field
 
-        const payload = {
-            ...restFormData,
-            mobile: mobileNo,
-            subscribe: subscribeNewsletter,
-            b2bMeeting: schedulingB2B,
-            specificRequirement: anyRequirement,
-            industrySector: industry,
-        };
+            let targetKey = key;
+            if (key === 'mobileNo') targetKey = 'mobile';
+            if (key === 'subscribeNewsletter') targetKey = 'subscribe';
+            if (key === 'schedulingB2B') targetKey = 'b2bMeeting';
+            if (key === 'anyRequirement') targetKey = 'specificRequirement';
+            if (key === 'industry') {
+                targetKey = 'industrySector';
+                value = value === 'others' ? formData.otherIndustry : value;
+            }
+
+            if (Array.isArray(value)) {
+                data.append(targetKey, JSON.stringify(value));
+            } else {
+                data.append(targetKey, value as string);
+            }
+        });
+
+        // Append files
+        if (files) {
+            Object.entries(files).forEach(([key, file]) => {
+                if (file) {
+                    data.append(key, file);
+                }
+            });
+        }
 
         setLoading(true);
         try {
-            const res = await visitorApi.submitCorporate(payload);
+            const res = await visitorApi.submitInternational(data);
             if (res.success || res.data) { setIsSuccess(true); window.scrollTo({ top: 0, behavior: "smooth" }); }
             else throw new Error(res.message || 'Failed');
         } catch (err: any) { alert(err.message || "Submission failed."); }
@@ -386,6 +402,42 @@ const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) =>
                                 <div className="lg:col-span-2">
                                     <Label className={labelClasses}>Organisation / Company Name</Label>
                                     <Input name="companyName" value={formData.companyName} onChange={handleInputChange} placeholder="Company Name (if applicable)" className={inputClasses} />
+                                </div>
+                                <div>
+                                    <Label className={labelClasses}>Company Website</Label>
+                                    <Input name="companyWebsite" value={formData.companyWebsite} onChange={handleInputChange} placeholder="www.company.com" className={inputClasses} />
+                                </div>
+                                <div>
+                                    <Label className={labelClasses}>Industry / Sector</Label>
+                                    <Select onValueChange={(v) => handleSelectChange('industry', v)} value={formData.industry}>
+                                        <SelectTrigger className={inputClasses}><SelectValue placeholder="Select Here" /></SelectTrigger>
+                                        <SelectContent className="bg-white">
+                                            <SelectItem value="ayush">AYUSH</SelectItem>
+                                            <SelectItem value="agriculture">Agriculture & Organic</SelectItem>
+                                            <SelectItem value="fitness">Fitness & Wellness</SelectItem>
+                                            <SelectItem value="healthcare">Healthcare Services</SelectItem>
+                                            <SelectItem value="pharma">Pharmaceutical</SelectItem>
+                                            <SelectItem value="others">Others</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                {formData.industry === 'others' && (
+                                    <div>
+                                        <Label className={labelClasses}>Please Specify Industry</Label>
+                                        <Input name="otherIndustry" value={formData.otherIndustry} onChange={handleInputChange} placeholder="Enter your industry" className={inputClasses} />
+                                    </div>
+                                )}
+                                <div>
+                                    <Label className={labelClasses}>Company Size</Label>
+                                    <Select onValueChange={(v) => handleSelectChange('companySize', v)} value={formData.companySize}>
+                                        <SelectTrigger className={inputClasses}><SelectValue placeholder="Select Here" /></SelectTrigger>
+                                        <SelectContent className="bg-white">
+                                            <SelectItem value="1-10">1-10 Employees</SelectItem>
+                                            <SelectItem value="11-50">11-50 Employees</SelectItem>
+                                            <SelectItem value="51-200">51-200 Employees</SelectItem>
+                                            <SelectItem value="200+">200+ Employees</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                             </div>
                         </div>
@@ -503,9 +555,9 @@ const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) =>
                         {/* ── NEXT STEP BUTTON (STEP 1) ── */}
                         {step === 1 && (
                             <div className="pt-4 flex flex-col items-center border-t border-slate-100 mt-4">
-                                <Button 
-                                    type="button" 
-                                    onClick={() => setStep(2)} 
+                                <Button
+                                    type="button"
+                                    onClick={() => setStep(2)}
                                     disabled={requireOtpForVisitorRegistration && (!emailVerified || !phoneVerified)}
                                     className="w-full max-w-xs h-10 rounded-sm bg-[#23471d] hover:bg-[#1a3516] text-white font-black text-xs uppercase tracking-widest shadow-xl flex items-center justify-center gap-3 group disabled:opacity-60 disabled:cursor-not-allowed transition-all"
                                 >
