@@ -263,9 +263,24 @@ const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) =>
         if (!formData.confirmInfo || !formData.agreeTerms || !formData.acceptPrivacy || !formData.agreeRules) {
             alert("Please accept all declarations."); return;
         }
+
+        const { 
+            mobileNo, subscribeNewsletter, schedulingB2B, anyRequirement, industry, 
+            ...restFormData 
+        } = formData;
+
+        const payload = {
+            ...restFormData,
+            mobile: mobileNo,
+            subscribe: subscribeNewsletter,
+            b2bMeeting: schedulingB2B,
+            specificRequirement: anyRequirement,
+            industrySector: industry,
+        };
+
         setLoading(true);
         try {
-            const res = await visitorApi.submitCorporate({ ...formData });
+            const res = await visitorApi.submitCorporate(payload);
             if (res.success || res.data) { setIsSuccess(true); window.scrollTo({ top: 0, behavior: "smooth" }); }
             else throw new Error(res.message || 'Failed');
         } catch (err: any) { alert(err.message || "Submission failed."); }
@@ -638,9 +653,32 @@ const AddInternationalVistor = ({ embedded = false }: { embedded?: boolean }) =>
                                         />
                                     </div>
 
+                                    {/* ── DECLARATION ── */}
+                                    <div className="pt-4 space-y-3">
+                                        <label className="flex items-start gap-3 cursor-pointer group">
+                                            <Checkbox checked={formData.confirmInfo} onCheckedChange={(c: boolean) => setFormData(prev => ({ ...prev, confirmInfo: !!c }))}
+                                                className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] mt-0.5" />
+                                            <span className="text-[11px] font-medium text-slate-600 leading-tight">I confirm that the information provided is accurate and complete.</span>
+                                        </label>
+                                        <label className="flex items-start gap-3 cursor-pointer group">
+                                            <Checkbox checked={formData.agreeTerms} onCheckedChange={(c: boolean) => setFormData(prev => ({ ...prev, agreeTerms: !!c }))}
+                                                className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] mt-0.5" />
+                                            <span className="text-[11px] font-medium text-slate-600 leading-tight">I agree to the Terms and Conditions of the event.</span>
+                                        </label>
+                                        <label className="flex items-start gap-3 cursor-pointer group">
+                                            <Checkbox checked={formData.acceptPrivacy} onCheckedChange={(c: boolean) => setFormData(prev => ({ ...prev, acceptPrivacy: !!c }))}
+                                                className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] mt-0.5" />
+                                            <span className="text-[11px] font-medium text-slate-600 leading-tight">I accept the Privacy Policy.</span>
+                                        </label>
+                                        <label className="flex items-start gap-3 cursor-pointer group">
+                                            <Checkbox checked={formData.agreeRules} onCheckedChange={(c: boolean) => setFormData(prev => ({ ...prev, agreeRules: !!c }))}
+                                                className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] mt-0.5" />
+                                            <span className="text-[11px] font-medium text-slate-600 leading-tight">I agree to abide by the event rules and regulations.</span>
+                                        </label>
+                                    </div>
 
                                     {/* ── SUBSCRIBE ── */}
-                                    <label className="flex items-center gap-3 cursor-pointer group pt-4">
+                                    <label className="flex items-center gap-3 cursor-pointer group pt-2">
                                         <Checkbox checked={formData.subscribeNewsletter} onCheckedChange={(c: boolean) => setFormData(prev => ({ ...prev, subscribeNewsletter: !!c }))}
                                             className="rounded-none w-3.5 h-3.5 border-slate-400 data-[state=checked]:bg-[#23471d] data-[state=checked]:border-[#23471d]" />
                                         <span className="text-[11px] font-bold text-slate-600 uppercase tracking-wide">Subscribe to IHWE Global Updates & Newsletters</span>
