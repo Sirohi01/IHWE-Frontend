@@ -33,7 +33,7 @@ const cardBackgrounds = [
 
 const DistinguishedSpeakers: React.FC<DistinguishedSpeakersProps> = ({
   title = "MEET OUR ESTEEMED",
-  highlight = "SPEAKERS 2025",
+  highlight = "SPEAKERS 2026",
   compact = false,
 }) => {
   const [isPaused, setIsPaused] = useState(false);
