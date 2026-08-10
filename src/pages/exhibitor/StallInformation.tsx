@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
     Download, FileText, ChevronRight, CheckCircle2,
     Layers, Maximize, Map, Calendar, MapPin, Type, Zap,
-    Trash2, Box, Grid, Headset, ArrowRight, Plus, ShieldCheck,
+    Trash2, Box, Grid, Headset, ShieldCheck,
     LightbulbIcon, WifiIcon, ZapIcon, Check, CalendarIcon, Package
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -331,12 +331,8 @@ export default function StallInformation() {
                                 <FloorPlanPreview currentStallNo={String(stallNo)} />
                             </button>
                             <div className="flex flex-wrap justify-between items-center gap-y-1.5 mt-1.5 text-[9px] font-semibold text-slate-700 w-full px-3">
-                                <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-200/60"></span> Available</div>
-                                <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-[#0052cc]"></span> Booked</div>
                                 <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span> Your Stall</div>
-                                <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-slate-300"></span> Blocked</div>
-                                <div className="flex items-center gap-1 ml-1.5"><ArrowRight size={10} className="text-[#10b981]" strokeWidth={4} /> Entrance</div>
-                                <div className="flex items-center gap-1"><Plus size={10} className="text-red-500" strokeWidth={4} /> Fire Exit</div>
+                                <span className="text-slate-400">Tap to zoom in on the full hall layout</span>
                             </div>
                         </div>
                     </div>
