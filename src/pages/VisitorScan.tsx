@@ -51,21 +51,32 @@ const VisitorScan = () => {
 
   useEffect(() => {
     if (!registrationId) return;
-    fetch(`${API_URL}/corporate-visitors/scan/${encodeURIComponent(registrationId)}`)
-      .then((r) => r.json())
-      .then((d) => {
-        if (d.success) { setVisitor(d.data); setVisitorType("Corporate Visitor Pass"); setLoading(false); }
-        else {
-          return fetch(`${API_URL}/general-visitors/scan/${encodeURIComponent(registrationId)}`)
-            .then((r) => r.json())
-            .then((d2) => {
-              if (d2.success) { setVisitor(d2.data); setVisitorType("General Visitor Pass"); }
-              else setError("Visitor not found for this QR code.");
-            });
+
+    const lookups: { url: string; label: string }[] = [
+      { url: "corporate-visitors", label: "Corporate Visitor Pass" },
+      { url: "general-visitors", label: "General Visitor Pass" },
+      { url: "international-visitors", label: "International Visitor Pass" },
+      { url: "health-camp-visitors", label: "Health Camp Visitor Pass" },
+    ];
+
+    const findVisitor = async () => {
+      for (const { url, label } of lookups) {
+        try {
+          const res = await fetch(`${API_URL}/${url}/scan/${encodeURIComponent(registrationId)}`);
+          const data = await res.json();
+          if (data.success) {
+            setVisitor(data.data);
+            setVisitorType(label);
+            return;
+          }
+        } catch {
+          // try the next visitor type
         }
-      })
-      .catch(() => setError("Failed to fetch visitor data. Please try again."))
-      .finally(() => setLoading(false));
+      }
+      setError("Visitor not found for this QR code.");
+    };
+
+    findVisitor().finally(() => setLoading(false));
   }, [registrationId]);
 
   if (loading) {
