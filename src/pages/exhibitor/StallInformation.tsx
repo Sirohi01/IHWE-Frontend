@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import {
     Download, FileText, ChevronRight, CheckCircle2,
     Layers, Maximize, Map, Calendar, MapPin, Type, Zap,
-    Trash2, Box, Grid, Headset, ArrowRight, Plus, ShieldCheck,
+    Trash2, Box, Grid, Headset, ShieldCheck,
     LightbulbIcon, WifiIcon, ZapIcon, Check, CalendarIcon, Package
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -151,6 +151,17 @@ export default function StallInformation() {
         { label: 'Open Side', value: openSide, icon: Layers },
         { label: 'Power Allocation', value: powerAllocation, icon: Zap },
     ];
+
+    useEffect(() => {
+        if (showFloorPlanPreview) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [showFloorPlanPreview]);
 
     useEffect(() => {
         let mounted = true;
@@ -331,12 +342,8 @@ export default function StallInformation() {
                                 <FloorPlanPreview currentStallNo={String(stallNo)} />
                             </button>
                             <div className="flex flex-wrap justify-between items-center gap-y-1.5 mt-1.5 text-[9px] font-semibold text-slate-700 w-full px-3">
-                                <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-blue-200/60"></span> Available</div>
-                                <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-[#0052cc]"></span> Booked</div>
-                                <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span> Your Stall</div>
-                                <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-slate-300"></span> Blocked</div>
-                                <div className="flex items-center gap-1 ml-1.5"><ArrowRight size={10} className="text-[#10b981]" strokeWidth={4} /> Entrance</div>
-                                <div className="flex items-center gap-1"><Plus size={10} className="text-red-500" strokeWidth={4} /> Fire Exit</div>
+                                <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span> Your Stall No. - {stallNo}</div>
+                                <span className="text-slate-400">Tap to zoom in on the full hall layout</span>
                             </div>
                         </div>
                     </div>
@@ -344,8 +351,8 @@ export default function StallInformation() {
 
                 {showFloorPlanPreview && (
                     <div className="fixed inset-0 z-50 bg-black/70 p-4 md:p-6 flex items-center justify-center">
-                        <div className="w-full max-w-7xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden">
-                            <div className="flex items-center justify-between px-4 py-3 border-b border-slate-200">
+                        <div className="w-full max-w-5xl bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden flex flex-col max-h-[90vh] md:max-h-[85vh]">
+                            <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200 flex-shrink-0">
                                 <div>
                                     <h3 className="text-sm md:text-base font-black text-slate-900">Your Stall Location</h3>
                                     <p className="text-[11px] font-bold text-slate-500">Stall No. {stallParts.stall}</p>
@@ -353,14 +360,14 @@ export default function StallInformation() {
                                 <button
                                     type="button"
                                     onClick={() => setShowFloorPlanPreview(false)}
-                                    className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center"
+                                    className="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-700 flex items-center justify-center transition-colors"
                                     aria-label="Close floor plan preview"
                                 >
                                     ×
                                 </button>
                             </div>
-                            <div className="h-[72vh] bg-slate-50 overflow-auto">
-                                <div className="min-w-[1200px] h-full p-4">
+                            <div className="flex-1 bg-slate-50 overflow-auto px-4 md:px-10 py-2 md:py-4">
+                                <div className="min-w-[400px] md:min-w-0 w-[85%] lg:w-[75%] mx-auto h-full flex items-center justify-center">
                                     <FloorPlanPreview currentStallNo={String(stallNo)} />
                                 </div>
                             </div>
