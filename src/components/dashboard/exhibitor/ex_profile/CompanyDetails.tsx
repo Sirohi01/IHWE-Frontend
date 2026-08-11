@@ -12,6 +12,7 @@ const COMPANY_FIELDS = [
     { key: "gstNo", label: "GST No." },
     { key: "panNo", label: "PAN No." },
     { key: "landlineNo", label: "Landline" },
+    { key: "companyDescription", label: "About Company", fullWidth: true, isTextArea: true },
 ];
 
 const ADDRESS_FIELDS = [
@@ -102,9 +103,9 @@ export default function CompanyDetails() {
                     </div>
                     <div className="p-5 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-6 gap-x-4">
                         {companyDetails.map((detail, idx) => (
-                            <div key={idx} className="flex flex-col gap-1">
+                            <div key={idx} className={`flex flex-col gap-1 ${detail.fullWidth ? "lg:col-span-4 md:col-span-2" : ""}`}>
                                 <span className="text-[11px] font-bold text-gray-500 uppercase tracking-wider">{detail.label}</span>
-                                <span className="text-[14px] font-semibold text-[#0A143D]">{detail.value}</span>
+                                <span className="text-[14px] font-semibold text-[#0A143D] whitespace-pre-wrap">{detail.value}</span>
                             </div>
                         ))}
                     </div>
@@ -144,12 +145,20 @@ export default function CompanyDetails() {
                                 {[...COMPANY_FIELDS, ...ADDRESS_FIELDS].map(({ key, label }) => (
                                     <div key={key} className="space-y-1">
                                         <label className="text-xs font-bold uppercase tracking-wider text-slate-400">{label}</label>
-                                        <input
-                                            type="text"
-                                            className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500 text-sm"
-                                            value={form[key] || ""}
-                                            onChange={(e) => setForm({ ...form, [key]: e.target.value })}
-                                        />
+                                        {(key === "companyDescription" || key === "address") ? (
+                                            <textarea
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500 text-sm min-h-[100px]"
+                                                value={form[key] || ""}
+                                                onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                                            />
+                                        ) : (
+                                            <input
+                                                type="text"
+                                                className="w-full rounded-xl border border-slate-200 p-2.5 outline-none focus:border-blue-500 text-sm"
+                                                value={form[key] || ""}
+                                                onChange={(e) => setForm({ ...form, [key]: e.target.value })}
+                                            />
+                                        )}
                                     </div>
                                 ))}
                             </div>

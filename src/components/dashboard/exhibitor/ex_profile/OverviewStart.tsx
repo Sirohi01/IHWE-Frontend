@@ -402,7 +402,7 @@ export default function OverviewStart() {
                                         <Pencil size={13} />
                                         Edit Profile
                                     </button>
-                                    <button onClick={() => window.open("/profile")} className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-[13px] font-semibold transition-colors">
+                                    <button onClick={() => window.open("/exhibitor-profile")} className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-[13px] font-semibold transition-colors">
                                         <Eye size={13} />
                                         View Public Profile
                                     </button>

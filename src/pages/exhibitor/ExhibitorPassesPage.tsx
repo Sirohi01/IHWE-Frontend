@@ -50,7 +50,22 @@ export default function ExhibitorPassesPage() {
     };
 
     const getTeamAllocation = (pass: any) => {
-        const teamMembers = Array.isArray(data?.teamMembers) ? data.teamMembers : [];
+        let teamMembers = Array.isArray(data?.teamMembers) ? [...data.teamMembers] : [];
+        if (data?.contact1) {
+            const hasContact1 = teamMembers.some((m: any) => 
+                (m.email && m.email.toLowerCase() === data.contact1.email?.toLowerCase()) || 
+                (m.isPrimary === true)
+            );
+            if (!hasContact1) {
+                teamMembers.unshift({
+                    ...data.contact1,
+                    _id: data.contact1._id || 'primary_contact',
+                    name: [data.contact1.firstName, data.contact1.lastName].filter(Boolean).join(' ') || data.companyName || 'Primary Contact',
+                    isPrimary: true,
+                    roleAtExhibition: 'Primary Contact'
+                });
+            }
+        }
         const previousRequests = passRequests.filter(
             request => request.passType === pass.id && request.status !== 'rejected'
         );
@@ -250,11 +265,17 @@ export default function ExhibitorPassesPage() {
         setIsSubmitting(true);
         try {
             const token = localStorage.getItem("exhibitorToken");
+
+            const sanitizePayloadList = (list: any[]) => list?.map(entry => ({
+                ...entry,
+                teamMemberId: entry.teamMemberId === 'primary_contact' ? undefined : entry.teamMemberId
+            }));
+
             const payload = {
                 passType: selectedPass.id,
                 quantity,
-                vehicles: isVehiclePassId(selectedPass.id) ? vehicles : undefined,
-                personnel: !isVehiclePassId(selectedPass.id) ? personnel : undefined,
+                vehicles: isVehiclePassId(selectedPass.id) ? sanitizePayloadList(vehicles) : undefined,
+                personnel: !isVehiclePassId(selectedPass.id) ? sanitizePayloadList(personnel) : undefined,
                 paymentDetails
             };
 
