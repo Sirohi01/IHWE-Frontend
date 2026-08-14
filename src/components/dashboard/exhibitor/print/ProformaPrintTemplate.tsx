@@ -38,11 +38,16 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
     const fmtNum = (n: any) => Math.round(Number(n || 0)).toLocaleString('en-IN');
 
     const items = document?.items || [];
+    // Prefer the Payment Terms snapshotted onto the PI at save time; older
+    // PIs saved before that snapshot existed fall back to this fixed line.
+    const paymentConditions: string[] = document?.paymentConditions?.length
+        ? document.paymentConditions
+        : ['Advance Payment – 100%: Full payment is payable in advance on the same day of Proforma Invoice (PI) generation.'];
     const estNo = document?.est_no || '';
     const estDate = document?.supply_date ? new Date(document.supply_date).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' }) : '';
-    const createdDateTime = document?.added
-        ? new Date(document.added).toLocaleString('en-GB', { day: '2-digit', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }).replace(',', '')
-        : new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: '2-digit', hour: '2-digit', minute: '2-digit', hour12: true }).replace(',', '');
+    const createdAt = document?.added ? new Date(document.added) : new Date();
+    const createdDate = createdAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' });
+    const createdTime = createdAt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true });
 
     const totalTaxable = items.reduce((sum: number, item: any) => {
         const amt = parseFloat(item.amount) || 0;
@@ -301,7 +306,12 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                                 <tr>
                                     <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Created Date</td>
                                     <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right', whiteSpace: 'nowrap' }}>{createdDateTime}</td>
+                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right', whiteSpace: 'nowrap' }}>{createdDate}</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Created Time</td>
+                                    <td style={{ fontWeight: 'bold', border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                    <td style={{ border: 'none', padding: '1px 0', textAlign: 'right', whiteSpace: 'nowrap' }}>{createdTime}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ fontWeight: 'bold', whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Created By</td>
@@ -347,9 +357,17 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                         <tr key={index}>
                             <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{index + 1}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px' }}>
-                                <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>9TH EDITION OF INTERNATIONAL HEALTH &amp; WELLNESS EXPO (IHWE GLOBAL EDITION)</div>
+                                {item?.category !== 'PLC Charges' && (
+                                    <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>
+                                        {item?.category === 'Addon Product' ? 'Add-on Product' : 'Exhibition Stall Charges'}
+                                    </div>
+                                )}
                                 <div style={{ fontSize: 10, color: '#555', whiteSpace: 'pre-wrap' }}>
-                                    {item?.description}
+                                    {item?.category === 'PLC Charges'
+                                        ? <><span style={{ fontWeight: 700 }}>Note:</span> {item?.description}</>
+                                        : item?.category === 'Addon Product'
+                                            ? item?.description
+                                            : `Stall No. ${item?.description}${item?.plScheme ? ` | ${item.plScheme}` : ''}${item?.stallType ? ` | ${item.stallType}` : ''}`}
                                     {item?.remarks ? `\n${item.remarks}` : ''}
                                 </div>
                             </td>
@@ -385,7 +403,8 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                 <thead>
                     <tr style={{ background: '#0d1f3c', color: '#fff', textTransform: 'uppercase' }}>
                         <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold', textTransform: 'none' }}>S.No.</th>
-                        <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>HSN/SAC No.</th>
+                        <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>HSN Code</th>
+                        <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>SAC Code</th>
                         <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Item Value</th>
                         <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Qty.</th>
                         <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>CGST(%)</th>
@@ -407,11 +426,17 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                         const itemTaxable = amt - discountAmt;
                         const gstAmt = parseFloat(item?.tax) || 0;
                         const halfGstAmt = gstAmt / 2;
+                        // Stall bookings (and the PLC surcharge on them) are a service — SAC;
+                        // an Addon Product is treated as goods — HSN. Only one code is ever
+                        // saved per item, so it's shown under whichever column applies.
+                        const itemCode = item?.hsn || item?.hsnCode || item?.hsn_code || '—';
+                        const isServiceItem = item?.category !== 'Addon Product';
 
                         return (
                             <tr key={index}>
                                 <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{index + 1}</td>
-                                <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{item?.hsn}</td>
+                                <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{!isServiceItem ? itemCode : '—'}</td>
+                                <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{isServiceItem ? itemCode : '—'}</td>
                                 <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right' }}>{fmtNum(itemTaxable)}</td>
                                 <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{item?.qty}</td>
                                 <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{!isIgst ? halfGst + '%' : '-'}</td>
@@ -425,16 +450,16 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                         );
                     })}
                     <tr style={{ background: 'rgb(241, 245, 249)', textTransform: 'uppercase' }}>
-                        <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>GST Amount in Words</td>
+                        <td colSpan={4} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>GST Amount in Words</td>
                         <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px', textTransform: 'none' }}>{toWords(Math.round(totalGstAmount))}</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Total GST Amount</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(totalGstAmount)}</td>
                     </tr>
                     <tr style={{ height: 8 }}>
-                        {Array(11).fill(0).map((_, j) => <td key={j} style={{ border: 'none', padding: 0 }}></td>)}
+                        {Array(12).fill(0).map((_, j) => <td key={j} style={{ border: 'none', padding: 0 }}></td>)}
                     </tr>
                     <tr style={{ background: 'rgb(241, 245, 249)', textTransform: 'uppercase' }}>
-                        <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
+                        <td colSpan={4} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words</td>
                         <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px', textTransform: 'none' }}>{toWords(Math.round(grandTotal))}</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Grand Total</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right', fontSize: 13, color: '#000' }}>{fmtNum(grandTotal)}</td>
@@ -456,13 +481,9 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                             </div>
                         </td>
                         <td style={{ width: '40%', border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10, background: '#fafafa' }}>
-                            <div style={{ fontWeight: 700, marginBottom: 4, background: 'rgb(241, 245, 249)', fontSize: 10, borderBottom: '1px solid #ccc', padding: '4px 8px', margin: '-6px -8px 6px' }}>Payment Conditions:</div>
+                            <div style={{ fontWeight: 700, marginBottom: 4, background: 'rgb(241, 245, 249)', fontSize: 10, borderBottom: '1px solid #ccc', padding: '4px 8px', margin: '-6px -8px 6px' }}>Payment &amp; Term Conditions:</div>
                             <div style={{ whiteSpace: 'pre-wrap' }}>
-                                {estimateTerms?.paymentConditions?.length ? (
-                                    estimateTerms.paymentConditions.map((t: string, i: number) => <div key={i}>{i + 1}. {t}</div>)
-                                ) : (
-                                    '1. 100% Advance Payment.'
-                                )}
+                                {paymentConditions.map((t: string, i: number) => <div key={i}>{i + 1}. {t}</div>)}
                             </div>
                         </td>
                     </tr>
