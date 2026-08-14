@@ -191,8 +191,14 @@ export const joinAddressParts = (parts: any[]): string => {
 
 export const getFirstAddressValue = (...values: any[]): string => values.find((value) => cleanAddressPart(value)) || '';
 export const getFirstCleanValue = (...values: any[]): string => values.find((value) => String(value ?? '').trim()) || '';
+// Contact names are often saved ALL CAPS (or all lowercase) — normalize to
+// Title Case rather than relying on CSS text-transform, which can't lowercase
+// the rest of an already-uppercase word.
+const toTitleCase = (value: string): string =>
+    value.toLowerCase().replace(/(^|[\s.'-])([a-z])/g, (_, sep, ch) => sep + ch.toUpperCase());
+
 export const normalizeContactName = (name: any, titledName: any): string => {
     const clean = (value: any) => String(value || '').replace(/\s+/g, ' ').trim();
     const value = clean(name) || clean(titledName);
-    return value ? value.replace(/^(mr|mrs|ms|miss|dr|prof)\.?\s*/i, '').trim() : '—';
+    return value ? toTitleCase(value.replace(/^(mr|mrs|ms|miss|dr|prof)\.?\s*/i, '').trim()) : '—';
 };
