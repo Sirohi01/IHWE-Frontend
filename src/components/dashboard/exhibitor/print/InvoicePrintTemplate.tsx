@@ -376,7 +376,7 @@ export default function InvoicePrintTemplate({ document, sourceEstimate, company
                     {[
                         { label: 'S.No.', width: '3%' },
                         { label: 'Item Description', width: '48%' },
-                        { label: 'HSN Code', width: '7%' },
+                        { label: 'HSN/SAC Code', width: '7%' },
                         { label: 'Qty.', width: '4%' },
                         { label: 'Size', width: '7%' },
                         { label: 'Area', width: '7%' },
@@ -444,7 +444,8 @@ export default function InvoicePrintTemplate({ document, sourceEstimate, company
                 <thead>
                     <tr style={{ background: '#0d1f3c', color: '#fff', textTransform: 'uppercase' }}>
                         <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>S.No.</th>
-                        <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>HSN/SAC No.</th>
+                        <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>HSN Code</th>
+                        <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>SAC Code</th>
                         <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Item Value</th>
                         <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>Qty.</th>
                         <th style={{ border: '1px solid #0d1f3c', padding: '3px 2px', fontSize: 10, background: '#0d1f3c', color: '#fff', fontWeight: 'bold' }}>CGST(%)</th>
@@ -463,11 +464,14 @@ export default function InvoicePrintTemplate({ document, sourceEstimate, company
                         const gstAmt = parseFloat(item?.gstAmount) || 0;
                         const halfGstAmt = gstAmt / 2;
                         const itemTaxable = parseFloat(item?.taxableValue) || 0;
+                        const itemCode = item?.hsn || item?.hsnCode || item?.hsn_code || '—';
+                        const isServiceItem = item?.category !== 'Addon Product';
 
                         return (
                             <tr key={index}>
                                 <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{index + 1}</td>
-                                <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{item?.hsn}</td>
+                                <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{!isServiceItem ? itemCode : '—'}</td>
+                                <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{isServiceItem ? itemCode : '—'}</td>
                                 <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'right' }}>{fmtNum(itemTaxable)}</td>
                                 <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{item?.qty}</td>
                                 <td style={{ border: '1px solid #ccc', padding: '4px 6px', textAlign: 'center' }}>{!isIgst ? halfGst + '%' : '-'}</td>
@@ -481,16 +485,16 @@ export default function InvoicePrintTemplate({ document, sourceEstimate, company
                         );
                     })}
                     <tr style={{ background: '#f8fafc', textTransform: 'uppercase' }}>
-                        <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>GST Amount in Words ({currAbbr})</td>
+                        <td colSpan={4} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>GST Amount in Words ({currAbbr})</td>
                         <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px', textTransform: 'none' }}>{toWords(Math.round(totalGstAmount))}</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Total GST Amount</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right' }}>{fmtNum(totalGstAmount)}</td>
                     </tr>
                     <tr style={{ height: 8 }}>
-                        {Array(11).fill(0).map((_, j) => <td key={j} style={{ border: 'none', padding: 0 }}></td>)}
+                        {Array(12).fill(0).map((_, j) => <td key={j} style={{ border: 'none', padding: 0 }}></td>)}
                     </tr>
                     <tr style={{ background: '#f8fafc', textTransform: 'uppercase' }}>
-                        <td colSpan={3} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words ({currAbbr})</td>
+                        <td colSpan={4} style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Amount in Words ({currAbbr})</td>
                         <td colSpan={6} style={{ border: '1px solid #ccc', padding: '4px 6px', textTransform: 'none' }}>{toWords(Math.round(grandTotal))}</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700 }}>Grand Total</td>
                         <td style={{ border: '1px solid #ccc', padding: '4px 6px', fontWeight: 700, textAlign: 'right', fontSize: 13, color: '#000' }}>{fmtNum(grandTotal)}</td>

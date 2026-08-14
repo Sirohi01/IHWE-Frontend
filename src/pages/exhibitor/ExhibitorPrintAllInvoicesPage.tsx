@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { API_URL, SERVER_URL, settingsApi } from '@/lib/api';
 import InvoicePrintTemplate from '@/components/dashboard/exhibitor/print/InvoicePrintTemplate';
+import adminInvoiceHeader from '@/assets/header.webp';
 import ProformaPrintTemplate from '@/components/dashboard/exhibitor/print/ProformaPrintTemplate';
 import ChallanPrintTemplate from '@/components/dashboard/exhibitor/print/ChallanPrintTemplate';
 import { Printer, Download, Loader2, ArrowLeft } from 'lucide-react';
@@ -236,9 +237,9 @@ export default function ExhibitorPrintAllInvoicesPage() {
                             {type === 'challan' ? (
                                 <ChallanPrintTemplate challan={doc} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} estimateTerms={terms} />
                             ) : type === 'proforma' ? (
-                                <ProformaPrintTemplate document={doc} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} estimateTerms={terms} />
+                                <ProformaPrintTemplate document={doc} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={adminInvoiceHeader} estimateTerms={terms} />
                             ) : (
-                                <InvoicePrintTemplate document={doc} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} heading="TAX INVOICE" estimateTerms={terms} />
+                                <InvoicePrintTemplate document={doc} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={adminInvoiceHeader} heading="TAX INVOICE" estimateTerms={terms} />
                             )}
                         </div>
                     );

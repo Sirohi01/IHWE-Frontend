@@ -333,7 +333,7 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
                     {[
                         { label: 'S.No.', width: '3%' },
                         { label: 'Item Description', width: '48%' },
-                        { label: 'HSN Code', width: '7%' },
+                        { label: 'HSN/SAC Code', width: '7%' },
                         { label: 'Qty.', width: '4%' },
                         { label: 'Size', width: '7%' },
                         { label: 'Area', width: '7%' },

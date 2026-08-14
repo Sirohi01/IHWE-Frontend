@@ -9,6 +9,7 @@ import DebitNotePrintTemplate from '@/components/dashboard/exhibitor/print/Debit
 import { Printer, Download, Loader2 } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import { jsPDF } from 'jspdf';
+import adminInvoiceHeader from '@/assets/header.webp';
 
 const mediaUrl = (value?: string) => {
     if (!value) return null;
@@ -173,13 +174,13 @@ export default function ExhibitorDocumentPrintPage() {
                 {docType === 'challan' ? (
                     <ChallanPrintTemplate challan={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} estimateTerms={estimateTerms} />
                 ) : docType === 'proforma' ? (
-                    <ProformaPrintTemplate document={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} estimateTerms={estimateTerms} />
+                    <ProformaPrintTemplate document={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={adminInvoiceHeader} estimateTerms={estimateTerms} />
                 ) : docType === 'creditnote' || docType === 'legacycreditnote' ? (
                     <CreditNotePrintTemplate document={document} company={company} settings={settings} headerImageUrl={headerImageUrl} />
                 ) : docType === 'debitnote' ? (
                     <DebitNotePrintTemplate document={document} company={company} settings={settings} headerImageUrl={headerImageUrl} />
                 ) : (
-                    <InvoicePrintTemplate document={document} sourceEstimate={sourceEstimate} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} heading="TAX INVOICE" estimateTerms={estimateTerms} />
+                    <InvoicePrintTemplate document={document} sourceEstimate={sourceEstimate} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={adminInvoiceHeader} heading="TAX INVOICE" estimateTerms={estimateTerms} />
                 )}
             </div>
 
