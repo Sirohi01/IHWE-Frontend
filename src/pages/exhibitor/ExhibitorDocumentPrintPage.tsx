@@ -23,6 +23,7 @@ export default function ExhibitorDocumentPrintPage() {
     const printRef = useRef<HTMLDivElement>(null);
     const [document, setDocument] = useState<any>(null);
     const [company, setCompany] = useState<any>(null);
+    const [sourceEstimate, setSourceEstimate] = useState<any>(null);
     const [settings, setSettings] = useState<any>(null);
     const [bankDetails, setBankDetails] = useState<any>(null);
     const [estimateTerms, setEstimateTerms] = useState<any>(null);
@@ -46,13 +47,14 @@ export default function ExhibitorDocumentPrintPage() {
                     return;
                 }
                 setDocument(docJson.document);
+                setSourceEstimate(docJson.sourceEstimate || null);
                 if (docJson.company) {
                     setCompany(docJson.company);
                 }
 
                 let termEndpoint = 'performa';
                 if (docType === 'challan') termEndpoint = 'delivery-challan';
-                else if (docType !== 'proforma' && docType !== 'creditnote' && docType !== 'debitnote' && docType !== 'legacycreditnote') termEndpoint = 'tax-invoice';
+                else if (docType !== 'proforma' && docType !== 'creditnote' && docType !== 'debitnote' && docType !== 'legacycreditnote') termEndpoint = 'performa';
 
                 const [settingsData, banksRes, templateRes, termsRes] = await Promise.all([
                     settingsApi.get().catch(() => null),
@@ -177,7 +179,7 @@ export default function ExhibitorDocumentPrintPage() {
                 ) : docType === 'debitnote' ? (
                     <DebitNotePrintTemplate document={document} company={company} settings={settings} headerImageUrl={headerImageUrl} />
                 ) : (
-                    <InvoicePrintTemplate document={document} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} heading="TAX INVOICE" estimateTerms={estimateTerms} />
+                    <InvoicePrintTemplate document={document} sourceEstimate={sourceEstimate} company={company} settings={settings} bankDetails={bankDetails} headerImageUrl={headerImageUrl} heading="TAX INVOICE" estimateTerms={estimateTerms} />
                 )}
             </div>
 

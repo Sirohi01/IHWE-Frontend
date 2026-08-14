@@ -29,6 +29,7 @@ const MIN_PADDED_ROWS = 3;
 
 interface Props {
     document: any;
+    sourceEstimate?: any;
     company?: any;
     bankDetails?: any;
     settings?: any;
@@ -38,11 +39,19 @@ interface Props {
     estimateTerms?: any;
 }
 
-export default function InvoicePrintTemplate({ document, company, bankDetails, settings, headerImageUrl, heading = 'TAX INVOICE', invoiceCopy = 'ORIGINAL COPY', estimateTerms }: Props) {
+export default function InvoicePrintTemplate({ document, sourceEstimate, company, bankDetails, settings, headerImageUrl, heading = 'TAX INVOICE', invoiceCopy = 'ORIGINAL COPY', estimateTerms }: Props) {
     const cur = '₹';
     const fmtNum = (n: any) => Math.round(Number(n || 0)).toLocaleString('en-IN');
 
-    const items = document?.items || [];
+    const items = (document?.items || []).map((item: any) => {
+        if (item?.category !== 'PLC Charges') return item;
+        const plcPct = Number(sourceEstimate?.plcPct) || Number(String(item.description || '').match(/@\s*([\d.]+)%/)?.[1]) || 0;
+        const scheme = item.plScheme || sourceEstimate?.items?.find((sourceItem: any) => sourceItem?.category !== 'Addon Product')?.plScheme || '';
+        return {
+            ...item,
+            description: [`Preferred Location Charges (PLC)${plcPct ? ` @ ${plcPct}%` : ''}`, scheme ? `${scheme} Stall: ${plcPct}% of the Basic Stall Price` : ''].filter(Boolean).join('\n'),
+        };
+    });
     const invoiceNo = document?.invoice_no || '';
     const dateVal = document?.invoice_date || document?.supply_date;
     const invoiceDate = dateVal ? new Date(dateVal).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' }) : '';
@@ -166,6 +175,15 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
     ]);
     const shipmentAddress = eventPlaceOfSupply;
     const eventGstNo = document?.event_gst_no || PROFORMA_EVENT_GST_NO;
+    const shipmentContactPerson = getFirstCleanValue(document?.consignee_person, sourceEstimate?.consignee_person) || '—';
+    const shipmentContactNo = getFirstCleanValue(document?.consignee_phone, sourceEstimate?.consignee_phone) || '—';
+    const shipmentEmail = getFirstCleanValue(document?.consignee_email, sourceEstimate?.consignee_email) || '—';
+    const paymentPlanInstalments = sourceEstimate?.instalments || [];
+    const tdsApplicable = sourceEstimate?.tdsApplicable !== false;
+    const tdsLines = sourceEstimate?.tdsLines || [];
+    const paymentConditions = sourceEstimate?.paymentConditions?.length
+        ? sourceEstimate.paymentConditions
+        : ['Advance Payment – 100%: Full payment is payable in advance on the same day of Proforma Invoice (PI) generation.'];
 
     const currentInvoiceType = document?.type_of_invoice || document?.est_type;
     const isIgst = currentInvoiceType
@@ -286,12 +304,17 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                                 <tr>
                                     <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact Person</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{clientContactPerson}</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{shipmentContactPerson}</td>
                                 </tr>
                                 <tr>
                                     <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Contact No.</td>
                                     <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
-                                    <td style={{ border: 'none', padding: '1px 0' }}>{clientContactNo}</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{shipmentContactNo}</td>
+                                </tr>
+                                <tr>
+                                    <td style={{ whiteSpace: 'nowrap', padding: '1px 4px 1px 0', border: 'none', width: '1%' }}>Email</td>
+                                    <td style={{ border: 'none', padding: '1px 4px 1px 0', width: '1%' }}>:</td>
+                                    <td style={{ border: 'none', padding: '1px 0' }}>{shipmentEmail}</td>
                                 </tr>
                                 {eventGstNo && eventGstNo !== '—' && (
                                     <tr>
@@ -369,16 +392,18 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
             <tbody>
                 {chunk.map((item: any, i: number) => {
                     const index = startIndex + i;
+                    const isPlcItem = item?.category === 'PLC Charges';
+                    const isStallItem = !isPlcItem && item?.category !== 'Addon Product';
                     const amt = parseFloat(item.amount) || 0;
                     const disc = parseFloat(item.taxableValue) ? amt - parseFloat(item.taxableValue) : 0;
                     const discPct = item.discountPct != null ? parseFloat(item.discountPct) : (amt > 0 ? (disc / amt) * 100 : 0);
                     return (
                         <tr key={index}>
-                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{index + 1}</td>
+                            <td style={{ border: '1px solid #ccc', padding: '6px', textAlign: 'center' }}>{isPlcItem ? '' : index + 1}</td>
                             <td style={{ border: '1px solid #ccc', padding: '6px' }}>
-                                <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>9TH EDITION OF INTERNATIONAL HEALTH &amp; WELLNESS EXPO (IHWE GLOBAL EDITION)</div>
+                                {!isPlcItem && <div style={{ fontWeight: 700, textTransform: 'uppercase' }}>{isStallItem ? 'Exhibition Stall Charges' : (item?.category || 'Add-on Product')}</div>}
                                 <div style={{ fontSize: 10, color: '#555', whiteSpace: 'pre-wrap' }}>
-                                    {item?.description}
+                                    {isPlcItem ? <><strong>Note:</strong> {item?.description}</> : isStallItem ? `Stall No. ${item?.description}${item?.plScheme ? ` | ${item.plScheme}` : ''}${item?.stallType ? ` | ${item.stallType}` : ''}` : item?.description}
                                     {item?.remarks ? `\n${item.remarks}` : ''}
                                 </div>
                             </td>
@@ -496,14 +521,10 @@ export default function InvoicePrintTemplate({ document, company, bankDetails, s
                         <td style={{ width: '40%', border: '1px solid #ccc', padding: '6px 8px', verticalAlign: 'top', fontSize: 10, background: '#fafafa' }}>
                             <div style={{ fontWeight: 700, marginBottom: 4, background: '#F8FAFC', borderBottom: '1px solid #ccc', padding: '4px 8px', margin: '-6px -8px 6px' }}>Payment Conditions:</div>
                             <div style={{ whiteSpace: 'pre-wrap' }}>
-                                {estimateTerms?.paymentConditions?.length ? (
-                                    estimateTerms.paymentConditions.map((t: string, i: number) => <div key={i}>{i + 1}. {t}</div>)
-                                ) : (
-                                    <>
-                                        <div>1. 100% Advance Payment.</div>
-                                        <div>2. Applicable TDS, if deducted, must be supported with TDS certificate / Form 16A.</div>
-                                    </>
-                                )}
+                                {paymentPlanInstalments.length > 0
+                                    ? paymentPlanInstalments.map((instalment: any, index: number) => <div key={index}>{index + 1}. {instalment.label} – {instalment.percentage}%: ₹{fmtNum(instalment.amount)}{instalment.remarks ? ` — ${instalment.remarks}` : ''}</div>)
+                                    : paymentConditions.map((condition: string, index: number) => <div key={index}>{index + 1}. {condition}</div>)}
+                                {tdsApplicable && tdsLines.map((line: string, index: number) => <div key={`tds-${index}`}>{(paymentPlanInstalments.length || paymentConditions.length) + index + 1}. {line}</div>)}
                             </div>
                         </td>
                     </tr>
