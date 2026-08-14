@@ -49,14 +49,19 @@ export default function ProformaPrintTemplate({ document, company, bankDetails, 
     const createdDate = createdAt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' });
     const createdTime = createdAt.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true });
 
+    // PLC Charges are a real part of the taxable base (and carry their own
+    // GST) but aren't a line item — add them in so these subtotals actually
+    // add up to the Grand Total below.
+    const plcCharges = Number(document?.plcCharges) || 0;
+    const plcGstAmount = Number(document?.plcGstAmount) || 0;
     const totalTaxable = items.reduce((sum: number, item: any) => {
         const amt = parseFloat(item.amount) || 0;
         const discPct = parseFloat(item.disc) || 0;
         const discountAmt = (amt * discPct) / 100;
         return sum + (amt - discountAmt);
-    }, 0);
-    const totalGstAmount = items.reduce((sum: number, item: any) => sum + (parseFloat(item.tax) || 0), 0);
-    const grandTotal = document?.finalAmount || items.reduce((sum: number, item: any) => sum + (parseFloat(item.finalAmount) || 0), 0);
+    }, plcCharges);
+    const totalGstAmount = items.reduce((sum: number, item: any) => sum + (parseFloat(item.tax) || 0), plcGstAmount);
+    const grandTotal = document?.finalAmount || items.reduce((sum: number, item: any) => sum + (parseFloat(item.finalAmount) || 0), plcCharges + plcGstAmount);
 
     const primaryTeamMember = company?.teamMembers?.find((member: any) =>
         member?.isPrimary || /primary contact/i.test(member?.roleAtExhibition || '')
