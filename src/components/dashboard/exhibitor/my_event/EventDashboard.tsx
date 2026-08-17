@@ -4,6 +4,7 @@ import { Store, FileText, CreditCard, ShoppingBag, Users, Ticket, Handshake } fr
 
 type MyEventDashboardProps = {
     data: any;
+    myStalls?: any[];
     accessoryOrders?: any[];
     passRequests?: any[];
 };
@@ -40,9 +41,12 @@ const documentDone = (data: any) => {
     return docs.filter(hasValue).length >= 3 || ["approved", "verified"].includes(data?.documentStatus) || data?.kycStatus === "approved";
 };
 
-export default function EventDashboard({ data, accessoryOrders = [], passRequests = [] }: MyEventDashboardProps) {
+export default function EventDashboard({ data, myStalls = [], accessoryOrders = [], passRequests = [] }: MyEventDashboardProps) {
     const navigate = useNavigate();
-    const hasStall = hasValue(data?.participation?.stallFor) || hasValue(data?.participation?.stallNo);
+    const hasStall = myStalls.length > 0 || hasValue(data?.participation?.stallFor) || hasValue(data?.participation?.stallNo);
+    const stallSummary = myStalls.length > 1
+        ? `${myStalls.length} stalls (${myStalls.map((s) => s.stallNumber).join(', ')}) assigned`
+        : `${data?.participation?.stallFor || data?.participation?.stallNo} assigned`;
     const hasAccessories = accessoryOrders.length > 0;
     const hasPassRequests = passRequests.length > 0;
     const hasApprovedPass = passRequests.some((req) => req.status === "approved");
@@ -53,7 +57,7 @@ export default function EventDashboard({ data, accessoryOrders = [], passRequest
             iconColor: "text-emerald-600",
             bg: "bg-emerald-50",
             name: "Complete Stall Information",
-            sub: hasStall ? `${data?.participation?.stallFor || data?.participation?.stallNo} assigned` : "Provide your stall details and specifications",
+            sub: hasStall ? stallSummary : "Provide your stall details and specifications",
             status: hasStall ? "completed" : "pending",
             path: "/exhibitor-dashboard/stall-information",
         },
@@ -93,7 +97,7 @@ export default function EventDashboard({ data, accessoryOrders = [], passRequest
             status: Array.isArray(data?.teamMembers) && data.teamMembers.length > 0 ? "completed" : "pending",
             path: "/exhibitor-dashboard/ex-profile",
         },
-    ], [accessoryOrders.length, data, hasAccessories, hasStall]);
+    ], [accessoryOrders.length, data, hasAccessories, hasStall, stallSummary]);
 
     const bookings = [
         { icon: Store, iconColor: "text-emerald-600", name: "Stall Booking", status: hasStall ? "confirmed" : "notbooked", path: "/exhibitor-dashboard/stall-information" },

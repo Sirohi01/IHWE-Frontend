@@ -43,7 +43,7 @@ interface DashboardWidgetsProps {
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) {
-    const { data } = useExhibitorCtx();
+    const { data, myStalls = [] } = useExhibitorCtx();
     const [updates, setUpdates] = useState<any[]>([]);
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -124,7 +124,13 @@ export default function DashboardWidgets({ onNavigate }: DashboardWidgetsProps) 
     const balance = Number(data?.balanceAmount || 0);
     const quickAccess = [
         { id: "my-event", label: "My Event", sub: data?.eventId?.name || "View event details", icon: Calendar, link: "/exhibitor-dashboard/my-event", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]" },
-        { id: "stall-management", label: "Stall Information", sub: data?.participation?.stallFor ? `${data.participation.stallFor} - ${data?.participation?.stallSize || 0} SQM` : "Stall pending", icon: Building2, link: "/exhibitor-dashboard/stall-information", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]" },
+        {
+            id: "stall-management", label: "Stall Information",
+            sub: myStalls.length > 1
+                ? `${myStalls.length} stalls - ${myStalls.reduce((sum: number, s: any) => sum + Number(s.size || 0), 0)} SQM`
+                : data?.participation?.stallFor ? `${data.participation.stallFor} - ${data?.participation?.stallSize || 0} SQM` : "Stall pending",
+            icon: Building2, link: "/exhibitor-dashboard/stall-information", iconBg: "bg-gradient-to-br from-[#3b82f6] to-[#2563eb]"
+        },
         { id: "invoices", label: "Invoice & Receipts", sub: data?.invoice?.invoiceNo || data?.estimate?.estimateNo || `${data?.paymentHistory?.length || 0} payment records`, icon: FileText, link: "/exhibitor-dashboard/invoices", iconBg: "bg-gradient-to-br from-[#22a96a] to-[#178a52]" },
         { id: "add-on-services", label: "Add On Services", sub: `${moduleStats.accessoryOrders} order${moduleStats.accessoryOrders === 1 ? '' : 's'} placed`, icon: ShoppingBag, link: "/exhibitor-dashboard/accessories", iconBg: "bg-gradient-to-br from-[#f43f5e] to-[#e11d48]" },
         { id: "exhibitor-pass", label: "Passes & Hospitality", sub: moduleStats.passRequests ? `${moduleStats.approvedPassRequests}/${moduleStats.passRequests} approved` : "No requests yet", icon: Ticket, link: "/exhibitor-dashboard/exhibitor-pass", iconBg: "bg-gradient-to-br from-[#10b981] to-[#059669]" },

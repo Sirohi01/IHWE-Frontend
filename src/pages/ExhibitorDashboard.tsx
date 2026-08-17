@@ -15,6 +15,7 @@ export default function ExhibitorDashboard() {
     const location = useLocation();
     const [data, setData] = useState<any>(null);
     const [allRegistrations, setAllRegistrations] = useState<any[]>([]);
+    const [myStalls, setMyStalls] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [unreadChat, setUnreadChat] = useState(0);
     const [showChangePwd, setShowChangePwd] = useState(false);
@@ -75,6 +76,21 @@ export default function ExhibitorDashboard() {
         return () => { document.removeEventListener('visibilitychange', handleVisibility); clearInterval(poll); };
     }, []);
 
+    // Fetched once here (rather than per-page) so every exhibitor-dashboard screen
+    // that shows stall info reflects the exhibitor's full stall footprint, not just
+    // the single stall on their own registration.
+    useEffect(() => {
+        if (!data?._id) { setMyStalls([]); return; }
+        const token = localStorage.getItem('exhibitorToken');
+        if (!token) return;
+        let mounted = true;
+        fetch(`${API_URL}/exhibitor-auth/my-stalls`, { headers: { Authorization: `Bearer ${token}` } })
+            .then(r => r.json())
+            .then(res => { if (mounted && res.success && Array.isArray(res.data)) setMyStalls(res.data); })
+            .catch(() => { if (mounted) setMyStalls([]); });
+        return () => { mounted = false; };
+    }, [data?._id]);
+
     const handleLogout = () => { 
         localStorage.removeItem('exhibitorToken'); 
         localStorage.removeItem('selectedRegId');
@@ -111,7 +127,7 @@ export default function ExhibitorDashboard() {
     if (!data) return null;
 
     return (
-        <ExhibitorCtx.Provider value={{ data, setData, allRegistrations, fetchDashboard, setLoading }}>
+        <ExhibitorCtx.Provider value={{ data, setData, allRegistrations, myStalls, fetchDashboard, setLoading }}>
             <ExhibitorLayout
                 logo={logo}
                 data={data}

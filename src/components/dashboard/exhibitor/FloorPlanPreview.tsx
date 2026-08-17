@@ -279,10 +279,14 @@ const normalise = (v?: string) => String(v || '').match(/\d+[A-Za-z]?/)?.[0] || 
 
 const strip = (v: string) => v.trim().replace(/^0+/, '').toUpperCase();
 
-const isCurrent = (ids: string[], currentStallNo?: string) => {
-  const current = normalise(currentStallNo);
-  if (!current) return false;
-  return ids.map(strip).includes(strip(current));
+const isCurrent = (ids: string[], currentStallNo?: string | string[]) => {
+  const currentList = (Array.isArray(currentStallNo) ? currentStallNo : [currentStallNo])
+    .map(normalise)
+    .filter(Boolean)
+    .map(strip);
+  if (!currentList.length) return false;
+  const stripped = ids.map(strip);
+  return currentList.some((current) => stripped.includes(current));
 };
 
 function StallBox({ stall, current }: { stall: Stall; current: boolean }) {
@@ -333,7 +337,7 @@ function StallBox({ stall, current }: { stall: Stall; current: boolean }) {
   );
 }
 
-export default function FloorPlanPreview({ currentStallNo }: { currentStallNo?: string }) {
+export default function FloorPlanPreview({ currentStallNo }: { currentStallNo?: string | string[] }) {
   const allBlocks = [...stalls, PAPER_PRESENTATION];
 
   return (

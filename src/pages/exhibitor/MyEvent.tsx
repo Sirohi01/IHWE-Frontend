@@ -31,7 +31,7 @@ const buildDocuments = (data: any) => {
 };
 
 const MyEvent = () => {
-    const { data } = useExhibitorCtx();
+    const { data, myStalls = [] } = useExhibitorCtx();
     const [updates, setUpdates] = useState<any[]>([]);
     const [accessoryOrders, setAccessoryOrders] = useState<any[]>([]);
     const [passRequests, setPassRequests] = useState<any[]>([]);
@@ -70,8 +70,8 @@ const MyEvent = () => {
     return (
 
         <div className="pt-4 px-6 bg-[#f4f6fb]">
-            <MyEventHero data={data} />
-            <EventDashboard data={data} accessoryOrders={accessoryOrders} passRequests={passRequests} />
+            <MyEventHero data={data} myStalls={myStalls} />
+            <EventDashboard data={data} myStalls={myStalls} accessoryOrders={accessoryOrders} passRequests={passRequests} />
             <EventDashboard1 announcements={updates} documents={documents} />
         </div>
 

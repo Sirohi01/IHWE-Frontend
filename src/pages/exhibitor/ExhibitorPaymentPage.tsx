@@ -101,7 +101,6 @@ export default function ExhibitorPaymentPage() {
     const [paymentSuccess, setPaymentSuccess] = useState<{
         show: boolean; amount: number; gatewayFee: number; transactionId: string; balanceAmount: number; status: string;
     } | null>(null);
-
     const token = localStorage.getItem('exhibitorToken');
     const isUSD = data?.participation?.currency === 'USD';
     const cur = isUSD ? '$' : '₹';
@@ -196,14 +195,48 @@ export default function ExhibitorPaymentPage() {
 
     const payableDocuments = (() => {
         const documents: any[] = docOverview?.recentDocuments || [];
-        const remainingById = new Map<string, number>(
-            (docOverview?.financials?.remainingBreakdown || []).map((entry: any) => [String(entry.id), entry.remainingAmount])
+        const breakdownById = new Map<string, any>(
+            (docOverview?.financials?.remainingBreakdown || []).map((entry: any) => [String(entry.id), entry])
         );
         return documents
             .filter((doc) => doc.documentType === 'Invoice' || doc.documentType === 'Proforma Invoice')
-            .map((doc) => ({ ...doc, remaining: remainingById.get(String(doc.id)) || 0 }))
+            .map((doc) => ({ ...doc, remaining: breakdownById.get(String(doc.id))?.remainingAmount || 0, particulars: breakdownById.get(String(doc.id))?.particulars || '' }))
             .filter((doc) => doc.remaining > 0);
     })();
+
+    // Payment History — docOverview.financials.paidBreakdown is the real, de-duplicated
+    // record of every payment (online + recorded directly in Accounts) already tagged with
+    // which document it was against (forNo/forType); summary.paymentHistory only covers this
+    // one registration's own online payments and doesn't know which invoice they applied to.
+    // Falls back to summary.paymentHistory only while docOverview hasn't loaded yet.
+    const paymentHistoryByTxnId = new Map<string, any>(
+        (summary?.paymentHistory || []).map((h: any) => [String(h.transactionId || h.razorpayPaymentId || ''), h])
+    );
+    const paidBreakdown: any[] = docOverview?.financials?.paidBreakdown || [];
+    const historyRows = paidBreakdown.length > 0
+        ? paidBreakdown.map((p) => {
+            const matched = paymentHistoryByTxnId.get(String(p.no || ''));
+            return {
+                amount: p.amount,
+                date: p.date,
+                type: p.type,
+                forNo: p.forNo,
+                forType: p.forType,
+                method: matched?.method || matched?.paymentMode || (p.type === 'Online Payment' ? 'Online' : '-'),
+                transactionId: p.no,
+                receiptPdfUrl: matched?.receiptPdfUrl,
+            };
+        })
+        : (summary?.paymentHistory || []).map((h: any) => ({
+            amount: h.amount,
+            date: h.paidAt,
+            type: h.paymentType || 'Payment',
+            forNo: 'Registration',
+            forType: 'Registration',
+            method: h.method || h.paymentMode || 'Online',
+            transactionId: h.transactionId || h.razorpayPaymentId,
+            receiptPdfUrl: h.receiptPdfUrl,
+        }));
 
     const payDocument = async (doc: any) => {
         const docType = doc.documentType === 'Invoice' ? 'invoice' : 'proforma';
@@ -465,7 +498,13 @@ export default function ExhibitorPaymentPage() {
 
     const daysOverdue = getDaysOverdue();
     const totalPayable = summary?.finance?.totalPayable || summary?.finance?.balanceAmount || 0;
-    const isFullyPaid = summary?.status === 'paid' || totalPayable <= 0;
+    // summary.finance only covers this one registration's own stall booking — an exhibitor can
+    // also owe money on other invoices raised directly through Accounts (extra stalls, add-ons),
+    // which docOverview.financials.remainingBalance (the real, company-wide total) does capture.
+    // Without this, a registration that's "paid" on its own booking would show a misleading
+    // "Payment Complete" screen even while the exhibitor still has real invoices outstanding.
+    const realTotalOutstanding = Number(docOverview?.financials?.remainingBalance ?? totalPayable);
+    const isFullyPaid = (summary?.status === 'paid' || totalPayable <= 0) && realTotalOutstanding <= 0;
     const contractValue = Number(summary?.finance?.netPayable || 0);
     const amountPaid = Number(summary?.finance?.amountPaid || 0);
     const paidPercentage = contractValue > 0
@@ -785,6 +824,7 @@ export default function ExhibitorPaymentPage() {
                             </div>
                         </div>
 
+
                         {!isFullyPaid && (
                             <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
                                 <div className="px-3 py-2 border-b border-gray-100 flex items-center gap-2">
@@ -1044,6 +1084,9 @@ export default function ExhibitorPaymentPage() {
                                             <div key={`${doc.documentType}-${doc.id}`} className="flex items-center justify-between gap-2 px-3 py-2.5">
                                                 <div className="min-w-0">
                                                     <p className="text-[12px] font-bold text-slate-800 truncate">{doc.documentNo}</p>
+                                                    {doc.particulars && (
+                                                        <p className="text-[10px] font-semibold text-slate-600 truncate">{doc.particulars}</p>
+                                                    )}
                                                     <p className="text-[10px] text-slate-400">{doc.documentType} &middot; Due {fmt(doc.remaining)}</p>
                                                 </div>
                                                 <button
@@ -1080,31 +1123,35 @@ export default function ExhibitorPaymentPage() {
                         animate={{ opacity: 1 }}
                         className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm"
                     >
-                        {summary.paymentHistory && summary.paymentHistory.length > 0 ? (
+                        {historyRows.length > 0 ? (
                             <>
                                 <div className="hidden sm:block overflow-x-auto">
                                     <table className="w-full">
                                         <thead className="bg-slate-50 border-b border-gray-200">
                                             <tr>
-                                                {['#', 'Type', 'Amount', 'Method', 'Transaction ID', 'Date', 'Receipt'].map(h => (
+                                                {['#', 'Type', 'Amount', 'Against', 'Method', 'Transaction ID', 'Date', 'Receipt'].map(h => (
                                                     <th key={h} className="px-4 py-2.5 text-left text-[11px] font-semibold text-slate-500 uppercase">{h}</th>
                                                 ))}
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-gray-100">
-                                            {summary.paymentHistory.map((h: any, i: number) => (
+                                            {historyRows.map((h, i) => (
                                                 <tr key={i} className="hover:bg-slate-50 transition-colors">
                                                     <td className="px-4 py-2.5 text-[12px] text-gray-400 font-bold">#{i + 1}</td>
                                                     <td className="px-4 py-3">
                                                         <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[9px] font-black uppercase rounded-full">
-                                                            {h.paymentType || 'Payment'}
+                                                            {h.type || 'Payment'}
                                                         </span>
                                                     </td>
                                                     <td className="px-4 py-2.5 text-[12px] font-bold text-gray-800">{fmt(h.amount)}</td>
-                                                    <td className="px-4 py-2.5 text-[12px] text-gray-600 font-semibold uppercase">{h.method || h.paymentMode || 'Online'}</td>
-                                                    <td className="px-4 py-2.5 text-[12px] text-gray-500 font-mono">{h.transactionId || h.razorpayPaymentId || '—'}</td>
+                                                    <td className="px-4 py-2.5 text-[12px]">
+                                                        <span className="font-bold text-slate-700">{h.forNo || '—'}</span>
+                                                        {h.forType && <span className="block text-[10px] text-slate-400">{h.forType}</span>}
+                                                    </td>
+                                                    <td className="px-4 py-2.5 text-[12px] text-gray-600 font-semibold uppercase">{h.method || 'Online'}</td>
+                                                    <td className="px-4 py-2.5 text-[12px] text-gray-500 font-mono">{h.transactionId || '—'}</td>
                                                     <td className="px-4 py-2.5 text-[12px] text-gray-500 font-semibold">
-                                                        {h.paidAt ? new Date(h.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}
+                                                        {h.date ? new Date(h.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}
                                                     </td>
                                                     <td className="px-4 py-2.5 text-[12px]">
                                                         {h.receiptPdfUrl ? (
@@ -1123,23 +1170,26 @@ export default function ExhibitorPaymentPage() {
                                 </div>
                                 {/* Mobile cards */}
                                 <div className="sm:hidden divide-y divide-gray-100">
-                                    {summary.paymentHistory.map((h: any, i: number) => (
+                                    {historyRows.map((h, i) => (
                                         <div key={i} className="p-4 space-y-3">
                                             <div className="flex items-center justify-between">
                                                 <span className="px-2 py-0.5 bg-emerald-100 text-emerald-800 text-[9px] font-black uppercase rounded-full">
-                                                    {h.paymentType || 'Payment'}
+                                                    {h.type || 'Payment'}
                                                 </span>
                                                 <span className="text-sm font-black text-gray-800">{fmt(h.amount)}</span>
                                             </div>
                                             <div className="flex items-center justify-between text-[10px]">
-                                                <span className="text-gray-500 font-bold uppercase">{h.method || h.paymentMode || 'Online'}</span>
+                                                <span className="text-gray-500 font-bold uppercase">{h.method || 'Online'}</span>
                                                 <span className="text-gray-500 font-bold">
-                                                    {h.paidAt ? new Date(h.paidAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}
+                                                    {h.date ? new Date(h.date).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—'}
                                                 </span>
                                             </div>
-                                            {(h.transactionId || h.razorpayPaymentId) && (
+                                            {h.forNo && (
+                                                <p className="text-[10px] font-bold text-slate-600">Against: {h.forNo} {h.forType ? `(${h.forType})` : ''}</p>
+                                            )}
+                                            {h.transactionId && (
                                                 <p className="text-[9px] font-mono text-gray-400 truncate">
-                                                    Txn: {h.transactionId || h.razorpayPaymentId}
+                                                    Txn: {h.transactionId}
                                                 </p>
                                             )}
                                             {h.receiptPdfUrl && (

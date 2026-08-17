@@ -102,7 +102,7 @@ function InfoCard({ icon: Icon, iconBg, label, value, sub }: {
     );
 }
 
-export default function MyEventHero({ data }: { data: any }) {
+export default function MyEventHero({ data, myStalls = [] }: { data: any; myStalls?: any[] }) {
     const navigate = useNavigate();
     const fallbackDate = new Date("2026-08-21T00:00:00");
     const rawDate = data?.eventId?.startDate ? new Date(data.eventId.startDate) : null;
@@ -111,11 +111,21 @@ export default function MyEventHero({ data }: { data: any }) {
     
     const { days, hrs, mins, secs } = useCountdown(eventStart);
     const eventDates = formatDateRange(data?.eventId?.startDate, data?.eventId?.endDate);
-    const setupDates = shiftDateRange(data?.eventId?.startDate);
-    const dismantlingDate = singleDate(data?.eventId?.endDate);
+    // Prefer the real Setup/Dismantling dates set on the event in admin; fall back to an
+    // estimate (2 days before start / the event's end date) for events that predate those fields.
+    const setupDates = data?.eventId?.setupDate
+        ? singleDate(data.eventId.setupDate)
+        : shiftDateRange(data?.eventId?.startDate);
+    const dismantlingDate = data?.eventId?.dismantlingDate
+        ? singleDate(data.eventId.dismantlingDate)
+        : singleDate(data?.eventId?.endDate);
     const teamCount = Array.isArray(data?.teamMembers) ? data.teamMembers.length : 0;
-    const stallValue = data?.participation?.stallFor || data?.participation?.stallNo || "TBD";
-    const stallSub = data?.participation?.stallScheme || data?.participation?.stallType || "Stall pending";
+    const stallValue = myStalls.length > 1
+        ? myStalls.map((s) => s.stallNumber).join(", ")
+        : data?.participation?.stallFor || data?.participation?.stallNo || "TBD";
+    const stallSub = myStalls.length > 1
+        ? `${myStalls.length} stalls`
+        : data?.participation?.stallScheme || data?.participation?.stallType || "Stall pending";
     const eventName = data?.eventId?.name || "IHWE 2026";
 
     const infoCards = [

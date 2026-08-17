@@ -14,6 +14,7 @@ import DashboardWidgets from '@/components/dashboard/exhibitor/home/DashboardWid
 import DashboardBottom from '@/components/dashboard/exhibitor/home/DashboardBottom';
 import ReferralPopup from '@/components/dashboard/exhibitor/home/ReferralPopup';
 import SellerPopup from '@/components/dashboard/exhibitor/home/SellerPopup';
+import PaymentReminderPopup from '@/components/dashboard/exhibitor/home/PaymentReminderPopup';
 
 export default function ExhibitorDashboardHome() {
     const { data } = useExhibitorCtx();
@@ -29,16 +30,24 @@ export default function ExhibitorDashboardHome() {
 
     const isPostExpo = new Date() > new Date('2026-04-20'); // Post-expo phase
     const [showFeedbackBanner] = useState(isPostExpo && !localStorage.getItem('feedback_submitted'));
+    const [isPaymentReminderOpen, setIsPaymentReminderOpen] = useState(false);
     const [isReferralPopupOpen, setIsReferralPopupOpen] = useState(false);
     const [isSellerPopupOpen, setIsSellerPopupOpen] = useState(false);
 
-    // Initial load: 15 seconds delay for Referral Popup
+    // Payment Reminder takes priority: always try it shortly after load. It fetches the real
+    // Accounts-side balance itself and closes silently if nothing's actually due — we can't
+    // pre-filter on data.balanceAmount here since that field only reflects the online booking
+    // flow and stays 0 for exhibitors invoiced directly through Accounts. The Referral popup's
+    // own 15s timer only starts once the reminder has been dismissed (or closed itself).
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsReferralPopupOpen(true);
-        }, 15000);
+        const timer = setTimeout(() => setIsPaymentReminderOpen(true), 2000);
         return () => clearTimeout(timer);
     }, []);
+
+    const handlePaymentReminderClose = () => {
+        setIsPaymentReminderOpen(false);
+        setTimeout(() => setIsReferralPopupOpen(true), 15000);
+    };
 
     const handleReferralClose = () => {
         setIsReferralPopupOpen(false);
@@ -58,6 +67,7 @@ export default function ExhibitorDashboardHome() {
 
     return (
         <>
+            <PaymentReminderPopup isOpen={isPaymentReminderOpen} onClose={handlePaymentReminderClose} />
             <ReferralPopup isOpen={isReferralPopupOpen} onClose={handleReferralClose} />
             <SellerPopup isOpen={isSellerPopupOpen} onClose={handleSellerClose} />
             {/* <ExhibotorTopbar /> */}

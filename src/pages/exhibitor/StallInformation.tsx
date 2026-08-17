@@ -109,18 +109,25 @@ const moneyFmt = (value?: number) => {
 
 export default function StallInformation() {
     const navigate = useNavigate();
-    const { data } = useExhibitorCtx() || {};
+    const { data, myStalls: ctxMyStalls } = useExhibitorCtx() || {};
     const [usefulDocs, setUsefulDocs] = useState<any[]>([]);
     const [requirementRequests, setRequirementRequests] = useState<any[]>([]);
     const [loadingRequirements, setLoadingRequirements] = useState(false);
     const [showFloorPlanPreview, setShowFloorPlanPreview] = useState(false);
+    const myStalls = Array.isArray(ctxMyStalls) ? ctxMyStalls : [];
     const participation = data?.participation || {};
     const stallDetails = data?.stallDetails || {};
     const stallNo = participation.stallFor || stallDetails.stallNumber || participation.stallNo || 'TBA';
     const stallParts = getStallParts(stallNo);
     const stallSize = participation.stallSize || stallDetails.area;
     const dimension = participation.dimension || stallDetails.dimension;
-    const dimensionLabel = dimension && stallSize ? `${dimension} (${stallSize} sqm)` : stallSize ? `${stallSize} sqm` : dimension || 'TBA';
+    // When there's more than one stall, participation.stallSize is the summed total
+    // across all of them (see backend stall-size sync) — pairing that total with one
+    // stall's own dimensions (e.g. "3x3m (30 sqm)") would be self-contradictory, so
+    // show the combined total instead of a single stall's dimension string.
+    const dimensionLabel = myStalls.length > 1
+        ? `${myStalls.reduce((sum, s) => sum + Number(s.size || 0), 0)} sqm total across ${myStalls.length} stalls`
+        : dimension && stallSize ? `${dimension} (${stallSize} sqm)` : stallSize ? `${stallSize} sqm` : dimension || 'TBA';
     const stallType = participation.stallType || participation.stallCategory || 'TBA';
     const stallCategory = data?.typeOfBusiness || data?.primaryCategory || participation.stallCategory || 'TBA';
     const openSide = openSideLabel(participation.stallScheme || stallDetails.openSide || stallDetails.plScheme);
@@ -133,7 +140,7 @@ export default function StallInformation() {
     const services = Array.isArray(data?.complimentaryServices) ? data.complimentaryServices : [];
     const powerService = services.find((s: any) => /electric|power/i.test(s.name || ''));
     const powerAllocation = powerService ? serviceSubText(powerService).replace(/[()]/g, '') : 'TBA';
-    const hallNumber = stallParts.hall === 'TBA' ? '8, 9, 10' : stallParts.hall;
+    const hallNumber = stallParts.hall === 'TBA' ? '12' : stallParts.hall;
     const exhibitorRegistrationId = String(data?.registrationId || '').trim();
     const exhibitorQrValue = exhibitorRegistrationId
         ? JSON.stringify({ registrationId: exhibitorRegistrationId })
@@ -141,11 +148,19 @@ export default function StallInformation() {
     const storedExhibitorQr = typeof data?.qrCode === 'string' && data.qrCode.trim()
         ? data.qrCode.trim()
         : '';
+    const allStallNumbers = myStalls.length ? myStalls.map((s) => s.stallNumber) : [stallNo];
+    const totalStallSize = myStalls.length
+        ? myStalls.reduce((sum, s) => sum + Number(s.size || 0), 0)
+        : Number(stallSize || 0);
 
     const overviewRows = [
         { label: 'Hall Number', value: hallNumber, icon: Map },
-        { label: 'Stall Number', value: stallParts.stall, icon: MapPin },
-        { label: 'Stall Size', value: dimensionLabel, icon: Maximize },
+        myStalls.length > 1
+            ? { label: 'Total Stalls', value: String(myStalls.length), icon: MapPin }
+            : { label: 'Stall Number', value: stallParts.stall, icon: MapPin },
+        myStalls.length > 1
+            ? { label: 'Total Stall Size', value: `${totalStallSize} sqm`, icon: Maximize }
+            : { label: 'Stall Size', value: dimensionLabel, icon: Maximize },
         { label: 'Stall Type', value: stallType, icon: Grid },
         { label: 'Type Of Business', value: stallCategory, icon: Layers },
         { label: 'Open Side', value: openSide, icon: Layers },
@@ -276,8 +291,8 @@ export default function StallInformation() {
                         <div className="w-full md:w-[62%] p-3.5 md:p-4 flex flex-col justify-center">
                             <div className="flex justify-between items-start mb-3">
                                 <div className="pt-4">
-                                    <p className="text-[12px] font-bold text-[#002855] mb-0.5">Stall No.</p>
-                                    <h2 className="text-[14px] md:text-[20px] font-bold text-[#002855] tracking-tight leading-tight">{stallNo}</h2>
+                                    <p className="text-[12px] font-bold text-[#002855] mb-0.5">Stall No{allStallNumbers.length > 1 ? 's' : ''}.</p>
+                                    <h2 className="text-[14px] md:text-[20px] font-bold text-[#002855] tracking-tight leading-tight">{allStallNumbers.join(', ')}</h2>
                                 </div>
                                 <div className="text-center flex flex-col items-center ml-3 border border-slate-200 rounded-lg px-2.5 py-1.5 bg-slate-100">
                                     <p className="text-[10px] font-bold text-black mb-1">Exhibitor Entry QR</p>
@@ -339,10 +354,10 @@ export default function StallInformation() {
                                 className="w-full h-[190px] sm:h-[220px] rounded-xl overflow-hidden bg-slate-50 cursor-zoom-in"
                                 aria-label="Open floor plan preview"
                             >
-                                <FloorPlanPreview currentStallNo={String(stallNo)} />
+                                <FloorPlanPreview currentStallNo={allStallNumbers} />
                             </button>
                             <div className="flex flex-wrap justify-between items-center gap-y-1.5 mt-1.5 text-[9px] font-semibold text-slate-700 w-full px-3">
-                                <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span> Your Stall No. - {stallNo}</div>
+                                <div className="flex items-center gap-1"><span className="w-2.5 h-2.5 rounded-full bg-[#10b981]"></span> Your Stall No{allStallNumbers.length > 1 ? 's' : ''}. - {allStallNumbers.join(', ')}</div>
                                 <span className="text-slate-400">Tap to zoom in on the full hall layout</span>
                             </div>
                         </div>
@@ -355,7 +370,7 @@ export default function StallInformation() {
                             <div className="flex items-center justify-between px-3 py-2 border-b border-slate-200 flex-shrink-0">
                                 <div>
                                     <h3 className="text-sm md:text-base font-black text-slate-900">Your Stall Location</h3>
-                                    <p className="text-[11px] font-bold text-slate-500">Stall No. {stallParts.stall}</p>
+                                    <p className="text-[11px] font-bold text-slate-500">Stall No{allStallNumbers.length > 1 ? 's' : ''}. {allStallNumbers.join(', ')}</p>
                                 </div>
                                 <button
                                     type="button"
@@ -368,7 +383,7 @@ export default function StallInformation() {
                             </div>
                             <div className="flex-1 bg-slate-50 overflow-auto px-4 md:px-10 py-2 md:py-4">
                                 <div className="min-w-[400px] md:min-w-0 w-[85%] lg:w-[75%] mx-auto h-full flex items-center justify-center">
-                                    <FloorPlanPreview currentStallNo={String(stallNo)} />
+                                    <FloorPlanPreview currentStallNo={allStallNumbers} />
                                 </div>
                             </div>
                         </div>
@@ -504,6 +519,24 @@ export default function StallInformation() {
                     </div>
 
                     <div className="lg:col-span-3 flex flex-col gap-2.5 lg:-mt-[82px]">
+                        {myStalls.length > 1 && (
+                            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-3.5">
+                                <h3 className="text-sm font-bold text-slate-800 mb-2">Your Stalls ({myStalls.length})</h3>
+                                <div className="space-y-1.5">
+                                    {myStalls.map((s) => (
+                                        <div key={s.stallNumber} className="flex items-center justify-between gap-2 rounded-lg border border-slate-100 bg-slate-50/60 px-2.5 py-1.5">
+                                            <div className="min-w-0">
+                                                <p className="text-[11px] font-bold text-slate-800">Stall {s.stallNumber}</p>
+                                                <p className="text-[9px] font-semibold text-slate-500">{s.dimension ? `${s.dimension} (${s.size} sqm)` : `${s.size} sqm`} • {s.stallType || 'TBA'}</p>
+                                            </div>
+                                            <span className={`shrink-0 text-[8px] font-extrabold uppercase rounded-full px-2 py-0.5 border ${s.status === 'booked' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-amber-50 text-amber-700 border-amber-100'}`}>
+                                                {s.status === 'booked' ? 'Confirmed' : s.status}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        )}
                         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-3.5">
                             <h3 className="text-sm font-bold text-slate-800 mb-2">Stall Overview</h3>
                             <div className="space-y-0.5">
