@@ -23,7 +23,8 @@ const fallbackDocumentStats = (data: any) => {
 };
 
 export default function StatCards() {
-    const { data } = useExhibitorCtx();
+    const { data, myStalls: ctxMyStalls } = useExhibitorCtx();
+    const myStalls = Array.isArray(ctxMyStalls) ? ctxMyStalls : [];
     const [timeLeft, setTimeLeft] = useState({
         days: 0,
         hours: 0,
@@ -152,7 +153,9 @@ export default function StatCards() {
             cardBg: "bg-gradient-to-br from-white to-indigo-50",
             hoverBg: "hover:to-indigo-100/50",
             label: "STALL NUMBER",
-            value: data?.participation?.stallFor || "TBA",
+            value: myStalls.length > 1
+                ? myStalls.map((s: any) => s.stallNumber).join(", ")
+                : data?.participation?.stallFor || "TBA",
             sub: `${data?.participation?.stallType || "Space"} – ${data?.participation?.stallSize || 0} SQM`,
             valueColor: "text-gray-800",
         },

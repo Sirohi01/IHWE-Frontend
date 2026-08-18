@@ -10,7 +10,6 @@ import {
     FileCheck2,
     FileText,
     Headphones,
-    Hourglass,
     Info,
     Lightbulb,
     Loader2,
@@ -36,6 +35,32 @@ const fieldValue = (data, paths, fallback) => {
         if (value !== null && value !== undefined && value !== '') return value;
     }
     return fallback;
+};
+
+// Once a document is actually uploaded, its Description cell should show real
+// details fetched off that specific file by AI (Udyam number, GSTIN, account
+// number, etc. — see buildMsmeExtractionPrompt in aiDocumentVerificationService.js)
+// instead of the generic "what this document is" placeholder text every row
+// starts with.
+const describeUploaded = (uploaded) => {
+    if (!uploaded) return null;
+    const fields = uploaded.extractedDetails && typeof uploaded.extractedDetails === 'object'
+        ? Object.entries(uploaded.extractedDetails).filter(([, v]) => v !== null && v !== undefined && String(v).trim() !== '')
+        : [];
+
+    if (fields.length) {
+        return { summary: fields.map(([k, v]) => `${k}: ${v}`).join(' · '), full: fields.map(([k, v]) => `${k}: ${v}`).join('\n') };
+    }
+
+    const uploadedOn = uploaded.uploadedAt
+        ? new Date(uploaded.uploadedAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+        : null;
+    const parts = [];
+    if (uploadedOn) parts.push(`Uploaded ${uploadedOn}`);
+    if (uploaded.aiVerification?.checked) parts.push('No details could be read from this file');
+    else if (uploaded.aiVerification && uploaded.aiVerification.checked === false) parts.push('AI check not run for this file');
+    const text = parts.join(' · ') || null;
+    return text ? { summary: text, full: text } : null;
 };
 
 const STEPS = [
@@ -139,25 +164,6 @@ function SummaryRow({ label, value }) {
     );
 }
 
-function StatusBadge({ status }) {
-    const isUploaded = status === 'Uploaded';
-    return (
-        <span className={`inline-flex w-[72px] items-center justify-center gap-1 whitespace-nowrap rounded px-1.5 py-0.5 text-[9px] font-semibold border ${isUploaded
-                ? 'text-[#087536] bg-[#eafbf1] border-[#b7ecd0]'
-                : 'text-[#e07a12] bg-[#fef6ec] border-[#fbdfb0]'
-            }`}>
-            {isUploaded ? (
-                <span className="grid h-3 w-3 place-items-center rounded-full bg-[#087536] text-white">
-                    <Check size={7} strokeWidth={3} />
-                </span>
-            ) : (
-                <Hourglass size={12} strokeWidth={2.2} className="text-[#e07a12]" />
-            )}
-            {status}
-        </span>
-    );
-}
-
 function DocumentRow({ index, doc, onUpload, onDelete, uploadingId }) {
     const isUploaded = doc.status === 'Uploaded';
     const isUploading = uploadingId === doc.id;
@@ -166,67 +172,48 @@ function DocumentRow({ index, doc, onUpload, onDelete, uploadingId }) {
     return (
         <tr className="border-b border-[#e9eef4] last:border-b-0">
             <td className="whitespace-nowrap p-1.5 text-[9.5px] font-semibold text-[#6b7ea3]">{index + 1}</td>
-            <td className="min-w-[150px] p-1.5 text-[9.5px] font-semibold text-[#061743]">
+            <td className="w-px whitespace-nowrap p-1.5 pr-3 text-[9.5px] font-semibold text-[#061743]">
                 <span className="inline-flex items-center gap-1.5">
                     <FileText size={12} strokeWidth={2} className="shrink-0 text-[#6b82ac]" />
                     {doc.name}
                     {doc.required && <b className="text-[#e62f28]">*</b>}
                 </span>
             </td>
-            <td className="min-w-[150px] p-1.5 text-[9.5px] font-medium text-[#5a6c92]">{doc.description}</td>
-            <td className="whitespace-nowrap p-1.5">
+            <td className="max-w-[220px] truncate p-1.5 text-[9.5px] font-medium text-[#5a6c92]" title={doc.fullDetails || doc.description}>{doc.description}</td>
+            <td className="whitespace-nowrap p-1.5 text-right">
                 {isUploading ? (
-                    <span className="inline-flex w-[72px] items-center justify-center gap-1 whitespace-nowrap rounded px-1.5 py-0.5 text-[9px] font-semibold border text-[#2a6bd6] bg-[#eef4fd] border-[#bcd6f7]">
+                    <span className="inline-flex w-[72px] items-center justify-center gap-1 whitespace-nowrap rounded px-1.5 py-0.5 text-[9px] font-semibold border text-[#2a6bd6] bg-[#eef4fd] border-[#bcd6f7] ml-auto">
                         <Loader2 size={10} strokeWidth={2.5} className="animate-spin" />
                         Uploading
                     </span>
-                ) : (
-                    <StatusBadge status={doc.status} />
-                )}
-            </td>
-            <td className="min-w-[130px] p-1.5 text-[9.5px] font-semibold">
-                {isUploaded ? (
-                    <span className="inline-flex items-center gap-1.5 whitespace-nowrap">
-                        <a href="#" onClick={(event) => event.preventDefault()} className="font-semibold text-[#2a6bd6] hover:underline">{doc.file}</a>
-                    </span>
-                ) : (
-                    <span className="text-[#8090ad]">–</span>
-                )}
-            </td>
-            <td className="min-w-[130px] p-1.5 text-[9.5px] font-semibold">
-                {isUploaded ? (
-                    <div className='flex items-center gap-4 whitespace-nowrap'>
-                        <span className="">({doc.size})</span>
+                ) : isUploaded ? (
+                    <div className="flex items-center justify-end gap-1.5">
                         <button
                             type="button"
                             onClick={() => doc.url && window.open(doc.url, '_blank', 'noopener,noreferrer')}
                             disabled={!doc.url}
-                            className="disabled:opacity-40"
+                            className="inline-flex h-[20px] w-[20px] items-center justify-center rounded-md border border-[#a4b0d1] text-[#061743] disabled:opacity-40"
                             title="View document"
                         >
-                            <Eye size={16} strokeWidth={2} className="shrink-0" />
+                            <Eye size={12} strokeWidth={2} />
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => onDelete(doc.id)}
+                            disabled={isBlocked}
+                            className="h-[20px] w-[64px] rounded-md border border-red-200 text-center text-[9px] font-semibold text-red-600 disabled:opacity-40"
+                        >
+                            Remove
                         </button>
                     </div>
-                ) : ''}
-            </td>
-            <td className="whitespace-nowrap p-1.5 text-right">
-                {isUploaded ? (
-                    <button
-                        type="button"
-                        onClick={() => onDelete(doc.id)}
-                        disabled={isBlocked || isUploading}
-                        className="h-[20px] w-[64px] rounded-md border border-red-200 text-center text-[9px] font-semibold text-red-600 disabled:opacity-40"
-                    >
-                        Remove
-                    </button>
                 ) : (
-                    <label className={`inline-flex h-[20px] w-[64px] items-center justify-center rounded-md border border-[#5924c6] text-center text-[9px] font-semibold text-[#5924c6] ${isBlocked || isUploading ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'}`}>
-                        {isUploading ? <Loader2 size={12} strokeWidth={2.5} className="animate-spin" /> : 'Upload'}
+                    <label className={`ml-auto inline-flex h-[20px] w-[64px] items-center justify-center rounded-md border border-[#5924c6] text-center text-[9px] font-semibold text-[#5924c6] ${isBlocked ? 'cursor-not-allowed opacity-40' : 'cursor-pointer'}`}>
+                        Upload
                         <input
                             type="file"
                             accept="application/pdf,image/jpeg,image/png"
                             className="hidden"
-                            disabled={isBlocked || isUploading}
+                            disabled={isBlocked}
                             onChange={(event) => { const file = event.target.files?.[0]; if (file) onUpload(doc.id, file); event.target.value = ''; }}
                         />
                     </label>
@@ -303,14 +290,19 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpl
     const documentDefinitions = REQUIRED_DOCUMENTS.map(doc => ({ ...doc, required: requiredForApplication(doc) }));
     const [documents, setDocuments] = useState(() => documentDefinitions.map(doc => {
         const uploaded = data?.documents?.find(item => item.documentType === doc.id);
-        return uploaded ? { ...doc, status: 'Uploaded', file: uploaded.filename, size: uploaded.size ? `${Math.round(uploaded.size / 1024)} KB` : '', url: uploaded.url || null } : { ...doc, file: null, size: null, status: 'Pending', url: null };
+        const fetched = describeUploaded(uploaded);
+        return uploaded
+            ? { ...doc, status: 'Uploaded', file: uploaded.filename, size: uploaded.size ? `${Math.round(uploaded.size / 1024)} KB` : '', url: uploaded.url || null, description: fetched?.summary || doc.description, fullDetails: fetched?.full || null }
+            : { ...doc, file: null, size: null, status: 'Pending', url: null, fullDetails: null };
     }));
 
     useEffect(() => {
         setDocuments(prev => prev.map(doc => {
             const uploaded = data?.documents?.find(item => item.documentType === doc.id);
-            if (uploaded) return { ...doc, status: 'Uploaded', file: uploaded.filename, size: uploaded.size ? `${Math.round(uploaded.size / 1024)} KB` : '', url: uploaded.url || null };
-            return { ...doc, file: null, size: null, status: 'Pending', url: null };
+            const fetched = describeUploaded(uploaded);
+            const original = REQUIRED_DOCUMENTS.find(d => d.id === doc.id);
+            if (uploaded) return { ...doc, status: 'Uploaded', file: uploaded.filename, size: uploaded.size ? `${Math.round(uploaded.size / 1024)} KB` : '', url: uploaded.url || null, description: fetched?.summary || original?.description, fullDetails: fetched?.full || null };
+            return { ...doc, file: null, size: null, status: 'Pending', url: null, description: original?.description, fullDetails: null };
         }));
     }, [data?.documents]);
 
@@ -333,7 +325,8 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpl
                 const SERVER_URL = import.meta.env.VITE_SERVER_URL || 'http://localhost:5000';
                 docUrl = uploadedDoc.path.startsWith('http') ? uploadedDoc.path : `${SERVER_URL}${uploadedDoc.path.startsWith('/') ? '' : '/'}${uploadedDoc.path.replace(/\\/g, '/')}`;
             }
-            setDocuments(prev => prev.map(doc => doc.id === id ? { ...doc, status: 'Uploaded', file: file.name, size: `${Math.round(file.size / 1024)} KB`, url: docUrl || doc.url } : doc));
+            const fetched = describeUploaded(uploadedDoc);
+            setDocuments(prev => prev.map(doc => doc.id === id ? { ...doc, status: 'Uploaded', file: file.name, size: `${Math.round(file.size / 1024)} KB`, url: docUrl || doc.url, description: fetched?.summary || doc.description, fullDetails: fetched?.full || null } : doc));
         } finally {
             setUploadingId(null);
         }
@@ -341,7 +334,8 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpl
 
     const handleDelete = async (id) => {
         await onDelete?.(id);
-        setDocuments(prev => prev.map(doc => doc.id === id ? { ...doc, status: 'Pending', file: null, size: null, url: null } : doc));
+        const original = REQUIRED_DOCUMENTS.find(d => d.id === id);
+        setDocuments(prev => prev.map(doc => doc.id === id ? { ...doc, status: 'Pending', file: null, size: null, url: null, description: original?.description, fullDetails: null } : doc));
     };
 
     return (
@@ -412,15 +406,12 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpl
                             <p className="mb-1.5 text-[9.5px] font-medium text-[#5a6c92]">Please upload clear and valid documents to proceed with verification.</p>
 
                             <div className="overflow-x-auto rounded-lg border border-[#e9eef4]">
-                                <table className="w-full min-w-[720px] border-collapse">
+                                <table className="w-full min-w-[480px] border-collapse">
                                     <thead>
                                         <tr className="bg-[#f6f9fc]">
                                             <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">#</th>
                                             <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">Document Name</th>
                                             <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">Description</th>
-                                            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">Status</th>
-                                            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]">File / Preview</th>
-                                            <th className="whitespace-nowrap px-1.5 py-1 text-left text-[9.5px] font-semibold text-[#061743]"></th>
                                             <th className="whitespace-nowrap px-1.5 py-1 text-right text-[9.5px] font-semibold text-[#061743]">Action</th>
                                         </tr>
                                     </thead>

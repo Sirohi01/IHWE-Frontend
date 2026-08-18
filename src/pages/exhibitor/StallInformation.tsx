@@ -156,7 +156,7 @@ export default function StallInformation() {
     const overviewRows = [
         { label: 'Hall Number', value: hallNumber, icon: Map },
         myStalls.length > 1
-            ? { label: 'Total Stalls', value: String(myStalls.length), icon: MapPin }
+            ? { label: 'Stall Number', value: allStallNumbers.join(', '), icon: MapPin }
             : { label: 'Stall Number', value: stallParts.stall, icon: MapPin },
         myStalls.length > 1
             ? { label: 'Total Stall Size', value: `${totalStallSize} sqm`, icon: Maximize }

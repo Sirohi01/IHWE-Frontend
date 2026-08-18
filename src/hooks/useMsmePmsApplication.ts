@@ -92,7 +92,32 @@ export function useMsmePmsApplication(exhibitorData: any) {
       : '';
     const rmPhone = relationshipManager?.mobile || '';
     const assignedRmName = relationshipManager?.fullName || exhibitorData?.filledByFullName || exhibitorData?.spokenWith || (exhibitorData?.filledBy !== 'User' ? exhibitorData?.filledBy : '');
-    const stallClaim = Number(exhibitorData?.claim?.stallCharges ?? total ?? 0);
+
+    // The MSME PMS scheme only ever reimburses ONE stall up to 9 sqm per
+    // exhibitor — regardless of how many stalls they actually booked or how
+    // large their combined footprint is (participation.stallSize is the
+    // *combined* area across every PI once an exhibitor has more than one —
+    // see syncExhibitorStallSize in estimateController.js — so it can't be
+    // used directly as "their one stall's size"). Cap at 9 sqm using their
+    // per-sqm PI rate, which stays correct per-stall regardless of how many
+    // stalls they hold.
+    const MSME_CAP_SQM = 9;
+    const ratePerSqm = Number(participation.rate || 0);
+    const gstPercent = Number(participation.gstPercent ?? 18);
+    const stallSize = Number(participation.stallSize || 0);
+    const cappedSqm = stallSize > 0 ? Math.min(MSME_CAP_SQM, stallSize) : MSME_CAP_SQM;
+    let cappedStallCharge = 0;
+    if (ratePerSqm > 0) {
+      const base = ratePerSqm * cappedSqm;
+      cappedStallCharge = base + (base * gstPercent) / 100;
+    } else if (stallSize > 0 && total > 0) {
+      // No per-sqm rate on record — prorate the known contract value down to
+      // the capped area instead of claiming the full multi-stall total.
+      cappedStallCharge = total * (cappedSqm / stallSize);
+    } else {
+      cappedStallCharge = total;
+    }
+    const stallClaim = Number(exhibitorData?.claim?.stallCharges ?? cappedStallCharge ?? 0);
     const existingClaim = exhibitorData?.claim || application?.claim || {};
     const knownClaimValues = [stallClaim, existingClaim.hotelStay, existingClaim.travel, existingClaim.courier, existingClaim.marketing]
       .map(value => Number(value || 0));
@@ -126,6 +151,8 @@ export function useMsmePmsApplication(exhibitorData: any) {
     claim: {
       ...existingClaim,
       stallCharges: stallClaim || null,
+      stallSqmClaimed: cappedSqm,
+      stallSqmActual: stallSize || null,
       totalClaimed: totalClaimed || null,
       eligibleAmount: existingClaim.eligibleAmount != null ? Number(existingClaim.eligibleAmount) : (totalClaimed ? Math.min(totalClaimed, 150000) : null),
     },

@@ -114,7 +114,7 @@ function Section({ icon, letter, title, note, children, className = '' }) {
     return (
         <section
             className={cx(
-                'min-h-0 min-w-0 overflow-hidden rounded-[9px] border border-[#dbe4ef] bg-white',
+                'min-h-0 min-w-0 rounded-[9px] border border-[#dbe4ef] bg-white',
                 'p-[13px_15px_14px] shadow-[0_2px_8px_rgba(9,32,74,0.025)]',
                 '[@media(max-height:1100px)_and_(min-width:1181px)]:p-[9px_13px_10px]',
                 'max-[1180px]:[min-height:auto]',
@@ -474,7 +474,7 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
                         <Step number="5" label="Submit" />
                     </div>
 
-                    <main className={"grid min-h-0 min-w-0 grid-rows-[188px_186px_128px_164px_52px] gap-3 overflow-hidden [@media(max-height:1100px)_and_(min-width:1181px)]:grid-rows-[164px_160px_108px_132px_46px] [@media(max-height:1100px)_and_(min-width:1181px)]:gap-2 max-[1180px]:h-auto max-[1180px]:grid-rows-none max-[1180px]:overflow-visible max-[820px]:gap-4"}>
+                    <main className={"grid min-h-0 min-w-0 grid-rows-[minmax(188px,auto)_minmax(186px,auto)_minmax(128px,auto)_minmax(164px,auto)_minmax(52px,auto)] gap-3 [@media(max-height:1100px)_and_(min-width:1181px)]:grid-rows-[minmax(164px,auto)_minmax(160px,auto)_minmax(108px,auto)_minmax(132px,auto)_minmax(46px,auto)] [@media(max-height:1100px)_and_(min-width:1181px)]:gap-2 max-[1180px]:h-auto max-[1180px]:grid-rows-none max-[1180px]:overflow-visible max-[820px]:gap-4"}>
                         <Section
                             letter="A"
                             title="Company / Organization Details"
@@ -699,10 +699,10 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
                     </main>
                 </div>
 
-                <aside className={"grid min-h-0 min-w-0 grid-rows-[238px_190px_270px_70px] gap-[14px] overflow-hidden [@media(max-height:1100px)_and_(min-width:1181px)]:grid-rows-[210px_168px_232px_60px] [@media(max-height:1100px)_and_(min-width:1181px)]:gap-2 max-[1180px]:h-auto max-[1180px]:grid-cols-2 max-[1180px]:grid-rows-none max-[1180px]:overflow-visible max-[1180px]:gap-4 max-[820px]:grid-cols-1 max-[820px]:gap-5"}>
+                <aside className={"grid min-h-0 min-w-0 grid-rows-[minmax(238px,auto)_minmax(190px,auto)_minmax(270px,auto)_minmax(70px,auto)] gap-[14px] [@media(max-height:1100px)_and_(min-width:1181px)]:grid-rows-[minmax(210px,auto)_minmax(168px,auto)_minmax(232px,auto)_minmax(60px,auto)] [@media(max-height:1100px)_and_(min-width:1181px)]:gap-2 max-[1180px]:h-auto max-[1180px]:grid-cols-2 max-[1180px]:grid-rows-none max-[1180px]:overflow-visible max-[1180px]:gap-4 max-[820px]:grid-cols-1 max-[820px]:gap-5"}>
                     <section
                         className={cx(
-                            'min-w-0 overflow-hidden rounded-[9px] border border-[#dbe4ef] bg-white p-[15px]',
+                            'min-w-0 rounded-[9px] border border-[#dbe4ef] bg-white p-[15px]',
                             '[@media(max-height:1100px)_and_(min-width:1181px)]:p-[11px_13px]',
                             'max-[820px]:p-[18px]'
                         )}
@@ -722,7 +722,7 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
 
                     <section
                         className={cx(
-                            'min-w-0 overflow-hidden rounded-[9px] border border-[#dbe4ef]',
+                            'min-w-0 rounded-[9px] border border-[#dbe4ef]',
                             'bg-[linear-gradient(135deg,#ffffff_0%,#f8fcfa_100%)] p-[15px]',
                             '[@media(max-height:1100px)_and_(min-width:1181px)]:p-[11px_13px]',
                             'max-[820px]:p-[18px]'
@@ -749,7 +749,7 @@ export default function MSMEPMSApplication({ data, onSaveDraft, onContinue, savi
 
                     <section
                         className={cx(
-                            'min-w-0 overflow-hidden rounded-[9px] border border-[#dbe4ef] bg-white p-[15px]',
+                            'min-w-0 rounded-[9px] border border-[#dbe4ef] bg-white p-[15px]',
                             '[@media(max-height:1100px)_and_(min-width:1181px)]:p-[11px_13px]',
                             'max-[820px]:p-[18px]'
                         )}

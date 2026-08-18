@@ -10,13 +10,13 @@ interface MSMEProps { data: any; }
 function InfoGrid({ rows }: { rows: [string, React.ReactNode][] }) {
     return (
         <div className="border border-slate-200 rounded-sm overflow-hidden">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2">
                 {rows.map(([label, value], i) => (
                     <div key={i} className="flex border-r border-b border-slate-200 last:border-r-0 hover:bg-slate-50/40">
-                        <div className="w-[120px] min-w-[120px] px-2 py-2 text-[10px] font-semibold text-slate-500 uppercase border-r bg-slate-50 flex items-center">
+                        <div className="w-[100px] min-w-[100px] px-2 py-1.5 text-[9px] font-semibold text-slate-500 uppercase border-r bg-slate-50 flex items-center">
                             {label}
                         </div>
-                        <div className="flex-1 px-2 py-2 text-[11px] text-slate-800 flex items-center break-all">
+                        <div className="flex-1 px-2 py-1.5 text-[10px] text-slate-800 flex items-center break-all">
                             {value ?? '—'}
                         </div>
                     </div>
@@ -28,10 +28,10 @@ function InfoGrid({ rows }: { rows: [string, React.ReactNode][] }) {
 
 function Section({ title, children }: any) {
     return (
-        <div className="mb-4">
-            <div className="flex items-center gap-2 mb-1.5">
-                <div className="w-1 h-3.5 bg-[#23471d] rounded-full" />
-                <span className="text-[11px] font-semibold text-[#23471d] uppercase tracking-wider">
+        <div>
+            <div className="flex items-center gap-1.5 mb-1">
+                <div className="w-1 h-3 bg-[#23471d] rounded-full" />
+                <span className="text-[10px] font-semibold text-[#23471d] uppercase tracking-wider">
                     {title}
                 </span>
             </div>
@@ -200,51 +200,51 @@ export default function ExhibitorMSME({ data }: MSMEProps) {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <div className="bg-white border border-slate-200 rounded-sm overflow-hidden shadow-sm">
 
-                {/* Modern Header */}
-                <div className="bg-slate-50 border-b border-slate-200 px-6 py-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 bg-[#23471d] rounded-sm flex items-center justify-center text-white shadow-lg shadow-[#23471d]/20">
-                            <FileText size={24} />
+                {/* Header */}
+                <div className="bg-slate-50 border-b border-slate-200 px-4 py-2.5 flex flex-col md:flex-row md:items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5">
+                        <div className="w-8 h-8 bg-[#23471d] rounded-sm flex items-center justify-center text-white shrink-0">
+                            <FileText size={16} />
                         </div>
                         <div>
-                            <h1 className="text-[16px] font-black text-slate-900 uppercase tracking-tight">Udyam Registration Details</h1>
-                            <div className="flex items-center gap-2 mt-1">
-                                <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">MSME Classification Profile</span>
-                                <span className={`px-2 py-0.5 rounded-[2px] text-[8px] font-black uppercase tracking-widest ${msme.udhyamRegNo ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-amber-100 text-amber-700 border border-amber-200'}`}>
-                                    {msme.udhyamRegNo ? 'Status: Verified' : 'Status: Pending Update'}
+                            <div className="flex items-center gap-2">
+                                <h1 className="text-[13px] font-black text-slate-900 uppercase tracking-tight">Udyam Registration Details</h1>
+                                <span className={`px-1.5 py-0.5 rounded-[2px] text-[8px] font-black uppercase tracking-widest ${msme.udhyamRegNo ? 'bg-green-100 text-green-700 border border-green-200' : 'bg-amber-100 text-amber-700 border border-amber-200'}`}>
+                                    {msme.udhyamRegNo ? 'Verified' : 'Pending Update'}
                                 </span>
                             </div>
+                            <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">MSME Classification Profile</span>
                         </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1.5">
                         <button
                             onClick={() => window.open('https://www.udyamregistration.gov.in/UdyamRegistration.aspx', '_blank')}
-                            className="h-9 px-4 text-[10px] font-black uppercase tracking-widest text-blue-600 hover:bg-blue-50 rounded-sm transition-all flex items-center gap-2 border border-blue-200"
+                            className="h-7 px-2.5 text-[9px] font-black uppercase tracking-widest text-blue-600 hover:bg-blue-50 rounded-sm transition-all flex items-center gap-1.5 border border-blue-200"
                         >
-                            <ExternalLink size={14} />
+                            <ExternalLink size={12} />
                             Register on udyam
                         </button>
 
                         {editing ? (
                             <>
-                                <button onClick={() => setEditing(false)} className="h-9 px-4 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-100 rounded-sm transition-all flex items-center gap-2">
-                                    <X size={14} /> Discard
+                                <button onClick={() => setEditing(false)} className="h-7 px-2.5 text-[9px] font-black uppercase tracking-widest text-slate-500 hover:bg-slate-100 rounded-sm transition-all flex items-center gap-1.5">
+                                    <X size={12} /> Discard
                                 </button>
-                                <button onClick={handleSave} disabled={saving} className="h-9 px-6 text-[10px] font-black uppercase tracking-widest bg-[#23471d] text-white hover:bg-[#1a3516] rounded-sm transition-all shadow-md flex items-center gap-2">
-                                    {saving ? <Loader2 size={14} className="animate-spin" /> : <Save size={14} />}
+                                <button onClick={handleSave} disabled={saving} className="h-7 px-3 text-[9px] font-black uppercase tracking-widest bg-[#23471d] text-white hover:bg-[#1a3516] rounded-sm transition-all shadow-sm flex items-center gap-1.5">
+                                    {saving ? <Loader2 size={12} className="animate-spin" /> : <Save size={12} />}
                                     {saving ? 'Processing...' : 'Save Profile'}
                                 </button>
                             </>
                         ) : (
-                            <button onClick={() => setEditing(true)} className="h-9 px-6 text-[10px] font-black uppercase tracking-widest bg-slate-900 text-white hover:bg-black rounded-sm transition-all shadow-md flex items-center gap-2">
-                                <Pencil size={14} /> Edit Information
+                            <button onClick={() => setEditing(true)} className="h-7 px-3 text-[9px] font-black uppercase tracking-widest bg-slate-900 text-white hover:bg-black rounded-sm transition-all shadow-sm flex items-center gap-1.5">
+                                <Pencil size={12} /> Edit Information
                             </button>
                         )}
                     </div>
                 </div>
 
-                <div className="p-6">
+                <div className="p-3">
 
                     {/* EDIT MODE */}
                     {editing ? (
@@ -367,71 +367,71 @@ export default function ExhibitorMSME({ data }: MSMEProps) {
                             </div>
                         </div>
                     ) : (
-                        /* 🔥 VIEW MODE */
-                        <div className="space-y-3">
-                            {/* Certificate Link */}
+                        /* VIEW MODE — two sections per row instead of stacking every
+                           section full-width, since each only needs 1-2 InfoGrid rows. */
+                        <div className="space-y-2.5">
                             {certUrl && (
-                                <div className="mb-3">
-                                    <a href={certUrl} target="_blank" rel="noopener noreferrer"
-                                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#23471d] text-white text-[10px] rounded">
-                                        <ExternalLink size={12} /> View Certificate
-                                    </a>
-                                </div>
+                                <a href={certUrl} target="_blank" rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#23471d] text-white text-[10px] rounded">
+                                    <ExternalLink size={12} /> View Certificate
+                                </a>
                             )}
 
-                            <Section title="udyam Details">
-                                <InfoGrid rows={[
-                                    ['Reg No', msme.udyamRegNo],
-                                    ['Type', msme.udyamType],
-                                    ['Issue Date', msme.udyamIssueDate ? new Date(msme.udyamIssueDate).toLocaleDateString() : '—'],
-                                    ['Expiry Date', msme.udyamExpiryDate ? new Date(msme.udyamExpiryDate).toLocaleDateString() : '—'],
-                                ]} />
-                            </Section>
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2.5">
+                                <Section title="udyam Details">
+                                    <InfoGrid rows={[
+                                        ['Reg No', msme.udyamRegNo],
+                                        ['Type', msme.udyamType],
+                                        ['Issue Date', msme.udyamIssueDate ? new Date(msme.udyamIssueDate).toLocaleDateString() : '—'],
+                                        ['Expiry Date', msme.udyamExpiryDate ? new Date(msme.udyamExpiryDate).toLocaleDateString() : '—'],
+                                    ]} />
+                                </Section>
 
-                            <Section title="Enterprise Details">
-                                <InfoGrid rows={[
-                                    ['Enterprise Name', msme.enterpriseName],
-                                    ['PAN Number', msme.panNumber],
-                                    ['GST Number', msme.gstNumber],
-                                ]} />
-                            </Section>
+                                <Section title="Enterprise Details">
+                                    <InfoGrid rows={[
+                                        ['Enterprise Name', msme.enterpriseName],
+                                        ['PAN Number', msme.panNumber],
+                                        ['GST Number', msme.gstNumber],
+                                    ]} />
+                                </Section>
 
-                            <Section title="Contact Details">
-                                <InfoGrid rows={[
-                                    ['Contact Person', msme.contactPerson],
-                                    ['Gender', msme.gender || '—'],
-                                    ['Designation', msme.designation],
-                                    ['Mobile No', msme.mobileNo],
-                                    ['Email ID', msme.emailId],
-                                    ['Alternate No', msme.alternateNo || '—'],
-                                ]} />
-                            </Section>
+                                <Section title="Contact Details">
+                                    <InfoGrid rows={[
+                                        ['Contact Person', msme.contactPerson],
+                                        ['Gender', msme.gender || '—'],
+                                        ['Designation', msme.designation],
+                                        ['Mobile No', msme.mobileNo],
+                                        ['Email ID', msme.emailId],
+                                        ['Alternate No', msme.alternateNo || '—'],
+                                    ]} />
+                                </Section>
 
-                            <Section title="Address Details">
-                                <InfoGrid rows={[
-                                    ['Address', msme.address],
-                                    ['City', msme.city],
-                                    ['State', msme.state],
-                                    ['Pincode', msme.pincode],
-                                ]} />
-                            </Section>
+                                <Section title="Address Details">
+                                    <InfoGrid rows={[
+                                        ['Address', msme.address],
+                                        ['City', msme.city],
+                                        ['State', msme.state],
+                                        ['Pincode', msme.pincode],
+                                    ]} />
+                                </Section>
 
-                            <Section title="MSME Classification">
-                                <InfoGrid rows={[
-                                    ['Category', msme.msmeCategory],
-                                    ['Investment', msme.investmentInPlant ? `₹${Number(msme.investmentInPlant).toLocaleString()}` : '—'],
-                                    ['Turnover', msme.turnover ? `₹${Number(msme.turnover).toLocaleString()}` : '—'],
-                                ]} />
-                            </Section>
+                                <Section title="MSME Classification">
+                                    <InfoGrid rows={[
+                                        ['Category', msme.msmeCategory],
+                                        ['Investment', msme.investmentInPlant ? `₹${Number(msme.investmentInPlant).toLocaleString()}` : '—'],
+                                        ['Turnover', msme.turnover ? `₹${Number(msme.turnover).toLocaleString()}` : '—'],
+                                    ]} />
+                                </Section>
 
-                            <Section title="DFO Details">
-                                <InfoGrid rows={[
-                                    ['Location', msme.dfoLocation || '—'],
-                                    ['Email', msme.dfoEmail || '—'],
-                                    ['Mobile No', msme.dfoMobileNo || '—'],
-                                    ['Remark', msme.msmeRemark || '—'],
-                                ]} />
-                            </Section>
+                                <Section title="DFO Details">
+                                    <InfoGrid rows={[
+                                        ['Location', msme.dfoLocation || '—'],
+                                        ['Email', msme.dfoEmail || '—'],
+                                        ['Mobile No', msme.dfoMobileNo || '—'],
+                                        ['Remark', msme.msmeRemark || '—'],
+                                    ]} />
+                                </Section>
+                            </div>
                         </div>
                     )}
                 </div>

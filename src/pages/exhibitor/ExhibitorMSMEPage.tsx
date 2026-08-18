@@ -1,17 +1,14 @@
 import { useExhibitorCtx } from '@/context/ExhibitorContext';
 import ExhibitorMSME from '@/components/dashboard/exhibitor/ExhibitorMSME';
-import DashboardHero from '@/components/dashboard/DashboardHero';
 
+// ExhibitorMSME already renders its own contextual header ("Udyam
+// Registration Details" bar) — stacking the generic DashboardHero banner on
+// top of it was two large headers back to back, which is most of why this
+// page felt overly long. Dropped it.
 export default function ExhibitorMSMEPage() {
     const { data } = useExhibitorCtx();
     return (
-        <div className="space-y-6">
-            <DashboardHero
-                pageId="ex-msme"
-                defaultTitle="MSME & PSM Claim"
-                defaultSubtitle="Manage your MSME certification and claim government subsidies"
-                type="exhibitor"
-            />
+        <div className="p-3">
             <ExhibitorMSME data={data} />
         </div>
     );

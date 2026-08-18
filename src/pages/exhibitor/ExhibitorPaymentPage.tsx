@@ -86,7 +86,8 @@ const fixUrl = (url?: string) => {
 };
 
 export default function ExhibitorPaymentPage() {
-    const { data, fetchDashboard } = useExhibitorCtx();
+    const { data, fetchDashboard, myStalls: ctxMyStalls } = useExhibitorCtx();
+    const myStalls = Array.isArray(ctxMyStalls) ? ctxMyStalls : [];
     const [summary, setSummary] = useState<PaymentSummary | null>(null);
     const [loading, setLoading] = useState(true);
     const [paying, setPaying] = useState(false);
@@ -193,15 +194,27 @@ export default function ExhibitorPaymentPage() {
         fetchDocOverview();
     }, [fetchDocOverview]);
 
+    // One row per stall — docOverview.recentDocuments lists a PI *and* its
+    // converted Invoice as two separate entries once invoiced, which would
+    // double up every stall in this list. financials.dueBreakdown is already
+    // deduplicated server-side (the Invoice once converted, the PI only while
+    // still uninvoiced), so use that instead and keep every stall here even
+    // once fully paid — remaining defaults to 0 (rendered as "Paid" below)
+    // when a stall's document isn't in remainingBreakdown any more.
     const payableDocuments = (() => {
-        const documents: any[] = docOverview?.recentDocuments || [];
-        const breakdownById = new Map<string, any>(
-            (docOverview?.financials?.remainingBreakdown || []).map((entry: any) => [String(entry.id), entry])
+        const dueDocs: any[] = docOverview?.financials?.dueBreakdown || [];
+        const remainingById = new Map<string, number>(
+            (docOverview?.financials?.remainingBreakdown || []).map((entry: any) => [String(entry.id), entry.remainingAmount])
         );
-        return documents
-            .filter((doc) => doc.documentType === 'Invoice' || doc.documentType === 'Proforma Invoice')
-            .map((doc) => ({ ...doc, remaining: breakdownById.get(String(doc.id))?.remainingAmount || 0, particulars: breakdownById.get(String(doc.id))?.particulars || '' }))
-            .filter((doc) => doc.remaining > 0);
+        return dueDocs
+            .filter((doc) => doc.type === 'Invoice' || doc.type === 'Proforma Invoice')
+            .map((doc) => ({
+                id: doc.id,
+                documentType: doc.type,
+                documentNo: doc.no,
+                particulars: doc.particulars || '',
+                remaining: remainingById.get(String(doc.id)) ?? 0,
+            }));
     })();
 
     // Payment History — docOverview.financials.paidBreakdown is the real, de-duplicated
@@ -626,8 +639,12 @@ export default function ExhibitorPaymentPage() {
 
                         <div className="grid grid-cols-2 md:grid-cols-4 border border-slate-100 rounded-lg overflow-hidden shadow-sm mt-auto">
                             <div className="col-span-2 md:col-span-1 bg-[#1a5c2e] p-2 text-white flex flex-col justify-center rounded-t-lg md:rounded-t-none md:rounded-l-lg md:rounded-r-none">
-                                <p className="text-[10px] font-bold text-emerald-200 uppercase tracking-wider mb-0.5">Stall Number</p>
-                                <p className="text-2xl md:text-3xl font-black leading-none">{summary.stall?.stallFor || summary.stall?.stallNumber || 'TBA'}</p>
+                                <p className="text-[10px] font-bold text-emerald-200 uppercase tracking-wider mb-0.5">Stall Number{myStalls.length > 1 ? 's' : ''}</p>
+                                <p className={myStalls.length > 1 ? "text-xl md:text-2xl font-black leading-tight" : "text-2xl md:text-3xl font-black leading-none"}>
+                                    {myStalls.length > 1
+                                        ? myStalls.map((s: any) => s.stallNumber).join(', ')
+                                        : (summary.stall?.stallFor || summary.stall?.stallNumber || 'TBA')}
+                                </p>
                             </div>
                             <div className="p-2.5 bg-white border-r border-slate-100 flex flex-col justify-center">
                                 <Layers3 className="w-4 h-4 text-amber-500 mb-1" />
@@ -733,98 +750,9 @@ export default function ExhibitorPaymentPage() {
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="space-y-2"
+                        className="grid grid-cols-1 lg:grid-cols-12 gap-2 items-start"
                     >
-                        {/* Financial Summary Card — Full Breakdown */}
-                        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
-                            <div className="px-4 py-1.5 md:py-2 flex items-center gap-2 border-b border-slate-100 bg-slate-50/50">
-                                <div className="w-6 h-6 rounded-full bg-[#ecfdf5] flex items-center justify-center border border-[#d1fae5]">
-                                    <IndianRupee className="w-3.5 h-3.5 text-[#10b981]" />
-                                </div>
-                                <p className="text-[14px] font-bold text-slate-800">Financial Breakdown</p>
-                            </div>
-                            <div className="p-0">
-                                <div className="w-full text-[13px]">
-                                    {/* Gross Booking Cost */}
-                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
-                                        <span className="text-slate-600 font-medium text-xs">Gross Booking Cost</span>
-                                        <span className="font-bold text-slate-800">{fmt(summary.finance.grossAmount)}</span>
-                                    </div>
-
-                                    {/* Stall Discount */}
-                                    {summary.finance.stallDiscountAmount > 0 && (
-                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
-                                            <span className="text-slate-600 font-medium flex items-center gap-2 text-xs">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Stall Discount
-                                            </span>
-                                            <span className="font-bold text-orange-600">−{fmt(summary.finance.stallDiscountAmount)}</span>
-                                        </div>
-                                    )}
-
-                                    {/* Full Payment Discount */}
-                                    {summary.finance.discountAmount > 0 && (
-                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
-                                            <span className="text-slate-600 font-medium flex items-center gap-2 text-xs">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Full Payment Discount
-                                            </span>
-                                            <span className="font-bold text-emerald-600">−{fmt(summary.finance.discountAmount)}</span>
-                                        </div>
-                                    )}
-
-                                    {/* Taxable Value */}
-                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
-                                        <span className="text-slate-600 font-medium text-xs">Taxable Value (Pre-GST)</span>
-                                        <span className="font-bold text-slate-800">{fmt(summary.finance.subtotal)}</span>
-                                    </div>
-
-                                    {/* GST */}
-                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
-                                        <span className="text-slate-600 font-medium text-xs">GST @ 18%</span>
-                                        <span className="font-bold text-slate-600">+{fmt(summary.finance.gstAmount)}</span>
-                                    </div>
-
-                                    {/* TDS */}
-                                    {summary.finance.tdsAmount > 0 && (
-                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
-                                            <span className="text-slate-600 font-medium flex items-center gap-2 text-xs">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-[#0052cc]"></span> TDS
-                                            </span>
-                                            <span className="font-bold text-[#0052cc]">−{fmt(summary.finance.tdsAmount)}</span>
-                                        </div>
-                                    )}
-
-                                    {/* Net Payable / Contract Value */}
-                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100 bg-[#f8f9fa]">
-                                        <span className="font-bold text-[#10b981] uppercase text-xs tracking-wider">Total Contract Value</span>
-                                        <span className="font-black text-[#10b981] text-[15px]">{fmt(summary.finance.netPayable)}</span>
-                                    </div>
-
-                                    {/* Amount Paid So Far */}
-                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100 bg-[#f8f9fa]">
-                                        <span className="text-slate-600 font-medium text-xs">Amount Paid So Far</span>
-                                        <span className="font-black text-[#10b981]">−{fmt(summary.finance.amountPaid)}</span>
-                                    </div>
-
-                                    {/* Penalty */}
-                                    {summary.finance.penaltyAmount > 0 && (
-                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100 bg-red-50/30">
-                                            <span className="text-red-500 font-medium flex items-center gap-2 text-xs">
-                                                <AlertTriangle className="w-3.5 h-3.5" /> Late Payment Penalty
-                                            </span>
-                                            <span className="font-bold text-red-600">+{fmt(summary.finance.penaltyAmount)}</span>
-                                        </div>
-                                    )}
-
-                                    {/* Balance Due */}
-                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 bg-[#fff1f2]">
-                                        <span className="font-black text-rose-600 uppercase text-xs tracking-wider">Balance Due</span>
-                                        <span className="font-black text-rose-600 text-[18px]">{fmt(summary.finance.totalPayable)}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-
+                        <div className="lg:col-span-8 space-y-2">
                         {!isFullyPaid && (
                             <div className="bg-white border border-slate-200 rounded-lg overflow-hidden shadow-sm">
                                 <div className="px-3 py-2 border-b border-gray-100 flex items-center gap-2">
@@ -1070,6 +998,98 @@ export default function ExhibitorPaymentPage() {
                             </motion.div>
                         )}
 
+                        </div>
+
+                        <div className="lg:col-span-4 space-y-2 lg:sticky lg:top-3">
+                        {/* Financial Summary Card — Full Breakdown */}
+                        <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm">
+                            <div className="px-4 py-1.5 md:py-2 flex items-center gap-2 border-b border-slate-100 bg-slate-50/50">
+                                <div className="w-6 h-6 rounded-full bg-[#ecfdf5] flex items-center justify-center border border-[#d1fae5]">
+                                    <IndianRupee className="w-3.5 h-3.5 text-[#10b981]" />
+                                </div>
+                                <p className="text-[14px] font-bold text-slate-800">Financial Breakdown</p>
+                            </div>
+                            <div className="p-0">
+                                <div className="w-full text-[13px]">
+                                    {/* Gross Booking Cost */}
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                        <span className="text-slate-600 font-medium text-xs">Gross Booking Cost</span>
+                                        <span className="font-bold text-slate-800">{fmt(summary.finance.grossAmount)}</span>
+                                    </div>
+
+                                    {/* Stall Discount */}
+                                    {summary.finance.stallDiscountAmount > 0 && (
+                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                            <span className="text-slate-600 font-medium flex items-center gap-2 text-xs">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-orange-400"></span> Stall Discount
+                                            </span>
+                                            <span className="font-bold text-orange-600">−{fmt(summary.finance.stallDiscountAmount)}</span>
+                                        </div>
+                                    )}
+
+                                    {/* Full Payment Discount */}
+                                    {summary.finance.discountAmount > 0 && (
+                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                            <span className="text-slate-600 font-medium flex items-center gap-2 text-xs">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span> Full Payment Discount
+                                            </span>
+                                            <span className="font-bold text-emerald-600">−{fmt(summary.finance.discountAmount)}</span>
+                                        </div>
+                                    )}
+
+                                    {/* Taxable Value */}
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                        <span className="text-slate-600 font-medium text-xs">Taxable Value (Pre-GST)</span>
+                                        <span className="font-bold text-slate-800">{fmt(summary.finance.subtotal)}</span>
+                                    </div>
+
+                                    {/* GST */}
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                        <span className="text-slate-600 font-medium text-xs">GST @ 18%</span>
+                                        <span className="font-bold text-slate-600">+{fmt(summary.finance.gstAmount)}</span>
+                                    </div>
+
+                                    {/* TDS */}
+                                    {summary.finance.tdsAmount > 0 && (
+                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100">
+                                            <span className="text-slate-600 font-medium flex items-center gap-2 text-xs">
+                                                <span className="w-1.5 h-1.5 rounded-full bg-[#0052cc]"></span> TDS
+                                            </span>
+                                            <span className="font-bold text-[#0052cc]">−{fmt(summary.finance.tdsAmount)}</span>
+                                        </div>
+                                    )}
+
+                                    {/* Net Payable / Contract Value */}
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100 bg-[#f8f9fa]">
+                                        <span className="font-bold text-[#10b981] uppercase text-xs tracking-wider">Total Contract Value</span>
+                                        <span className="font-black text-[#10b981] text-[15px]">{fmt(summary.finance.netPayable)}</span>
+                                    </div>
+
+                                    {/* Amount Paid So Far */}
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100 bg-[#f8f9fa]">
+                                        <span className="text-slate-600 font-medium text-xs">Amount Paid So Far</span>
+                                        <span className="font-black text-[#10b981]">−{fmt(summary.finance.amountPaid)}</span>
+                                    </div>
+
+                                    {/* Penalty */}
+                                    {summary.finance.penaltyAmount > 0 && (
+                                        <div className="flex justify-between items-center px-4 py-1.5 md:py-2 border-b border-slate-100 bg-red-50/30">
+                                            <span className="text-red-500 font-medium flex items-center gap-2 text-xs">
+                                                <AlertTriangle className="w-3.5 h-3.5" /> Late Payment Penalty
+                                            </span>
+                                            <span className="font-bold text-red-600">+{fmt(summary.finance.penaltyAmount)}</span>
+                                        </div>
+                                    )}
+
+                                    {/* Balance Due */}
+                                    <div className="flex justify-between items-center px-4 py-1.5 md:py-2 bg-[#fff1f2]">
+                                        <span className="font-black text-rose-600 uppercase text-xs tracking-wider">Balance Due</span>
+                                        <span className="font-black text-rose-600 text-[18px]">{fmt(summary.finance.totalPayable)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         {/* Pay against a specific Invoice / Proforma Invoice */}
                         {payableDocuments.length > 0 && (
                             <div className="w-full rounded-xl overflow-hidden shadow-sm border border-slate-200 bg-white">
@@ -1080,6 +1100,7 @@ export default function ExhibitorPaymentPage() {
                                 <div className="divide-y divide-slate-100">
                                     {payableDocuments.map((doc: any) => {
                                         const isPaying = payingDocId === String(doc.id);
+                                        const isPaid = doc.remaining <= 0;
                                         return (
                                             <div key={`${doc.documentType}-${doc.id}`} className="flex items-center justify-between gap-2 px-3 py-2.5">
                                                 <div className="min-w-0">
@@ -1087,16 +1108,23 @@ export default function ExhibitorPaymentPage() {
                                                     {doc.particulars && (
                                                         <p className="text-[10px] font-semibold text-slate-600 truncate">{doc.particulars}</p>
                                                     )}
-                                                    <p className="text-[10px] text-slate-400">{doc.documentType} &middot; Due {fmt(doc.remaining)}</p>
+                                                    <p className="text-[10px] text-slate-400">{doc.documentType} &middot; {isPaid ? 'Fully Paid' : `Due ${fmt(doc.remaining)}`}</p>
                                                 </div>
-                                                <button
-                                                    onClick={() => payDocument(doc)}
-                                                    disabled={isPaying}
-                                                    className="shrink-0 h-8 px-3 rounded-lg bg-[#23471d] hover:bg-[#1a3516] text-white text-[11px] font-semibold flex items-center gap-1.5 disabled:opacity-60"
-                                                >
-                                                    {isPaying ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CreditCard className="w-3.5 h-3.5" />}
-                                                    Pay {fmt(doc.remaining)}
-                                                </button>
+                                                {isPaid ? (
+                                                    <span className="shrink-0 h-8 px-3 rounded-lg bg-emerald-50 text-emerald-700 text-[11px] font-semibold flex items-center gap-1.5 border border-emerald-100">
+                                                        <CheckCircle2 className="w-3.5 h-3.5" />
+                                                        Paid
+                                                    </span>
+                                                ) : (
+                                                    <button
+                                                        onClick={() => payDocument(doc)}
+                                                        disabled={isPaying}
+                                                        className="shrink-0 h-8 px-3 rounded-lg bg-[#23471d] hover:bg-[#1a3516] text-white text-[11px] font-semibold flex items-center gap-1.5 disabled:opacity-60"
+                                                    >
+                                                        {isPaying ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <CreditCard className="w-3.5 h-3.5" />}
+                                                        Pay {fmt(doc.remaining)}
+                                                    </button>
+                                                )}
                                             </div>
                                         );
                                     })}
@@ -1113,6 +1141,7 @@ export default function ExhibitorPaymentPage() {
                                 For any payment issues, please contact our support team.
                             </p>
                         </div> */}
+                        </div>
                     </motion.div>
                 )}
 
