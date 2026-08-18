@@ -69,7 +69,7 @@ export function useMsmePmsApplication(exhibitorData: any) {
     return request(`/application/documents/${documentType}`, { method: 'POST', headers: authHeaders(), body: form }, selectedExhibitorId);
   }), [run, selectedExhibitorId]);
 
-  const deleteDocument = useCallback((documentType: string) => run(() => request(`/application/documents/${documentType}`, {
+  const deleteDocument = useCallback((documentType: string, documentId?: string) => run(() => request(`/application/documents/${documentType}${documentId ? `?documentId=${encodeURIComponent(documentId)}` : ''}`, {
     method: 'DELETE', headers: authHeaders(),
   }, selectedExhibitorId)), [run, selectedExhibitorId]);
 

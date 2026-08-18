@@ -491,7 +491,7 @@ export default function MSMEPMSBankDetails({ data, onBack, onContinue, onSaveDra
                         <footer className="grid grid-cols-1 items-center gap-2 rounded-lg border border-[#dbe4ef] bg-white p-1.5 sm:grid-cols-[120px_minmax(0,1fr)_190px]">
                             <button
                                 type="button"
-                                onClick={() => navigate("/exhibitor-dashboard/msme/application")}
+                                onClick={() => navigate("/exhibitor-dashboard/msme/application/edit")}
                                 className="flex h-7 items-center justify-center gap-2 rounded-md border border-[#d5deea] bg-white text-[10px] font-semibold text-[#061743]"
                             >
                                 <ArrowLeft size={15} strokeWidth={2} />

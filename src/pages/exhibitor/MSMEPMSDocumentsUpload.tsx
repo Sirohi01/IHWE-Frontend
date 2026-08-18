@@ -288,8 +288,15 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpl
         return false;
     };
     const documentDefinitions = REQUIRED_DOCUMENTS.map(doc => ({ ...doc, required: requiredForApplication(doc) }));
+    // A documentType can now hold several uploaded files (see
+    // MSMEPMSClaimDocuments) — this wizard step still shows one slot per
+    // type, so pick the most recently uploaded file for display here.
+    const latestByType = (type) => {
+        const matches = (data?.documents || []).filter(item => item.documentType === type);
+        return matches.length ? matches[matches.length - 1] : undefined;
+    };
     const [documents, setDocuments] = useState(() => documentDefinitions.map(doc => {
-        const uploaded = data?.documents?.find(item => item.documentType === doc.id);
+        const uploaded = latestByType(doc.id);
         const fetched = describeUploaded(uploaded);
         return uploaded
             ? { ...doc, status: 'Uploaded', file: uploaded.filename, size: uploaded.size ? `${Math.round(uploaded.size / 1024)} KB` : '', url: uploaded.url || null, description: fetched?.summary || doc.description, fullDetails: fetched?.full || null }
@@ -298,7 +305,7 @@ export default function MSMEPMSDocumentsUpload({ data, onBack, onContinue, onUpl
 
     useEffect(() => {
         setDocuments(prev => prev.map(doc => {
-            const uploaded = data?.documents?.find(item => item.documentType === doc.id);
+            const uploaded = latestByType(doc.id);
             const fetched = describeUploaded(uploaded);
             const original = REQUIRED_DOCUMENTS.find(d => d.id === doc.id);
             if (uploaded) return { ...doc, status: 'Uploaded', file: uploaded.filename, size: uploaded.size ? `${Math.round(uploaded.size / 1024)} KB` : '', url: uploaded.url || null, description: fetched?.summary || original?.description, fullDetails: fetched?.full || null };

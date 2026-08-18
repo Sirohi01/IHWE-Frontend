@@ -413,7 +413,7 @@ export default function MSMEPMSClaimStatusPage() {
             </div>
 
             <div className="grid h-full grid-cols-3 gap-[18px]">
-              <button type="button" onClick={() => navigate("/exhibitor-dashboard/msme/application")} className="flex h-full items-center justify-center gap-[8px] rounded-[5px] bg-[#087536] text-[10px] font-black text-white transition hover:bg-[#06652f]">
+              <button type="button" onClick={() => navigate("/exhibitor-dashboard/msme/application/edit")} className="flex h-full items-center justify-center gap-[8px] rounded-[5px] bg-[#087536] text-[10px] font-black text-white transition hover:bg-[#06652f]">
                 <Download size={14} strokeWidth={1.8} />
                 {submitted ? "View Application" : "Complete Application"}
               </button>
@@ -445,7 +445,7 @@ export default function MSMEPMSClaimStatusPage() {
               <LabelValue label="GST Number" value={gstNumber} />
               <LabelValue label="Booking Status" value={safe(data?.event?.bookingStatus, "Pending")} green={data?.event?.bookingStatus === "Confirmed"} />
               <LabelValue label="Payment Status" value={safe(data?.event?.paymentStatus, "Pending")} green={data?.event?.paymentStatus === "Fully Paid"} />
-              <button type="button" onClick={() => navigate("/exhibitor-dashboard/msme/application")} className="mt-[10px] h-[28px] w-full rounded-[5px] border border-[#087536] bg-white text-[9px] font-black text-[#087536] transition hover:bg-[#edf9f2]">
+              <button type="button" onClick={() => navigate("/exhibitor-dashboard/msme/application/edit")} className="mt-[10px] h-[28px] w-full rounded-[5px] border border-[#087536] bg-white text-[9px] font-black text-[#087536] transition hover:bg-[#edf9f2]">
                 View Full Application
               </button>
             </Panel>

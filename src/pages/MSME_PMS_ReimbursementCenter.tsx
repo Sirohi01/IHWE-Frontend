@@ -190,7 +190,7 @@ function Hero({ navigate, eligibleAmount }: { navigate: (p: string) => void; eli
           <button onClick={() => navigate("/exhibitor-dashboard/msme")} className="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-medium px-4 py-1 rounded-lg flex items-center gap-1">
             Check My Eligibility <ArrowRight size={10} />
           </button>
-          <button onClick={() => navigate("/exhibitor-dashboard/msme/application")} className="border border-gray-300 text-[10px] font-medium px-4 py-1 rounded-lg hover:bg-gray-50 flex items-center gap-1 bg-white">
+          <button onClick={() => navigate("/exhibitor-dashboard/msme/application/edit")} className="border border-gray-300 text-[10px] font-medium px-4 py-1 rounded-lg hover:bg-gray-50 flex items-center gap-1 bg-white">
             Start Application <ArrowRight size={10} />
           </button>
         </div>
@@ -263,7 +263,7 @@ function EligibilityCard({ data, navigate }: { data: any; navigate: (p: string) 
           <span className="text-[10px]">{pct}% Complete</span>
         </div>
       </div>
-      <button onClick={() => navigate("/exhibitor-dashboard/msme/application")} className="flex items-center justify-end gap-1 text-blue-600 text-[10px] font-medium hover:text-blue-700">
+      <button onClick={() => navigate("/exhibitor-dashboard/msme/application/edit")} className="flex items-center justify-end gap-1 text-blue-600 text-[10px] font-medium hover:text-blue-700">
         Complete Eligibility Check <ArrowRight className="w-3 h-3" />
       </button>
     </Card>
@@ -342,7 +342,7 @@ function ApplicationProgressCard({ application, data, navigate }: { application:
         })}
       </div>
 
-      <button onClick={() => navigate("/exhibitor-dashboard/msme/application")} className="mt-2 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-medium py-1 rounded-lg flex items-center justify-center gap-1">
+      <button onClick={() => navigate("/exhibitor-dashboard/msme/application/edit")} className="mt-2 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-medium py-1 rounded-lg flex items-center justify-center gap-1">
         Continue Application
         <ArrowRight className="w-3.5 h-3.5" />
       </button>
@@ -514,7 +514,7 @@ function ApplicationStatusCard({ application, data, navigate }: { application: a
       </div>
 
       <div className="bg-amber-50 border-amber-100 border rounded-lg py-1 flex items-center justify-center mt-auto">
-        <LinkRow icon={<ArrowRight className="w-3 h-3 text-amber-600" />} onClick={() => navigate(missingDocs.length ? "/exhibitor-dashboard/msme/documents-upload" : "/exhibitor-dashboard/msme/application")}>
+        <LinkRow icon={<ArrowRight className="w-3 h-3 text-amber-600" />} onClick={() => navigate(missingDocs.length ? "/exhibitor-dashboard/msme/documents-upload" : "/exhibitor-dashboard/msme/application/edit")}>
           <span className="text-amber-600">Resolve Pending Action</span>
         </LinkRow>
       </div>
@@ -527,7 +527,7 @@ function ApplicationStatusCard({ application, data, navigate }: { application: a
 function QuickActionsCard({ navigate }: { navigate: (p: string) => void }) {
   const quickActions = [
     { icon: FileText, label: "Check Eligibility", bg: "#ECFDF5", color: "#059669", to: "/exhibitor-dashboard/msme" },
-    { icon: FileText, label: "Continue Application", bg: "#EFF6FF", color: "#2563EB", to: "/exhibitor-dashboard/msme/application" },
+    { icon: FileText, label: "Continue Application", bg: "#EFF6FF", color: "#2563EB", to: "/exhibitor-dashboard/msme/application/edit" },
     { icon: FileText, label: "Upload Documents", bg: "#F5F3FF", color: "#7C3AED", to: "/exhibitor-dashboard/msme/documents-upload" },
     { icon: Route, label: "Track Application", bg: "#EFF6FF", color: "#2563EB", to: "/exhibitor-dashboard/msme/pms-claim-status" },
     { icon: Search, label: "Raise a Query", bg: "#FFF7ED", color: "#EA580C", to: "/exhibitor-dashboard/support" },
@@ -647,7 +647,7 @@ function FooterCta({ navigate, saving, onSaveDraft }: { navigate: (p: string) =>
       </div>
 
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full md:w-auto shrink-0">
-        <button onClick={() => navigate("/exhibitor-dashboard/msme/application")} className="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-medium px-4 py-2 rounded-lg flex items-center justify-center gap-1 whitespace-nowrap">
+        <button onClick={() => navigate("/exhibitor-dashboard/msme/application/edit")} className="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-medium px-4 py-2 rounded-lg flex items-center justify-center gap-1 whitespace-nowrap">
           Continue Application
           <ArrowRight className="w-3.5 h-3.5" />
         </button>
