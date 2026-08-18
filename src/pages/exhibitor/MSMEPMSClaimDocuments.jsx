@@ -13,6 +13,7 @@ import {
   Folder,
   Landmark,
   Loader2,
+  Lock,
   Mail,
   PenLine,
   Phone,
@@ -160,9 +161,11 @@ function DocCard({ index, doc, entries, onUpload, onDelete, onView, uploading, d
                 <Eye size={10} className="shrink-0" />
                 <span className="truncate">{f.filename}</span>
               </button>
-              <button type="button" disabled={deletingId === f._id} onClick={() => onDelete(doc.type, f._id)} className="shrink-0 text-slate-300 hover:text-red-500 disabled:opacity-40">
-                {deletingId === f._id ? <Loader2 size={11} className="animate-spin" /> : <Trash2 size={11} />}
-              </button>
+              {!allVerified && (
+                <button type="button" disabled={deletingId === f._id} onClick={() => onDelete(doc.type, f._id)} className="shrink-0 text-slate-300 hover:text-red-500 disabled:opacity-40">
+                  {deletingId === f._id ? <Loader2 size={11} className="animate-spin" /> : <Trash2 size={11} />}
+                </button>
+              )}
             </li>
           ))}
         </ul>
@@ -171,6 +174,10 @@ function DocCard({ index, doc, entries, onUpload, onDelete, onView, uploading, d
       <div className="mt-2">
         {notApplicable ? (
           <button type="button" disabled className="w-full rounded-md border border-slate-200 bg-slate-50 px-2 py-1.5 text-[10px] font-bold text-slate-400">Not Applicable</button>
+        ) : allVerified ? (
+          <button type="button" disabled className="flex w-full items-center justify-center gap-1.5 rounded-md border border-emerald-100 bg-emerald-50 px-2 py-1.5 text-[10px] font-bold text-emerald-600">
+            <Lock size={11} /> Approved — Locked
+          </button>
         ) : (
           <label className={`flex w-full items-center justify-center gap-1.5 rounded-md px-2 py-1.5 text-[10px] font-bold cursor-pointer ${uploading ? "bg-slate-100 text-slate-400" : uploaded ? "border border-slate-200 bg-white text-slate-600 hover:bg-slate-50" : "bg-orange-50 text-orange-600 hover:bg-orange-100"}`}>
             {uploading ? <Loader2 size={12} className="animate-spin" /> : <Upload size={12} />}

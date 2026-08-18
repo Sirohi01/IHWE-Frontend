@@ -45,6 +45,7 @@ const ProductServices = lazy(() => import("../pages/exhibitor/ProductServices"))
 const StallInformation = lazy(() => import("../pages/exhibitor/StallInformation"));
 const MyEvent = lazy(() => import("../pages/exhibitor/MyEvent"));
 const DocumentCenter = lazy(() => import("../pages/exhibitor/DocumentCenter"));
+const MsmeSectionGuard = lazy(() => import("../pages/exhibitor/MsmeSectionGuard"));
 const BuyerContacts = lazy(() => import("../pages/exhibitor/BuyerContacts"));
 
 export const ExhibitorRoutes = () => (
@@ -64,17 +65,19 @@ export const ExhibitorRoutes = () => (
                     <Route path="bsm" element={<BuyerContacts />} />
                     <Route path="calendar" element={<ExhibitorCalendarPage />} />
                     <Route path="chat" element={<ExhibitorChatPage />} />
-                    <Route path="msme" element={<ExhibitorMSMEPage />} />
-                    <Route path="msme/application" element={<MSMEPMSApplicationStatus />} />
-                    <Route path="msme/application/edit" element={<MSMEPMSApplicationPage />} />
-                    <Route path="msme/claim-documents" element={<MSMEPMSClaimDocuments />} />
-                    <Route path="msme/claim-reimbursement" element={<MSMEPMSClaimReimbursementStatus />} />
-                    <Route path="msme/pms-claim-status" element={<MSMEPMSClaimStatusPage />} />
-                    <Route path="msme/pms-claim-status-approved" element={<MSMEPMSClaimApprovedPage />} />
-                    <Route path="msme/bank-details" element={<MSMEPMSBankDetailsPage />} />
-                    <Route path="msme/documents-upload" element={<MSMEPMSDocumentsUploadPage />} />
-                    <Route path="msme/pms-approved" element={<PMSReimbursementApprovedPage />} />
-                    <Route path="msme/application-review" element={<MSMEApplicationReviewPage />} />
+                    <Route path="msme" element={<MsmeSectionGuard />}>
+                      <Route index element={<ExhibitorMSMEPage />} />
+                      <Route path="application" element={<MSMEPMSApplicationStatus />} />
+                      <Route path="application/edit" element={<MSMEPMSApplicationPage />} />
+                      <Route path="claim-documents" element={<MSMEPMSClaimDocuments />} />
+                      <Route path="claim-reimbursement" element={<MSMEPMSClaimReimbursementStatus />} />
+                      <Route path="pms-claim-status" element={<MSMEPMSClaimStatusPage />} />
+                      <Route path="pms-claim-status-approved" element={<MSMEPMSClaimApprovedPage />} />
+                      <Route path="bank-details" element={<MSMEPMSBankDetailsPage />} />
+                      <Route path="documents-upload" element={<MSMEPMSDocumentsUploadPage />} />
+                      <Route path="pms-approved" element={<PMSReimbursementApprovedPage />} />
+                      <Route path="application-review" element={<MSMEApplicationReviewPage />} />
+                    </Route>
                     <Route path="epromotion" element={<ExhibitorEPromotion />} />
                     <Route path="product" element={<ProductServices />} />
                     <Route path="stall-information" element={<StallInformation />} />

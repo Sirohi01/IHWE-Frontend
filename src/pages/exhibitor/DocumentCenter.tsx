@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -6,12 +7,27 @@ import "react-toastify/dist/ReactToastify.css";
 import DocumentCenterHero from "@/components/dashboard/exhibitor/document_center/DocumentCenterHero";
 import { DocumentsList, DocumentPreviewPanel, Doc, DocCategory, DocStatus } from "@/components/dashboard/exhibitor/document_center/Documentscenter1";
 import { useExhibitorCtx } from "@/context/ExhibitorContext";
+import { useMsmePmsApplication } from "@/hooks/useMsmePmsApplication";
 import { API_URL } from "@/lib/api";
 import { logActivity } from "@/utils/activityLogger";
+
+// Prefix marks a card as sourced from the MSME PMS claim (a separate
+// document system from the general client-documents one below) so upload/
+// delete on this page can redirect to the Claim Documents page instead of
+// posting into the wrong backend.
+const MSME_DOC_ID_PREFIX = "msme-pms-";
+
+const MSME_STATUS: Record<string, DocStatus> = {
+    Verified: "Approved",
+    Rejected: "Rejected",
+    Submitted: "Under Review",
+};
 
 const DocumentCenter = () => {
     const { data } = useExhibitorCtx();
     const clientId = data?._id;
+    const navigate = useNavigate();
+    const pms = useMsmePmsApplication(data);
 
     const [docs, setDocs] = useState<Doc[]>([]);
     const [activeTab, setActiveTab] = useState<string>("All Documents");
@@ -66,7 +82,31 @@ const DocumentCenter = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [clientId]);
 
-    const selectedDoc = docs.find(d => d.id === selectedDocId) || null;
+    // Documents uploaded against the MSME PMS claim (a separate system from
+    // the client-documents one this page otherwise manages) — surfaced here
+    // read-only so "if it's uploaded, it should show here too" holds without
+    // duplicating storage or upload flows across two backends.
+    const msmeClaimDocs: Doc[] = (pms.data?.pmsClaimDocuments || []).map((cd: any) => {
+        const entries = (pms.data?.documents || []).filter((d: any) => d.documentType === cd.type && d.path && !d.notApplicable);
+        const latest = entries[entries.length - 1];
+        return {
+            id: `${MSME_DOC_ID_PREFIX}${cd.type}`,
+            title: cd.label,
+            type: latest?.filename?.split('.').pop()?.toUpperCase() || "PDF",
+            size: latest?.size ? `${Math.round(latest.size / 1024)} KB` : "-",
+            date: latest ? new Date(latest.uploadedAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }) : "-",
+            category: "MSME Related" as DocCategory,
+            status: (latest ? (MSME_STATUS[latest.status] || "Under Review") : "Pending Upload") as DocStatus,
+            uploadedBy: latest?.uploadedBy || "-",
+            uploadDate: latest ? new Date(latest.uploadedAt).toLocaleString('en-US', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : "-",
+            previewUrl: latest?.path,
+            originalPdfUrl: latest?.path,
+        };
+    });
+    const allDocs = [...docs, ...msmeClaimDocs];
+
+    const selectedDoc = allDocs.find(d => d.id === selectedDocId) || null;
+    const isMsmeDoc = (id: string | null) => !!id && id.startsWith(MSME_DOC_ID_PREFIX);
 
     const uploadDocDirect = (doc: Doc, file: File) => {
         if (!clientId) return;
@@ -101,15 +141,23 @@ const DocumentCenter = () => {
     };
 
     const handleCardFilePick = (doc: Doc, e: React.ChangeEvent<HTMLInputElement>) => {
+        e.target.value = '';
+        if (isMsmeDoc(doc.id)) {
+            navigate('/exhibitor-dashboard/msme/claim-documents');
+            return;
+        }
         const file = e.target.files?.[0];
         if (file) {
             setSelectedDocId(doc.id);
             uploadDocDirect(doc, file);
         }
-        e.target.value = '';
     };
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (selectedDoc && isMsmeDoc(selectedDoc.id)) {
+            navigate('/exhibitor-dashboard/msme/claim-documents');
+            return;
+        }
         const file = e.target.files?.[0];
         if (file && selectedDoc) {
             const url = URL.createObjectURL(file);
@@ -167,6 +215,10 @@ const DocumentCenter = () => {
     };
 
     const handleDeleteDoc = () => {
+        if (selectedDoc && isMsmeDoc(selectedDoc.id)) {
+            navigate('/exhibitor-dashboard/msme/claim-documents');
+            return;
+        }
         if (selectedDoc && selectedDoc.status === "Under Review") {
             Swal.fire({
                 title: 'Delete Document?',
@@ -214,7 +266,7 @@ const DocumentCenter = () => {
                         <DocumentCenterHero />
                         <div className="mt-2.5">
                             <DocumentsList
-                                docs={docs}
+                                docs={allDocs}
                                 activeTab={activeTab}
                                 setActiveTab={setActiveTab}
                                 statusFilter={statusFilter}
